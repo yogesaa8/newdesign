@@ -52,12 +52,12 @@ const DetailJobModal = () => {
   };
 
   return (
-    <div className="bg-[#f5f5f5] text-[#1a1a1a] font-sans">
-      <div className="bg-white pt-12 pb-8 text-center px-4 border-b border-gray-100">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+    <div className="bg-surface-container-low text-on-surface font-sans">
+      <div className="bg-white pt-12 pb-8 text-center px-4 border-b border-outline-variant">
+        <h1 className="text-3xl md:text-4xl font-bold text-on-surface mb-4">
           Find Your Dream Job
         </h1>
-        <p className="text-gray-500 mb-8">
+        <p className="text-outline mb-8">
           You are applying for this <b>{job.title}</b>.
         </p>
       </div>
@@ -67,34 +67,34 @@ const DetailJobModal = () => {
         {/* Left Section */}
         <section className="col-span-8">
           <div className="bg-white rounded-2xl shadow-sm p-8">
-            <span className="bg-[#e8f7f5] text-teal-600 text-xs px-3 py-1 rounded-full">
+            <span className="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">
               {job.time}
             </span>
             <div className="mt-5 flex justify-between items-start">
               <div>
                 <h2 className="text-4xl font-semibold">{job.title}</h2>
-                <p className="text-gray-500 mt-1">{job.company}</p>
+                <p className="text-outline mt-1">{job.company}</p>
               </div>
               {job.applyLink ? (
                 <a
                   href={job.applyLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-teal-500 text-white px-10 py-3 rounded-md"
+                  className="bg-primary text-on-primary px-10 py-3 rounded-md"
                 >
                   Apply via Web
                 </a>
               ) : (
-                <button 
+                <button
                   onClick={() => setShowApplyModal(true)}
-                  className="bg-teal-500 text-white px-10 py-3 rounded-md hover:bg-teal-600"
+                  className="bg-primary text-on-primary px-10 py-3 rounded-md hover:bg-primary-container"
                 >
                   Apply Job
                 </button>
               )}
             </div>
 
-            <div className="flex gap-8 text-gray-500 mt-6 text-sm flex-wrap">
+            <div className="flex gap-8 text-outline mt-6 text-sm flex-wrap">
               <span>{job.category}</span>
               <span>{job.type}</span>
               <span>{job.salary}</span>
@@ -104,14 +104,14 @@ const DetailJobModal = () => {
             <div className="mt-10 space-y-10">
               <div>
                 <h3 className="text-2xl font-semibold mb-4">Job Description</h3>
-                <p className="text-gray-500 leading-8">{job.description}.</p>
+                <p className="text-outline leading-8">{job.description}.</p>
               </div>
 
               <div>
                 <h3 className="text-2xl font-semibold mb-4">
                   Key Responsibilities
                 </h3>
-                <ul className="space-y-3 text-gray-500">
+                <ul className="space-y-3 text-outline">
                   {job.responsibilities.map((resp, i) => (
                     <li key={i}>✓ {resp}</li>
                   ))}
@@ -122,7 +122,7 @@ const DetailJobModal = () => {
                 <h3 className="text-2xl font-semibold mb-4">
                   Professional Skills
                 </h3>
-                <ul className="space-y-3 text-gray-500">
+                <ul className="space-y-3 text-outline">
                   {job.skills.map((skill, i) => (
                     <li key={i}>✓ {skill}</li>
                   ))}
@@ -135,7 +135,7 @@ const DetailJobModal = () => {
                   {job.tags?.map((tag, index) => (
                     <span
                       key={index}
-                      className="bg-[#e8f7f5] text-teal-600 px-4 py-2 rounded-full text-sm"
+                      className="bg-primary/10 text-primary px-4 py-2 rounded-full text-sm"
                     >
                       {tag}
                     </span>
@@ -148,7 +148,7 @@ const DetailJobModal = () => {
           {/* Related Jobs */}
           <div className="mt-14">
             <h2 className="text-5xl font-bold">Related Jobs</h2>
-            <p className="text-gray-500 mt-3">
+            <p className="text-outline mt-3">
               At eu lobortis pretium tincidunt amet lacus at aenean aliquet
             </p>
             <div className="mt-8 space-y-6">
@@ -158,14 +158,14 @@ const DetailJobModal = () => {
                   className="bg-white rounded-2xl p-6 shadow-sm flex items-center justify-between"
                 >
                   <div>
-                    <span className="bg-[#e8f7f5] text-teal-600 text-xs px-3 py-1 rounded-full">
+                    <span className="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full">
                       {related.time}
                     </span>
                     <h3 className="text-2xl font-semibold mt-3">
                       {related.title}
                     </h3>
-                    <p className="text-gray-500">{related.company}</p>
-                    <div className="flex gap-8 text-gray-500 mt-4 text-sm">
+                    <p className="text-outline">{related.company}</p>
+                    <div className="flex gap-8 text-outline mt-4 text-sm">
                       <span>{related.category}</span>
                       <span>{related.type}</span>
                       <span>{related.salary}</span>
@@ -175,7 +175,7 @@ const DetailJobModal = () => {
                   <Link
                     to={`/jobs/${related.id}`}
                     state={{ job: related, allJobs: allJobs }}
-                    className="bg-teal-500 text-white px-6 py-3 rounded-md"
+                    className="bg-primary text-on-primary px-6 py-3 rounded-md hover:bg-primary-container transition-colors"
                   >
                     Job Details
                   </Link>
@@ -188,10 +188,10 @@ const DetailJobModal = () => {
         {/* Sidebar */}
         <aside className="col-span-4 space-y-8">
           {/* Job Overview */}
-          <div className="bg-[#eaf3f2] rounded-2xl p-8">
+          <div className="bg-surface-container rounded-2xl p-8">
             <h3 className="text-2xl font-semibold mb-6">Job Overview</h3>
 
-            <div className="space-y-4 text-gray-600">
+            <div className="space-y-4 text-on-surface-variant">
               <p>
                 <strong>Job Title:</strong> {job.title}
               </p>
@@ -216,13 +216,13 @@ const DetailJobModal = () => {
             </div>
 
             {/* Map / Image placeholder */}
-            <div className="mt-6 h-48 bg-gray-300 rounded-xl flex items-center justify-center text-sm text-gray-500">
+            <div className="mt-6 h-48 bg-surface-container rounded-xl flex items-center justify-center text-sm text-outline">
               Map / Location Preview
             </div>
           </div>
 
           {/* Contact Form */}
-          <div className="bg-[#eaf3f2] rounded-2xl p-8">
+          <div className="bg-surface-container rounded-2xl p-8">
             <h3 className="text-2xl font-semibold mb-6">Send Us Message</h3>
 
             <div className="space-y-4">
@@ -243,7 +243,7 @@ const DetailJobModal = () => {
                 placeholder="Your Message"
               ></textarea>
 
-              <button className="bg-teal-500 text-white px-6 py-3 rounded-md w-full">
+              <button className="bg-primary text-on-primary px-6 py-3 rounded-md w-full hover:bg-primary-container transition-colors">
                 Send Message
               </button>
             </div>
@@ -258,26 +258,26 @@ const DetailJobModal = () => {
             {isSuccess ? (
               <div className="flex flex-col items-center justify-center p-12 text-center">
                 <div className="text-5xl mb-4">✓</div>
-                <h2 className="text-2xl font-semibold text-teal-600 mb-2">
+                <h2 className="text-2xl font-semibold text-primary mb-2">
                   Application Successful!
                 </h2>
-                <p className="text-gray-500">
+                <p className="text-outline">
                   Your application has been submitted to {job.company}.
                 </p>
               </div>
             ) : (
               <>
-                <div className="bg-[#eaf3f2] px-8 py-6 border-b border-gray-100">
-                  <h2 className="text-2xl font-semibold text-gray-900">
+                <div className="bg-surface-container px-8 py-6 border-b border-outline-variant">
+                  <h2 className="text-2xl font-semibold text-on-surface">
                     Apply for {job.title}
                   </h2>
-                  <p className="text-gray-500 text-sm mt-1">{job.company}</p>
+                  <p className="text-outline text-sm mt-1">{job.company}</p>
                 </div>
 
                 <form onSubmit={handleApplySubmit} className="p-8 space-y-6">
                   {/* Name Field */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-on-surface-variant mb-2">
                       Full Name *
                     </label>
                     <input
@@ -286,17 +286,17 @@ const DetailJobModal = () => {
                       value={formData.name}
                       onChange={handleInputChange}
                       placeholder="Your full name"
-                      className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      className="w-full border border-outline-variant rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-primary/30"
                       required
                     />
                   </div>
 
                   {/* Resume Upload */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-on-surface-variant mb-2">
                       Upload Resume *
                     </label>
-                    <div className="border-2 border-dashed border-gray-300 rounded-md p-4 text-center hover:border-teal-500 cursor-pointer">
+                    <div className="border-2 border-dashed border-outline-variant rounded-md p-4 text-center hover:border-primary cursor-pointer">
                       <input
                         type="file"
                         name="resume"
@@ -306,7 +306,7 @@ const DetailJobModal = () => {
                         required
                       />
                       {formData.resume && (
-                        <p className="text-sm text-teal-600 mt-2">
+                        <p className="text-sm text-primary mt-2">
                           ✓ {formData.resume.name}
                         </p>
                       )}
@@ -315,36 +315,36 @@ const DetailJobModal = () => {
 
                   {/* HR Question 1 */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      Why do you want to join {job.company}? <span className="text-gray-400">(Optional)</span>
+                    <label className="block text-sm font-semibold text-on-surface-variant mb-2">
+                      Why do you want to join {job.company}? <span className="text-outline">(Optional)</span>
                     </label>
                     <textarea
                       name="question1"
                       value={formData.question1}
                       onChange={handleInputChange}
                       placeholder="Share your thoughts..."
-                      className="w-full border border-gray-300 rounded-md p-3 h-20 focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
+                      className="w-full border border-outline-variant rounded-md p-3 h-20 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
                     />
                   </div>
 
                   {/* HR Question 2 */}
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      What relevant experience do you have? <span className="text-gray-400">(Optional)</span>
+                    <label className="block text-sm font-semibold text-on-surface-variant mb-2">
+                      What relevant experience do you have? <span className="text-outline">(Optional)</span>
                     </label>
                     <textarea
                       name="question2"
                       value={formData.question2}
                       onChange={handleInputChange}
                       placeholder="Tell us about your experience..."
-                      className="w-full border border-gray-300 rounded-md p-3 h-20 focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
+                      className="w-full border border-outline-variant rounded-md p-3 h-20 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
                     />
                   </div>
 
                   {/* Note */}
-                  <div className="bg-[#e8f7f5] border-l-4 border-teal-500 p-4 rounded">
-                    <p className="text-xs text-gray-600">
-                      <span className="font-semibold text-teal-700">💡 Note:</span> Filling the optional questions will make a better impression with our HR team!
+                  <div className="bg-primary/10 border-l-4 border-primary p-4 rounded">
+                    <p className="text-xs text-on-surface-variant">
+                      <span className="font-semibold text-primary">💡 Note:</span> Filling the optional questions will make a better impression with our HR team!
                     </p>
                   </div>
 
@@ -356,13 +356,13 @@ const DetailJobModal = () => {
                         setShowApplyModal(false);
                         setFormData({ name: "", resume: null, question1: "", question2: "" });
                       }}
-                      className="flex-1 border border-gray-300 text-gray-700 px-4 py-3 rounded-md font-semibold hover:bg-gray-50"
+                      className="flex-1 border border-outline-variant text-on-surface-variant px-4 py-3 rounded-md font-semibold hover:bg-surface-container-low"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="flex-1 bg-teal-500 text-white px-4 py-3 rounded-md font-semibold hover:bg-teal-600"
+                      className="flex-1 bg-primary text-on-primary px-4 py-3 rounded-md font-semibold hover:bg-primary-container transition-colors"
                     >
                       Apply Now
                     </button>

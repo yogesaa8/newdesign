@@ -18,7 +18,7 @@ const AboutUs = () => {
               Et nunc ut tempus duis nisl sed massa
             </h2>
           </div>
-          <div className="text-gray-600">
+          <div className="text-on-surface-variant">
             <p>
               Nunc sed a nisl purus. Nibh dis faucibus proin tristique. Sit cong
               non vitae odio sit est in. Felis eu ultrices a sed massa. Commodo
@@ -30,7 +30,7 @@ const AboutUs = () => {
         </div>
 
         <div className="mt-12 max-w-6xl mx-auto px-6">
-          <div className="h-80 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl" />
+          <div className="h-80 bg-gradient-to-br from-inverse-surface to-on-surface rounded-2xl" />
         </div>
       </section>
 
@@ -39,7 +39,7 @@ const AboutUs = () => {
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-semibold mb-3">How it works</h2>
-            <p className="text-gray-600">
+            <p className="text-on-surface-variant">
               At eu lobortis pretium tincidunt amet lacus ut aenean aliquet.
               Blandit a massa elementum id scelerisque rhoncus.
             </p>
@@ -70,11 +70,11 @@ const AboutUs = () => {
             ].map((step, i) => (
               <div
                 key={i}
-                className="border border-gray-200 rounded-2xl p-8 text-center hover:shadow-md transition"
+                className="border border-outline-variant rounded-2xl p-8 text-center hover:shadow-md transition"
               >
                 <div className="text-4xl mb-4">{step.icon}</div>
                 <h3 className="font-semibold text-xl mb-2">{step.title}</h3>
-                <p className="text-sm text-gray-600">{step.desc}</p>
+                <p className="text-sm text-on-surface-variant">{step.desc}</p>
               </div>
             ))}
           </div>
@@ -84,7 +84,7 @@ const AboutUs = () => {
       {/* Video Section */}
       <section className="py-12">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="relative h-[420px] bg-gradient-to-br from-emerald-900 to-black rounded-3xl flex items-center justify-center overflow-hidden">
+          <div className="relative h-[420px] bg-gradient-to-br from-primary-container to-inverse-surface rounded-3xl flex items-center justify-center overflow-hidden">
             <div className="absolute inset-0 bg-black/30" />
             <button className="w-20 h-20 bg-white rounded-full flex items-center justify-center z-10 hover:scale-110 transition">
               <div className="w-0 h-0 border-t-8 border-t-transparent border-l-[18px] border-l-black border-b-8 border-b-transparent ml-1" />
@@ -97,7 +97,7 @@ const AboutUs = () => {
               <div className="grid md:grid-cols-3 gap-6">
                 {[1, 2, 3].map((n) => (
                   <div key={n} className="flex gap-4">
-                    <div className="w-8 h-8 bg-teal-500 text-white rounded flex items-center justify-center flex-shrink-0 text-sm font-bold">
+                    <div className="w-8 h-8 bg-primary text-on-primary rounded flex items-center justify-center flex-shrink-0 text-sm font-bold">
                       {n}
                     </div>
                     <div>
@@ -106,7 +106,7 @@ const AboutUs = () => {
                       </p>
                       <a
                         href="#"
-                        className="text-teal-400 text-sm mt-1 inline-block"
+                        className="text-primary text-sm mt-1 inline-block"
                       >
                         Learn more →
                       </a>
@@ -141,21 +141,21 @@ const AboutUs = () => {
             ].map((q, i) => (
               <div
                 key={i}
-                className="border border-gray-200 rounded-2xl overflow-hidden"
+                className="border border-outline-variant rounded-2xl overflow-hidden"
               >
                 <button
                   onClick={() => toggleFaq(i)}
-                  className="w-full px-8 py-6 flex justify-between items-center text-left hover:bg-gray-50"
+                  className="w-full px-8 py-6 flex justify-between items-center text-left hover:bg-surface-container-low"
                 >
                   <span className="font-medium">
                     {`0${i + 1}`} {q}
                   </span>
-                  <span className="text-2xl text-teal-500">
+                  <span className="text-2xl text-primary">
                     {openFaq === i ? "−" : "+"}
                   </span>
                 </button>
                 {openFaq === i && (
-                  <div className="px-8 pb-8 text-gray-600 text-sm leading-relaxed">
+                  <div className="px-8 pb-8 text-on-surface-variant text-sm leading-relaxed">
                     Nunc sed a nisl purus. Nibh dis faucibus proin tristique.
                     Sit cong non vitae odio sit est in. Felis eu ultrices a sed
                     massa. Commodo fringilla sed tempor risus laoreet ultrices
@@ -169,14 +169,14 @@ const AboutUs = () => {
       </section>
 
       {/* We're Only Working With The Best */}
-      <section className="py-20 bg-white border-t">
+      <section className="py-20 bg-white border-t border-outline-variant">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="grid grid-cols-2 gap-6">
-              <div className="aspect-video bg-gradient-to-br from-gray-700 to-gray-900 rounded-2xl" />
+              <div className="aspect-video bg-gradient-to-br from-inverse-surface to-on-surface rounded-2xl" />
               <div className="space-y-6">
-                <div className="aspect-video bg-gradient-to-br from-gray-400 to-gray-600 rounded-2xl" />
-                <div className="aspect-video bg-gradient-to-br from-gray-700 to-gray-900 rounded-2xl" />
+                <div className="aspect-video bg-gradient-to-br from-on-surface-variant/60 to-on-surface-variant rounded-2xl" />
+                <div className="aspect-video bg-gradient-to-br from-inverse-surface to-on-surface rounded-2xl" />
               </div>
             </div>
 
@@ -184,7 +184,7 @@ const AboutUs = () => {
               <h2 className="text-4xl font-bold leading-tight mb-8">
                 We’re Only Working With The Best
               </h2>
-              <p className="text-gray-600 mb-12">
+              <p className="text-on-surface-variant mb-12">
                 Ultrices purus dolor viverra mi laoreet at cursus justo.
                 Ultrices purus diam egestas amet faucibus tempor blandit.
               </p>
@@ -194,14 +194,14 @@ const AboutUs = () => {
                   <div className="text-3xl">😊</div>
                   <div>
                     <div className="font-semibold">Quality Job</div>
-                    <div className="text-sm text-gray-500">Top Companies</div>
+                    <div className="text-sm text-outline">Top Companies</div>
                   </div>
                 </div>
                 <div className="flex gap-4">
                   <div className="text-3xl">📝</div>
                   <div>
                     <div className="font-semibold">Resume builder</div>
-                    <div className="text-sm text-gray-500">Top Talents</div>
+                    <div className="text-sm text-outline">Top Talents</div>
                   </div>
                 </div>
               </div>
@@ -225,37 +225,37 @@ const AboutUs = () => {
 
           <div className="grid md:grid-cols-2 gap-8">
             <div className="group">
-              <div className="h-80 bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl mb-6 relative overflow-hidden">
-                <div className="absolute top-6 left-6 bg-teal-500 text-white text-xs px-4 py-1 rounded">
+              <div className="h-80 bg-gradient-to-br from-inverse-surface to-on-surface rounded-3xl mb-6 relative overflow-hidden">
+                <div className="absolute top-6 left-6 bg-primary text-on-primary text-xs px-4 py-1 rounded">
                   News
                 </div>
               </div>
-              <div className="text-sm text-gray-500 mb-2">30 March 2024</div>
+              <div className="text-sm text-outline mb-2">30 March 2024</div>
               <h3 className="text-xl font-semibold leading-tight">
                 Revitalizing Workplace Morale: Innovative Tactics For Boosting
                 Employee Engagement In 2024
               </h3>
               <a
                 href="#"
-                className="inline-flex items-center gap-2 text-teal-500 mt-4 text-sm font-medium"
+                className="inline-flex items-center gap-2 text-primary mt-4 text-sm font-medium"
               >
                 Read more →
               </a>
             </div>
 
             <div className="group">
-              <div className="h-80 bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl mb-6 relative overflow-hidden">
-                <div className="absolute top-6 left-6 bg-teal-500 text-white text-xs px-4 py-1 rounded">
+              <div className="h-80 bg-gradient-to-br from-inverse-surface to-on-surface rounded-3xl mb-6 relative overflow-hidden">
+                <div className="absolute top-6 left-6 bg-primary text-on-primary text-xs px-4 py-1 rounded">
                   Blog
                 </div>
               </div>
-              <div className="text-sm text-gray-500 mb-2">30 March 2024</div>
+              <div className="text-sm text-outline mb-2">30 March 2024</div>
               <h3 className="text-xl font-semibold leading-tight">
                 How To Avoid The Top Six Most Common Job Interview Mistakes
               </h3>
               <a
                 href="#"
-                className="inline-flex items-center gap-2 text-teal-500 mt-4 text-sm font-medium"
+                className="inline-flex items-center gap-2 text-primary mt-4 text-sm font-medium"
               >
                 Read more →
               </a>

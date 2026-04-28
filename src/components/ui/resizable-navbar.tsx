@@ -124,7 +124,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
     <motion.div
       onMouseLeave={() => setHovered(null)}
       className={cn(
-        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-600 transition duration-200 hover:text-zinc-800 lg:flex lg:space-x-2",
+        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-on-surface-variant transition duration-200 hover:text-on-surface lg:flex lg:space-x-2",
         className,
       )}
     >
@@ -141,12 +141,12 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
             <a
               onClick={onItemClick}
               href={item.link || "#"}
-              className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300"
+              className="relative px-4 py-2 text-on-surface-variant dark:text-surface-container-low"
             >
               {isOpen && (
                 <motion.div
                   layoutId="hovered"
-                  className="absolute inset-0 h-full w-full rounded-full bg-gray-100 dark:bg-neutral-800"
+                  className="absolute inset-0 h-full w-full rounded-full bg-surface-container dark:bg-inverse-surface"
                 />
               )}
               <span className="relative z-20">{item.name}</span>
@@ -156,7 +156,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
             {item.children && (
               <div
                 className={cn(
-                  "absolute left-0 top-full mt-2 w-44 rounded-lg border bg-white dark:bg-neutral-900 shadow-lg transition-all duration-200",
+                  "absolute left-0 top-full mt-2 w-44 rounded-lg border border-outline-variant bg-white dark:bg-inverse-surface shadow-lg transition-all duration-200",
                   isOpen ? "opacity-100 visible" : "opacity-0 invisible"
                 )}
               >
@@ -164,7 +164,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
                   <a
                     key={i}
                     href={child.link}
-                    className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-neutral-800"
+                    className="block px-4 py-2 text-sm text-on-surface hover:bg-surface-container dark:hover:bg-on-surface-variant/20"
                   >
                     {child.name}
                   </a>
@@ -238,7 +238,7 @@ export const MobileNavMenu = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className={cn(
-            "absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-4 rounded-lg bg-white px-4 py-8 shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] dark:bg-neutral-950",
+            "absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-4 rounded-lg bg-white px-4 py-8 shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] dark:bg-inverse-surface",
             className,
           )}
         >
@@ -306,7 +306,7 @@ export const NavbarButton = ({
     secondary: "bg-transparent shadow-none dark:text-white",
     dark: "bg-black text-white shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]",
     gradient:
-      "bg-gradient-to-b from-blue-500 to-blue-700 text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset]",
+      "bg-gradient-to-b from-primary to-primary-container text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset]",
   };
 
   return (

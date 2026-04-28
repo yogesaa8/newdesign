@@ -83,21 +83,29 @@ const Footer = () => {
           </a>
           <ul className="text-lg text-center sm:flex items-cente justify-center gap-14 lg:gap-10 xl:gap-14 transition-all duration-500">
             <li>
-              <Link to="/" className="text-white hover:text-gray-400">Pagedone</Link>
+              <Link to="/" className="text-white hover:text-gray-400">
+                Pagedone
+              </Link>
             </li>
             <li className="sm:my-0 my-2">
-              <Link to="/about-us" className="text-white hover:text-gray-400">About</Link>
+              <Link to="/about-us" className="text-white hover:text-gray-400">
+                About
+              </Link>
             </li>
             <li>
-              <Link to="/" className="text-white hover:text-gray-400">Resources</Link>
+              <Link to="/" className="text-white hover:text-gray-400">
+                Resources
+              </Link>
             </li>
             <li className="sm:my-0 my-2">
               <Link to="/blog" className="text-white hover:text-gray-400">
                 Blog
-              </Link>              
+              </Link>
             </li>
             <li>
-              <Link to="/" className="text-white hover:text-gray-400">Support</Link>
+              <Link to="/" className="text-white hover:text-gray-400">
+                Support
+              </Link>
             </li>
           </ul>
           <div className="flex  space-x-4 sm:justify-center  ">

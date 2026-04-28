@@ -17,7 +17,7 @@ export const BackgroundLines = ({
   return (
     <div
       className={cn(
-        "min-h-screen w-full bg-white dark:bg-black",
+        "min-h-screen w-full bg-surface dark:bg-inverse-surface",
         className
       )}
     >
@@ -68,27 +68,27 @@ const SVG = ({
   ];
 
   const colors = [
-    "#46A5CA",
-    "#8C2F2F",
-    "#4FAE4D",
-    "#D6590C",
-    "#811010",
-    "#247AFB",
-    "#A534A0",
-    "#A8A438",
-    "#D6590C",
-    "#46A29C",
-    "#670F6D",
-    "#D7C200",
-    "#59BBEB",
-    "#504F1C",
-    "#55BC54",
-    "#4D3568",
-    "#9F39A5",
-    "#363636",
-    "#860909",
-    "#6A286F",
-    "#604483",
+    "#4d00ff",
+    "#3d00cc",
+    "#9466ff",
+    "#5063af",
+    "#303c69",
+    "#7c00ff",
+    "#b99fff",
+    "#6b80c9",
+    "#4a5899",
+    "#8fa3db",
+    "#71788e",
+    "#d4ccff",
+    "#5a6078",
+    "#434860",
+    "#4d00ff",
+    "#7c5cfc",
+    "#6b5a99",
+    "#5063af",
+    "#3d00cc",
+    "#9466ff",
+    "#303c69",
   ];
   return (
     <motion.svg

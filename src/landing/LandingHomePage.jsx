@@ -16,6 +16,7 @@ const LandingHomePage = () => {
       <GridBackgroundDemo />
       <FeaturesSection />
       <FAQSection />
+      <Footer />
     </div>
   );
 };

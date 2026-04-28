@@ -9,33 +9,33 @@ import "swiper/css/navigation";
 export default function BlogSection() {
   return (
     <>
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-surface-container-low">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row gap-12 items-start">
             {/* LEFT CONTENT */}
             <div className="w-full lg:w-2/5 flex flex-col justify-between h-full">
               <div>
-                <h2 className="text-4xl font-bold text-gray-900 mb-5">
-                  Our latest <span className="text-indigo-600">blogs</span>
+                <h2 className="text-4xl font-bold text-on-surface mb-5">
+                  Our latest <span className="text-primary">blogs</span>
                 </h2>
 
-                <p className="text-gray-500 mb-10 max-w-md">
+                <p className="text-outline mb-10 max-w-md">
                   Welcome to our blog section, where knowledge meets
                   inspiration. Explore insightful articles, expert tips, and the
                   latest trends in our field.
                 </p>
 
-                <button className="border border-gray-300 rounded-full px-6 py-3 font-semibold hover:bg-gray-100 transition">
+                <button className="border border-outline-variant rounded-full px-6 py-3 font-semibold hover:bg-surface-container transition">
                   View All
                 </button>
               </div>
 
               {/* ARROWS */}
               <div className="flex gap-4 mt-10">
-                <button className="swiper-button-prev-custom w-10 h-10 flex items-center justify-center rounded-full border border-indigo-500 text-indigo-500 hover:bg-indigo-500 hover:text-white transition">
+                <button className="swiper-button-prev-custom w-10 h-10 flex items-center justify-center rounded-full border border-primary text-primary hover:bg-primary hover:text-on-primary transition">
                   ←
                 </button>
-                <button className="swiper-button-next-custom w-10 h-10 flex items-center justify-center rounded-full border border-indigo-500 text-indigo-500 hover:bg-indigo-500 hover:text-white transition">
+                <button className="swiper-button-next-custom w-10 h-10 flex items-center justify-center rounded-full border border-primary text-primary hover:bg-primary hover:text-on-primary transition">
                   →
                 </button>
               </div>
@@ -65,13 +65,13 @@ export default function BlogSection() {
                         className="rounded-2xl w-full h-56 object-cover mb-6"
                       />
 
-                      <h3 className="text-lg font-semibold text-gray-900 mb-3 group-hover:text-indigo-600 transition">
+                      <h3 className="text-lg font-semibold text-on-surface mb-3 group-hover:text-primary transition">
                         {blog.title}
                       </h3>
 
-                      <p className="text-gray-500 text-sm mb-5">{blog.desc}</p>
+                      <p className="text-outline text-sm mb-5">{blog.desc}</p>
 
-                      <a className="text-indigo-600 font-semibold flex items-center gap-2">
+                      <a className="text-primary font-semibold flex items-center gap-2">
                         Read more →
                       </a>
                     </div>
@@ -86,7 +86,7 @@ export default function BlogSection() {
       <section class="py-24 ">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div class="flex justify-center  gap-y-8 lg:gap-y-0 flex-wrap md:flex-wrap lg:flex-nowrap lg:flex-row lg:justify-between lg:gap-x-8">
-            <div class="group w-full max-lg:max-w-xl lg:w-1/3 border border-gray-300 rounded-2xl">
+            <div class="group w-full max-lg:max-w-xl lg:w-1/3 border border-outline-variant rounded-2xl">
               <div class="flex items-center">
                 <img
                   src="https://pagedone.io/asset/uploads/1696244317.png"
@@ -94,26 +94,26 @@ export default function BlogSection() {
                   class="rounded-t-2xl w-full object-cover"
                 />
               </div>
-              <div class="p-4 lg:p-6 transition-all duration-300 rounded-b-2xl group-hover:bg-gray-50">
-                <span class="text-indigo-600 font-medium mb-3 block">
+              <div class="p-4 lg:p-6 transition-all duration-300 rounded-b-2xl group-hover:bg-surface-container-low">
+                <span class="text-primary font-medium mb-3 block">
                   Jan 01, 2023
                 </span>
-                <h4 class="text-xl text-gray-900 font-medium leading-8 mb-5">
+                <h4 class="text-xl text-on-surface font-medium leading-8 mb-5">
                   Clever ways to invest in product to organize your portfolio
                 </h4>
-                <p class="text-gray-500 leading-6 mb-10">
+                <p class="text-outline leading-6 mb-10">
                   Discover smart investment strategies to streamline and
                   organize your portfolio..
                 </p>
                 <a
                   href="javascript:;"
-                  class="cursor-pointer text-lg text-indigo-600 font-semibold"
+                  class="cursor-pointer text-lg text-primary font-semibold"
                 >
                   Read more..
                 </a>
               </div>
             </div>
-            <div class="group w-full max-lg:max-w-xl lg:w-1/3 border border-gray-300 rounded-2xl">
+            <div class="group w-full max-lg:max-w-xl lg:w-1/3 border border-outline-variant rounded-2xl">
               <div class="flex items-center">
                 <img
                   src="https://pagedone.io/asset/uploads/1696244340.png"
@@ -121,26 +121,26 @@ export default function BlogSection() {
                   class="rounded-t-2xl w-full object-cover"
                 />
               </div>
-              <div class="p-4 lg:p-6 transition-all duration-300 rounded-b-2xl group-hover:bg-gray-50">
-                <span class="text-indigo-600 font-medium mb-3 block">
+              <div class="p-4 lg:p-6 transition-all duration-300 rounded-b-2xl group-hover:bg-surface-container-low">
+                <span class="text-primary font-medium mb-3 block">
                   Feb 01, 2023
                 </span>
-                <h4 class="text-xl text-gray-900 font-medium leading-8 mb-5">
+                <h4 class="text-xl text-on-surface font-medium leading-8 mb-5">
                   How to grow your profit through systematic investment with us
                 </h4>
-                <p class="text-gray-500 leading-6 mb-10">
+                <p class="text-outline leading-6 mb-10">
                   Unlock the power of systematic investment with us and watch
                   your profits soar. Our..
                 </p>
                 <a
                   href="javascript:;"
-                  class="cursor-pointer text-lg text-indigo-600 font-semibold"
+                  class="cursor-pointer text-lg text-primary font-semibold"
                 >
                   Read more..
                 </a>
               </div>
             </div>
-            <div class="group w-full max-lg:max-w-xl lg:w-1/3 border border-gray-300 rounded-2xl">
+            <div class="group w-full max-lg:max-w-xl lg:w-1/3 border border-outline-variant rounded-2xl">
               <div class="flex items-center">
                 <img
                   src="https://pagedone.io/asset/uploads/1696244356.png"
@@ -148,20 +148,20 @@ export default function BlogSection() {
                   class="rounded-t-2xl w-full object-cover"
                 />
               </div>
-              <div class="p-4 lg:p-6 transition-all duration-300 rounded-b-2xl group-hover:bg-gray-50">
-                <span class="text-indigo-600 font-medium mb-3 block">
+              <div class="p-4 lg:p-6 transition-all duration-300 rounded-b-2xl group-hover:bg-surface-container-low">
+                <span class="text-primary font-medium mb-3 block">
                   Mar 01, 20233
                 </span>
-                <h4 class="text-xl text-gray-900 font-medium leading-8 mb-5">
+                <h4 class="text-xl text-on-surface font-medium leading-8 mb-5">
                   How to analyze every holdings of your portfolio
                 </h4>
-                <p class="text-gray-500 leading-6 mb-10">
+                <p class="text-outline leading-6 mb-10">
                   Our comprehensive guide will equip you with the tools and
                   insights needed to..
                 </p>
                 <a
                   href="javascript:;"
-                  class="cursor-pointer text-lg text-indigo-600 font-semibold"
+                  class="cursor-pointer text-lg text-primary font-semibold"
                 >
                   Read more..
                 </a>

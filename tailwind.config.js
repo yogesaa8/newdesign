@@ -7,52 +7,84 @@ module.exports = {
     extend: {
       colors: {
         "on-secondary": "#ffffff",
-        "surface-tint": "#0053db",
-        "secondary": "#495c95",
-        "inverse-primary": "#b4c5ff",
-        "inverse-surface": "#233144",
-        "surface-container": "#e6eeff",
-        "background": "#f8f9ff",
-        "primary-container": "#2563eb",
-        "primary": "#004ac6",
-        "surface-bright": "#f8f9ff",
+        /* Periwinkle 500 tint */
+        "surface-tint": "#4d00ff",
+        /* Glaucous 500 */
+        "secondary": "#5063af",
+        /* Periwinkle 200 */
+        "inverse-primary": "#b899ff",
+        /* Slate Grey 900 */
+        "inverse-surface": "#17181c",
+        /* Glaucous 100 */
+        "surface-container": "#dce0ef",
+        /* Glaucous 50 */
+        "background": "#eeeff7",
+        /* Periwinkle 600 */
+        "primary-container": "#3d00cc",
+        /* Periwinkle 500 */
+        "primary": "#4d00ff",
+        /* Glaucous 50 */
+        "surface-bright": "#eeeff7",
         "surface-container-lowest": "#ffffff",
-        "on-secondary-container": "#394c84",
+        /* Glaucous 700 */
+        "on-secondary-container": "#303c69",
         "on-tertiary-fixed-variant": "#7d2d00",
         "tertiary-fixed-dim": "#ffb596",
-        "on-primary-container": "#eeefff",
-        "secondary-container": "#acbfff",
-        "on-surface": "#0d1c2e",
-        "surface-variant": "#d5e3fc",
+        /* Periwinkle 50 */
+        "on-primary-container": "#ede5ff",
+        /* Glaucous 200 */
+        "secondary-container": "#b9c1df",
+        /* Slate Grey 900 */
+        "on-surface": "#17181c",
+        /* Glaucous 100 */
+        "surface-variant": "#dce0ef",
         "on-error-container": "#93000a",
-        "on-surface-variant": "#434655",
+        /* Slate Grey 700 */
+        "on-surface-variant": "#444855",
         "error-container": "#ffdad6",
         "on-error": "#ffffff",
         "on-tertiary-container": "#ffede6",
         "tertiary-container": "#bc4800",
-        "surface": "#f8f9ff",
-        "outline-variant": "#c3c6d7",
-        "primary-fixed": "#dbe1ff",
+        /* Glaucous 50 */
+        "surface": "#eeeff7",
+        /* Slate Grey 100 */
+        "outline-variant": "#e3e4e8",
+        /* Periwinkle 50 */
+        "primary-fixed": "#ede5ff",
         "tertiary": "#943700",
         "tertiary-fixed": "#ffdbcd",
-        "on-secondary-fixed": "#00174b",
+        /* Glaucous 900 */
+        "on-secondary-fixed": "#101423",
         "on-primary": "#ffffff",
-        "surface-dim": "#ccdbf3",
-        "primary-fixed-dim": "#b4c5ff",
-        "surface-container-high": "#dce9ff",
+        /* Glaucous 100 */
+        "surface-dim": "#dce0ef",
+        /* Periwinkle 200 */
+        "primary-fixed-dim": "#b899ff",
+        /* Glaucous 200 */
+        "surface-container-high": "#b9c1df",
         "on-tertiary-fixed": "#360f00",
-        "outline": "#737686",
-        "on-background": "#0d1c2e",
+        /* Slate Grey 500 */
+        "outline": "#71788e",
+        /* Slate Grey 900 */
+        "on-background": "#17181c",
         "on-tertiary": "#ffffff",
-        "secondary-fixed": "#dbe1ff",
-        "on-secondary-fixed-variant": "#31447b",
-        "inverse-on-surface": "#eaf1ff",
-        "surface-container-low": "#eff4ff",
-        "surface-container-highest": "#d5e3fc",
-        "secondary-fixed-dim": "#b4c5ff",
+        /* Glaucous 50 */
+        "secondary-fixed": "#eeeff7",
+        /* Glaucous 700 */
+        "on-secondary-fixed-variant": "#303c69",
+        /* Glaucous 50 */
+        "inverse-on-surface": "#eeeff7",
+        /* Slate Grey 50 */
+        "surface-container-low": "#f1f1f4",
+        /* Glaucous 300 */
+        "surface-container-highest": "#96a2cf",
+        /* Glaucous 200 */
+        "secondary-fixed-dim": "#b9c1df",
         "error": "#ba1a1a",
-        "on-primary-fixed": "#00174b",
-        "on-primary-fixed-variant": "#003ea8"
+        /* Periwinkle 900 */
+        "on-primary-fixed": "#0f0033",
+        /* Periwinkle 700 */
+        "on-primary-fixed-variant": "#2e0099"
       },
       fontFamily: {
         headline: ["Manrope", "sans-serif"],

@@ -111,7 +111,7 @@ const JobCard = ({ job }) => {
 const JobList = () => {
   return (
     <HeroHighlight>
-      <div className="px-4 sm:px-6 flex-wrap relative max-w-5xl mx-auto p-6 space-y-6 bg-[#f7fbfa] min-h-screen">
+      <div className="px-4 sm:px-6 flex-wrap relative max-w-5xl mx-auto p-6 space-y-6  min-h-screen">
         <div className="flex justify-end text-sm text-[#3aa89f] cursor-pointer">
           View all
         </div>

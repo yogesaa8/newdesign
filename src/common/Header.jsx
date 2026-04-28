@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/resizable-navbar";
 import { useState } from "react";
 import BackgroundLinesDemo from "../components/landingpage/background-lines-demo";
+import { Link } from "react-router-dom";
 
 export function NavbarDemo() {
   const navItems = [
@@ -46,8 +47,16 @@ export function NavbarDemo() {
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
-            <NavbarButton variant="secondary">Login</NavbarButton>
-            <NavbarButton variant="primary">Get Started</NavbarButton>
+            <Link to="/job-seeker-login">
+              <NavbarButton variant="secondary">
+                Login
+              </NavbarButton>
+            </Link>
+            <Link to="/job-seeker-signup">
+              <NavbarButton variant="primary">
+                Get Started
+              </NavbarButton>
+            </Link>
           </div>
         </NavBody>
 
@@ -72,7 +81,7 @@ export function NavbarDemo() {
                   <a
                     href={item.link}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 text-neutral-600 dark:text-neutral-300"
+                    className="block py-2 text-on-surface-variant dark:text-surface-container-low"
                   >
                     {item.name}
                   </a>
@@ -81,7 +90,7 @@ export function NavbarDemo() {
                 {/* Services / Dropdown Items */}
                 {item.children && (
                   <div className="flex flex-col gap-2">
-                    <span className="py-2 font-medium text-neutral-700 dark:text-neutral-200">
+                    <span className="py-2 font-medium text-on-surface dark:text-surface-container-low">
                       {item.name}
                     </span>
 
@@ -91,7 +100,7 @@ export function NavbarDemo() {
                           key={i}
                           href={child.link}
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className="text-sm text-neutral-500"
+                          className="text-sm text-outline"
                         >
                           {child.name}
                         </a>
@@ -103,13 +112,16 @@ export function NavbarDemo() {
             ))}
             <div className="flex w-full flex-col gap-4">
               <NavbarButton
+                href="/job-seeker-login"
                 onClick={() => setIsMobileMenuOpen(false)}
                 variant="primary"
                 className="w-full"
               >
                 Login
               </NavbarButton>
+
               <NavbarButton
+                href="/job-seeker-signup"
                 onClick={() => setIsMobileMenuOpen(false)}
                 variant="primary"
                 className="w-full"
