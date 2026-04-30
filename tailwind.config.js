@@ -6,85 +6,57 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        "white": "#FFFFFF",
+        "soft-sage": "#BDDDFC",
+        "sage-hover": "#88BDF2",
+        "text-main": "#384959",
         "on-secondary": "#ffffff",
-        /* Periwinkle 500 tint */
-        "surface-tint": "#4d00ff",
-        /* Glaucous 500 */
-        "secondary": "#5063af",
-        /* Periwinkle 200 */
-        "inverse-primary": "#b899ff",
-        /* Slate Grey 900 */
-        "inverse-surface": "#17181c",
-        /* Glaucous 100 */
-        "surface-container": "#dce0ef",
-        /* Glaucous 50 */
-        "background": "#eeeff7",
-        /* Periwinkle 600 */
-        "primary-container": "#3d00cc",
-        /* Periwinkle 500 */
-        "primary": "#4d00ff",
-        /* Glaucous 50 */
-        "surface-bright": "#eeeff7",
+        "surface-tint": "#6A89A7",
+        "secondary": "#88BDF2",
+        "inverse-primary": "#BDDDFC",
+        "inverse-surface": "#384959",
+        "surface-container": "#D7ECFD",
+        "background": "#F6FAFE",
+        "primary-container": "#88BDF2",
+        "primary": "#6A89A7",
+        "surface-bright": "#F6FAFE",
         "surface-container-lowest": "#ffffff",
-        /* Glaucous 700 */
-        "on-secondary-container": "#303c69",
+        "on-secondary-container": "#384959",
         "on-tertiary-fixed-variant": "#7d2d00",
         "tertiary-fixed-dim": "#ffb596",
-        /* Periwinkle 50 */
-        "on-primary-container": "#ede5ff",
-        /* Glaucous 200 */
-        "secondary-container": "#b9c1df",
-        /* Slate Grey 900 */
-        "on-surface": "#17181c",
-        /* Glaucous 100 */
-        "surface-variant": "#dce0ef",
+        "on-primary-container": "#384959",
+        "secondary-container": "#BDDDFC",
+        "on-surface": "#384959",
+        "surface-variant": "#BDDDFC",
         "on-error-container": "#93000a",
-        /* Slate Grey 700 */
-        "on-surface-variant": "#444855",
+        "on-surface-variant": "#6A89A7",
         "error-container": "#ffdad6",
         "on-error": "#ffffff",
         "on-tertiary-container": "#ffede6",
         "tertiary-container": "#bc4800",
-        /* Glaucous 50 */
-        "surface": "#eeeff7",
-        /* Slate Grey 100 */
-        "outline-variant": "#e3e4e8",
-        /* Periwinkle 50 */
-        "primary-fixed": "#ede5ff",
+        "surface": "#F6FAFE",
+        "outline-variant": "#BDDDFC",
+        "primary-fixed": "#BDDDFC",
         "tertiary": "#943700",
         "tertiary-fixed": "#ffdbcd",
-        /* Glaucous 900 */
-        "on-secondary-fixed": "#101423",
-        "on-primary": "#ffffff",
-        /* Glaucous 100 */
-        "surface-dim": "#dce0ef",
-        /* Periwinkle 200 */
-        "primary-fixed-dim": "#b899ff",
-        /* Glaucous 200 */
-        "surface-container-high": "#b9c1df",
+        "on-secondary-fixed": "#384959",
+        "on-primary": "#FFFFFF",
+        "surface-dim": "#BDDDFC",
+        "primary-fixed-dim": "#88BDF2",
+        "surface-container-high": "#BDDDFC",
         "on-tertiary-fixed": "#360f00",
-        /* Slate Grey 500 */
-        "outline": "#71788e",
-        /* Slate Grey 900 */
-        "on-background": "#17181c",
+        "outline": "#6A89A7",
+        "on-background": "#384959",
         "on-tertiary": "#ffffff",
-        /* Glaucous 50 */
-        "secondary-fixed": "#eeeff7",
-        /* Glaucous 700 */
-        "on-secondary-fixed-variant": "#303c69",
-        /* Glaucous 50 */
-        "inverse-on-surface": "#eeeff7",
-        /* Slate Grey 50 */
-        "surface-container-low": "#f1f1f4",
-        /* Glaucous 300 */
-        "surface-container-highest": "#96a2cf",
-        /* Glaucous 200 */
-        "secondary-fixed-dim": "#b9c1df",
+        "secondary-fixed": "#BDDDFC",
+        "on-secondary-fixed-variant": "#384959",
+        "inverse-on-surface": "#F6FAFE",
+        "surface-container-low": "#EEF7FF",
+        "surface-container-highest": "#88BDF2",
+        "secondary-fixed-dim": "#BDDDFC",
         "error": "#ba1a1a",
-        /* Periwinkle 900 */
-        "on-primary-fixed": "#0f0033",
-        /* Periwinkle 700 */
-        "on-primary-fixed-variant": "#2e0099"
+        "on-primary-fixed": "#384959",
+        "on-primary-fixed-variant": "#384959"
       },
       fontFamily: {
         headline: ["Manrope", "sans-serif"],

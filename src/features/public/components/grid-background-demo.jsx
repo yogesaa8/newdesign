@@ -1,0 +1,21 @@
+import React from "react";
+import CardHoverEffectDemo from "./card-hover-effect-demo";
+import { cn } from "../../../lib/utils";
+
+export default function GridBackgroundDemo() {
+  return (
+    <div className="relative flex min-h-[80vh] md:min-h-screen w-full items-center justify-center bg-white dark:bg-black py-10">
+      <div
+        className={cn(
+          "absolute inset-0",
+          "bg-size-[40px_40px]",
+          "bg-[linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]",
+          "dark:bg-[linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)]",
+        )}
+      />
+      {/* Radial gradient for the container to give a faded look */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white mask-[radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
+      <CardHoverEffectDemo />
+    </div>
+  );
+}
