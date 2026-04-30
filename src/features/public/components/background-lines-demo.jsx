@@ -21,28 +21,28 @@ export default function BackgroundLinesDemo() {
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 text-white">
                 Find Your Dream Job Today!
               </h1>
-              <p className="text-on-surface-variant max-w-xl mb-8">
+              <p className="text-slate-300 max-w-xl mb-8">
                 Connecting Talent with Opportunity: Your Gateway to Career Success
               </p>
 
               {/* Search Bar */}
-              <div className="w-full md:max-w-4xl bg-white rounded-xl overflow-hidden flex flex-col md:flex-row shadow-lg">
+              <div className="w-full md:max-w-4xl bg-white rounded-xl overflow-hidden flex flex-col md:flex-row border border-outline-variant shadow-[0_8px_20px_rgba(15,23,42,0.04)]">
                 <input
                   type="text"
                   placeholder="Job Title or Company"
-                  className="flex-1 px-4 py-4 text-black outline-none"
+                  className="flex-1 px-4 py-4 bg-slate-100 text-on-surface placeholder:text-slate-400 outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary"
                 />
                 <input
                   type="text"
                   placeholder="Select Location"
-                  className="flex-1 px-4 py-3 text-black outline-none border-t md:border-t-0 md:border-l border-outline-variant/30"
+                  className="flex-1 px-4 py-3 bg-slate-100 text-on-surface placeholder:text-slate-400 outline-none border-t md:border-t-0 md:border-l border-outline-variant focus:ring-4 focus:ring-primary/10 focus:border-primary"
                 />
                 <input
                   type="text"
                   placeholder="Select Category"
-                  className="flex-1 px-4 py-3 text-black outline-none border-t md:border-t-0 md:border-l border-outline-variant/30"
+                  className="flex-1 px-4 py-3 bg-slate-100 text-on-surface placeholder:text-slate-400 outline-none border-t md:border-t-0 md:border-l border-outline-variant focus:ring-4 focus:ring-primary/10 focus:border-primary"
                 />
-                <button className="bg-primary px-6 py-4 md:py-3 text-on-primary font-medium hover:bg-primary-container border-t md:border-t-0 transition-colors">
+                <button className="bg-primary px-6 py-4 md:py-3 text-on-primary font-medium shadow-[0_8px_20px_rgba(37,99,235,0.25)] hover:bg-primary-hover active:bg-primary-active border-t md:border-t-0 transition-colors">
                   Search Job
                 </button>
               </div>
@@ -50,32 +50,32 @@ export default function BackgroundLinesDemo() {
               {/* Stats - FIXED */}
               <div className="flex flex-wrap justify-center gap-6 md:gap-12 mt-6 md:mt-16 pb-4">
                 <div className="flex items-center space-x-3">
-                  <div className="bg-primary p-3 rounded-full">
+                  <div className="bg-primary-container text-primary p-3 rounded-full">
                     <PiSuitcaseLight className='h-5 w-5 md:h-8 md:w-8' />
                   </div>
                   <div>
                     <p className="font-bold text-lg text-left text-white">25,850</p>
-                    <p className="text-on-surface-variant text-xs md:text-sm text-left">Jobs</p>
+                    <p className="text-slate-300 text-xs md:text-sm text-left">Jobs</p>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-3">
-                  <div className="bg-primary p-3 rounded-full">
+                  <div className="bg-primary-container text-primary p-3 rounded-full">
                     <FiUsers className='h-5 w-5 md:h-8 md:w-8' />
                   </div>
                   <div>
                     <p className="font-bold text-lg text-left text-white">10,250</p>
-                    <p className="text-on-surface-variant text-xs md:text-sm">Candidates</p>
+                    <p className="text-slate-300 text-xs md:text-sm">Candidates</p>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-3">
-                  <div className="bg-primary p-3 rounded-full">
+                  <div className="bg-primary-container text-primary p-3 rounded-full">
                     <PiBuildingOfficeLight className='h-5 w-5 md:h-8 md:w-8' />
                   </div>
                   <div>
                     <p className="font-bold text-lg text-left text-white">18,400</p>
-                    <p className="text-on-surface-variant text-xs md:text-sm">Companies</p>
+                    <p className="text-slate-300 text-xs md:text-sm">Companies</p>
                   </div>
                 </div>
               </div>
@@ -85,7 +85,7 @@ export default function BackgroundLinesDemo() {
         </div>
 
         {/* Companies Section */}
-        <div className="border-t border-on-surface/20 bg-inverse-surface py-8 md:py-12 px-6 md:px-16 flex flex-wrap justify-center gap-6 md:gap-10 text-on-surface-variant">
+        <div className="border-t border-white/10 bg-inverse-surface py-8 md:py-12 px-6 md:px-16 flex flex-wrap justify-center gap-6 md:gap-10 text-slate-300">
           <div className="flex items-center gap-2">
             <img src={spotify} alt="spotify" className='h-7 md:h-12' />
             <span className='text-xl md:text-4xl'>Spotify</span>

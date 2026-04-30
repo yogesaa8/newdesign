@@ -17,6 +17,14 @@ const MainLayout = ({ children }) => {
     return (
         <div className="bg-surface dark:bg-inverse-surface dark:text-on-surface-variant min-h-screen">
             <div className="flex h-screen overflow-hidden">
+                {/* Mobile sidebar backdrop */}
+                {sidebarOpen && (
+                    <div
+                        className="fixed inset-0 z-9998 bg-black/40 lg:hidden"
+                        onClick={() => setSidebarOpen(false)}
+                    />
+                )}
+
                 {/* <!-- Sidebar --> */}
                 <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 

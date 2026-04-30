@@ -15,13 +15,13 @@ const FeaturesSection = () => {
           <div className="flex flex-col justify-center md:flex-row gap-5 max-w-lg mx-auto md:max-w-2xl lg:max-w-full">
             <a
               href="javascript:;"
-              className="cursor-pointer bg-primary py-3 px-6 rounded-full flex items-center justify-center text-sm font-semibold text-white transition-all duration-500 focus:outline-hidden hover:bg-primary-container"
+              className="cursor-pointer bg-primary py-3 px-6 rounded-full flex items-center justify-center text-sm font-semibold text-white shadow-[0_8px_20px_rgba(37,99,235,0.25)] transition-all duration-500 focus:outline-hidden hover:bg-primary-hover active:bg-primary-active"
             >
               Get started
             </a>
             <a
               href="javascript:;"
-              className="cursor-pointer bg-surface-container-low py-3 px-6 rounded-full flex items-center justify-center text-sm font-semibold text-primary transition-all duration-500 focus:outline-hidden hover:bg-secondary-container"
+              className="cursor-pointer bg-secondary border border-blue-300 py-3 px-6 rounded-full flex items-center justify-center text-sm font-semibold text-primary transition-all duration-500 focus:outline-hidden hover:bg-blue-200"
             >
               Learn more
             </a>
@@ -129,7 +129,7 @@ const FeaturesSection = () => {
             </div>
           </div>
           <div className="relative w-full h-auto">
-            <div className="bg-on-surface-variant rounded-2xl p-5 xl:p-8 h-full">
+            <div className="bg-slate-700 rounded-2xl p-5 xl:p-8 h-full">
               <div className="block">
                 <svg
                   width="30"

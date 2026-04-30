@@ -25,7 +25,7 @@ export const HoverEffect = ({
           <AnimatePresence>
             {hoveredIndex === idx && (
               <motion.span
-                className="absolute inset-0 h-full w-full bg-primary/10 dark:bg-on-surface-variant/20 block  rounded-3xl"
+                className="absolute inset-0 h-full w-full bg-primary/5 dark:bg-on-surface-variant/20 block  rounded-3xl"
                 layoutId="hoverBackground"
                 initial={{ opacity: 0 }}
                 animate={{
@@ -55,7 +55,7 @@ export const Card = ({
   return (
     <div
       className={cn(
-        "rounded-2xl h-full w-full p-4 overflow-hidden bg-inverse-surface border border-transparent dark:border-outline-variant/20 group-hover:border-outline-variant relative z-20",
+        "rounded-2xl h-full w-full p-4 overflow-hidden bg-white border border-outline-variant shadow-[0_8px_20px_rgba(15,23,42,0.04)] group-hover:border-blue-200 group-hover:shadow-[0_12px_30px_rgba(37,99,235,0.08)] group-hover:-translate-y-1 transition-all duration-300 dark:border-outline-variant/20 relative z-20",
         className
       )}>
       <div className="relative z-50">
@@ -69,7 +69,7 @@ export const CardTitle = ({
   children
 }) => {
   return (
-    <h4 className={cn("text-zinc-100 font-bold tracking-wide mt-4", className)}>
+    <h4 className={cn("text-on-surface font-bold tracking-wide mt-4", className)}>
       {children}
     </h4>
   );
@@ -80,7 +80,7 @@ export const CardDescription = ({
 }) => {
   return (
     <p
-      className={cn("mt-8 text-orange-400 tracking-wide leading-relaxed text-sm", className)}>
+      className={cn("mt-8 text-on-surface-variant tracking-wide leading-relaxed text-sm", className)}>
       {children}
     </p>
   );

@@ -4,7 +4,7 @@ import { cn } from "../../../lib/utils";
 
 export default function GridBackgroundDemo() {
   return (
-    <div className="relative flex min-h-[80vh] md:min-h-screen w-full items-center justify-center bg-white dark:bg-black py-10">
+    <div className="relative flex min-h-[80vh] md:min-h-screen w-full items-center justify-center bg-background dark:bg-inverse-surface py-10">
       <div
         className={cn(
           "absolute inset-0",
@@ -14,7 +14,7 @@ export default function GridBackgroundDemo() {
         )}
       />
       {/* Radial gradient for the container to give a faded look */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white mask-[radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-background mask-[radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-inverse-surface"></div>
       <CardHoverEffectDemo />
     </div>
   );

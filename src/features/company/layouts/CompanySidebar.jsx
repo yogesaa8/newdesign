@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-const CompanySidebar = () => {
+const CompanySidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path;
@@ -19,7 +19,10 @@ const CompanySidebar = () => {
   ];
 
   return (
-    <aside className="h-screen sticky top-0 left-0 w-64 bg-surface-container-low dark:bg-inverse-surface flex flex-col p-4 gap-2 font-headline font-medium antialiased hidden md:flex">
+    <aside className={`h-screen top-0 left-0 z-50 w-64 bg-surface-container-low dark:bg-inverse-surface flex flex-col p-4 gap-2 font-headline font-medium antialiased transition-transform duration-300 ease-in-out
+      fixed md:sticky
+      ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+    `}>
       {/* Logo Section */}
       <div className="px-2 py-4 mb-4">
         <span className="text-xl font-extrabold tracking-tight text-on-surface dark:text-white">

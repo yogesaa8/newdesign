@@ -43,8 +43,8 @@ const Dashboard = () => {
       value: '42',
       badge: '15 New',
       badgeColor: 'bg-primary text-white',
-      iconBg: 'bg-primary-container/10',
-      iconColor: 'text-primary-container',
+      iconBg: 'bg-primary/10',
+      iconColor: 'text-primary',
     },
   ];
 
@@ -59,7 +59,7 @@ const Dashboard = () => {
     {
       id: 1,
       icon: 'check_circle',
-      iconColor: 'text-primary-container',
+      iconColor: 'text-primary',
       title: 'Sarah Jenkins shortlisted',
       subtitle: 'Product Designer role • 2m ago',
     },
@@ -155,7 +155,7 @@ const Dashboard = () => {
           </div>
           <Link
             to="/company-post-job"
-            className="bg-gradient-to-br from-primary to-primary-container text-white px-6 py-2.5 rounded-lg font-semibold flex items-center gap-2 hover:opacity-90 transition-all shadow-md"
+            className="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-semibold flex items-center gap-2 hover:bg-primary-hover transition-all shadow-md"
           >
             <span className="material-symbols-outlined text-sm">add</span>
             Create Job Posting
@@ -309,7 +309,7 @@ const Dashboard = () => {
                       </button>
                       <button
                         onClick={() => handleReject(applicant.id)}
-                        className="px-4 py-1.5 bg-error-container/20 text-error font-bold text-xs rounded-full hover:bg-error-container hover:text-on-error-container transition-all"
+                        className="px-4 py-1.5 bg-error/8 text-error font-bold text-xs rounded-full hover:bg-error/15 transition-all"
                       >
                         Reject
                       </button>

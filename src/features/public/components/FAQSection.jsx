@@ -58,7 +58,7 @@ const FAQSection = () => {
             {faqs.map((faq, index) => (
               <div
                 key={index}
-                className={`rounded-xl p-5 cursor-pointer transition ${
+                className={`rounded-xl border border-outline-variant p-5 cursor-pointer transition hover:border-blue-200 hover:shadow-[0_12px_30px_rgba(37,99,235,0.08)] ${
                   activeIndex === index ? "bg-secondary-container" : "bg-surface-container-low"
                 }`}
                 onClick={() => toggleAccordion(index)}
@@ -84,7 +84,7 @@ const FAQSection = () => {
           </div>
 
           {/* RIGHT SIDE - CONTACT FORM */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
+          <div className="bg-white rounded-xl border border-outline-variant p-6 shadow-[0_8px_20px_rgba(15,23,42,0.04)]">
             <h3 className="text-lg font-semibold text-on-surface mb-2">
               In what way can we help?
             </h3>
@@ -96,21 +96,21 @@ const FAQSection = () => {
               <input
                 type="text"
                 placeholder="John Smith"
-                className="w-full border border-outline-variant rounded-lg px-4 py-2 outline-none focus:border-primary"
+                className="w-full border border-input bg-slate-100 rounded-xl px-4 py-2 text-on-surface placeholder:text-slate-400 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10"
               />
 
               <input
                 type="email"
                 placeholder="pagedone@gmail.com"
-                className="w-full border border-outline-variant rounded-lg px-4 py-2 outline-none focus:border-primary"
+                className="w-full border border-input bg-slate-100 rounded-xl px-4 py-2 text-on-surface placeholder:text-slate-400 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10"
               />
 
               <textarea
                 placeholder="Enter here..."
-                className="w-full border border-outline-variant rounded-lg px-4 py-2 h-28 outline-none focus:border-primary"
+                className="w-full border border-input bg-slate-100 rounded-xl px-4 py-2 h-28 text-on-surface placeholder:text-slate-400 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10"
               ></textarea>
 
-              <button className="bg-primary text-white px-6 py-2 rounded-lg w-full hover:bg-primary-container transition-colors">
+              <button className="bg-primary text-white px-6 py-2 rounded-xl w-full shadow-[0_8px_20px_rgba(37,99,235,0.25)] hover:bg-primary-hover active:bg-primary-active transition-colors">
                 Submit Now
               </button>
             </div>

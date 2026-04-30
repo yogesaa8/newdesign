@@ -201,9 +201,9 @@ const ApplicantsList = () => {
                           >
                             Shortlist
                           </button>
-                          <button 
+                          <button
                             onClick={() => handleReject(applicant.id)}
-                            className="px-3 py-1.5 rounded-lg text-error hover:bg-error/10 font-bold text-xs transition-all"
+                            className="px-3 py-1.5 rounded-lg text-error bg-error/8 hover:bg-error/15 font-bold text-xs transition-all"
                           >
                             Reject
                           </button>

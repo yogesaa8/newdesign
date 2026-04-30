@@ -64,7 +64,7 @@ const jobs = [
 
 const JobCard = ({ job }) => {
   return (
-    <div className="bg-white border border-outline-variant md:max-w-xl rounded-2xl shadow-sm p-6 flex flex-col gap-4 mb-5">
+    <div className="bg-white border border-outline-variant md:max-w-xl rounded-2xl shadow-[0_8px_20px_rgba(15,23,42,0.04)] hover:border-blue-200 hover:shadow-[0_12px_30px_rgba(37,99,235,0.08)] hover:-translate-y-1 transition-all duration-300 p-6 flex flex-col gap-4 mb-5">
       {/* Top Row */}
       <div className="flex justify-between items-start">
         <span className="text-xs bg-surface-container-low text-primary px-3 py-1 rounded-full">
@@ -100,7 +100,7 @@ const JobCard = ({ job }) => {
 
       {/* Button */}
       <div className="flex justify-end">
-        <button className="bg-primary text-white text-sm px-5 py-2 rounded-lg hover:bg-primary-container transition-colors">
+        <button className="bg-primary text-white text-sm px-5 py-2 rounded-xl shadow-[0_8px_20px_rgba(37,99,235,0.25)] hover:bg-primary-hover active:bg-primary-active transition-colors">
           Job Details
         </button>
       </div>
