@@ -1,6 +1,9 @@
 "use client";
 import { motion } from "motion/react";
-import { HeroHighlight, Highlight } from "../../../components/ui/hero-highlight";
+import {
+  HeroHighlight,
+  Highlight,
+} from "../../../components/ui/hero-highlight";
 
 export default function HeroHighlightDemo() {
   return (
@@ -18,13 +21,10 @@ export default function HeroHighlightDemo() {
           duration: 0.5,
           ease: [0.4, 0.0, 0.2, 1],
         }}
-        className="text-xl sm:text-2xl px-4 md:text-4xl lg:text-5xl font-bold text-on-surface dark:text-white max-w-4xl leading-relaxed lg:leading-snug text-center mx-auto "
+        className="text-xl sm:text-2xl px-4 md:text-4xl lg:text-5xl font-bold max-w-4xl leading-relaxed lg:leading-snug text-center mx-auto"
       >
-        With insomnia, nothing&apos;s real. Everything is far away. Everything
-        is a{" "}
-        <Highlight className="text-on-surface dark:text-white">
-          copy, of a copy, of a copy.
-        </Highlight>
+        Explore fresher jobs from top{" "}
+        <Highlight> employers worldwide</Highlight>.
       </motion.h1>
     </HeroHighlight>
   );

@@ -1,34 +1,35 @@
 import React, { useState } from "react";
+
 const faqs = [
   {
-    question: "How do I update my billing information?",
+    question: "How do I apply for jobs?",
     answer:
-      'To update your billing information, log in and go to the billing or payment page. Look for an option to "Update payment method" or "Edit billing information" and follow the prompts. Be sure to save your changes before exiting.',
+      "Browse job listings, select a role, and click apply. You can submit your resume and cover letter directly through the portal in just a few clicks.",
   },
   {
-    question: "How do I delete my account?",
+    question: "Is creating an account free?",
     answer:
-      "To delete your account, go to account settings and select delete account option. Follow the steps to confirm.",
+      "Yes, signing up is free for job seekers. Create a profile, upload your resume, and start applying to roles at no cost.",
   },
   {
-    question: "How do I join a group or community?",
+    question: "Can I upload multiple resumes?",
     answer:
-      "You can join a group by navigating to the community section and selecting a group of your choice.",
+      "Yes, you can upload multiple resumes and tailor your application to different job types and industries.",
   },
   {
-    question: "How can I contact customer support?",
+    question: "How do job alerts work?",
     answer:
-      "You can contact support via the contact form or email provided in the support section.",
+      "Set your preferences for role type, location, and experience level to receive email alerts for new jobs that match your profile.",
   },
   {
-    question: "Which is better short term or long term?",
+    question: "How do I prepare for interviews?",
     answer:
-      "It depends on your goals. Short term is good for quick results, long term for stability.",
+      "Use our career resources and interview guides to practice answers, refine your skills, and feel confident for every stage.",
   },
   {
-    question: "How do I change my email address?",
+    question: "How do I know a company is trusted?",
     answer:
-      "Go to account settings and update your email under profile section.",
+      "We highlight verified employers and trusted job postings from companies with strong hiring records and positive candidate reviews.",
   },
 ];
 
@@ -40,78 +41,105 @@ const FAQSection = () => {
   };
 
   return (
-    <div className="bg-surface py-16 px-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="py-24 px-4 relative bg-[#0a0a0a] overflow-hidden">
+      {/* Background Glow Orbs */}
+      <div className="absolute top-0 left-1/3 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[150px] pointer-events-none"></div>
+      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+      <div className="max-w-6xl mx-auto relative z-10">
         {/* Heading */}
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-semibold text-on-surface">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-zinc-500">
             Frequently Asked Questions
           </h2>
-          <p className="text-outline mt-2">
-            Trusted in more than 100 countries and 5 million customers.
+          <p className="mt-4 text-zinc-400 text-lg max-w-xl mx-auto">
+            Get quick answers about applying, alerts, account setup, and career
+            support.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-10 items-start">
           {/* LEFT SIDE - ACCORDION */}
           <div className="space-y-4">
             {faqs.map((faq, index) => (
               <div
                 key={index}
-                className={`rounded-xl border border-outline-variant p-5 cursor-pointer transition hover:border-blue-200 hover:shadow-[0_12px_30px_rgba(37,99,235,0.08)] ${
-                  activeIndex === index ? "bg-secondary-container" : "bg-surface-container-low"
+                className={`rounded border p-5 cursor-pointer transition-all duration-300 backdrop-blur-sm ${
+                  activeIndex === index
+                    ? "bg-zinc-900/60 border-purple-500/50 shadow-[0_0_30px_-10px_rgba(168,85,247,0.4)]"
+                    : "bg-zinc-900/30 border-zinc-800 hover:border-zinc-700 hover:bg-zinc-900/50"
                 }`}
                 onClick={() => toggleAccordion(index)}
               >
-                <div className="flex justify-between items-center">
-                  <h3 className="text-on-surface font-medium">{faq.question}</h3>
+                <div className="flex justify-between items-center gap-4">
+                  <h3
+                    className={`font-medium transition-colors duration-300 ${
+                      activeIndex === index
+                        ? "text-purple-300"
+                        : "text-zinc-200"
+                    }`}
+                  >
+                    {faq.question}
+                  </h3>
 
-                  <span className="text-primary text-xl">
-                    {activeIndex === index ? "−" : "+"}
+                  {/* Animated Plus/Minus Icon */}
+                  <span
+                    className={`text-2xl text-zinc-500 font-light transition-transform duration-300 flex-shrink-0 ${
+                      activeIndex === index ? "rotate-45 text-purple-400" : ""
+                    }`}
+                  >
+                    +
                   </span>
                 </div>
 
-                {/* Answer */}
+                {/* Answer with smooth height transition */}
                 <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    activeIndex === index ? "max-h-40 mt-3" : "max-h-0"
+                  className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                    activeIndex === index
+                      ? "max-h-40 mt-4 opacity-100"
+                      : "max-h-0 mt-0 opacity-0"
                   }`}
                 >
-                  <p className="text-on-surface-variant text-sm">{faq.answer}</p>
+                  <p className="text-sm text-zinc-400 leading-relaxed border-t border-zinc-800 pt-4">
+                    {faq.answer}
+                  </p>
                 </div>
               </div>
             ))}
           </div>
 
           {/* RIGHT SIDE - CONTACT FORM */}
-          <div className="bg-white rounded-xl border border-outline-variant p-6 shadow-[0_8px_20px_rgba(15,23,42,0.04)]">
-            <h3 className="text-lg font-semibold text-on-surface mb-2">
-              In what way can we help?
-            </h3>
-            <p className="text-outline text-sm mb-4">
-              Feel free to reach out to us with your inquiries.
-            </p>
+          <div className="rounded border border-zinc-800 bg-zinc-900/40 backdrop-blur-md p-8 shadow-xl">
+            <div className="mb-6">
+              <h3 className="text-2xl font-bold text-white">
+                How can we support your job search?
+              </h3>
+              <p className="text-sm text-zinc-400 mt-2">
+                Send us your question and our team will help you get started.
+              </p>
+            </div>
 
-            <div className="space-y-4">
+            <div className="space-y-5">
               <input
                 type="text"
-                placeholder="John Smith"
-                className="w-full border border-input bg-slate-100 rounded-xl px-4 py-2 text-on-surface placeholder:text-slate-400 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10"
+                placeholder="Your name"
+                className="w-full bg-zinc-900/60 border border-zinc-800 rounded px-4 py-3 outline-none text-white placeholder-zinc-600 focus:border-purple-500 focus:shadow-[0_0_15px_-5px_rgba(168,85,247,0.3)] transition-all duration-300"
               />
 
               <input
                 type="email"
-                placeholder="pagedone@gmail.com"
-                className="w-full border border-input bg-slate-100 rounded-xl px-4 py-2 text-on-surface placeholder:text-slate-400 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10"
+                placeholder="you@example.com"
+                className="w-full bg-zinc-900/60 border border-zinc-800 rounded px-4 py-3 outline-none text-white placeholder-zinc-600 focus:border-purple-500 focus:shadow-[0_0_15px_-5px_rgba(168,85,247,0.3)] transition-all duration-300"
               />
 
               <textarea
-                placeholder="Enter here..."
-                className="w-full border border-input bg-slate-100 rounded-xl px-4 py-2 h-28 text-on-surface placeholder:text-slate-400 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10"
+                placeholder="Describe your question..."
+                rows={4}
+                className="w-full bg-zinc-900/60 border border-zinc-800 rounded px-4 py-3 outline-none text-white placeholder-zinc-600 focus:border-purple-500 focus:shadow-[0_0_15px_-5px_rgba(168,85,247,0.3)] transition-all duration-300 resize-none"
               ></textarea>
 
-              <button className="bg-primary text-white px-6 py-2 rounded-xl w-full shadow-[0_8px_20px_rgba(37,99,235,0.25)] hover:bg-primary-hover active:bg-primary-active transition-colors">
-                Submit Now
+              <button className="w-full py-3 rounded text-white font-semibold bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 transition-all duration-300 hover:shadow-[0_0_30px_-5px_rgba(168,85,247,0.5)] active:scale-[0.98]">
+                Send Message
               </button>
             </div>
           </div>

@@ -1,17 +1,25 @@
-import React from 'react'
-import { BrowserRouter } from 'react-router-dom'
-import AppRoutes from './routes/AppRoutes'
-import ScrollToTop from './components/layout/ScrollToTop'
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./routes/AppRoutes";
+import ScrollToTop from "./components/layout/ScrollToTop";
+import Banner from "./components/layout/Banner";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
   return (
-    <div className="min-h-screen bg-background text-text-main">
-      <BrowserRouter>
+    <BrowserRouter>
+      <div className="min-h-screen flex flex-col">
+        <Banner />
         <ScrollToTop />
-        <AppRoutes />
-      </BrowserRouter>
-    </div>
-  )
-}
 
-export default App
+        <div className="flex-1 flex flex-col">
+          <AppRoutes />
+        </div>
+
+        <Toaster />
+      </div>
+    </BrowserRouter>
+  );
+};
+
+export default App;

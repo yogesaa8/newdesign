@@ -14,45 +14,25 @@ import {
 import { useState } from "react";
 import BackgroundLinesDemo from "./background-lines-demo";
 import { Link } from "react-router-dom";
+import navItems from "../data/headerData.json";
 
 export function NavbarDemo() {
-  const navItems = [
-    {
-      name: "Jobs",
-      link: "/jobs",
-    },
-    {
-      name: "Resume",
-      link: "/resume",
-    },
-    {
-      name: "Services",
-      children: [
-        { name: "Company", link: "/company" },
-        { name: "College", link: "/college" },
-      ],
-    },
-    {
-      name: "Review",
-      link: "/review",
-    },
-  ];
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full bg-[#fff7f3]">
       <Navbar>
         {/* Desktop Navigation */}
         <NavBody>
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
-            <NavbarButton as={Link} to="/job-seeker-login" variant="secondary">
+            <NavbarButton as={Link} to="/job-seeker/login" variant="secondary">
               Login
             </NavbarButton>
-            <NavbarButton as={Link} to="/job-seeker-signup" variant="primary">
-              Get Started
+            <NavbarButton as={Link} to="/job-seeker/signup" variant="primary">
+              Sign Up
             </NavbarButton>
           </div>
         </NavBody>
@@ -109,7 +89,7 @@ export function NavbarDemo() {
             ))}
             <div className="flex w-full flex-col gap-4">
               <NavbarButton
-                href="/job-seeker-login"
+                href="/job-seeker/login"
                 onClick={() => setIsMobileMenuOpen(false)}
                 variant="primary"
                 className="w-full"
@@ -118,12 +98,12 @@ export function NavbarDemo() {
               </NavbarButton>
 
               <NavbarButton
-                href="/job-seeker-signup"
+                href="/job-seeker/signup"
                 onClick={() => setIsMobileMenuOpen(false)}
                 variant="primary"
                 className="w-full"
               >
-                Get Started
+                Sign Up
               </NavbarButton>
             </div>
           </MobileNavMenu>

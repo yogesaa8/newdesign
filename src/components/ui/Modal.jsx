@@ -5,17 +5,21 @@ const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-99999 flex items-center justify-center bg-black/40 px-4">
-      <div className="relative w-full max-w-xl rounded-2xl border border-outline-variant bg-white shadow-2xl dark:border-outline-variant/30 dark:bg-inverse-surface">
-        <div className="flex items-center justify-between border-b border-outline-variant py-4 px-6 dark:border-outline-variant/30">
-          <h3 className="font-medium text-on-surface dark:text-white">{title}</h3>
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/50 px-4 backdrop-blur-sm">
+      <div className="relative w-full max-w-xl rounded border border-orange-100 bg-white shadow-2xl">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-orange-100 bg-orange-50 px-6 py-4 rounded-t-2xl">
+          <h3 className="text-lg font-semibold text-orange-700">{title}</h3>
+
           <button
             onClick={onClose}
-            className="text-outline hover:text-primary transition-colors"
+            className="flex h-9 w-9 items-center justify-center rounded text-orange-500 transition hover:bg-orange-100 hover:text-orange-700"
           >
-            <FiX size={24} />
+            <FiX size={22} />
           </button>
         </div>
+
+        {/* Body */}
         <div className="p-6">{children}</div>
       </div>
     </div>

@@ -1,0 +1,31 @@
+[
+    {
+        "name": "Jobs",
+        "link": "/jobs"
+    },
+    {
+        "name": "Resume",
+        "link": "/resume"
+    },
+    {
+        "name": "Services",
+        "children": [
+            {
+                "name": "Company",
+                "link": "/company/signup"
+            },
+            {
+                "name": "College",
+                "link": "/college"
+            },
+            {
+                "name": "Career GPS",
+                "link": "/career-gps"
+            }
+        ]
+    },
+    {
+        "name": "Review",
+        "link": "/reviews"
+    }
+]

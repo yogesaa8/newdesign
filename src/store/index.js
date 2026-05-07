@@ -1,4 +1,4 @@
 export { useAuthStore } from "./authStore";
-export { useJobStore } from "./jobStore";
-export { useCompanyStore } from "./companyStore";
-export { useAdminStore } from "./adminStore";
+export { useJobStore } from "../features/seeker/store/jobStore";
+export { useCompanyStore } from "../features/company/store/companyStore";
+export { useAdminStore } from "../features/admin/store/adminStore";

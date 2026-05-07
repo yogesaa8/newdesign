@@ -33,44 +33,11 @@ h6 {
   letter-spacing: -0.03em;
 }
 
+
 /* Tailwind theme tokens */
 @theme inline {
   --font-sans: "Rubik", sans-serif;
   --font-heading: "Rubik", sans-serif;
-
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -81,126 +48,51 @@ h6 {
 
 /* Light theme */
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-
-  --card: #ffffff;
-  --card-foreground: #0f172a;
-
-  --popover: #ffffff;
-  --popover-foreground: #0f172a;
-
-  --primary: #2563eb;
-  --primary-foreground: #ffffff;
-
-  --secondary: #dbeafe;
-  --secondary-foreground: #2563eb;
-
-  --muted: #f1f5f9;
-  --muted-foreground: #475569;
-
-  --accent: #eff6ff;
-  --accent-foreground: #1d4ed8;
-
-  --border: #e2e8f0;
-  --input: #cbd5e1;
-  --ring: #2563eb;
-
   --radius: 1rem;
-
-  --sidebar: #ffffff;
-  --sidebar-foreground: #0f172a;
-  --sidebar-primary: #2563eb;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #eff6ff;
-  --sidebar-accent-foreground: #1d4ed8;
-  --sidebar-border: #e2e8f0;
-  --sidebar-ring: #2563eb;
-}
-
-/* Dark theme */
-.dark {
-  --background: #0b1120;
-  --foreground: #f8fafc;
-
-  --card: #111827;
-  --card-foreground: #f8fafc;
-
-  --popover: #111827;
-  --popover-foreground: #f8fafc;
-
-  --primary: #60a5fa;
-  --primary-foreground: #0b1120;
-
-  --secondary: #1e3a8a;
-  --secondary-foreground: #dbeafe;
-
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
-
-  --accent: #172554;
-  --accent-foreground: #bfdbfe;
-
-  --border: #334155;
-  --input: #334155;
-  --ring: #60a5fa;
-
-  --sidebar: #111827;
-  --sidebar-foreground: #f8fafc;
-  --sidebar-primary: #60a5fa;
-  --sidebar-primary-foreground: #0b1120;
-  --sidebar-accent: #172554;
-  --sidebar-accent-foreground: #bfdbfe;
-  --sidebar-border: #334155;
-  --sidebar-ring: #60a5fa;
 }
 
 /* Base layer */
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-
   html {
     @apply font-sans scroll-smooth;
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply antialiased;
   }
 }
 
 /* Reusable components */
 @layer components {
   .job-card {
-    @apply bg-card border border-border rounded-2xl p-5 shadow-[0_8px_20px_rgba(15,23,42,0.04)] hover:border-blue-200 hover:shadow-[0_12px_30px_rgba(37,99,235,0.08)] hover:-translate-y-1 transition-all duration-300;
+    @apply rounded-2xl p-5 hover:-translate-y-1 transition-all duration-300;
   }
 
   .primary-btn {
-    @apply bg-primary text-primary-foreground px-5 py-2.5 rounded-xl font-semibold hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 shadow-[0_8px_20px_rgba(37,99,235,0.25)];
+    @apply px-5 py-2.5 rounded-xl font-semibold transition-all duration-200;
   }
 
   .secondary-btn {
-    @apply bg-secondary text-secondary-foreground border border-blue-300 px-5 py-2.5 rounded-xl font-semibold hover:bg-blue-200 transition-all duration-200;
+    @apply px-5 py-2.5 rounded-xl font-semibold transition-all duration-200;
   }
 
   .input-field {
-    @apply w-full rounded-xl border border-input bg-slate-100 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:ring-4 focus:ring-blue-600/10 focus:border-primary;
+    @apply w-full rounded-xl px-4 py-3 text-sm outline-none focus:ring-4;
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl font-extrabold tracking-tight text-foreground;
+    @apply text-3xl md:text-4xl font-extrabold tracking-tight;
   }
 
   .section-subtitle {
-    @apply text-muted-foreground text-base md:text-lg mt-2 max-w-2xl;
+    @apply text-base md:text-lg mt-2 max-w-2xl;
   }
 
   /* .container-custom {
-    @apply max-w-7xl mx-auto px-4 md:px-8;
-  } */
+ @apply max-w-7xl mx-auto px-4 md:px-8;
+ } */
 
   .navbar-link {
-    @apply text-sm font-medium text-muted-foreground hover:text-foreground transition-colors;
+    @apply text-sm font-medium transition-colors;
   }
 }
