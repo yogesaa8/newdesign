@@ -5,7 +5,7 @@ import { useAuthStore } from "../store";
 const ProtectedRoute = ({
   allowedRoles,
   children,
-  redirectTo = "/job-seeker/login",
+  redirectTo = "/seeker/login",
 }) => {
   const { isAuthenticated, role } = useAuthStore();
 
@@ -17,10 +17,10 @@ const ProtectedRoute = ({
   // 2. Agar logged in hai lekin usko yahan entry nahi hai (Galat role)
   if (allowedRoles && !allowedRoles.includes(role)) {
     // Role ke hisaab sahi dashboard par bhej do
-    if (role === "seeker") return <Navigate to="/job-seeker/dashboard" replace />;
+    if (role === "seeker") return <Navigate to="/seeker/dashboard" replace />;
     if (role === "company") return <Navigate to="/company/dashboard" replace />;
     if (role === "admin") return <Navigate to="/admin/dashboard" replace />;
-    
+
     return <Navigate to={redirectTo} replace />;
   }
 

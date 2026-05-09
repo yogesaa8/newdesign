@@ -1,8 +1,4 @@
 import React, { useState } from "react";
-import { RiLockPasswordLine } from "react-icons/ri";
-import { IoMdBusiness } from "react-icons/io";
-import { AiTwotoneMail } from "react-icons/ai";
-import { LiaIndustrySolid } from "react-icons/lia";
 import { BsGoogle } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
@@ -10,23 +6,42 @@ import { useAuthStore } from "../../../../store";
 
 const CompanySignupPage = () => {
   const navigate = useNavigate();
-  const { setAuth } = useAuthStore();
+
+  const {
+    setAuth,
+
+    // Replace these names with your actual store API functions
+    registerCompany,
+    verifyCompanyOtp,
+    completeCompanyProfile,
+  } = useAuthStore();
+
+  const [step, setStep] = useState(1);
+  const [otpSent, setOtpSent] = useState(false);
 
   const [formData, setFormData] = useState({
-    companyName: "",
     email: "",
-    industry: "Technology",
+    phone_no: "",
     password: "",
+    otp: "",
+
+    company_name: "",
+    industry: "",
+    company_size: "",
+    gstin: "",
+    company_website: "",
+
     agreeTerms: false,
   });
 
   const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
+  const [isSubmittingProfile, setIsSubmittingProfile] = useState(false);
 
-  // Password Strength Checker
   const getPasswordStrength = (password) => {
     if (!password) return { level: 0, text: "", color: "" };
-    
+
     let strength = 0;
     if (password.length >= 8) strength++;
     if (/[A-Z]/.test(password)) strength++;
@@ -34,39 +49,53 @@ const CompanySignupPage = () => {
     if (/[^A-Za-z0-9]/.test(password)) strength++;
 
     if (strength <= 1) return { level: 25, text: "Weak", color: "bg-red-500" };
-    if (strength === 2) return { level: 50, text: "Fair", color: "bg-yellow-500" };
-    if (strength === 3) return { level: 75, text: "Good", color: "bg-blue-500" };
+    if (strength === 2)
+      return { level: 50, text: "Fair", color: "bg-yellow-500" };
+    if (strength === 3)
+      return { level: 75, text: "Good", color: "bg-blue-500" };
+
     return { level: 100, text: "Strong", color: "bg-emerald-500" };
   };
 
   const pwdStrength = getPasswordStrength(formData.password);
 
-  // Handle Input Changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]:
+        name === "phone_no"
+          ? value.replace(/\D/g, "").slice(0, 10)
+          : name === "otp"
+            ? value.replace(/\D/g, "").slice(0, 6)
+            : type === "checkbox"
+              ? checked
+              : value,
     }));
 
-    // Clear error for the specific field when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
+
+    if (errors.api) {
+      setErrors((prev) => ({ ...prev, api: "" }));
+    }
   };
 
-  // Form Validation Logic
-  const validateForm = () => {
+  const validateRegisterFields = () => {
     const newErrors = {};
 
-    if (!formData.companyName.trim()) {
-      newErrors.companyName = "Company name is required.";
-    }
-
     if (!formData.email.trim()) {
-      newErrors.email = "Contact email is required.";
+      newErrors.email = "Email is required.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Please enter a valid email address.";
+    }
+
+    if (!formData.phone_no.trim()) {
+      newErrors.phone_no = "Phone number is required.";
+    } else if (formData.phone_no.length !== 10) {
+      newErrors.phone_no = "Phone number must be 10 digits.";
     }
 
     if (!formData.password) {
@@ -83,24 +112,145 @@ const CompanySignupPage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle Form Submit
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
+  const validateOtp = () => {
+    const newErrors = {};
 
-    setIsSubmitting(true);
+    if (!formData.otp.trim()) {
+      newErrors.otp = "OTP is required.";
+    } else if (formData.otp.length !== 6) {
+      newErrors.otp = "OTP must be 6 digits.";
+    }
 
-    // Simulating API Call
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const validateCompanyDetails = () => {
+    const newErrors = {};
+
+    if (!formData.company_name.trim()) {
+      newErrors.company_name = "Company name is required.";
+    }
+
+    if (!formData.industry.trim()) {
+      newErrors.industry = "Industry is required.";
+    }
+
+    if (!formData.company_size.trim()) {
+      newErrors.company_size = "Company size is required.";
+    }
+
+    if (!formData.gstin.trim()) {
+      newErrors.gstin = "GSTIN is required.";
+    }
+
+    if (!formData.company_website.trim()) {
+      newErrors.company_website = "Company website is required.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSendOtp = async () => {
+    if (!validateRegisterFields()) return;
+
+    setIsSendingOtp(true);
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log("Account Creation Data: ", formData);
-      alert("Account created successfully! (Check console for data)");
-      // navigate('/step-2'); // Next step pe jaane ke liye ye use karein
+      const registerPayload = {
+        email: formData.email,
+        phone_no: formData.phone_no,
+        password: formData.password,
+      };
+
+      console.log("Register API Payload:", registerPayload);
+
+      // Register API call: this should send OTP to email/phone
+      if (registerCompany) {
+        await registerCompany(registerPayload);
+      }
+
+      setOtpSent(true);
     } catch (error) {
-      setErrors({ api: "Something went wrong. Please try again." });
+      setErrors({
+        api: error?.message || "Unable to send OTP. Please try again.",
+      });
     } finally {
-      setIsSubmitting(false);
+      setIsSendingOtp(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+
+    if (!otpSent) {
+      setErrors({ otp: "Please send OTP first." });
+      return;
+    }
+
+    if (!validateOtp()) return;
+
+    setIsVerifyingOtp(true);
+
+    try {
+      const verifyOtpPayload = {
+        email: formData.email,
+        otp: formData.otp,
+      };
+
+      console.log("Verify OTP API Payload:", verifyOtpPayload);
+
+      // OTP verify API call
+      if (verifyCompanyOtp) {
+        await verifyCompanyOtp(verifyOtpPayload);
+      }
+
+      setStep(2);
+      setErrors({});
+    } catch (error) {
+      setErrors({
+        api: error?.message || "Invalid OTP. Please try again.",
+      });
+    } finally {
+      setIsVerifyingOtp(false);
+    }
+  };
+
+  const handleSubmitCompanyDetails = async (e) => {
+    e.preventDefault();
+
+    if (!validateCompanyDetails()) return;
+
+    setIsSubmittingProfile(true);
+
+    try {
+      const companyDetailsPayload = {
+        company_name: formData.company_name,
+        industry: formData.industry,
+        company_size: formData.company_size,
+        gstin: formData.gstin,
+        company_website: formData.company_website,
+      };
+
+      console.log("Company Details API Payload:", companyDetailsPayload);
+
+      // Second API call
+      if (completeCompanyProfile) {
+        await completeCompanyProfile(companyDetailsPayload);
+      }
+
+      alert(
+        "Company details submitted successfully. Your account will be created after approval.",
+      );
+
+      navigate("/company/login");
+    } catch (error) {
+      setErrors({
+        api: error?.message || "Something went wrong. Please try again.",
+      });
+    } finally {
+      setIsSubmittingProfile(false);
     }
   };
 
@@ -108,7 +258,7 @@ const CompanySignupPage = () => {
     setAuth({
       role: "company",
       user: {
-        name: formData.companyName || "RecruitPro Company",
+        name: formData.company_name || "RecruitPro Company",
         email: formData.email || "company.google@example.com",
       },
     });
@@ -119,11 +269,12 @@ const CompanySignupPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-slate-50">
       <div className="max-w-6xl w-full grid lg:grid-cols-2 gap-12 items-center">
-        {/* Left Side */}
         <div className="hidden lg:block space-y-8">
           <div>
-            <div className="flex items-center gap-2 font-bold mb-4 ">
-              <span className="px-3 py-1 rounded-full text-sm bg-orange-100 text-orange-600 font-medium">RecruitPro</span>
+            <div className="flex items-center gap-2 font-bold mb-4">
+              <span className="px-3 py-1 rounded-full text-sm bg-orange-100 text-orange-600 font-medium">
+                RecruitPro
+              </span>
             </div>
 
             <h1 className="text-5xl font-extrabold tracking-tight leading-tight text-slate-900">
@@ -177,206 +328,374 @@ const CompanySignupPage = () => {
           </div>
         </div>
 
-        {/* Right Side */}
         <div className="rounded shadow-xl p-10 bg-white border border-slate-200">
           <div className="mb-8">
             <h2 className="text-3xl font-extrabold text-slate-900">
               Create Employer Account
             </h2>
+
             <p className="mt-2 inline-block px-3 py-1 rounded-full text-sm bg-orange-50 text-orange-600 font-medium">
-              Step 1 of 2: Company Profile
+              Step {step} of 2:{" "}
+              {step === 1 ? "Account Verification" : "Company Details"}
             </p>
           </div>
 
-          {/* API Error Display */}
           {errors.api && (
             <div className="mb-4 p-3 rounded bg-red-50 border border-red-200 text-sm text-red-600">
               {errors.api}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-            <InputField
-              label="Company Name"
-              name="companyName"
-              icon={<IoMdBusiness />}
-              type="text"
-              placeholder="Acme Corp"
-              value={formData.companyName}
-              onChange={handleChange}
-              error={errors.companyName}
-            />
+          {step === 1 && (
+            <form onSubmit={handleVerifyOtp} className="space-y-6" noValidate>
+              <FloatingInput
+                label="Email Address"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                error={errors.email}
+              />
 
-            <InputField
-              label="Contact Email"
-              name="email"
-              icon={<AiTwotoneMail />}
-              type="email"
-              placeholder="hiring@company.com"
-              value={formData.email}
-              onChange={handleChange}
-              error={errors.email}
-            />
+              <FloatingInput
+                label="Phone Number"
+                name="phone_no"
+                type="tel"
+                value={formData.phone_no}
+                onChange={handleChange}
+                error={errors.phone_no}
+              />
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold mb-1.5 text-slate-700">
-                  Industry
-                </label>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                    <LiaIndustrySolid />
-                  </span>
-                  <select 
-                    name="industry"
-                    value={formData.industry}
-                    onChange={handleChange}
-                    className="w-full pl-10 py-3.5 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white"
-                  >
-                    <option>Technology</option>
-                    <option>Healthcare</option>
-                    <option>Finance</option>
-                    <option>Manufacturing</option>
-                    <option>Retail</option>
-                  </select>
-                </div>
-              </div>
+              <FloatingInput
+                label="Password"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                error={errors.password}
+              />
 
-              <div>
-                <InputField
-                  label="Password"
-                  name="password"
-                  icon={<RiLockPasswordLine />}
-                  type="password"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={handleChange}
-                  error={errors.password}
-                />
-                {/* Password Strength Indicator */}
-                {formData.password && (
-                  <div className="mt-2">
-                    <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                      <div 
-                        className={`h-full ${pwdStrength.color} rounded-full transition-all duration-300`}
-                        style={{ width: `${pwdStrength.level}%` }}
-                      ></div>
-                    </div>
-                    <p className={`text-xs mt-1 ${pwdStrength.level <= 25 ? 'text-red-500' : pwdStrength.level <= 50 ? 'text-yellow-600' : pwdStrength.level <= 75 ? 'text-blue-500' : 'text-emerald-500'}`}>
-                      {pwdStrength.text}
-                    </p>
+              {formData.password && (
+                <div className="-mt-3">
+                  <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full ${pwdStrength.color} rounded-full transition-all duration-300`}
+                      style={{ width: `${pwdStrength.level}%` }}
+                    ></div>
                   </div>
+
+                  <p
+                    className={`text-xs mt-1 ${
+                      pwdStrength.level <= 25
+                        ? "text-red-500"
+                        : pwdStrength.level <= 50
+                          ? "text-yellow-600"
+                          : pwdStrength.level <= 75
+                            ? "text-blue-500"
+                            : "text-emerald-500"
+                    }`}
+                  >
+                    {pwdStrength.text}
+                  </p>
+                </div>
+              )}
+
+              <div>
+                <div className="flex items-start gap-3">
+                  <div className="flex-1">
+                    <FloatingInput
+                      label="Enter OTP"
+                      name="otp"
+                      type="text"
+                      value={formData.otp}
+                      onChange={handleChange}
+                      error={errors.otp}
+                    />
+                  </div>
+
+                  {/* Vertical Line */}
+                  <div className="mt-4 h-12 w-px bg-gray-300"></div>
+
+                  <button
+                    type="button"
+                    onClick={handleSendOtp}
+                    disabled={isSendingOtp}
+                    className="mt-3 whitespace-nowrap px-5 py-3 text-sm font-bold text-orange-500 hover:text-orange-700 border-b border-gray-300 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {isSendingOtp
+                      ? "Sending..."
+                      : otpSent
+                        ? "Resend OTP"
+                        : "Send OTP"}
+                  </button>
+                </div>
+
+                {otpSent && (
+                  <p className="mt-2 text-xs text-green-600">
+                    OTP sent successfully. Please check your email/phone.
+                  </p>
                 )}
               </div>
-            </div>
 
-            <div className="flex items-start gap-3">
-              <input
-                type="checkbox"
-                id="terms"
-                name="agreeTerms"
-                checked={formData.agreeTerms}
-                onChange={handleChange}
-                className="w-5 h-5 mt-0.5 accent-orange-600"
-              />
-              <label htmlFor="terms" className="text-sm text-slate-600">
-                I agree to the{" "}
-                <Link
-                  to="/terms"
-                  className="underline text-orange-600 transition hover:text-orange-700"
-                >
-                  Terms of Service
-                </Link>{" "}
-                and{" "}
-                <Link
-                  to="/privacy-policy"
-                  className="underline text-orange-600 transition hover:text-orange-700"
-                >
-                  Privacy Policy
-                </Link>
-              </label>
-            </div>
-            {errors.agreeTerms && (
-              <p className="text-sm text-red-500 -mt-4">{errors.agreeTerms}</p>
-            )}
+              <div className="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  name="agreeTerms"
+                  checked={formData.agreeTerms}
+                  onChange={handleChange}
+                  className="w-5 h-5 mt-0.5 accent-orange-600 cursor-pointer"
+                />
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full py-4 font-bold flex items-center justify-center gap-2 transition-all bg-orange-600 hover:bg-orange-700 text-white shadow-md cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? (
-                <>
-                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Creating Account...
-                </>
-              ) : (
-                <>
-                  Create Account
-                  <ArrowRight size={18} />
-                </>
-              )}
-            </button>
-
-            <div className="relative flex items-center justify-center py-2">
-              <div className="absolute inset-0 flex items-center gap-3">
-                <span className="border-t w-full"></span>
-                <span className="text-sm text-slate-400">OR</span>
-                <span className="border-t w-full"></span>
+                <label htmlFor="terms" className="text-sm text-slate-600">
+                  I agree to the{" "}
+                  <Link
+                    to="/terms"
+                    className="underline text-orange-600 transition hover:text-orange-700"
+                  >
+                    Terms of Service
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    to="/privacy-policy"
+                    className="underline text-orange-600 transition hover:text-orange-700"
+                  >
+                    Privacy Policy
+                  </Link>
+                </label>
               </div>
-            </div>
 
-            <button
-              type="button"
-              onClick={handleGoogleSignup}
-              className="flex w-full items-center justify-center gap-2 border border-slate-300 py-3 rounded text-sm font-semibold transition hover:bg-slate-50 cursor-pointer"
+              {errors.agreeTerms && (
+                <p className="text-sm text-red-500 -mt-4">
+                  {errors.agreeTerms}
+                </p>
+              )}
+
+              {otpSent && (
+                <button
+                  type="submit"
+                  disabled={isVerifyingOtp}
+                  className="w-full py-4 font-bold flex items-center justify-center gap-2 transition-all bg-orange-600 hover:bg-orange-700 text-white shadow-md cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {isVerifyingOtp ? "Verifying..." : "Verify OTP"}
+                  {!isVerifyingOtp && <ArrowRight size={18} />}
+                </button>
+              )}
+
+              <AuthFooter handleGoogleSignup={handleGoogleSignup} />
+            </form>
+          )}
+
+          {step === 2 && (
+            <form
+              onSubmit={handleSubmitCompanyDetails}
+              className="space-y-6"
+              noValidate
             >
-              <BsGoogle className="h-5 w-5" />
-              Continue with Google
-            </button>
+              <div className="rounded border border-orange-200 bg-orange-50 p-4 text-sm text-orange-700">
+                Please fill accurate details. After approval your account will
+                be created.
+              </div>
 
-            <p className="text-center text-sm text-slate-600">
-              Already using RecruitPro?{" "}
-              <Link
-                to="/company/login"
-                className="font-bold text-orange-600 hover:text-orange-700"
+              <FloatingInput
+                label="Company Name"
+                name="company_name"
+                type="text"
+                value={formData.company_name}
+                onChange={handleChange}
+                error={errors.company_name}
+              />
+
+              <FloatingSelect
+                label="Industry"
+                name="industry"
+                value={formData.industry}
+                onChange={handleChange}
+                error={errors.industry}
               >
-                Log in to your hub
-              </Link>
-            </p>
-          </form>
+                <option value=""></option>
+                <option value="Technology">Technology</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Finance">Finance</option>
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="Retail">Retail</option>
+                <option value="Education">Education</option>
+                <option value="Real Estate">Real Estate</option>
+                <option value="Other">Other</option>
+              </FloatingSelect>
+
+              <FloatingSelect
+                label="Company Size"
+                name="company_size"
+                value={formData.company_size}
+                onChange={handleChange}
+                error={errors.company_size}
+              >
+                <option value=""></option>
+                <option value="1-10">1-10 Employees</option>
+                <option value="11-50">11-50 Employees</option>
+                <option value="51-200">51-200 Employees</option>
+                <option value="201-500">201-500 Employees</option>
+                <option value="501-1000">501-1000 Employees</option>
+                <option value="1000+">1000+ Employees</option>
+              </FloatingSelect>
+
+              <FloatingInput
+                label="GSTIN"
+                name="gstin"
+                type="text"
+                value={formData.gstin}
+                onChange={handleChange}
+                error={errors.gstin}
+              />
+
+              <FloatingInput
+                label="Company Website"
+                name="company_website"
+                type="url"
+                value={formData.company_website}
+                onChange={handleChange}
+                error={errors.company_website}
+              />
+
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  className="w-full py-4 font-bold border border-slate-300 text-slate-700 transition-all hover:bg-slate-50 cursor-pointer"
+                >
+                  Back
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={isSubmittingProfile}
+                  className="w-full py-4 font-bold flex items-center justify-center gap-2 transition-all bg-orange-600 hover:bg-orange-700 text-white shadow-md cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {isSubmittingProfile ? "Submitting..." : "Submit Details"}
+                  {!isSubmittingProfile && <ArrowRight size={18} />}
+                </button>
+              </div>
+
+              <p className="text-center text-sm text-slate-600">
+                Already using RecruitPro?{" "}
+                <Link
+                  to="/company/login"
+                  className="font-bold text-orange-600 hover:text-orange-700"
+                >
+                  Log in to your hub
+                </Link>
+              </p>
+            </form>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-// Updated Input Field Component to handle functionality
-const InputField = ({ label, name, icon, type, placeholder, value, onChange, error }) => (
-  <div>
-    <label className="block text-sm font-semibold mb-1.5 text-slate-700">
-      {label}
-    </label>
-    <div className="relative">
-      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-        {icon}
-      </span>
-      <input
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        className={`w-full pl-10 py-3 border focus:outline-none focus:ring-2 focus:ring-orange-500 ${
-          error ? "border-red-500 focus:ring-red-500" : "border-slate-300"
-        }`}
-      />
+const FloatingInput = ({
+  label,
+  type = "text",
+  name,
+  value,
+  onChange,
+  error,
+}) => {
+  return (
+    <div>
+      <div className="relative">
+        <input
+          type={type}
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder=" "
+          className={`peer w-full border-0 border-b bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all ${
+            error
+              ? "border-red-500 focus:border-red-500"
+              : "border-slate-300 focus:border-orange-600"
+          }`}
+        />
+
+        <label
+          className={`pointer-events-none absolute left-0 top-5 text-sm transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs ${
+            error
+              ? "text-red-500 peer-focus:text-red-500"
+              : "text-slate-500 peer-focus:text-orange-600"
+          }`}
+        >
+          {label}
+        </label>
+      </div>
+
+      {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
     </div>
-    {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
-  </div>
-);
+  );
+};
+
+const FloatingSelect = ({ label, name, value, onChange, error, children }) => {
+  return (
+    <div>
+      <div className="relative">
+        <select
+          name={name}
+          value={value}
+          onChange={onChange}
+          className={`peer w-full border-0 border-b bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all ${
+            error
+              ? "border-red-500 focus:border-red-500"
+              : "border-slate-300 focus:border-orange-600"
+          }`}
+        >
+          {children}
+        </select>
+
+        <label
+          className={`pointer-events-none absolute left-0 top-0 text-xs transition-all duration-200 ${
+            error ? "text-red-500" : "text-slate-500 peer-focus:text-orange-600"
+          }`}
+        >
+          {label}
+        </label>
+      </div>
+
+      {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
+    </div>
+  );
+};
+
+const AuthFooter = ({ handleGoogleSignup }) => {
+  return (
+    <>
+      <div className="relative flex items-center justify-center py-2">
+        <div className="absolute inset-0 flex items-center gap-3">
+          <span className="border-t w-full"></span>
+          <span className="text-sm text-slate-400">OR</span>
+          <span className="border-t w-full"></span>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        onClick={handleGoogleSignup}
+        className="flex w-full items-center justify-center gap-2 border border-slate-300 py-3 rounded text-sm font-semibold transition hover:bg-slate-50 cursor-pointer"
+      >
+        <BsGoogle className="h-5 w-5" />
+        Continue with Google
+      </button>
+
+      <p className="text-center text-sm text-slate-600">
+        Already using RecruitPro?{" "}
+        <Link
+          to="/company/login"
+          className="font-bold text-orange-600 hover:text-orange-700"
+        >
+          Log in to your hub
+        </Link>
+      </p>
+    </>
+  );
+};
 
 export default CompanySignupPage;

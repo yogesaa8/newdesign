@@ -17,7 +17,6 @@ import { Link } from "react-router-dom";
 import navItems from "../data/headerData.json";
 
 export function NavbarDemo() {
-
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -28,10 +27,10 @@ export function NavbarDemo() {
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
-            <NavbarButton as={Link} to="/job-seeker/login" variant="secondary">
+            <NavbarButton as={Link} to="/seeker/login" variant="secondary">
               Login
             </NavbarButton>
-            <NavbarButton as={Link} to="/job-seeker/signup" variant="primary">
+            <NavbarButton as={Link} to="/seeker/signup" variant="primary">
               Sign Up
             </NavbarButton>
           </div>
@@ -89,7 +88,7 @@ export function NavbarDemo() {
             ))}
             <div className="flex w-full flex-col gap-4">
               <NavbarButton
-                href="/job-seeker/login"
+                href="/seeker/login"
                 onClick={() => setIsMobileMenuOpen(false)}
                 variant="primary"
                 className="w-full"
@@ -98,7 +97,7 @@ export function NavbarDemo() {
               </NavbarButton>
 
               <NavbarButton
-                href="/job-seeker/signup"
+                href="/seeker/signup"
                 onClick={() => setIsMobileMenuOpen(false)}
                 variant="primary"
                 className="w-full"

@@ -1,12 +1,39 @@
 import { Link, useNavigate } from "react-router-dom";
-import { FiBriefcase, FiMail, FiCheckCircle } from "react-icons/fi";
+import { FiBriefcase, FiCheckCircle } from "react-icons/fi";
+
+const FloatingInput = ({
+  label,
+  type = "text",
+  name,
+  value,
+  onChange,
+  required = true,
+}) => {
+  return (
+    <div className="relative">
+      <input
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder=" "
+        required={required}
+        className="peer w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all focus:border-orange-600"
+      />
+
+      <label className="pointer-events-none absolute left-0 top-5 text-sm text-slate-500 transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-orange-600 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs">
+        {label}
+      </label>
+    </div>
+  );
+};
 
 const JobSeekerResetPassword = () => {
   const navigate = useNavigate();
 
   const handleReset = (e) => {
     e.preventDefault();
-    navigate("/job-seeker/verify-otp");
+    navigate("/seeker/verify-otp");
   };
 
   return (
@@ -14,12 +41,12 @@ const JobSeekerResetPassword = () => {
       {/* Left Side */}
       <div className="hidden lg:flex w-1/2 flex-col justify-center px-16 xl:px-24 relative">
         {/* Logo */}
-        <div className="absolute top-12 left-16 flex items-center gap-2">
+        {/* <div className="absolute top-12 left-16 flex items-center gap-2">
           <div className="p-2 rounded-xl">
             <FiBriefcase size={28} />
           </div>
           <span className="text-2xl font-bold tracking-tight">JobPortal</span>
-        </div>
+        </div> */}
 
         {/* Content */}
         <div className="space-y-6">
@@ -65,7 +92,7 @@ const JobSeekerResetPassword = () => {
         <div className="w-full min-h-screen lg:min-h-0 lg:h-full lg:rounded-l-[4rem] p-8 sm:p-12 xl:p-16 flex flex-col justify-center shadow-2xl relative overflow-hidden">
           <div className="max-w-md mx-auto w-full">
             {/* Mobile Logo */}
-            <div className="lg:hidden flex justify-center mb-8">
+            {/* <div className="lg:hidden flex justify-center mb-8">
               <div className="flex items-center gap-2">
                 <div className="p-2 rounded-xl shadow-lg">
                   <FiBriefcase size={24} />
@@ -74,7 +101,7 @@ const JobSeekerResetPassword = () => {
                   JobPortal
                 </span>
               </div>
-            </div>
+            </div> */}
 
             {/* Heading */}
             <div className="text-center mb-10">
@@ -87,19 +114,7 @@ const JobSeekerResetPassword = () => {
 
             {/* Form */}
             <form onSubmit={handleReset} className="space-y-6">
-              <div className="relative">
-                <FiMail
-                  className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400"
-                  size={18}
-                />
-
-                <input
-                  type="email"
-                  placeholder="Email Address"
-                  className="w-full border border-slate-300 py-4 pl-14 pr-6 outline-none focus:ring-1 transition-all"
-                  required
-                />
-              </div>
+              <FloatingInput label="Email Address" type="email" />
 
               <button
                 type="submit"
@@ -112,8 +127,8 @@ const JobSeekerResetPassword = () => {
                 <p className="text-sm">
                   Remember your password?{" "}
                   <Link
-                    to="/job-seeker/login"
-                    className="font-bold transition-colors"
+                    to="/seeker/login"
+                    className="font-bold transition-colors hover:text-orange-600"
                   >
                     Login
                   </Link>

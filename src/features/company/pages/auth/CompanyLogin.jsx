@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { BsGoogle } from "react-icons/bs";
 import { useAuthStore } from "../../../../store";
@@ -18,6 +18,7 @@ const CompanyLogin = () => {
 
   const handleChange = (e) => {
     const { name, value, checked, type } = e.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -33,6 +34,7 @@ const CompanyLogin = () => {
         email,
       },
     });
+
     navigate("/company/dashboard");
   };
 
@@ -48,24 +50,16 @@ const CompanyLogin = () => {
   };
 
   const handleGoogleLogin = () => {
-    loginCompany(formData.email || "company.google@example.com", formData.remember);
+    loginCompany(
+      formData.email || "company.google@example.com",
+      formData.remember,
+    );
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-slate-50">
       <div className="max-w-5xl w-full flex flex-col lg:flex-row items-center gap-16">
         <div className="w-full max-w-md rounded shadow-xl border border-slate-200 bg-white p-8">
-          <div className="flex flex-col items-center mb-8">
-            <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center">
-              <span className="text-3xl">RP</span>
-            </div>
-
-            <h1 className="text-3xl font-bold mt-4 text-slate-900">
-              RecruitPro
-            </h1>
-            <p className="text-sm text-slate-500">Enterprise Hub Login</p>
-          </div>
-
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
               <h2 className="text-2xl font-semibold mb-1 text-slate-900">
@@ -76,53 +70,28 @@ const CompanyLogin = () => {
               </p>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium mb-1 text-slate-700">
-                Email Address
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-3.5 h-5 w-5 text-slate-400" />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="name@company.com"
-                  autoComplete="off"
-                  className="w-full pl-11 pr-4 py-3 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                />
-              </div>
-            </div>
+            <FloatingInput
+              label="Email Address"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              autoComplete="off"
+            />
 
-            <div>
-              <div className="flex justify-between items-center mb-1">
-                <label className="text-sm font-medium text-slate-700">
-                  Password
-                </label>
-                <Link
-                  to="/company/reset-password"
-                  className="text-sm text-orange-600 hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-
-              <div className="relative">
-                <Lock className="absolute left-4 top-3.5 h-5 w-5 text-slate-400" />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Password"
-                  autoComplete="off"
-                  className="w-full pl-11 pr-11 py-3 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                />
-
+            <div className="space-y-2">
+              <FloatingInput
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                autoComplete="off"
+              >
                 <button
                   type="button"
                   onClick={() => setShowPassword((value) => !value)}
-                  className="absolute right-4 top-3.5 text-slate-400 transition hover:text-orange-600 cursor-pointer"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-orange-600 cursor-pointer"
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
@@ -130,6 +99,15 @@ const CompanyLogin = () => {
                     <Eye className="h-5 w-5" />
                   )}
                 </button>
+              </FloatingInput>
+
+              <div className="text-right">
+                <Link
+                  to="/company/reset-password"
+                  className="text-sm text-orange-600 hover:underline"
+                >
+                  Forgot password?
+                </Link>
               </div>
             </div>
 
@@ -217,6 +195,38 @@ const CompanyLogin = () => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const FloatingInput = ({
+  label,
+  type = "text",
+  name,
+  value,
+  onChange,
+  required = true,
+  children,
+  autoComplete,
+}) => {
+  return (
+    <div className="relative">
+      <input
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder=" "
+        required={required}
+        autoComplete={autoComplete}
+        className="peer w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all focus:border-orange-600"
+      />
+
+      <label className="pointer-events-none absolute left-0 top-5 text-sm text-slate-500 transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-orange-600 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs">
+        {label}
+      </label>
+
+      {children}
     </div>
   );
 };

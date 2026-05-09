@@ -73,10 +73,10 @@ const ResumeLanding = () => {
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
-            <NavbarButton as={Link} to="/job-seeker/login" variant="secondary">
+            <NavbarButton as={Link} to="/seeker/login" variant="secondary">
               Login
             </NavbarButton>
-            <NavbarButton as={Link} to="/job-seeker/signup" variant="primary">
+            <NavbarButton as={Link} to="/seeker/signup" variant="primary">
               Get Started
             </NavbarButton>
           </div>
@@ -131,7 +131,7 @@ const ResumeLanding = () => {
             ))}
             <div className="flex w-full flex-col gap-4">
               <NavbarButton
-                href="/job-seeker/login"
+                href="/seeker/login"
                 onClick={() => setIsMobileMenuOpen(false)}
                 variant="primary"
                 className="w-full"
@@ -140,7 +140,7 @@ const ResumeLanding = () => {
               </NavbarButton>
 
               <NavbarButton
-                href="/job-seeker/signup"
+                href="/seeker/signup"
                 onClick={() => setIsMobileMenuOpen(false)}
                 variant="primary"
                 className="w-full"
@@ -309,7 +309,7 @@ const ResumeLanding = () => {
               </p>
             </div>
 
-            <div className="mt-16 grid overflow-hidden rounded-3xl border border-[#E0D8D3] bg-[#FFFFFF] divide-[#E0D8D3] dark:border-[#333333] dark:bg-[#1E1E1E] dark:divide-[#333333] sm:grid-cols-2 sm:divide-x lg:grid-cols-4 xl:grid-cols-4">
+            <div className="mt-16 grid overflow-hidden rounded-3xl  divide-[#E0D8D3] dark:border-[#333333] dark:bg-[#1E1E1E] dark:divide-[#333333] sm:grid-cols-2 sm:divide-x lg:grid-cols-4 xl:grid-cols-4">
               {features.map((feature, index) => (
                 <div
                   key={feature.title}

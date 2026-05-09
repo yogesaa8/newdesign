@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, Lock, Mail, ShieldCheck } from "lucide-react";
+import { Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../../store";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
   const { setAuth } = useAuthStore();
+
   const [showPassword, setShowPassword] = useState(false);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -14,6 +16,7 @@ const AdminLogin = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -32,6 +35,7 @@ const AdminLogin = () => {
         email: formData.email,
       },
     });
+
     navigate("/admin/dashboard");
   };
 
@@ -44,9 +48,11 @@ const AdminLogin = () => {
               <div className="flex h-14 w-14 items-center justify-center rounded bg-orange-500/10 text-orange-400">
                 <ShieldCheck className="h-7 w-7" />
               </div>
+
               <h1 className="mt-8 text-4xl font-extrabold leading-tight">
                 Admin Control Center
               </h1>
+
               <p className="mt-5 max-w-md text-sm leading-6 text-slate-300">
                 Review companies, monitor platform health, and manage core
                 activity from a dedicated administrator workspace.
@@ -54,16 +60,18 @@ const AdminLogin = () => {
             </div>
 
             <div className="grid gap-4">
-              {["Role-based access", "Company approvals", "Platform reports"].map(
-                (item) => (
-                  <div
-                    key={item}
-                    className="rounded border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-200"
-                  >
-                    {item}
-                  </div>
-                ),
-              )}
+              {[
+                "Role-based access",
+                "Company approvals",
+                "Platform reports",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="rounded border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-200"
+                >
+                  {item}
+                </div>
+              ))}
             </div>
           </div>
 
@@ -73,63 +81,46 @@ const AdminLogin = () => {
                 <p className="text-sm font-semibold uppercase tracking-wider text-orange-600">
                   Admin Login
                 </p>
-                <h2 className="mt-2 text-3xl font-extrabold">
-                  Welcome back
-                </h2>
+
+                <h2 className="mt-2 text-3xl font-extrabold">Welcome back</h2>
+
                 <p className="mt-2 text-sm text-slate-500">
                   Sign in to continue to the admin dashboard.
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <label className="block">
-                  <span className="mb-1.5 block text-sm font-medium text-slate-700">
-                    Email Address
-                  </span>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="admin@jobportal.com"
-                      className="w-full border border-slate-300 py-3 pl-11 pr-4 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
-                    />
-                  </div>
-                </label>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <FloatingInput
+                  label="Email Address"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
 
-                <label className="block">
-                  <span className="mb-1.5 block text-sm font-medium text-slate-700">
-                    Password
-                  </span>
-                  <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      placeholder="••••••••"
-                      className="w-full border border-slate-300 py-3 pl-11 pr-12 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword((value) => !value)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
-                    >
-                      {showPassword ? (
-                        <EyeOff className="h-5 w-5" />
-                      ) : (
-                        <Eye className="h-5 w-5" />
-                      )}
-                    </button>
-                  </div>
-                </label>
+                <FloatingInput
+                  label="Password"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((value) => !value)}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-orange-600 cursor-pointer"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
+                  </button>
+                </FloatingInput>
 
                 <button
                   type="submit"
-                  className="w-full bg-orange-600 py-3.5 font-semibold text-white shadow-md transition hover:bg-orange-700"
+                  className="w-full bg-orange-600 py-3.5 font-semibold text-white shadow-md transition hover:bg-orange-700 cursor-pointer"
                 >
                   Sign In
                 </button>
@@ -138,6 +129,36 @@ const AdminLogin = () => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const FloatingInput = ({
+  label,
+  type = "text",
+  name,
+  value,
+  onChange,
+  required = true,
+  children,
+}) => {
+  return (
+    <div className="relative">
+      <input
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder=" "
+        required={required}
+        className="peer w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all focus:border-orange-600"
+      />
+
+      <label className="pointer-events-none absolute left-0 top-5 text-sm text-slate-500 transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-orange-600 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs">
+        {label}
+      </label>
+
+      {children}
     </div>
   );
 };

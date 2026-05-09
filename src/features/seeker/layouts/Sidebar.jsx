@@ -24,34 +24,34 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         {
           name: "Dashboard",
           icon: <FiLayout size={18} />,
-          path: "/job-seeker/dashboard",
+          path: "/seeker/dashboard",
         },
         {
           name: "My Profile",
           icon: <FiUser size={18} />,
-          path: "/job-seeker/dashboard/profile",
+          path: "/seeker/dashboard/profile",
         },
         {
           name: "Applications",
           icon: <FiBriefcase size={18} />,
-          path: "/job-seeker/dashboard/applications",
+          path: "/seeker/dashboard/applications",
           badge: "NEW",
           badgeColor: "bg-orange-100 text-orange-700",
         },
         {
           name: "Saved Jobs",
           icon: <FiBookmark size={18} />,
-          path: "/job-seeker/dashboard/saved-jobs",
+          path: "/seeker/dashboard/saved-jobs",
         },
         {
           name: "Job Alerts",
           icon: <FiBell size={18} />,
-          path: "/job-seeker/dashboard/job-alerts",
+          path: "/seeker/dashboard/job-alerts",
         },
         {
           name: "Interviews",
           icon: <FiClock size={18} />,
-          path: "/job-seeker/dashboard/interviews",
+          path: "/seeker/dashboard/interviews",
         },
       ],
     },
@@ -61,14 +61,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         {
           name: "Messages",
           icon: <FiMessageCircle size={18} />,
-          path: "/job-seeker/dashboard/messages",
+          path: "/seeker/dashboard/messages",
           badge: "5",
           badgeColor: "bg-red-100 text-red-600",
         },
         {
           name: "Documents",
           icon: <FiFilePlus size={18} />,
-          path: "/job-seeker/dashboard/documents",
+          path: "/seeker/dashboard/documents",
         },
       ],
     },
@@ -78,12 +78,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         {
           name: "Support",
           icon: <FiHelpCircle size={18} />,
-          path: "/job-seeker/dashboard/support",
+          path: "/seeker/dashboard/support",
         },
         {
           name: "Account Settings",
           icon: <FiSettings size={18} />,
-          path: "/job-seeker/dashboard/settings",
+          path: "/seeker/dashboard/settings",
         },
       ],
     },
@@ -96,7 +96,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     >
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-6 border-b border-slate-100">
-        <NavLink to="/job-seeker/dashboard" className="flex items-center gap-3">
+        <NavLink to="/seeker/dashboard" className="flex items-center gap-3">
           <div className="p-2 bg-orange-100 rounded-xl">
             <FiBriefcase size={22} className="text-orange-600" />
           </div>
@@ -124,11 +124,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 <li key={idx}>
                   <NavLink
                     to={item.path}
-                    end={item.path === "/job-seeker/dashboard"}
+                    end={item.path === "/seeker/dashboard"}
                     className={({ isActive }) =>
                       `group flex items-center justify-between rounded px-4 py-2 font-medium border transition-all duration-200
                         ${
-                            isActive
+                          isActive
                             ? "bg-orange-50 text-orange-700 border-orange-100 shadow-sm"
                             : "text-slate-600 border-transparent hover:bg-slate-50 hover:text-slate-900"
                         }`

@@ -42,7 +42,6 @@ import {
 import { Link } from "react-router-dom";
 import navItems from "../../data/headerData.json";
 
-
 const resources = [
   {
     title: "Chevening Scholarship",
@@ -1144,37 +1143,10 @@ export default function CareerGPSReactComponent() {
     });
   }, [activeCategory, activeCountry, activeCourse, query]);
 
-//   const navItems = [
-//     {
-//       name: "Jobs",
-//       link: "/jobs",
-//     },
-//     {
-//       name: "Resume",
-//       link: "/resume",
-//     },
-//     {
-//       name: "Services",
-//       children: [
-//         { name: "Company", link: "/company" },
-//         { name: "College", link: "/college" },
-//         { name: "Career Coach", link: "/coach" },
-//       ],
-//     },
-//     {
-//       name: "Review",
-//       link: "/reviews",
-//     },
-//   ];
-
   return (
     <div className="min-h-screen scroll-smooth bg-[#f7f1e8] font-sans text-neutral-950 selection:bg-orange-500 selection:text-white">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600&display=swap');
         html { scroll-behavior: smooth; }
-        .font-serif { font-family: 'Playfair Display', Georgia, serif; }
-        .font-sans { font-family: 'DM Sans', system-ui, sans-serif; }
-        .font-mono { font-family: 'DM Mono', monospace; }
         .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s ease; }
         .reveal.show { opacity: 1; transform: translateY(0); }
         .logo-orbit { animation: orbit 6s linear infinite; transform-origin: center; }
@@ -1191,96 +1163,15 @@ export default function CareerGPSReactComponent() {
         className="fixed left-0 top-0 z-[70] h-1 bg-orange-500 transition-all"
         style={{ width: `${progress}%` }}
       />
-
-      {/* <nav
-        className={`fixed inset-x-0 top-0 z-50 border-b border-neutral-950/10 bg-[#f7f1e8]/82 backdrop-blur-xl transition-all duration-300 ${navSmall ? "h-[60px] shadow-lg shadow-neutral-950/5" : "h-[72px]"}`}
-      >
-        <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4 md:px-8">
-          <a href="#home" className="group flex items-center gap-3">
-            <span className="relative grid h-11 w-11 place-items-center rounded-full border border-orange-500/50 bg-orange-500/10">
-              <span className="absolute inset-1 rounded-full border border-dashed border-orange-500/50 logo-orbit" />
-              <Compass className="h-5 w-5 text-orange-600 transition group-hover:rotate-45" />
-            </span>
-            <span className="leading-none">
-              <span className="block font-serif text-2xl font-black tracking-tight">
-                Career<span className="text-orange-500">GPS</span>
-              </span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-slate-500">
-                by First Job India
-              </span>
-            </span>
-          </a>
-
-          <div className="hidden items-center gap-8 md:flex">
-            {navLinks.map((n) => (
-              <a
-                key={n}
-                href={`#${n.toLowerCase()}`}
-                className="font-mono text-xs uppercase tracking-[0.2em] text-slate-600 transition hover:text-orange-600"
-              >
-                {n}
-              </a>
-            ))}
-          </div>
-
-          <div className="hidden items-center gap-3 md:flex">
-            <button
-              onClick={() => setModalOpen(true)}
-              className="rounded-full border border-neutral-950/20 px-5 py-2 text-sm font-semibold transition hover:border-orange-500 hover:text-orange-600"
-            >
-              Login
-            </button>
-            <a
-              href="#pricing"
-              className="rounded-full bg-neutral-950 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-neutral-950/20 transition hover:bg-orange-500"
-            >
-              Get Started
-            </a>
-          </div>
-
-          <button
-            onClick={() => setMenuOpen((v) => !v)}
-            className="grid h-10 w-10 place-items-center rounded-full border border-neutral-950/15 md:hidden"
-          >
-            {menuOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
-          </button>
-        </div>
-        {menuOpen && (
-          <div className="border-t border-neutral-950/10 bg-[#f7f1e8] px-5 py-5 shadow-xl md:hidden">
-            <div className="grid gap-3">
-              {navLinks.map((n) => (
-                <a
-                  onClick={() => setMenuOpen(false)}
-                  key={n}
-                  href={`#${n.toLowerCase()}`}
-                  className="rounded-2xl px-4 py-3 font-mono text-xs uppercase tracking-[0.2em] hover:bg-orange-500/10"
-                >
-                  {n}
-                </a>
-              ))}
-              <button
-                onClick={() => setModalOpen(true)}
-                className="rounded-2xl border border-neutral-950/15 px-4 py-3 text-left font-semibold"
-              >
-                Login
-              </button>
-            </div>
-          </div>
-        )}
-      </nav> */}
       <Navbar className="bg-[#FFF7F3] dark:bg-[#121212]">
         <NavBody>
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
-            <NavbarButton as={Link} to="/job-seeker/login" variant="secondary">
+            <NavbarButton as={Link} to="/seeker/login" variant="secondary">
               Login
             </NavbarButton>
-            <NavbarButton as={Link} to="/job-seeker/signup" variant="primary">
+            <NavbarButton as={Link} to="/seeker/signup" variant="primary">
               Get Started
             </NavbarButton>
           </div>
@@ -1335,7 +1226,7 @@ export default function CareerGPSReactComponent() {
             ))}
             <div className="flex w-full flex-col gap-4">
               <NavbarButton
-                href="/job-seeker/login"
+                href="/seeker/login"
                 onClick={() => setIsMobileMenuOpen(false)}
                 variant="primary"
                 className="w-full"
@@ -1344,7 +1235,7 @@ export default function CareerGPSReactComponent() {
               </NavbarButton>
 
               <NavbarButton
-                href="/job-seeker/signup"
+                href="/seeker/signup"
                 onClick={() => setIsMobileMenuOpen(false)}
                 variant="primary"
                 className="w-full"

@@ -5,12 +5,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import PublicLayout from "../features/public/layouts/PublicLayout";
 import LandingHomePage from "../features/public/pages/home/LandingHomePage";
 import CollegeMainPage from "../features/public/pages/college/CollegeMainPage";
-import Review from "../features/public/pages/reviews/Review";
-import Blog from "../features/public/pages/blog/Blog";
-import AboutUs from "../features/public/pages/about/AboutUs";
 import ResumeLanding from "../features/public/pages/resume/ResumeLanding";
-import PrivacyPolicy from "../features/public/pages/legal/PrivacyPolicy";
-import TermsConditions from "../features/public/pages/legal/TermsConditions";
 
 /* JOB SEEKER IMPORTS */
 import JobsPage from "../features/seeker/pages/jobs/JobsPage";
@@ -52,6 +47,11 @@ import SeekerProtectedRoute from "./SeekerProtectedRoute";
 import CompanyProtectedRoute from "./CompanyProtectedRoute";
 import AdminProtectedRoute from "./AdminProtectedRoute";
 import CompanyForgotPassword from "../features/company/pages/auth/CompanyForgotPassword";
+import AboutUs from "../features/public/pages/AboutUs";
+import Blog from "../features/public/pages/Blog";
+import ReviewPage from "../features/public/pages/Review";
+import TermsConditions from "../features/public/pages/TermsConditions";
+import PrivacyPolicy from "../features/public/pages/PrivacyPolicy";
 
 const AppRoutes = () => {
   return (
@@ -63,7 +63,7 @@ const AppRoutes = () => {
         <Route path="/jobs/:jobId" element={<JobDetailsPage />} />
         <Route path="/resume" element={<ResumeLanding />} />
         <Route path="/college" element={<CollegeMainPage />} />
-        <Route path="/reviews" element={<Review />} />
+        <Route path="/reviews" element={<ReviewPage />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/career-gps" element={<CareerGPS />} />
@@ -74,13 +74,13 @@ const AppRoutes = () => {
 
       {/* AUTH ROUTES (Form pages) */}
       <Route element={<PublicLayout />}>
-        <Route path="/job-seeker/login" element={<JobSeekerLogin />} />
-        <Route path="/job-seeker/signup" element={<JobSeekerSignUp />} />
+        <Route path="/seeker/login" element={<JobSeekerLogin />} />
+        <Route path="/seeker/signup" element={<JobSeekerSignUp />} />
         <Route
-          path="/job-seeker/reset-password"
+          path="/seeker/reset-password"
           element={<JobSeekerResetPassword />}
         />
-        <Route path="/job-seeker/verify-otp" element={<SeekerVerifyOtp />} />
+        <Route path="/seeker/verify-otp" element={<SeekerVerifyOtp />} />
 
         <Route path="/company/login" element={<CompanyLogin />} />
         <Route path="/company/signup" element={<CompanySignupPage />} />
@@ -88,21 +88,16 @@ const AppRoutes = () => {
           path="/company/reset-password"
           element={<CompanyForgotPassword />}
         />
-        <Route
-          path="/admin/login"
-          element={<AdminLogin />}
-        />
+        <Route path="/admin/login" element={<AdminLogin />} />
       </Route>
-
-
 
       {/* JOB SEEKER DASHBOARD */}
       <Route
-        path="/job-seeker"
-        element={<Navigate to="/job-seeker/dashboard" replace />}
+        path="/seeker"
+        element={<Navigate to="/seeker/dashboard" replace />}
       />
       <Route
-        path="/job-seeker/dashboard"
+        path="/seeker/dashboard"
         element={
           <SeekerProtectedRoute>
             <DashboardLayout />
@@ -137,7 +132,9 @@ const AppRoutes = () => {
         <Route path="applicants" element={<ApplicantsList />} />
         <Route
           path="applicants/:applicantId/resume"
-          element={<UnderDevelopment title="Resume Preview" icon="visibility" />}
+          element={
+            <UnderDevelopment title="Resume Preview" icon="visibility" />
+          }
         />
         <Route path="profile" element={<CompanyProfile />} />
         <Route
@@ -158,7 +155,7 @@ const AppRoutes = () => {
           <AdminProtectedRoute>
             <AdminDashboard />
           </AdminProtectedRoute>
-        } 
+        }
       />
     </Routes>
   );

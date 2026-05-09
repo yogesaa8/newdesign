@@ -1,21 +1,46 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiBriefcase, FiCheckCircle, FiShield } from "react-icons/fi";
+import { useAuthStore } from "../../../../store";
+
+const OTP_LENGTH = 6;
 
 const SeekerVerifyOtp = () => {
-  const [otp, setOtp] = useState(["", "", "", ""]);
-  const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+  const [otp, setOtp] = useState(Array(OTP_LENGTH).fill(""));
+  const [resendMessage, setResendMessage] = useState("");
+
+  const inputRefs = [
+    useRef(null),
+    useRef(null),
+    useRef(null),
+    useRef(null),
+    useRef(null),
+    useRef(null),
+  ];
+
   const navigate = useNavigate();
+
+  const {
+    error,
+    isLoading,
+    pendingVerification,
+    resendSeekerOtp,
+    verifySeekerOtp,
+    clearError,
+  } = useAuthStore();
 
   const handleChange = (e, index) => {
     const value = e.target.value;
-    if (isNaN(value)) return;
+    if (!/^\d*$/.test(value)) return;
 
     const newOtp = [...otp];
     newOtp[index] = value.substring(value.length - 1);
-    setOtp(newOtp);
 
-    if (value && index < 3) {
+    setOtp(newOtp);
+    clearError();
+    setResendMessage("");
+
+    if (value && index < OTP_LENGTH - 1) {
       inputRefs[index + 1].current.focus();
     }
   };
@@ -26,14 +51,30 @@ const SeekerVerifyOtp = () => {
     }
   };
 
-  const handleVerify = (e) => {
+  const handleVerify = async (e) => {
     e.preventDefault();
+
     const otpValue = otp.join("");
 
-    if (otpValue.length === 4) {
-      navigate("/job-seeker/dashboard");
-    } else {
-      alert("Please enter a 4-digit code.");
+    if (otpValue.length !== OTP_LENGTH) {
+      alert(`Please enter a ${OTP_LENGTH}-digit code.`);
+      return;
+    }
+
+    try {
+      await verifySeekerOtp(otpValue);
+      navigate("/seeker/dashboard");
+    } catch {
+      // Store error is shown in the form.
+    }
+  };
+
+  const handleResendOtp = async () => {
+    try {
+      await resendSeekerOtp();
+      setResendMessage("OTP sent again to your email.");
+    } catch {
+      setResendMessage("");
     }
   };
 
@@ -42,12 +83,12 @@ const SeekerVerifyOtp = () => {
       {/* Left Side */}
       <div className="hidden lg:flex w-1/2 flex-col justify-center px-16 xl:px-24 relative">
         {/* Logo */}
-        <div className="absolute top-12 left-16 flex items-center gap-2">
+        {/* <div className="absolute top-12 left-16 flex items-center gap-2">
           <div className="p-2 rounded-xl">
             <FiBriefcase size={28} />
           </div>
           <span className="text-2xl font-bold tracking-tight">JobPortal</span>
-        </div>
+        </div> */}
 
         {/* Content */}
         <div className="space-y-6">
@@ -93,7 +134,7 @@ const SeekerVerifyOtp = () => {
         <div className="w-full min-h-screen lg:min-h-0 lg:h-full lg:rounded-l-[4rem] p-8 sm:p-12 xl:p-16 flex flex-col justify-center shadow-2xl relative overflow-hidden">
           <div className="max-w-md mx-auto w-full">
             {/* Mobile Logo */}
-            <div className="lg:hidden flex justify-center mb-8">
+            {/* <div className="lg:hidden flex justify-center mb-8">
               <div className="flex items-center gap-2">
                 <div className="p-2 rounded-xl shadow-lg">
                   <FiBriefcase size={24} />
@@ -102,44 +143,64 @@ const SeekerVerifyOtp = () => {
                   JobPortal
                 </span>
               </div>
-            </div>
+            </div> */}
 
             {/* Heading */}
             <div className="text-center mb-10">
               <h2 className="text-3xl font-extrabold mb-3">Verify OTP</h2>
               <p className="text-sm px-4 text-slate-500">
-                Enter the 4-digit code sent to your email.
+                Enter the {OTP_LENGTH}-digit code sent to{" "}
+                {pendingVerification?.user?.email || "your email"}.
               </p>
             </div>
 
+            {error && (
+              <div className="mb-5 border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+                {error}
+              </div>
+            )}
+
+            {resendMessage && (
+              <div className="mb-5 border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+                {resendMessage}
+              </div>
+            )}
+
             {/* Form */}
             <form onSubmit={handleVerify}>
-              <div className="mb-10 flex justify-center gap-4">
+              <div className="mb-10 flex justify-center gap-2 sm:gap-4">
                 {otp.map((digit, index) => (
                   <input
                     key={index}
                     type="text"
+                    inputMode="numeric"
                     maxLength="1"
                     value={digit}
                     ref={inputRefs[index]}
                     onChange={(e) => handleChange(e, index)}
                     onKeyDown={(e) => handleKeyDown(e, index)}
-                    className="h-16 w-16 border border-slate-300 text-center text-2xl font-bold outline-none focus:ring-1 transition-all shadow-sm"
+                    className="h-12 w-12 border-0 border-b-2 border-slate-300 bg-transparent text-center text-xl font-bold outline-none transition-all focus:border-orange-600 sm:h-16 sm:w-16 sm:text-2xl"
                   />
                 ))}
               </div>
 
               <button
                 type="submit"
-                className="w-full p-4 font-bold transition-all shadow-lg bg-orange-600 hover:bg-orange-700 text-white"
+                disabled={isLoading}
+                className="w-full p-4 font-bold transition-all shadow-lg bg-orange-600 hover:bg-orange-700 text-white disabled:cursor-not-allowed disabled:opacity-70"
               >
-                Verify Code
+                {isLoading ? "Verifying..." : "Verify Code"}
               </button>
 
               <div className="mt-8 text-center">
                 <p className="text-sm">
                   Didn't receive code?{" "}
-                  <button type="button" className="font-bold transition-colors">
+                  <button
+                    type="button"
+                    onClick={handleResendOtp}
+                    disabled={isLoading}
+                    className="font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-70"
+                  >
                     Resend Code
                   </button>
                 </p>
@@ -147,7 +208,7 @@ const SeekerVerifyOtp = () => {
 
               <div className="mt-6 text-center">
                 <Link
-                  to="/job-seeker/login"
+                  to="/seeker/login"
                   className="text-sm font-semibold transition-colors"
                 >
                   Back to Login

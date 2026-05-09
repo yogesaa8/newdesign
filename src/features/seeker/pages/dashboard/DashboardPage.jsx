@@ -124,7 +124,7 @@ const DashboardPage = () => {
             <div className="mb-6 flex justify-between items-center">
               <h4 className="text-xl font-semibold">Recent Applications</h4>
               <button
-                onClick={() => navigate("/job-seeker/dashboard/applications")}
+                onClick={() => navigate("/seeker/dashboard/applications")}
                 className="text-sm font-medium text-orange-600 hover:underline"
               >
                 View All

@@ -63,7 +63,9 @@ const JobDetailsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { jobId } = useParams();
-  const allJobs = location.state?.allJobs?.length ? location.state.allJobs : jobsData;
+  const allJobs = location.state?.allJobs?.length
+    ? location.state.allJobs
+    : jobsData;
   const job =
     location.state?.job ||
     allJobs.find((item) => String(item.id) === String(jobId));
@@ -147,7 +149,7 @@ const JobDetailsPage = () => {
       },
     });
     setTimeout(() => {
-      navigate("/job-seeker/login");
+      navigate("/seeker/login");
     }, 900);
   };
 

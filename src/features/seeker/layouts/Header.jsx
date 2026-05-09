@@ -166,7 +166,7 @@ const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
 
                 <div className="p-3 space-y-1">
                   <Link
-                    to="/job-seeker/dashboard/profile"
+                    to="/seeker/dashboard/profile"
                     className="flex items-center gap-3 rounded-xl px-3 py-3 hover:bg-slate-50"
                   >
                     <FiUser size={18} />
@@ -174,7 +174,7 @@ const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
                   </Link>
 
                   <Link
-                    to="/job-seeker/dashboard/settings"
+                    to="/seeker/dashboard/settings"
                     className="flex items-center gap-3 rounded-xl px-3 py-3 hover:bg-slate-50"
                   >
                     <FiSettings size={18} />
@@ -182,7 +182,7 @@ const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
                   </Link>
 
                   <Link
-                    to="/job-seeker/dashboard/support"
+                    to="/seeker/dashboard/support"
                     className="flex items-center gap-3 rounded-xl px-3 py-3 hover:bg-slate-50"
                   >
                     <FiHelpCircle size={18} />
