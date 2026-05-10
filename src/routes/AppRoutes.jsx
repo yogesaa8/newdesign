@@ -52,12 +52,14 @@ import Blog from "../features/public/pages/Blog";
 import ReviewPage from "../features/public/pages/Review";
 import TermsConditions from "../features/public/pages/TermsConditions";
 import PrivacyPolicy from "../features/public/pages/PrivacyPolicy";
+import ReactSlides from "../features/public/pages/career/ReactQuestions";
 
 const AppRoutes = () => {
   return (
     <Routes>
       {/* PUBLIC ROUTES (Koi bhi dekh sakta hai) */}
       <Route element={<PublicLayout />}>
+        <Route path="/e-book" element={<ReactSlides />} />
         <Route path="/" element={<LandingHomePage />} />
         <Route path="/jobs" element={<JobsPage />} />
         <Route path="/jobs/:jobId" element={<JobDetailsPage />} />
