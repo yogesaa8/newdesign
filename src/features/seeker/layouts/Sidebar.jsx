@@ -13,9 +13,16 @@ import {
   FiX,
 } from "react-icons/fi";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../../store";
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const navigate = useNavigate();
+  const { logout } = useAuthStore();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/seeker/login");
+  };
 
   const navItems = [
     {
@@ -167,7 +174,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         </div>
 
         <button
-          onClick={() => navigate("/")}
+          onClick={handleLogout}
           className="w-full flex items-center justify-center gap-2 rounded-xl border border-red-100 bg-red-50 py-3 text-red-600 font-medium hover:bg-red-100 transition"
         >
           <FiLogOut size={18} />

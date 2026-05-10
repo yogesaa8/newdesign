@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../../store";
 import {
   FiSearch,
   FiBell,
@@ -15,8 +16,16 @@ import {
 import { profileData } from "../data/mockData";
 
 const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
+  const navigate = useNavigate();
+  const { logout } = useAuthStore();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
+
+  const handleLogout = async () => {
+    setDropdownOpen(false);
+    await logout();
+    navigate("/seeker/login");
+  };
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
@@ -191,13 +200,13 @@ const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
                 </div>
 
                 <div className="border-t border-slate-300 p-3">
-                  <Link
-                    to="/"
-                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-red-600 hover:bg-red-50"
+                  <button
+                    onClick={handleLogout}
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-red-600 hover:bg-red-50"
                   >
                     <FiLogOut size={18} />
                     Sign Out
-                  </Link>
+                  </button>
                 </div>
               </div>
             )}

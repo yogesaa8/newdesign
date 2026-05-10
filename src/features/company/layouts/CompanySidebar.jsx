@@ -1,8 +1,16 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../../store";
 
 const CompanySidebar = ({ sidebarOpen }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuthStore();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/company/login");
+  };
 
   const isActive = (path) => location.pathname === path;
 
@@ -131,15 +139,15 @@ const CompanySidebar = ({ sidebarOpen }) => {
         <div
           className={`mt-auto border-t border-slate-100 pt-5 ${!sidebarOpen ? "md:hidden" : ""}`}
         >
-          <Link
-            to="/company/login"
-            className="flex items-center gap-3 rounded-lg px-4 py-3 font-medium text-red-500 transition-all hover:bg-red-50"
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 rounded-lg px-4 py-3 font-medium text-red-500 transition-all hover:bg-red-50 w-full"
           >
             <span className="material-symbols-outlined flex-shrink-0">
               logout
             </span>
             <span className="whitespace-nowrap">Logout</span>
-          </Link>
+          </button>
         </div>
       </aside>
     </>

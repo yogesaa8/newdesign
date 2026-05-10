@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiMenu } from "react-icons/fi";
+import { useAuthStore } from "../../../store";
 
 const CompanyHeader = ({ sidebarOpen, setSidebarOpen }) => {
   const navigate = useNavigate();
@@ -18,8 +19,10 @@ const CompanyHeader = ({ sidebarOpen, setSidebarOpen }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    console.log("Logging out...");
+  const { logout } = useAuthStore();
+
+  const handleLogout = async () => {
+    await logout();
     navigate("/company/login");
   };
 

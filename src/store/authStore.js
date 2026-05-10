@@ -118,7 +118,7 @@ const persistPendingAuth = (pendingVerification) => {
   }
 };
 
-export const useAuthStore = create((set) => ({
+export const useAuthStore = create((set, get) => ({
   user: storedAuth?.user ?? null,
   role: storedAuth?.role ?? null,
   accessToken: storedAuth?.accessToken ?? null,
@@ -295,6 +295,165 @@ export const useAuthStore = create((set) => ({
     } catch (error) {
       set({ isLoading: false, error: error.message });
       throw error;
+    }
+  },
+  registerCompany: async ({ email, phone_no, password }) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const payload = await apiRequest("/auth/register", {
+        method: "POST",
+        body: JSON.stringify({ email, phone_no, password, user_type: "company" }),
+      });
+      const tokens = extractTokens(payload);
+      const user = buildUser(payload, { email, phone_no });
+      const pendingVerification = {
+        user,
+        role: "company",
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+      };
+
+      persistPendingAuth(pendingVerification);
+      set({ pendingVerification, isLoading: false, error: null });
+      return payload;
+    } catch (error) {
+      set({ isLoading: false, error: error.message });
+      throw error;
+    }
+  },
+  loginCompany: async ({ email, password, remember = false }) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const payload = await apiRequest("/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
+      const tokens = extractTokens(payload);
+      const user = buildUser(payload, { email });
+
+      if (remember) {
+        localStorage.setItem(
+          AUTH_STORAGE_KEY,
+          JSON.stringify({ user, role: "company", accessToken: tokens.accessToken, refreshToken: tokens.refreshToken })
+        );
+      } else {
+        localStorage.removeItem(AUTH_STORAGE_KEY);
+      }
+
+      sessionStorage.removeItem(PENDING_AUTH_STORAGE_KEY);
+      set({
+        user,
+        role: "company",
+        accessToken: tokens.accessToken || null,
+        refreshToken: tokens.refreshToken || null,
+        pendingVerification: null,
+        isAuthenticated: true,
+        isLoading: false,
+        error: null,
+      });
+      return payload;
+    } catch (error) {
+      set({ isLoading: false, error: error.message });
+      throw error;
+    }
+  },
+  verifyCompanyOtp: async (otp) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const pendingVerification = getStoredPendingAuth();
+
+      if (!pendingVerification?.accessToken) {
+        throw new Error("OTP session expired. Please sign up again.");
+      }
+
+      const payload = await apiRequest("/auth/verify-otp", {
+        method: "POST",
+        token: pendingVerification.accessToken,
+        body: JSON.stringify({ otp }),
+      });
+
+      // Keep pendingVerification — token still needed for profile/complete
+      set({ isLoading: false, error: null });
+      return payload;
+    } catch (error) {
+      set({ isLoading: false, error: error.message });
+      throw error;
+    }
+  },
+  resendCompanyOtp: async () => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const pendingVerification = getStoredPendingAuth();
+
+      if (!pendingVerification?.accessToken) {
+        throw new Error("OTP session expired. Please sign up again.");
+      }
+
+      const payload = await apiRequest("/auth/resend-otp", {
+        method: "POST",
+        token: pendingVerification.accessToken,
+        body: JSON.stringify({ channel: "email" }),
+      });
+
+      set({ isLoading: false, error: null });
+      return payload;
+    } catch (error) {
+      set({ isLoading: false, error: error.message });
+      throw error;
+    }
+  },
+  completeCompanyProfile: async (details) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const pendingVerification = getStoredPendingAuth();
+
+      if (!pendingVerification?.accessToken) {
+        throw new Error("Session expired. Please sign up again.");
+      }
+
+      const payload = await apiRequest("/profile/complete", {
+        method: "POST",
+        token: pendingVerification.accessToken,
+        body: JSON.stringify(details),
+      });
+
+      sessionStorage.removeItem(PENDING_AUTH_STORAGE_KEY);
+      set({ pendingVerification: null, isLoading: false, error: null });
+      return payload;
+    } catch (error) {
+      set({ isLoading: false, error: error.message });
+      throw error;
+    }
+  },
+  logout: async () => {
+    const { accessToken } = get();
+
+    try {
+      if (accessToken) {
+        await apiRequest("/auth/logout", {
+          method: "POST",
+          token: accessToken,
+        });
+      }
+    } catch {
+      // Logout locally even if API call fails
+    } finally {
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+      sessionStorage.removeItem(PENDING_AUTH_STORAGE_KEY);
+      set({
+        user: null,
+        role: null,
+        accessToken: null,
+        refreshToken: null,
+        pendingVerification: null,
+        isAuthenticated: false,
+        error: null,
+      });
     }
   },
 }));
