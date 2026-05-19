@@ -97,13 +97,35 @@ const extractTokens = (payload) => {
 const buildUser = (payload, fallback = {}) => {
   const data = getResponseData(payload);
   const user = data?.user ?? payload?.user ?? data ?? {};
+  const profile = user?.profile ?? data?.profile ?? payload?.profile ?? {};
+  const company = user?.company ?? data?.company ?? payload?.company ?? {};
 
   return {
     ...user,
+    profile,
+    company,
     name:
-      user?.name || user?.full_name || user?.email || "Job Seeker",
-    email: user?.email || fallback.email,
-    phone_no: user?.phone_no || user?.phone || fallback.phone_no,
+      user?.name ||
+      user?.full_name ||
+      user?.fullName ||
+      profile?.name ||
+      profile?.full_name ||
+      company?.company_name ||
+      company?.companyName ||
+      company?.name ||
+      user?.email ||
+      fallback.name ||
+      fallback.email ||
+      "User",
+    email: user?.email || profile?.email || company?.email || fallback.email,
+    phone_no:
+      user?.phone_no ||
+      user?.phone ||
+      profile?.phone_no ||
+      profile?.phone ||
+      company?.phone_no ||
+      company?.phone ||
+      fallback.phone_no,
   };
 };
 

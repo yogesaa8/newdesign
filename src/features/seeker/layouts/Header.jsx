@@ -13,11 +13,52 @@ import {
   FiLogOut,
   FiMenu,
 } from "react-icons/fi";
-import { profileData } from "../data/mockData";
+
+const pickFirst = (...values) =>
+  values.find((value) => typeof value === "string" && value.trim())?.trim();
+
+const getSeekerProfile = (user) => {
+  const profile = user?.profile ?? {};
+  const name = pickFirst(
+    user?.name,
+    user?.full_name,
+    user?.fullName,
+    profile?.name,
+    profile?.full_name,
+    profile?.fullName,
+    user?.email,
+    "Job Seeker"
+  );
+
+  return {
+    name,
+    email: pickFirst(user?.email, profile?.email, ""),
+    position: pickFirst(
+      user?.position,
+      user?.designation,
+      profile?.position,
+      profile?.designation,
+      profile?.headline,
+      "Job Seeker"
+    ),
+    avatar: pickFirst(
+      user?.avatar,
+      user?.avatar_url,
+      user?.profile_picture,
+      user?.profilePicture,
+      profile?.avatar,
+      profile?.avatar_url,
+      profile?.profile_picture,
+      profile?.profilePicture
+    ),
+    initial: name.charAt(0).toUpperCase(),
+  };
+};
 
 const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
   const navigate = useNavigate();
-  const { logout } = useAuthStore();
+  const { user, logout } = useAuthStore();
+  const profile = getSeekerProfile(user);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
 
@@ -144,17 +185,23 @@ const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
               onClick={() => setDropdownOpen(!dropdownOpen)}
               className="flex items-center gap-3 rounded-2xl p-1.5 hover:bg-slate-50 transition"
             >
-              <img
-                src={profileData.avatar}
-                alt="User"
-                className="h-11 w-11 rounded-xl object-cover"
-              />
+              {profile.avatar ? (
+                <img
+                  src={profile.avatar}
+                  alt={profile.name}
+                  className="h-11 w-11 rounded-xl object-cover"
+                />
+              ) : (
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-100 text-sm font-bold text-orange-700">
+                  {profile.initial}
+                </span>
+              )}
 
               <div className="hidden lg:block text-left">
                 <p className="text-sm font-semibold text-slate-800">
-                  {profileData.name}
+                  {profile.name}
                 </p>
-                <p className="text-xs text-slate-500">{profileData.position}</p>
+                <p className="text-xs text-slate-500">{profile.position}</p>
               </div>
 
               <FiChevronDown
@@ -169,8 +216,8 @@ const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
                 className="absolute right-0 mt-3 w-72 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl"
               >
                 <div className="border-b border-slate-300 px-5 py-4">
-                  <h4 className="font-semibold">{profileData.name}</h4>
-                  <p className="text-sm text-slate-500">{profileData.email}</p>
+                  <h4 className="font-semibold">{profile.name}</h4>
+                  <p className="text-sm text-slate-500">{profile.email}</p>
                 </div>
 
                 <div className="p-3 space-y-1">

@@ -3,10 +3,61 @@ import { Link, useNavigate } from "react-router-dom";
 import { FiMenu } from "react-icons/fi";
 import { useAuthStore } from "../../../store";
 
+const pickFirst = (...values) =>
+  values.find((value) => typeof value === "string" && value.trim())?.trim();
+
+const getCompanyProfile = (user) => {
+  const company = user?.company ?? {};
+  const profile = user?.profile ?? {};
+  const name = pickFirst(
+    company?.company_name,
+    company?.companyName,
+    company?.name,
+    user?.company_name,
+    user?.companyName,
+    user?.name,
+    user?.full_name,
+    profile?.company_name,
+    profile?.companyName,
+    profile?.name,
+    user?.email,
+    "Company"
+  );
+
+  return {
+    name,
+    email: pickFirst(user?.email, company?.email, profile?.email, ""),
+    role: pickFirst(
+      user?.designation,
+      user?.position,
+      user?.contact_designation,
+      company?.contact_designation,
+      profile?.designation,
+      "Recruiter"
+    ),
+    avatar: pickFirst(
+      company?.logo,
+      company?.logo_url,
+      company?.logoUrl,
+      user?.logo,
+      user?.logo_url,
+      user?.avatar,
+      user?.avatar_url,
+      user?.profile_picture,
+      profile?.logo,
+      profile?.avatar,
+      profile?.profile_picture
+    ),
+    initial: name.charAt(0).toUpperCase(),
+  };
+};
+
 const CompanyHeader = ({ sidebarOpen, setSidebarOpen }) => {
   const navigate = useNavigate();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef(null);
+  const { user, logout } = useAuthStore();
+  const profile = getCompanyProfile(user);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -18,8 +69,6 @@ const CompanyHeader = ({ sidebarOpen, setSidebarOpen }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  const { logout } = useAuthStore();
 
   const handleLogout = async () => {
     await logout();
@@ -81,15 +130,21 @@ const CompanyHeader = ({ sidebarOpen, setSidebarOpen }) => {
             >
               <div className="hidden text-right lg:block">
                 <p className="text-sm font-semibold text-slate-800">
-                  Alex Sterling
+                  {profile.name}
                 </p>
-                <p className="text-xs text-slate-500">Recruiter</p>
+                <p className="text-xs text-slate-500">{profile.role}</p>
               </div>
-              <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKC5Rto4K9DF-gIwYT6OX5lnYSfJ3KSAE8KWzojvSDThPKoAPZzvZuwTBVcH4uEE8-bwUskyetEfxw-f2_bChT3B5GzbEPfYtPKiJkAkJMtX01DuB_ZYw4X6YHE1oldfK-it7vhZp5ByY_CCAFo5Qb08zkT2A5A66c8cAHXbZ8wI-js12p9hka4nhAsKWCx_eJrTT1H1a5i385y0xCiDTG6w8wGRCW9feBPB0S33TOGYkQ9xyD42Px9WCwHFm9P-Azl_nTon4t7hiw"
-                alt="User Avatar"
-                className="h-9 w-9 rounded-full border-2 border-white object-cover shadow-sm md:h-10 md:w-10"
-              />
+              {profile.avatar ? (
+                <img
+                  src={profile.avatar}
+                  alt={profile.name}
+                  className="h-9 w-9 rounded-full border-2 border-white object-cover shadow-sm md:h-10 md:w-10"
+                />
+              ) : (
+                <span className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-white bg-orange-100 text-sm font-bold text-orange-700 shadow-sm md:h-10 md:w-10">
+                  {profile.initial}
+                </span>
+              )}
             </button>
 
             {/* Dropdown Menu */}
@@ -97,11 +152,9 @@ const CompanyHeader = ({ sidebarOpen, setSidebarOpen }) => {
               <div className="absolute right-0 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
                 <div className="border-b border-slate-100 px-4 py-3 lg:hidden">
                   <p className="text-sm font-semibold text-slate-800">
-                    Alex Sterling
+                    {profile.name}
                   </p>
-                  <p className="text-xs text-slate-500">
-                    a.henderson@recruitpro.com
-                  </p>
+                  <p className="text-xs text-slate-500">{profile.email}</p>
                 </div>
                 <div className="p-2">
                   <Link
