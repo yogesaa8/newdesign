@@ -197,17 +197,17 @@ const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
                 </span>
               )}
 
-              <div className="hidden lg:block text-left">
+              {/* <div className="hidden lg:block text-left">
                 <p className="text-sm font-semibold text-slate-800">
                   {profile.name}
                 </p>
                 <p className="text-xs text-slate-500">{profile.position}</p>
-              </div>
+              </div> */}
 
-              <FiChevronDown
+              {/* <FiChevronDown
                 size={18}
                 className={`transition ${dropdownOpen ? "rotate-180" : ""}`}
-              />
+              /> */}
             </button>
 
             {dropdownOpen && (
