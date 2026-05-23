@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 const AUTH_STORAGE_KEY = "jobPortalAuth";
+const SESSION_KEY = "jobPortalSession";
 const PENDING_AUTH_STORAGE_KEY = "jobPortalPendingAuth";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "");
 
@@ -8,6 +9,15 @@ const getStoredAuth = () => {
   try {
     const storedAuth = localStorage.getItem(AUTH_STORAGE_KEY);
     return storedAuth ? JSON.parse(storedAuth) : null;
+  } catch {
+    return null;
+  }
+};
+
+const getStoredSession = () => {
+  try {
+    const s = localStorage.getItem(SESSION_KEY);
+    return s ? JSON.parse(s) : null;
   } catch {
     return null;
   }
@@ -23,7 +33,15 @@ const getStoredPendingAuth = () => {
 };
 
 const storedAuth = getStoredAuth();
+const storedSession = getStoredSession();
 const storedPendingAuth = getStoredPendingAuth();
+
+const hasFullAuth = Boolean(storedAuth?.user && storedAuth?.role);
+const hasSession = !hasFullAuth && Boolean(storedSession?.refreshToken);
+
+const persistSession = ({ user, role, refreshToken }) => {
+  localStorage.setItem(SESSION_KEY, JSON.stringify({ user, role, refreshToken }));
+};
 
 const getApiUrl = (path) => {
   if (!API_BASE_URL) {
@@ -94,6 +112,34 @@ const extractTokens = (payload) => {
   };
 };
 
+const decodeJwtPayload = (token) => {
+  try {
+    if (!token) return {};
+
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    return JSON.parse(atob(base64));
+  } catch {
+    return {};
+  }
+};
+
+const getUserType = (user, token) => {
+  const tokenPayload = decodeJwtPayload(token);
+
+  return (
+    user?.user_type ||
+    user?.userType ||
+    user?.role ||
+    user?.profile?.user_type ||
+    user?.profile?.userType ||
+    tokenPayload?.user_type ||
+    tokenPayload?.userType ||
+    tokenPayload?.role ||
+    ""
+  );
+};
+
 const buildUser = (payload, fallback = {}) => {
   const data = getResponseData(payload);
   const user = data?.user ?? payload?.user ?? data ?? {};
@@ -144,13 +190,15 @@ export const useAuthStore = create((set, get) => ({
   user: storedAuth?.user ?? null,
   role: storedAuth?.role ?? null,
   accessToken: storedAuth?.accessToken ?? null,
-  refreshToken: storedAuth?.refreshToken ?? null,
+  refreshToken: storedAuth?.refreshToken ?? storedSession?.refreshToken ?? null,
   pendingVerification: storedPendingAuth,
   isLoading: false,
+  isInitializing: hasSession,
   error: null,
-  isAuthenticated: Boolean(storedAuth?.user && storedAuth?.role),
+  isAuthenticated: hasFullAuth,
   setAuth: ({ user, role, accessToken, refreshToken, remember = false }) => {
     sessionStorage.removeItem(PENDING_AUTH_STORAGE_KEY);
+    persistSession({ user, role, refreshToken });
 
     if (remember) {
       localStorage.setItem(
@@ -168,11 +216,13 @@ export const useAuthStore = create((set, get) => ({
       refreshToken: refreshToken ?? null,
       pendingVerification: null,
       isAuthenticated: true,
+      isInitializing: false,
       error: null,
     });
   },
   clearAuth: () => {
     localStorage.removeItem(AUTH_STORAGE_KEY);
+    localStorage.removeItem(SESSION_KEY);
     sessionStorage.removeItem(PENDING_AUTH_STORAGE_KEY);
     set({
       user: null,
@@ -181,6 +231,7 @@ export const useAuthStore = create((set, get) => ({
       refreshToken: null,
       pendingVerification: null,
       isAuthenticated: false,
+      isInitializing: false,
       error: null,
     });
   },
@@ -229,6 +280,13 @@ export const useAuthStore = create((set, get) => ({
       });
       const tokens = extractTokens(payload);
       const user = buildUser(payload, { email });
+      const userType = getUserType(user, tokens.accessToken);
+
+      if (userType && userType !== "seeker") {
+        throw new Error("Please login with a seeker account.");
+      }
+
+      persistSession({ user, role: "seeker", refreshToken: tokens.refreshToken });
 
       if (remember) {
         localStorage.setItem(
@@ -252,6 +310,7 @@ export const useAuthStore = create((set, get) => ({
         refreshToken: tokens.refreshToken || null,
         pendingVerification: null,
         isAuthenticated: true,
+        isInitializing: false,
         isLoading: false,
         error: null,
       });
@@ -278,6 +337,11 @@ export const useAuthStore = create((set, get) => ({
         body: JSON.stringify({ otp }),
       });
 
+      persistSession({
+        user: pendingVerification.user,
+        role: pendingVerification.role,
+        refreshToken: pendingVerification.refreshToken,
+      });
       sessionStorage.removeItem(PENDING_AUTH_STORAGE_KEY);
       set({
         user: pendingVerification.user,
@@ -286,6 +350,7 @@ export const useAuthStore = create((set, get) => ({
         refreshToken: pendingVerification.refreshToken || null,
         pendingVerification: null,
         isAuthenticated: true,
+        isInitializing: false,
         isLoading: false,
         error: null,
       });
@@ -310,6 +375,30 @@ export const useAuthStore = create((set, get) => ({
         method: "POST",
         token: pendingVerification.accessToken,
         body: JSON.stringify({ channel: "email" }),
+      });
+
+      set({ isLoading: false, error: null });
+      return payload;
+    } catch (error) {
+      set({ isLoading: false, error: error.message });
+      throw error;
+    }
+  },
+  completeSeekerProfile: async (details) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const pendingVerification = getStoredPendingAuth();
+      const token = get().accessToken || pendingVerification?.accessToken;
+
+      if (!token) {
+        throw new Error("Session expired. Please sign up or login again.");
+      }
+
+      const payload = await apiRequest("/profile/complete", {
+        method: "POST",
+        token,
+        body: JSON.stringify(details),
       });
 
       set({ isLoading: false, error: null });
@@ -354,6 +443,13 @@ export const useAuthStore = create((set, get) => ({
       });
       const tokens = extractTokens(payload);
       const user = buildUser(payload, { email });
+      const userType = getUserType(user, tokens.accessToken);
+
+      if (userType && userType !== "company") {
+        throw new Error("Please login with a company account.");
+      }
+
+      persistSession({ user, role: "company", refreshToken: tokens.refreshToken });
 
       if (remember) {
         localStorage.setItem(
@@ -372,6 +468,7 @@ export const useAuthStore = create((set, get) => ({
         refreshToken: tokens.refreshToken || null,
         pendingVerification: null,
         isAuthenticated: true,
+        isInitializing: false,
         isLoading: false,
         error: null,
       });
@@ -466,6 +563,7 @@ export const useAuthStore = create((set, get) => ({
       // Logout locally even if API call fails
     } finally {
       localStorage.removeItem(AUTH_STORAGE_KEY);
+      localStorage.removeItem(SESSION_KEY);
       sessionStorage.removeItem(PENDING_AUTH_STORAGE_KEY);
       set({
         user: null,
@@ -474,7 +572,53 @@ export const useAuthStore = create((set, get) => ({
         refreshToken: null,
         pendingVerification: null,
         isAuthenticated: false,
+        isInitializing: false,
         error: null,
+      });
+    }
+  },
+
+  initAuth: async () => {
+    if (get().isAuthenticated) {
+      set({ isInitializing: false });
+      return;
+    }
+
+    const session = getStoredSession();
+    if (!session?.refreshToken) {
+      set({ isInitializing: false });
+      return;
+    }
+
+    try {
+      const payload = await apiRequest("/auth/refresh", {
+        method: "POST",
+        body: JSON.stringify({ refresh_token: session.refreshToken }),
+      });
+      const tokens = extractTokens(payload);
+      const newAccessToken = tokens.accessToken;
+      const newRefreshToken = tokens.refreshToken || session.refreshToken;
+
+      persistSession({ user: session.user, role: session.role, refreshToken: newRefreshToken });
+
+      set({
+        user: session.user,
+        role: session.role,
+        accessToken: newAccessToken || null,
+        refreshToken: newRefreshToken || null,
+        isAuthenticated: true,
+        isInitializing: false,
+        error: null,
+      });
+    } catch {
+      localStorage.removeItem(SESSION_KEY);
+      set({
+        user: null,
+        role: null,
+        accessToken: null,
+        refreshToken: null,
+        isAuthenticated: false,
+        isInitializing: false,
       });
     }
   },

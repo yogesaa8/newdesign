@@ -64,7 +64,7 @@ const JobSeekerLogin = () => {
 
     try {
       await loginSeeker(formData);
-      navigate("/seeker/dashboard");
+      navigate("/seeker/dashboard/profile");
     } catch {
       // Store error is shown in the form.
     }
@@ -80,7 +80,7 @@ const JobSeekerLogin = () => {
       },
     });
 
-    navigate("/seeker/dashboard");
+    navigate("/seeker/dashboard/profile");
   };
 
   return (

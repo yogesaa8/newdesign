@@ -1,16 +1,93 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
+import { useAuthStore } from "../../../../store/authStore";
+import { useCompanyStore } from "../../store/companyStore";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "");
+
+const getWebsiteValue = (url = "") => url.replace(/^https?:\/\//, "");
+
+const getLocationList = (payload) => {
+  const data = payload?.data ?? payload?.result ?? payload;
+  return data?.locations ?? data?.items ?? (Array.isArray(data) ? data : []);
+};
+
+const getLocationLabel = (location = {}) =>
+  [location.city, location.state].filter(Boolean).join(", ") ||
+  location.name ||
+  location.location_name ||
+  "";
+
+const toFormData = (company = {}) => ({
+  companyName: company.company_name || "",
+  industry: company.industry || "",
+  companySize: company.company_size || "",
+  gstin: company.gstin || "",
+  websiteUrl: getWebsiteValue(company.website || ""),
+  linkedinUrl: company.linkedin_url || "",
+  contactPerson: company.contact_person || "",
+  contactDesignation: company.contact_designation || "",
+  description: company.description || "",
+  logoUrl: company.logo_url || "",
+  locationId: company.location_id || "",
+  locationName:
+    company.location_name ||
+    getLocationLabel(company.location) ||
+    [company.location_city, company.location_state].filter(Boolean).join(", ") ||
+    "",
+});
+
+const toApiPayload = (formData) => ({
+  company_name: formData.companyName,
+  industry: formData.industry,
+  company_size: formData.companySize,
+  gstin: formData.gstin,
+  website: formData.websiteUrl
+    ? formData.websiteUrl.startsWith("http")
+      ? formData.websiteUrl
+      : `https://${formData.websiteUrl}`
+    : "",
+  linkedin_url: formData.linkedinUrl,
+  contact_person: formData.contactPerson,
+  contact_designation: formData.contactDesignation,
+  description: formData.description,
+  logo_url: formData.logoUrl,
+  location_id: formData.locationId,
+});
 
 const CompanyProfile = () => {
-  const [formData, setFormData] = useState({
-    companyName: "RecruitPro Enterprise",
-    industry: "Technology & SaaS",
-    websiteUrl: "recruitpro.com/enterprise",
-    linkedinUrl: "linkedin.com/company/recruitpro",
-    twitterHandle: "@RecruitProHQ",
-    description: `RecruitPro is a leading provider of AI-driven talent acquisition tools. We empower recruiters and hiring managers to build diverse, high-performing teams with speed and precision. Our mission is to humanize the hiring process through transparent data and intelligent automation.
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const {
+    company,
+    isLoading,
+    isSaving,
+    isDeleting,
+    fetchCompanyProfile,
+    completeCompanyProfile,
+    updateCompanyProfile,
+    deleteCompanyProfile,
+  } = useCompanyStore();
 
-Headquartered in San Francisco with remote teams worldwide, we pride ourselves on a culture of radical transparency, rapid iteration, and deep empathy for both candidates and employers.`,
+  const [formData, setFormData] = useState({
+    companyName: "",
+    industry: "",
+    companySize: "",
+    gstin: "",
+    websiteUrl: "",
+    linkedinUrl: "",
+    contactPerson: "",
+    contactDesignation: "",
+    description: "",
+    logoUrl: "",
+    locationId: "",
+    locationName: "",
   });
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [locationSearch, setLocationSearch] = useState("");
+  const [locationResults, setLocationResults] = useState([]);
+  const [isSearchingLocations, setIsSearchingLocations] = useState(false);
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
+  const locationRef = useRef(null);
 
   const [hasChanges, setHasChanges] = useState(false);
    const [logoPreview, setLogoPreview] = useState(
@@ -20,10 +97,122 @@ Headquartered in San Francisco with remote teams worldwide, we pride ourselves o
     "https://lh3.googleusercontent.com/aida-public/AB6AXuBhN6YagKu3-ziidYGc7lfq8TgKFiNUdzKc9r9yMZEwxHRfcNwTaCUMdv-VanhEs6fquPhNiy-FlUS8bOtJ7Y15dCz_sIoV5JwMh_Q1gjf8Bqr3XHJLcczelQvvopTJ1SHjtovPOrjzTM8D2h6WTtqt90OL9XOhhNtDi5X6zQH6eYRtt-Um_c1gFdevaFCvXkYxrDXFdR6CftDCZp07qGL7fkKN7YeSiHhtVmrxDdc0t3j2oEVUY-X9hy8mFwqNvmnVJ3CO_5PK8O4b",
   );
 
+  useEffect(() => {
+    if (!accessToken) return;
+
+    fetchCompanyProfile(accessToken).catch(() => {});
+  }, [accessToken, fetchCompanyProfile]);
+
+  useEffect(() => {
+    if (!company) return;
+
+    const nextFormData = toFormData(company);
+    setFormData(nextFormData);
+    if (company.logo_url) setLogoPreview(company.logo_url);
+    setHasChanges(false);
+
+    if (nextFormData.locationName) {
+      setLocationSearch(nextFormData.locationName);
+    } else if (nextFormData.locationId) {
+      // API returned only location_id — resolve it to a display label
+      fetch(`${API_BASE_URL}/locations`)
+        .then((r) => r.json())
+        .then((payload) => {
+          const list = getLocationList(payload);
+          const found = list.find((l) => l.id === nextFormData.locationId);
+          const label = found ? getLocationLabel(found) : "";
+          setLocationSearch(label);
+          setFormData((prev) => ({ ...prev, locationName: label }));
+        })
+        .catch(() => {});
+    } else {
+      setLocationSearch("");
+    }
+  }, [company]);
+
+  useEffect(() => {
+    if (locationSearch.trim().length < 2 || formData.locationId) {
+      setLocationResults([]);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setIsSearchingLocations(true);
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/locations?search=${encodeURIComponent(locationSearch.trim())}`,
+        );
+        const payload = await response.json();
+        setLocationResults(getLocationList(payload));
+      } catch {
+        setLocationResults([]);
+      } finally {
+        setIsSearchingLocations(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [locationSearch, formData.locationId]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (locationRef.current && !locationRef.current.contains(event.target)) {
+        setShowLocationDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const validateRequiredFields = () => {
+    const nextErrors = {};
+
+    if (!formData.companyName.trim()) nextErrors.companyName = "Company name is required.";
+    if (!formData.industry.trim()) nextErrors.industry = "Industry is required.";
+    if (!formData.companySize.trim()) nextErrors.companySize = "Company size is required.";
+    if (!formData.locationId) nextErrors.locationId = "Please select a location.";
+
+    setFieldErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setHasChanges(true);
+    if (fieldErrors[name]) {
+      setFieldErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const handleLocationSearchChange = (e) => {
+    const { value } = e.target;
+    setLocationSearch(value);
+    setShowLocationDropdown(true);
+    setFormData((prev) => ({
+      ...prev,
+      locationId: "",
+      locationName: value,
+    }));
+    setHasChanges(true);
+    if (fieldErrors.locationId) {
+      setFieldErrors((prev) => ({ ...prev, locationId: "" }));
+    }
+  };
+
+  const handleLocationSelect = (location) => {
+    const label = getLocationLabel(location);
+    setLocationSearch(label);
+    setFormData((prev) => ({
+      ...prev,
+      locationId: location.id,
+      locationName: label,
+    }));
+    setLocationResults([]);
+    setShowLocationDropdown(false);
+    setHasChanges(true);
+    setFieldErrors((prev) => ({ ...prev, locationId: "" }));
   };
 
   const handleLogoUpload = (e) => {
@@ -38,6 +227,13 @@ Headquartered in San Francisco with remote teams worldwide, we pride ourselves o
     }
   };
 
+  const handleLogoUrlChange = (e) => {
+    const { value } = e.target;
+    setFormData((prev) => ({ ...prev, logoUrl: value }));
+    if (value) setLogoPreview(value);
+    setHasChanges(true);
+  };
+
   const handleCoverUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -50,13 +246,64 @@ Headquartered in San Francisco with remote teams worldwide, we pride ourselves o
     }
   };
 
-  const handleSave = () => {
-    console.log("Saving company profile:", formData);
-    setHasChanges(false);
+  const handleSave = async () => {
+    if (!accessToken) {
+      toast.error("Session expired. Please login again.");
+      return;
+    }
+
+    if (!validateRequiredFields()) {
+      toast.error("Please fill all required fields.");
+      return;
+    }
+
+    const toastId = toast.loading(company ? "Updating profile..." : "Saving profile...");
+    try {
+      if (company) {
+        await updateCompanyProfile(toApiPayload(formData), accessToken);
+      } else {
+        await completeCompanyProfile(toApiPayload(formData), accessToken);
+      }
+      setHasChanges(false);
+      toast.success(
+        company ? "Profile updated successfully." : "Profile saved successfully.",
+        { id: toastId },
+      );
+    } catch (err) {
+      toast.error(err.message, { id: toastId });
+    }
   };
 
   const handleDiscard = () => {
+    const nextFormData = toFormData(company);
+    setFormData(nextFormData);
+    setLocationSearch(nextFormData.locationName);
+    setFieldErrors({});
     setHasChanges(false);
+  };
+
+  const handleDeleteProfile = async () => {
+    if (!accessToken) {
+      toast.error("Session expired. Please login again.");
+      return;
+    }
+
+    if (!window.confirm("Delete this company profile? Your account will remain active.")) {
+      return;
+    }
+
+    const toastId = toast.loading("Deleting profile...");
+    try {
+      await deleteCompanyProfile(accessToken);
+      const nextFormData = toFormData();
+      setFormData(nextFormData);
+      setLocationSearch(nextFormData.locationName);
+      setFieldErrors({});
+      setHasChanges(false);
+      toast.success("Company profile deleted successfully.", { id: toastId });
+    } catch (err) {
+      toast.error(err.message, { id: toastId });
+    }
   };
 
   const characterCount = formData.description.length;
@@ -79,6 +326,13 @@ Headquartered in San Francisco with remote teams worldwide, we pride ourselves o
           {/* Desktop Action Buttons */}
           <div className="hidden gap-3 md:flex">
             <button
+              onClick={handleDeleteProfile}
+              disabled={isDeleting || !company}
+              className="rounded border border-red-200 bg-white px-6 py-2.5 font-semibold text-red-600 shadow-sm transition-all duration-200 hover:bg-red-50 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              {isDeleting ? "Deleting..." : "Delete Profile"}
+            </button>
+            <button
               onClick={handleDiscard}
               className="rounded border border-slate-300 bg-white px-6 py-2.5 font-semibold text-slate-700 shadow-sm transition-all duration-200 hover:bg-slate-50 hover:shadow-md"
             >
@@ -86,9 +340,10 @@ Headquartered in San Francisco with remote teams worldwide, we pride ourselves o
             </button>
             <button
               onClick={handleSave}
-              className="rounded bg-orange-600 px-8 py-2.5 font-semibold text-white shadow-sm transition-all duration-200 hover:bg-orange-700 active:scale-[0.98]"
+              disabled={isSaving}
+              className="rounded bg-orange-600 px-8 py-2.5 font-semibold text-white shadow-sm transition-all duration-200 hover:bg-orange-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Save Changes
+              {isSaving ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </div>
@@ -161,16 +416,35 @@ Headquartered in San Francisco with remote teams worldwide, we pride ourselves o
 
                 <div className="space-y-1">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    Twitter / X
+                    GSTIN
                   </label>
                   <div className="flex items-center gap-2 rounded border border-slate-200 bg-slate-50 px-3 py-2 transition focus-within:border-orange-400 focus-within:bg-white focus-within:ring-1 focus-within:ring-orange-400">
                     <span className="text-sm text-slate-400 material-symbols-outlined">
-                      alternate_email
+                      badge
                     </span>
                     <input
-                      name="twitterHandle"
-                      value={formData.twitterHandle}
+                      name="gstin"
+                      value={formData.gstin}
                       onChange={handleInputChange}
+                      className="w-full border-none p-0 text-sm text-slate-700 outline-none focus:ring-0"
+                      type="text"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                    Logo URL
+                  </label>
+                  <div className="flex items-center gap-2 rounded border border-slate-200 bg-slate-50 px-3 py-2 transition focus-within:border-orange-400 focus-within:bg-white focus-within:ring-1 focus-within:ring-orange-400">
+                    <span className="text-sm text-slate-400 material-symbols-outlined">
+                      image
+                    </span>
+                    <input
+                      name="logoUrl"
+                      value={formData.logoUrl}
+                      onChange={handleLogoUrlChange}
+                      placeholder="https://example.com/logo.png"
                       className="w-full border-none p-0 text-sm text-slate-700 outline-none focus:ring-0"
                       type="text"
                     />
@@ -190,29 +464,42 @@ Headquartered in San Francisco with remote teams worldwide, we pride ourselves o
               <div className="grid grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-2 md:gap-x-8 md:gap-y-6">
                 <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    Company Name
+                    Company Name *
                   </label>
                   <input
                     name="companyName"
                     value={formData.companyName}
                     onChange={handleInputChange}
-                    className="w-full rounded border border-slate-200 bg-slate-50 px-4 py-3 font-medium text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
+                    className={`w-full rounded border bg-slate-50 px-4 py-3 font-medium text-slate-800 outline-none transition focus:bg-white focus:ring-1 ${
+                      fieldErrors.companyName
+                        ? "border-red-400 focus:border-red-400 focus:ring-red-400"
+                        : "border-slate-200 focus:border-orange-400 focus:ring-orange-400"
+                    }`}
                     type="text"
                   />
+                  {fieldErrors.companyName && (
+                    <p className="text-sm text-red-500">{fieldErrors.companyName}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    Industry
+                    Industry *
                   </label>
                   <div className="relative">
                     <select
                       name="industry"
                       value={formData.industry}
                       onChange={handleInputChange}
-                      className="w-full appearance-none rounded border border-slate-200 bg-slate-50 px-4 py-3 font-medium text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
+                      className={`w-full appearance-none rounded border bg-slate-50 px-4 py-3 font-medium text-slate-800 outline-none transition focus:bg-white focus:ring-1 ${
+                        fieldErrors.industry
+                          ? "border-red-400 focus:border-red-400 focus:ring-red-400"
+                          : "border-slate-200 focus:border-orange-400 focus:ring-orange-400"
+                      }`}
                     >
-                      <option>Technology & SaaS</option>
+                      <option value="">Select industry</option>
+                      <option value="Technology">Technology</option>
+                      <option value="Technology & SaaS">Technology & SaaS</option>
                       <option>Financial Services</option>
                       <option>Healthcare</option>
                       <option>Manufacturing</option>
@@ -223,9 +510,43 @@ Headquartered in San Francisco with remote teams worldwide, we pride ourselves o
                       expand_more
                     </span>
                   </div>
+                  {fieldErrors.industry && (
+                    <p className="text-sm text-red-500">{fieldErrors.industry}</p>
+                  )}
                 </div>
 
-                <div className="space-y-2 md:col-span-2">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                    Company Size *
+                  </label>
+                  <div className="relative">
+                    <select
+                      name="companySize"
+                      value={formData.companySize}
+                      onChange={handleInputChange}
+                      className={`w-full appearance-none rounded border bg-slate-50 px-4 py-3 font-medium text-slate-800 outline-none transition focus:bg-white focus:ring-1 ${
+                        fieldErrors.companySize
+                          ? "border-red-400 focus:border-red-400 focus:ring-red-400"
+                          : "border-slate-200 focus:border-orange-400 focus:ring-orange-400"
+                      }`}
+                    >
+                      <option value="">Select size</option>
+                      <option value="1-10">1-10</option>
+                      <option value="11-50">11-50</option>
+                      <option value="51-200">51-200</option>
+                      <option value="201-1000">201-1000</option>
+                      <option value="1000+">1000+</option>
+                    </select>
+                    <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 material-symbols-outlined text-sm">
+                      expand_more
+                    </span>
+                  </div>
+                  {fieldErrors.companySize && (
+                    <p className="text-sm text-red-500">{fieldErrors.companySize}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
                     Website URL
                   </label>
@@ -239,6 +560,71 @@ Headquartered in San Francisco with remote teams worldwide, we pride ourselves o
                       type="text"
                     />
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                    Contact Person
+                  </label>
+                  <input
+                    name="contactPerson"
+                    value={formData.contactPerson}
+                    onChange={handleInputChange}
+                    className="w-full rounded border border-slate-200 bg-slate-50 px-4 py-3 font-medium text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
+                    type="text"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                    Contact Designation
+                  </label>
+                  <input
+                    name="contactDesignation"
+                    value={formData.contactDesignation}
+                    onChange={handleInputChange}
+                    className="w-full rounded border border-slate-200 bg-slate-50 px-4 py-3 font-medium text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
+                    type="text"
+                  />
+                </div>
+
+                <div ref={locationRef} className="relative space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                    City / Location *
+                  </label>
+                  <input
+                    type="text"
+                    value={locationSearch}
+                    onChange={handleLocationSearchChange}
+                    onFocus={() => locationSearch.length >= 2 && setShowLocationDropdown(true)}
+                    placeholder="Search city"
+                    className={`w-full rounded border bg-slate-50 px-4 py-3 font-medium text-slate-800 outline-none transition focus:bg-white focus:ring-1 ${
+                      fieldErrors.locationId
+                        ? "border-red-400 focus:border-red-400 focus:ring-red-400"
+                        : "border-slate-200 focus:border-orange-400 focus:ring-orange-400"
+                    }`}
+                  />
+                  {isSearchingLocations && (
+                    <span className="absolute right-3 top-9 text-xs text-slate-400">
+                      Searching...
+                    </span>
+                  )}
+                  {showLocationDropdown && locationResults.length > 0 && (
+                    <ul className="absolute z-20 mt-1 max-h-48 w-full overflow-y-auto rounded border border-slate-200 bg-white shadow-lg">
+                      {locationResults.map((location) => (
+                        <li
+                          key={location.id}
+                          onMouseDown={() => handleLocationSelect(location)}
+                          className="cursor-pointer px-4 py-2 text-sm text-slate-700 hover:bg-orange-50 hover:text-orange-700"
+                        >
+                          {getLocationLabel(location)}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {fieldErrors.locationId && (
+                    <p className="text-sm text-red-500">{fieldErrors.locationId}</p>
+                  )}
                 </div>
 
                 <div className="space-y-2 pt-2 md:col-span-2 md:pt-4">
@@ -309,9 +695,10 @@ Headquartered in San Francisco with remote teams worldwide, we pride ourselves o
               </button>
               <button
                 onClick={handleSave}
-                className="rounded-lg bg-orange-600 px-6 py-2 text-xs font-bold text-white shadow-md"
+                disabled={isSaving}
+                className="rounded-lg bg-orange-600 px-6 py-2 text-xs font-bold text-white shadow-md disabled:cursor-not-allowed disabled:opacity-70"
               >
-                Save Now
+                {isSaving ? "Saving..." : "Save Now"}
               </button>
             </div>
           </div>

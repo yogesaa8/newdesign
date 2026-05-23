@@ -117,7 +117,7 @@ const JobSeekerSignUp = () => {
       },
     });
 
-    navigate("/seeker/dashboard");
+    navigate("/seeker/dashboard/profile");
   };
 
   return (

@@ -42,7 +42,7 @@ const CompanyLogin = () => {
     if (!validate()) return;
     try {
       await loginCompany(formData);
-      navigate("/company/dashboard");
+      navigate("/company/profile");
     } catch {
       // error displayed from store
     }
@@ -57,7 +57,7 @@ const CompanyLogin = () => {
         email: formData.email || "company.google@example.com",
       },
     });
-    navigate("/company/dashboard");
+    navigate("/company/profile");
   };
 
   return (
