@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { BsGoogle } from "react-icons/bs";
 import { useAuthStore } from "../../../../store";
+import GoogleOAuthButton from "../../../../components/auth/GoogleOAuthButton";
 
 const CompanyLogin = () => {
   const navigate = useNavigate();
-  const { error, isLoading, loginCompany, setAuth, clearError } = useAuthStore();
+  const { error, isLoading, loginCompany, continueWithGoogle, clearError } =
+    useAuthStore();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -48,16 +49,17 @@ const CompanyLogin = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    setAuth({
-      role: "company",
-      remember: formData.remember,
-      user: {
-        name: "RecruitPro Company",
-        email: formData.email || "company.google@example.com",
-      },
-    });
-    navigate("/company/profile");
+  const handleGoogleLogin = async (idToken) => {
+    try {
+      await continueWithGoogle({
+        idToken,
+        userType: "company",
+        remember: formData.remember,
+      });
+      navigate("/company/profile");
+    } catch {
+      // error displayed from store
+    }
   };
 
   return (
@@ -150,14 +152,11 @@ const CompanyLogin = () => {
               OR CONTINUE WITH
             </div>
 
-            <button
-              type="button"
-              onClick={handleGoogleLogin}
-              className="flex w-full items-center justify-center gap-2 border border-slate-300 py-3 rounded hover:bg-slate-50 transition cursor-pointer"
-            >
-              <BsGoogle className="h-5 w-5" />
-              Continue with Google
-            </button>
+            <GoogleOAuthButton
+              disabled={isLoading}
+              onCredential={handleGoogleLogin}
+              text="continue_with"
+            />
 
             <div className="text-center text-sm pt-4 text-slate-600">
               New to RecruitPro?{" "}

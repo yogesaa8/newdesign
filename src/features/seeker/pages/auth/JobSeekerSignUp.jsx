@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { FcGoogle } from "react-icons/fc";
 import { useAuthStore } from "../../../../store";
+import GoogleOAuthButton from "../../../../components/auth/GoogleOAuthButton";
 
 const FloatingInput = ({
   label,
@@ -42,7 +42,7 @@ const FloatingInput = ({
 
 const JobSeekerSignUp = () => {
   const navigate = useNavigate();
-  const { error, isLoading, registerSeeker, setAuth, clearError } =
+  const { error, isLoading, registerSeeker, continueWithGoogle, clearError } =
     useAuthStore();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -108,16 +108,16 @@ const JobSeekerSignUp = () => {
     }
   };
 
-  const handleGoogleSignup = () => {
-    setAuth({
-      role: "seeker",
-      user: {
-        name: "Google User",
-        email: "seeker.google@example.com",
-      },
-    });
-
-    navigate("/seeker/dashboard/profile");
+  const handleGoogleSignup = async (idToken) => {
+    try {
+      await continueWithGoogle({
+        idToken,
+        userType: "seeker",
+      });
+      navigate("/seeker/dashboard/profile");
+    } catch {
+      // Store error is shown in the form.
+    }
   };
 
   return (
@@ -278,13 +278,11 @@ const JobSeekerSignUp = () => {
               </div>
 
               <div className="grid grid-cols-1 gap-4">
-                <button
-                  type="button"
-                  onClick={handleGoogleSignup}
-                  className="flex items-center justify-center gap-2 border border-slate-300 py-3 px-4 text-sm font-semibold transition-all hover:bg-slate-50 cursor-pointer"
-                >
-                  <FcGoogle size={20} /> Continue with Google
-                </button>
+                <GoogleOAuthButton
+                  disabled={isLoading}
+                  onCredential={handleGoogleSignup}
+                  text="signup_with"
+                />
               </div>
 
               <div className="mt-8 text-center">

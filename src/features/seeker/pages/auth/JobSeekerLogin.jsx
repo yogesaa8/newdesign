@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff, FiCheckCircle } from "react-icons/fi";
-import { FcGoogle } from "react-icons/fc";
 import { useAuthStore } from "../../../../store";
+import GoogleOAuthButton from "../../../../components/auth/GoogleOAuthButton";
 
 const FloatingInput = ({
   label,
@@ -46,7 +46,8 @@ const JobSeekerLogin = () => {
   });
 
   const navigate = useNavigate();
-  const { error, isLoading, loginSeeker, setAuth, clearError } = useAuthStore();
+  const { error, isLoading, loginSeeker, continueWithGoogle, clearError } =
+    useAuthStore();
 
   const handleChange = (e) => {
     clearError();
@@ -70,17 +71,17 @@ const JobSeekerLogin = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    setAuth({
-      role: "seeker",
-      remember: formData.remember,
-      user: {
-        name: "Google User",
-        email: formData.email || "google.user@example.com",
-      },
-    });
-
-    navigate("/seeker/dashboard/profile");
+  const handleGoogleLogin = async (idToken) => {
+    try {
+      await continueWithGoogle({
+        idToken,
+        userType: "seeker",
+        remember: formData.remember,
+      });
+      navigate("/seeker/dashboard/profile");
+    } catch {
+      // Store error is shown in the form.
+    }
   };
 
   return (
@@ -207,13 +208,11 @@ const JobSeekerLogin = () => {
               </div>
 
               <div className="grid grid-cols-1 gap-4">
-                <button
-                  type="button"
-                  onClick={handleGoogleLogin}
-                  className="flex items-center justify-center gap-2 border border-slate-300 py-3 px-4 text-sm font-semibold transition-all hover:bg-slate-50 cursor-pointer"
-                >
-                  <FcGoogle size={20} /> Continue with Google
-                </button>
+                <GoogleOAuthButton
+                  disabled={isLoading}
+                  onCredential={handleGoogleLogin}
+                  text="continue_with"
+                />
               </div>
 
               <div className="mt-8 text-center">

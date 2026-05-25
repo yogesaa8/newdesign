@@ -3,7 +3,10 @@ import { create } from "zustand";
 const AUTH_STORAGE_KEY = "jobPortalAuth";
 const SESSION_KEY = "jobPortalSession";
 const PENDING_AUTH_STORAGE_KEY = "jobPortalPendingAuth";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "");
+const API_BASE_URL = (
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://nodebackend-smx3.onrender.com/api/v1"
+).replace(/\/$/, "");
 
 const getStoredAuth = () => {
   try {
@@ -138,6 +141,39 @@ const getUserType = (user, token) => {
     tokenPayload?.role ||
     ""
   );
+};
+
+const persistAuthenticatedUser = ({
+  set,
+  user,
+  role,
+  accessToken,
+  refreshToken,
+  remember = false,
+}) => {
+  persistSession({ user, role, refreshToken });
+
+  if (remember) {
+    localStorage.setItem(
+      AUTH_STORAGE_KEY,
+      JSON.stringify({ user, role, accessToken, refreshToken })
+    );
+  } else {
+    localStorage.removeItem(AUTH_STORAGE_KEY);
+  }
+
+  sessionStorage.removeItem(PENDING_AUTH_STORAGE_KEY);
+  set({
+    user,
+    role,
+    accessToken: accessToken || null,
+    refreshToken: refreshToken || null,
+    pendingVerification: null,
+    isAuthenticated: true,
+    isInitializing: false,
+    isLoading: false,
+    error: null,
+  });
 };
 
 const buildUser = (payload, fallback = {}) => {
@@ -313,6 +349,41 @@ export const useAuthStore = create((set, get) => ({
         isInitializing: false,
         isLoading: false,
         error: null,
+      });
+
+      return payload;
+    } catch (error) {
+      set({ isLoading: false, error: error.message });
+      throw error;
+    }
+  },
+  continueWithGoogle: async ({ idToken, userType, remember = false }) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const payload = await apiRequest("/auth/google", {
+        method: "POST",
+        body: JSON.stringify({
+          id_token: idToken,
+          user_type: userType,
+        }),
+      });
+      const tokens = extractTokens(payload);
+      const user = buildUser(payload);
+      const returnedUserType = getUserType(user, tokens.accessToken);
+      const role = returnedUserType || userType;
+
+      if (role !== userType) {
+        throw new Error(`Please login with a ${userType} account.`);
+      }
+
+      persistAuthenticatedUser({
+        set,
+        user,
+        role,
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+        remember,
       });
 
       return payload;

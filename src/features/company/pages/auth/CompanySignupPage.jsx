@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import { BsGoogle } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { useAuthStore } from "../../../../store";
+import GoogleOAuthButton from "../../../../components/auth/GoogleOAuthButton";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "");
+const API_BASE_URL = (
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://nodebackend-smx3.onrender.com/api/v1"
+).replace(/\/$/, "");
 
 const CompanySignupPage = () => {
   const navigate = useNavigate();
@@ -13,7 +16,7 @@ const CompanySignupPage = () => {
     isLoading,
     error: storeError,
     clearError,
-    setAuth,
+    continueWithGoogle,
     registerCompany,
     verifyCompanyOtp,
     resendCompanyOtp,
@@ -249,15 +252,16 @@ const CompanySignupPage = () => {
     }
   };
 
-  const handleGoogleSignup = () => {
-    setAuth({
-      role: "company",
-      user: {
-        name: formData.company_name || "RecruitPro Company",
-        email: formData.email || "company.google@example.com",
-      },
-    });
-    navigate("/company/dashboard");
+  const handleGoogleSignup = async (idToken) => {
+    try {
+      await continueWithGoogle({
+        idToken,
+        userType: "company",
+      });
+      navigate("/company/profile");
+    } catch (err) {
+      setErrors({ api: err?.message || "Unable to continue with Google." });
+    }
   };
 
   const apiError = errors.api || storeError;
@@ -727,14 +731,7 @@ const AuthFooter = ({ handleGoogleSignup }) => (
       </div>
     </div>
 
-    <button
-      type="button"
-      onClick={handleGoogleSignup}
-      className="flex w-full items-center justify-center gap-2 border border-slate-300 py-3 rounded text-sm font-semibold transition hover:bg-slate-50 cursor-pointer"
-    >
-      <BsGoogle className="h-5 w-5" />
-      Continue with Google
-    </button>
+    <GoogleOAuthButton onCredential={handleGoogleSignup} text="signup_with" />
 
     <p className="text-center text-sm text-slate-600">
       Already using RecruitPro?{" "}
