@@ -45,7 +45,7 @@ const AdminLogin = () => {
         <div className="grid w-full overflow-hidden rounded border border-white/10 bg-white shadow-2xl lg:grid-cols-2">
           <div className="hidden bg-slate-900 p-12 lg:flex lg:flex-col lg:justify-between">
             <div>
-              <div className="flex h-14 w-14 items-center justify-center rounded bg-orange-500/10 text-orange-400">
+              <div className="flex h-14 w-14 items-center justify-center rounded bg-indigo-500/10 text-indigo-400">
                 <ShieldCheck className="h-7 w-7" />
               </div>
 
@@ -78,7 +78,7 @@ const AdminLogin = () => {
           <div className="bg-white p-8 text-slate-900 sm:p-12">
             <div className="mx-auto max-w-md">
               <div className="mb-8">
-                <p className="text-sm font-semibold uppercase tracking-wider text-orange-600">
+                <p className="text-sm font-semibold uppercase tracking-wider text-indigo-600">
                   Admin Login
                 </p>
 
@@ -108,7 +108,7 @@ const AdminLogin = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword((value) => !value)}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-orange-600 cursor-pointer"
+                    className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-indigo-600 cursor-pointer"
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -120,7 +120,7 @@ const AdminLogin = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-orange-600 py-3.5 font-semibold text-white shadow-md transition hover:bg-orange-700 cursor-pointer"
+                  className="w-full bg-indigo-600 py-3.5 font-semibold text-white shadow-md transition hover:bg-indigo-700 cursor-pointer"
                 >
                   Sign In
                 </button>
@@ -151,10 +151,10 @@ const FloatingInput = ({
         onChange={onChange}
         placeholder=" "
         required={required}
-        className="peer w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all focus:border-orange-600"
+        className="peer w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all focus:border-indigo-600"
       />
 
-      <label className="pointer-events-none absolute left-0 top-5 text-sm text-slate-500 transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-orange-600 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs">
+      <label className="pointer-events-none absolute left-0 top-5 text-sm text-slate-500 transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-indigo-600 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs">
         {label}
       </label>
 

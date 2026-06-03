@@ -38,6 +38,8 @@ h6 {
 @theme inline {
   --font-sans: "Rubik", sans-serif;
   --font-heading: "Rubik", sans-serif;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Inter", sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

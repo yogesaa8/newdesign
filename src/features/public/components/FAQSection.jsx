@@ -1,37 +1,5 @@
 import React, { useState } from "react";
-
-const faqs = [
-  {
-    question: "How do I apply for jobs?",
-    answer:
-      "Browse job listings, select a role, and click apply. You can submit your resume and cover letter directly through the portal in just a few clicks.",
-  },
-  {
-    question: "Is creating an account free?",
-    answer:
-      "Yes, signing up is free for job seekers. Create a profile, upload your resume, and start applying to roles at no cost.",
-  },
-  {
-    question: "Can I upload multiple resumes?",
-    answer:
-      "Yes, you can upload multiple resumes and tailor your application to different job types and industries.",
-  },
-  {
-    question: "How do job alerts work?",
-    answer:
-      "Set your preferences for role type, location, and experience level to receive email alerts for new jobs that match your profile.",
-  },
-  {
-    question: "How do I prepare for interviews?",
-    answer:
-      "Use our career resources and interview guides to practice answers, refine your skills, and feel confident for every stage.",
-  },
-  {
-    question: "How do I know a company is trusted?",
-    answer:
-      "We highlight verified employers and trusted job postings from companies with strong hiring records and positive candidate reviews.",
-  },
-];
+import faqs from "@/data/faqs";
 
 const FAQSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -53,8 +21,8 @@ const FAQSection = () => {
             Frequently Asked Questions
           </h2>
           <p className="mt-4 text-zinc-400 text-lg max-w-xl mx-auto">
-            Get quick answers about applying, alerts, account setup, and career
-            support.
+            Real answers from the FirstJobIndia team about your first
+            application, your first interview, and your first offer.
           </p>
         </div>
 
@@ -112,10 +80,11 @@ const FAQSection = () => {
           <div className="rounded border border-zinc-800 bg-zinc-900/40 backdrop-blur-md p-8 shadow-xl">
             <div className="mb-6">
               <h3 className="text-2xl font-bold text-white">
-                How can we support your job search?
+                Cannot find your answer? Ask us.
               </h3>
               <p className="text-sm text-zinc-400 mt-2">
-                Send us your question and our team will help you get started.
+                Tell us where you are stuck and someone from our team will reply
+                within one working day.
               </p>
             </div>
 
@@ -139,7 +108,7 @@ const FAQSection = () => {
               ></textarea>
 
               <button className="w-full py-3 rounded text-white font-semibold bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 transition-all duration-300 hover:shadow-[0_0_30px_-5px_rgba(168,85,247,0.5)] active:scale-[0.98]">
-                Send Message
+                Send my question
               </button>
             </div>
           </div>

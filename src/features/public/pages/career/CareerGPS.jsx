@@ -41,6 +41,14 @@ import {
 } from "../../../../components/ui/resizable-navbar";
 import { Link } from "react-router-dom";
 import navItems from "../../data/headerData.json";
+import useSEO from "@/seo/useSEO";
+import seoMeta from "@/data/seoMeta";
+import {
+  buildWebPage,
+  buildBreadcrumbList,
+  buildHowTo,
+  buildCourse,
+} from "@/seo/schemas";
 
 const resources = [
   {
@@ -1065,10 +1073,10 @@ function A({ href, children, className = "" }) {
 function SectionHeader({ label, title, sub }) {
   return (
     <div className="mx-auto mb-12 max-w-3xl text-center">
-      <div className="mb-4 inline-flex rounded border border-orange-500/40 bg-orange-500/10 px-4 py-2 font-mono text-xs uppercase tracking-[0.28em] text-orange-600">
+      <div className="mb-4 inline-flex rounded border border-emerald-700/40 bg-emerald-700/10 px-4 py-2 text-xs uppercase tracking-[0.28em] text-emerald-800">
         {label}
       </div>
-      <h2 className="font-serif text-4xl font-semibold tracking-tight text-neutral-950 md:text-6xl">
+      <h2 className="font-display text-4xl font-semibold tracking-tight text-neutral-950 md:text-6xl">
         {title}
       </h2>
       {sub && (
@@ -1143,8 +1151,60 @@ export default function CareerGPSReactComponent() {
     });
   }, [activeCategory, activeCountry, activeCourse, query]);
 
+  const meta = seoMeta["/career-gps"];
+  const seoElement = useSEO({
+    title: meta.title,
+    description: meta.description,
+    path: meta.path,
+    graph: [
+      buildWebPage({
+        path: meta.path,
+        title: meta.title,
+        description: meta.description,
+        breadcrumbPath: meta.path,
+      }),
+      buildBreadcrumbList(
+        [
+          { name: "Home", path: "/" },
+          { name: "Career GPS", path: meta.path },
+        ],
+        meta.path,
+      ),
+      buildHowTo({
+        name: "How to score and improve your career readiness with CareerGPS",
+        description:
+          "A four-step playbook for Indian freshers to score and close gaps in resume, skills, interview prep, and study-abroad readiness.",
+        steps: [
+          {
+            name: "Score your current readiness",
+            text: "CareerGPS scores resume, skills, exam prep, interview practice, and study-abroad signals on one dashboard.",
+          },
+          {
+            name: "Pick a track that fits your goal",
+            text: "Choose a first-job-in-India track or a study-abroad track based on your readiness profile.",
+          },
+          {
+            name: "Close the highest-impact gap first",
+            text: "Follow the action playbook one step at a time, with prep guides, official portals, and curated walkthroughs.",
+          },
+          {
+            name: "Re-score and apply with confidence",
+            text: "Re-run your readiness score before every application so you know exactly when you are ready to apply.",
+          },
+        ],
+      }),
+      buildCourse({
+        name: "Career GPS: Readiness Analytics for Indian Freshers",
+        description:
+          "FirstJobIndia's readiness analytics platform that scores and improves a fresher's chances of landing their first job in India or abroad.",
+        path: meta.path,
+      }),
+    ],
+  });
+
   return (
-    <div className="min-h-screen scroll-smooth bg-[#f7f1e8] font-sans text-neutral-950 selection:bg-orange-500 selection:text-white">
+    <div className="min-h-screen scroll-smooth bg-[#f7f1e8] font-body text-neutral-950 selection:bg-emerald-700 selection:text-white">
+      {seoElement}
       <style>{`
         html { scroll-behavior: smooth; }
         .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s ease; }
@@ -1160,7 +1220,7 @@ export default function CareerGPSReactComponent() {
       `}</style>
 
       <div
-        className="fixed left-0 top-0 z-[70] h-1 bg-orange-500 transition-all"
+        className="fixed left-0 top-0 z-[70] h-1 bg-emerald-700 transition-all"
         style={{ width: `${progress}%` }}
       />
       <Navbar className="bg-[#FFF7F3] dark:bg-[#121212]">
@@ -1169,10 +1229,10 @@ export default function CareerGPSReactComponent() {
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
             <NavbarButton as={Link} to="/seeker/login" variant="secondary">
-              Login
+              Sign in
             </NavbarButton>
             <NavbarButton as={Link} to="/seeker/signup" variant="primary">
-              Get Started
+              Start free
             </NavbarButton>
           </div>
         </NavBody>
@@ -1231,7 +1291,7 @@ export default function CareerGPSReactComponent() {
                 variant="primary"
                 className="w-full"
               >
-                Login
+                Sign in
               </NavbarButton>
 
               <NavbarButton
@@ -1240,7 +1300,7 @@ export default function CareerGPSReactComponent() {
                 variant="primary"
                 className="w-full"
               >
-                Get Started
+                Start free
               </NavbarButton>
             </div>
           </MobileNavMenu>
@@ -1252,37 +1312,37 @@ export default function CareerGPSReactComponent() {
           id="home"
           className="relative overflow-hidden px-4 pb-20 pt-32 md:px-8 md:pb-28 md:pt-40"
         >
-          <div className="absolute right-[-18rem] top-[-18rem] h-[44rem] w-[44rem] rounded-full bg-orange-500/20 blur-3xl" />
-          <div className="absolute left-8 top-36 hidden h-2 w-2 rounded-full bg-orange-500 md:block marquee-dot" />
+          <div className="absolute right-[-18rem] top-[-18rem] h-[44rem] w-[44rem] rounded-full bg-emerald-700/20 blur-3xl" />
+          <div className="absolute left-8 top-36 hidden h-2 w-2 rounded-full bg-emerald-700 md:block marquee-dot" />
           <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.02fr_.98fr]">
             <div className="reveal relative z-10">
-              <div className="mb-7 inline-flex items-center gap-2 rounded border border-orange-500/40 bg-orange-500/10 px-4 py-2 font-mono text-xs uppercase tracking-[0.22em] text-orange-700">
-                <Sparkles className="h-4 w-4" /> India's First Study Abroad
-                Command Centre
+              <div className="mb-7 inline-flex items-center gap-2 rounded border border-emerald-700/40 bg-emerald-700/10 px-4 py-2 text-xs uppercase tracking-[0.22em] text-emerald-800">
+                <Sparkles className="h-4 w-4" /> Career-readiness analytics for
+                Indian freshers
               </div>
-              <h1 className="font-serif text-5xl font-black leading-[0.95] tracking-tight text-neutral-950 md:text-7xl lg:text-8xl">
-                Your passport to the world begins{" "}
-                <span className="block italic text-orange-500">
-                  with the right guidance.
+              <h1 className="font-display text-5xl font-black leading-[0.95] tracking-tight text-neutral-950 md:text-7xl lg:text-8xl">
+                Your readiness, scored.{" "}
+                <span className="block italic text-emerald-700">
+                  Your career, mapped.
                 </span>
               </h1>
               <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-700 md:text-xl">
-                We have mapped scholarships, exams, visa rules, documents,
-                loans, and every confusing step so a first-generation student
-                from a small city does not have to spend months decoding what
-                nobody taught them.
+                CareerGPS scores how ready you are for your first job in India
+                or abroad, then shows the exact next step. Resume, skills,
+                exams, interviews, visas, every readiness signal in one
+                dashboard.
               </p>
               <div className="mt-9 grid max-w-2xl grid-cols-3 overflow-hidden rounded border border-neutral-950/10 bg-white/45 shadow-xl shadow-neutral-950/5 backdrop-blur">
                 {[
-                  ["500+", "Scholarships Mapped"],
-                  ["40+", "Countries Covered"],
-                  ["12,000+", "Students Guided"],
+                  ["Resume", "readiness score"],
+                  ["Skills", "gap analysis"],
+                  ["Interview", "prep playbook"],
                 ].map((s, i) => (
                   <div
                     key={s[0]}
                     className={`p-5 ${i ? "border-l border-neutral-950/10" : ""}`}
                   >
-                    <div className="font-serif text-3xl font-black text-neutral-950">
+                    <div className="font-display text-3xl font-black text-neutral-950">
                       {s[0]}
                     </div>
                     <div className="mt-1 text-xs uppercase tracking-widest text-slate-500">
@@ -1294,16 +1354,16 @@ export default function CareerGPSReactComponent() {
               <div className="mt-9 flex flex-wrap gap-4">
                 <a
                   href="#dashboard"
-                  className="group inline-flex items-center gap-2 rounded bg-neutral-950 px-7 py-4 text-sm font-bold text-white shadow-2xl shadow-neutral-950/20 transition hover:bg-orange-500"
+                  className="group inline-flex items-center gap-2 rounded bg-neutral-950 px-7 py-4 text-sm font-bold text-white shadow-2xl shadow-neutral-950/20 transition hover:bg-emerald-700"
                 >
-                  Explore Dashboard{" "}
+                  View readiness dashboard{" "}
                   <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
                 </a>
                 <a
                   href="#guidance"
-                  className="inline-flex items-center gap-2 rounded border border-neutral-950/20 px-7 py-4 text-sm font-bold transition hover:border-orange-500 hover:text-orange-600"
+                  className="inline-flex items-center gap-2 rounded border border-neutral-950/20 px-7 py-4 text-sm font-bold transition hover:border-emerald-700 hover:text-emerald-800"
                 >
-                  See How It Works <Play className="h-4 w-4" />
+                  How scoring works <Play className="h-4 w-4" />
                 </a>
               </div>
             </div>
@@ -1319,9 +1379,9 @@ export default function CareerGPSReactComponent() {
                   />
                   <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/10" />
                 </div>
-                <p className="px-2 pb-2 pt-4 text-center font-serif text-lg italic text-slate-500">
-                  Watch how CareerGPS guides you from confusion to admission in
-                  under 5 minutes.
+                <p className="px-2 pb-2 pt-4 text-center font-display text-lg italic text-slate-500">
+                  See how CareerGPS scores your readiness and tells you the
+                  exact next move, in under 5 minutes.
                 </p>
               </div>
             </div>
@@ -1329,23 +1389,23 @@ export default function CareerGPSReactComponent() {
         </section>
 
         <section className="reveal bg-neutral-950 px-4 py-20 text-[#f7f1e8] md:px-8">
-          <blockquote className="mx-auto max-w-5xl text-center font-serif text-3xl italic leading-tight md:text-5xl">
-            "The world does not ask where you are from. It asks what you are
-            capable of. We exist to make sure your answer is heard."
+          <blockquote className="mx-auto max-w-5xl text-center font-display text-3xl italic leading-tight md:text-5xl">
+            "Recruiters do not ask where you are from. They ask what you are
+            ready to do. CareerGPS makes sure your answer is sharp."
           </blockquote>
-          <p className="mt-8 text-center font-mono text-xs uppercase tracking-[0.3em] text-orange-500">
-            — CareerGPS, First Job India
+          <p className="mt-8 text-center text-xs uppercase tracking-[0.3em] text-emerald-700">
+            CareerGPS, by FirstJobIndia
           </p>
         </section>
 
         <section id="journey" className="px-4 py-24 md:px-8">
           <SectionHeader
-            label="What We Do"
-            title="A Single Platform for Your Entire Study Abroad Journey"
-            sub="From the first Google search to visa approval, every milestone is mapped, every resource is linked, every step is explained."
+            label="Readiness Signals"
+            title="Every signal that decides your first offer, tracked in one place."
+            sub="Resume, skills, exams, interview practice, and (if you choose) study-abroad readiness, all scored against what Indian and international recruiters actually look for."
           />
           <div className="relative mx-auto max-w-6xl">
-            <div className="absolute left-6 top-0 h-full border-l border-dashed border-orange-500/60 md:left-1/2" />
+            <div className="absolute left-6 top-0 h-full border-l border-dashed border-emerald-700/60 md:left-1/2" />
             <div className="grid gap-10">
               {milestones.map((m, i) => {
                 const Icon = m.icon;
@@ -1355,15 +1415,15 @@ export default function CareerGPSReactComponent() {
                     className={`reveal relative grid items-center gap-6 md:grid-cols-2 ${i % 2 ? "md:[&>div:first-child]:col-start-2" : ""}`}
                   >
                     <div
-                      className={`relative ml-16 rounded border border-neutral-950/10 bg-[#fffaf2]/80 p-7 shadow-xl shadow-neutral-950/5 transition hover:-translate-y-1 hover:border-orange-500/40 hover:shadow-2xl md:ml-0 ${i % 2 ? "md:ml-10" : "md:mr-10"}`}
+                      className={`relative ml-16 rounded border border-neutral-950/10 bg-[#fffaf2]/80 p-7 shadow-xl shadow-neutral-950/5 transition hover:-translate-y-1 hover:border-emerald-700/40 hover:shadow-2xl md:ml-0 ${i % 2 ? "md:ml-10" : "md:mr-10"}`}
                     >
-                      <div className="absolute -left-[3.15rem] top-8 grid h-9 w-9 place-items-center rounded-full border-4 border-[#f7f1e8] bg-orange-500 text-white shadow-lg md:left-auto md:right-[-3.45rem] md:[.md\:col-start-2_&]:left-[-3.45rem]">
+                      <div className="absolute -left-[3.15rem] top-8 grid h-9 w-9 place-items-center rounded-full border-4 border-[#f7f1e8] bg-emerald-700 text-white shadow-lg md:left-auto md:right-[-3.45rem] md:[.md\:col-start-2_&]:left-[-3.45rem]">
                         <Icon className="h-4 w-4" />
                       </div>
-                      <div className="absolute right-7 top-4 font-serif text-7xl font-black text-orange-500/10">
+                      <div className="absolute right-7 top-4 font-display text-7xl font-black text-emerald-700/10">
                         {String(i + 1).padStart(2, "0")}
                       </div>
-                      <h3 className="relative font-serif text-3xl font-semibold">
+                      <h3 className="relative font-display text-3xl font-semibold">
                         {m.title}
                       </h3>
                       <p className="relative mt-3 leading-7 text-slate-600">
@@ -1374,14 +1434,14 @@ export default function CareerGPSReactComponent() {
                           <A
                             key={t}
                             href={m.urls[idx]}
-                            className="rounded-full border border-orange-500/35 px-3 py-2 font-mono text-xs uppercase tracking-wider text-orange-700 transition hover:bg-orange-500 hover:text-white"
+                            className="rounded-full border border-emerald-700/35 px-3 py-2 text-xs uppercase tracking-wider text-emerald-800 transition hover:bg-emerald-700 hover:text-white"
                           >
                             {t}
                           </A>
                         ))}
                         <A
                           href={yt(`${m.title} for Indian students`)}
-                          className="rounded-full border border-neutral-950/15 px-3 py-2 font-mono text-xs uppercase tracking-wider transition hover:border-orange-500 hover:text-orange-600"
+                          className="rounded-full border border-neutral-950/15 px-3 py-2 text-xs uppercase tracking-wider transition hover:border-emerald-700 hover:text-emerald-800"
                         >
                           Watch on YouTube
                         </A>
@@ -1397,13 +1457,13 @@ export default function CareerGPSReactComponent() {
 
         <section id="dashboard" className="bg-[#fffaf2] px-4 py-24 md:px-8">
           <SectionHeader
-            label="Resource Dashboard"
-            title="Every Resource You Need. Filtered, Ranked, Ready."
+            label="Readiness Dashboard"
+            title="Every readiness resource you need. Filtered, ranked, ready."
           />
           <div className="reveal mx-auto max-w-7xl rounded-[2rem] border border-neutral-950/10 bg-white/60 p-4 shadow-2xl shadow-neutral-950/5 md:p-6">
             <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-slate-600">
-              <Filter className="h-4 w-4 text-orange-500" /> Filter by resource,
-              country, course, and keyword
+              <Filter className="h-4 w-4 text-emerald-700" /> Filter by
+              readiness area, country, course, and keyword
             </div>
             <ChipRow
               items={categories}
@@ -1425,8 +1485,8 @@ export default function CareerGPSReactComponent() {
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search scholarships, exams, portals, visa guides..."
-                className="w-full rounded border border-neutral-950/10 bg-[#f7f1e8] py-4 pl-12 pr-4 outline-none transition focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10"
+                placeholder="Search readiness resources, exams, portals, prep guides..."
+                className="w-full rounded border border-neutral-950/10 bg-[#f7f1e8] py-4 pl-12 pr-4 outline-none transition focus:border-emerald-700 focus:ring-4 focus:ring-emerald-700/10"
               />
             </div>
           </div>
@@ -1437,7 +1497,7 @@ export default function CareerGPSReactComponent() {
               return (
                 <article
                   key={`${r.title}-${r.category}`}
-                  className="reveal group relative rounded bg-white p-6 shadow-lg shadow-neutral-950/5 transition-shadow duration-500 hover:shadow-2xl hover:shadow-orange-500/10"
+                  className="reveal group relative rounded bg-white p-6 shadow-lg shadow-neutral-950/5 transition-shadow duration-500 hover:shadow-2xl hover:shadow-emerald-700/10"
                 >
                   {/* Animated Border Effect on Hover */}
                   <span
@@ -1462,15 +1522,15 @@ export default function CareerGPSReactComponent() {
                   ></span>
 
                   <div className="flex items-start justify-between gap-3">
-                    <span className="inline-flex items-center gap-2 rounded bg-neutral-100 px-3 py-2 font-mono text-[11px] uppercase tracking-widest text-slate-700">
+                    <span className="inline-flex items-center gap-2 rounded bg-neutral-100 px-3 py-2 text-[11px] uppercase tracking-widest text-slate-700">
                       <Icon className="h-3.5 w-3.5" /> {r.category}
                     </span>
-                    <span className="rounded bg-neutral-100 px-3 py-2 font-mono text-[11px] uppercase tracking-widest text-slate-500">
+                    <span className="rounded bg-neutral-100 px-3 py-2 text-[11px] uppercase tracking-widest text-slate-500">
                       {r.country}
                     </span>
                   </div>
 
-                  <h3 className="mt-5 font-serif text-2xl font-semibold leading-tight text-neutral-950">
+                  <h3 className="mt-5 font-display text-2xl font-semibold leading-tight text-neutral-950">
                     {r.title}
                   </h3>
 
@@ -1478,17 +1538,17 @@ export default function CareerGPSReactComponent() {
                     {r.description}
                   </p>
 
-                  <p className="mt-4 font-serif italic text-orange-600">
+                  <p className="mt-4 font-display italic text-emerald-800">
                     What you'll get: {r.get}
                   </p>
 
                   <div className="mt-6 flex items-center justify-between gap-4 border-t border-neutral-950/10 pt-5">
-                    <span className="rounded bg-neutral-950 px-3 py-2 font-mono text-[11px] uppercase tracking-widest text-white">
+                    <span className="rounded bg-neutral-950 px-3 py-2 text-[11px] uppercase tracking-widest text-white">
                       {r.deadline}
                     </span>
                     <A
                       href={r.url}
-                      className="inline-flex items-center gap-2 text-sm font-bold text-neutral-950 transition-colors duration-300 group-hover:text-orange-600"
+                      className="inline-flex items-center gap-2 text-sm font-bold text-neutral-950 transition-colors duration-300 group-hover:text-emerald-800"
                     >
                       Visit Resource <ExternalLink className="h-4 w-4" />
                     </A>
@@ -1514,17 +1574,17 @@ export default function CareerGPSReactComponent() {
           `}</style>
           {!filtered.length && (
             <p className="mt-12 text-center text-slate-500">
-              No resources match this filter. Try a broader country, category,
-              or search term.
+              No readiness resources match this filter. Try a broader country,
+              area, or search term.
             </p>
           )}
         </section>
 
         <section id="guidance" className="px-4 py-24 md:px-8">
           <SectionHeader
-            label="Application Guidance"
-            title="From Research to Admission — Every Step Explained"
-            sub="Click any step to expand the full process with sub-steps, required documents, official links, and YouTube resources."
+            label="Action Playbook"
+            title="From readiness gap to first offer, every step explained."
+            sub="Click any step to expand the full action plan: sub-steps, documents to prepare, official links, and curated video walkthroughs."
           />
           <div className="mx-auto max-w-5xl space-y-4">
             {guidance.map((step, i) => (
@@ -1537,15 +1597,15 @@ export default function CareerGPSReactComponent() {
                   className="flex w-full items-center justify-between gap-5 p-6 text-left"
                 >
                   <span className="flex items-center gap-4">
-                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-orange-500 font-serif text-xl font-black text-white">
+                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-emerald-700 font-display text-xl font-black text-white">
                       {i + 1}
                     </span>
-                    <span className="font-serif text-2xl font-semibold">
+                    <span className="font-display text-2xl font-semibold">
                       {step.title}
                     </span>
                   </span>
                   <ChevronDown
-                    className={`h-5 w-5 transition ${openStep === i ? "rotate-180 text-orange-500" : ""}`}
+                    className={`h-5 w-5 transition ${openStep === i ? "rotate-180 text-emerald-700" : ""}`}
                   />
                 </button>
                 <div
@@ -1557,7 +1617,7 @@ export default function CareerGPSReactComponent() {
                         {step.items.map((item, idx) => (
                           <li key={idx} className="rounded bg-white/70 p-4">
                             <div className="flex gap-3">
-                              <Check className="mt-1 h-5 w-5 shrink-0 text-orange-500" />
+                              <Check className="mt-1 h-5 w-5 shrink-0 text-emerald-700" />
                               <div>
                                 <p className="font-semibold text-neutral-950">
                                   {item[0]}
@@ -1566,7 +1626,7 @@ export default function CareerGPSReactComponent() {
                                   {item[1] && (
                                     <A
                                       href={item[1][1]}
-                                      className="rounded-full border border-orange-500/30 px-3 py-2 text-xs font-bold text-orange-700 hover:bg-orange-500 hover:text-white"
+                                      className="rounded-full border border-emerald-700/30 px-3 py-2 text-xs font-bold text-emerald-800 hover:bg-emerald-700 hover:text-white"
                                     >
                                       {item[1][0]}
                                     </A>
@@ -1574,7 +1634,7 @@ export default function CareerGPSReactComponent() {
                                   {item[2] && (
                                     <A
                                       href={item[2][1]}
-                                      className="rounded-full border border-orange-500/30 px-3 py-2 text-xs font-bold text-orange-700 hover:bg-orange-500 hover:text-white"
+                                      className="rounded-full border border-emerald-700/30 px-3 py-2 text-xs font-bold text-emerald-800 hover:bg-emerald-700 hover:text-white"
                                     >
                                       {item[2][0]}
                                     </A>
@@ -1582,7 +1642,7 @@ export default function CareerGPSReactComponent() {
                                   {item[3] && (
                                     <A
                                       href={yt(item[3])}
-                                      className="rounded-full border border-neutral-950/15 px-3 py-2 text-xs font-bold hover:border-orange-500 hover:text-orange-600"
+                                      className="rounded-full border border-neutral-950/15 px-3 py-2 text-xs font-bold hover:border-emerald-700 hover:text-emerald-800"
                                     >
                                       Watch on YouTube
                                     </A>
@@ -1606,66 +1666,66 @@ export default function CareerGPSReactComponent() {
           className="bg-neutral-950 px-4 py-24 text-white md:px-8"
         >
           <SectionHeader
-            label="Plans"
-            title="Access Every Resource. At a Price That Makes Sense."
-            sub="No hidden fees. No consultancy charges. One payment, lifetime access to all resources for your category."
+            label="Access Plans"
+            title="One payment. Lifetime access to your readiness toolkit."
+            sub="No hidden fees. No consultancy charges. Pay once, keep every resource for your chosen track for life."
           />
           <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
             <PricingCard
-              title="Fully Funded Scholarships"
+              title="Fully Funded Study-Abroad Track"
               price="₹10,000"
-              subtitle="For students seeking 100% free education abroad"
-              cta="Get Access — ₹10,000"
+              subtitle="For freshers targeting 100% funded education abroad as their first move"
+              cta="Get access for ₹10,000"
               variant="gold"
               items={[
-                "Complete database of 100+ fully funded scholarships",
+                "Readiness score for 100+ fully funded scholarships",
                 "Eligibility checker by profile",
                 "SOP and application guidance",
                 "Deadline calendar with reminders",
-                "Country-wise visa guide",
+                "Country-wise visa readiness guide",
                 "Peer and alumni community access",
               ]}
-              note="Covers Chevening, DAAD, MEXT, Fulbright, NOS, Australia Awards, and 90+ more."
+              note="Covers Chevening, DAAD, MEXT, Fulbright, NOS, Australia Awards, and 90 more."
             />
             <PricingCard
-              title="All Scholarships"
+              title="Full Readiness Track"
               price="₹20,000"
-              subtitle="For students who want every possible funding option"
-              cta="Get Access — ₹20,000"
+              subtitle="For freshers who want every funding, prep, and recruiter signal in one place"
+              cta="Get access for ₹20,000"
               recommended
               items={[
-                "Everything in the Fully Funded plan",
+                "Everything in the Fully Funded Study-Abroad track",
                 "500+ scholarships including CSR and partial funding",
                 "Education loan comparison tool",
-                "Guidance for every course and country",
+                "Readiness guides for every course and country",
                 "SOP, CV, and LOR templates",
-                "Priority access to new resources",
+                "Priority access to new readiness resources",
               ]}
-              note="Best for students applying to USA, Canada, UK, or Germany in 2025-26 intake."
+              note="Best for freshers applying to USA, Canada, UK, or Germany in 2025-26 intake."
             />
           </div>
-          <p className="mt-10 text-center font-serif text-lg italic text-white/60">
+          <p className="mt-10 text-center font-display text-lg italic text-white/60">
             Both plans include lifetime access. No subscriptions. No renewal. No
             consultancy upsells.
           </p>
           <div className="reveal mx-auto mt-12 max-w-md rounded border border-white/10 bg-white/5 p-8 text-center">
-            <p className="font-serif text-2xl">Already have access?</p>
+            <p className="font-display text-2xl">Already have access?</p>
             <button
               onClick={() => setModalOpen(true)}
-              className="mt-5 rounded border border-orange-500/50 px-7 py-4 font-bold text-orange-400 transition hover:bg-orange-500 hover:text-white"
+              className="mt-5 rounded border border-emerald-700/50 px-7 py-4 font-bold text-emerald-600 transition hover:bg-emerald-700 hover:text-white"
             >
-              Login to CareerGPS
+              Sign in to CareerGPS
             </button>
           </div>
         </section>
 
-        <section className="reveal border-y border-orange-500/40 px-4 py-20 md:px-8">
-          <blockquote className="mx-auto max-w-5xl text-center font-serif text-3xl italic leading-tight text-neutral-950 md:text-5xl">
-            "Distance is not measured in kilometres. It is measured in the
-            courage it takes to begin."
+        <section className="reveal border-y border-emerald-700/40 px-4 py-20 md:px-8">
+          <blockquote className="mx-auto max-w-5xl text-center font-display text-3xl italic leading-tight text-neutral-950 md:text-5xl">
+            "Readiness is not measured in degrees. It is measured in the
+            courage it takes to start preparing."
           </blockquote>
-          <p className="mt-8 text-center font-mono text-xs uppercase tracking-[0.25em] text-orange-600">
-            — For every student who dared to dream beyond their postcode.
+          <p className="mt-8 text-center text-xs uppercase tracking-[0.25em] text-emerald-800">
+            For every fresher who dared to plan beyond their postcode.
           </p>
         </section>
       </main>
@@ -1676,7 +1736,7 @@ export default function CareerGPSReactComponent() {
         <div
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
-          className="fixed bottom-0 left-0 right-0 z-40 border-t border-orange-500/40 bg-neutral-950 text-white shadow-2xl"
+          className="fixed bottom-0 left-0 right-0 z-40 border-t border-emerald-700/40 bg-neutral-950 text-white shadow-2xl"
         >
           <div className="mx-auto flex h-[60px] max-w-7xl items-center justify-between gap-3 px-3 md:px-6">
             <button
@@ -1685,12 +1745,12 @@ export default function CareerGPSReactComponent() {
                   (adIndex - 1 + opportunities.length) % opportunities.length,
                 )
               }
-              className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/15 hover:border-orange-500"
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/15 hover:border-emerald-700"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
             <div className="min-w-0 flex-1 text-center md:flex md:items-center md:justify-center md:gap-5">
-              <p className="truncate font-serif text-lg font-semibold text-orange-400">
+              <p className="truncate font-display text-lg font-semibold text-emerald-600">
                 {opportunities[adIndex][0]}
               </p>
               <p className="truncate text-xs text-white/70 md:text-sm">
@@ -1698,20 +1758,20 @@ export default function CareerGPSReactComponent() {
               </p>
               <A
                 href={opportunities[adIndex][3]}
-                className="hidden rounded-full bg-orange-500 px-4 py-2 text-xs font-bold text-white md:inline-flex"
+                className="hidden rounded-full bg-emerald-700 px-4 py-2 text-xs font-bold text-white md:inline-flex"
               >
                 {opportunities[adIndex][2]}
               </A>
             </div>
             <button
               onClick={() => setAdIndex((adIndex + 1) % opportunities.length)}
-              className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/15 hover:border-orange-500"
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/15 hover:border-emerald-700"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
             <button
               onClick={() => setAdClosed(true)}
-              className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/15 hover:border-orange-500"
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/15 hover:border-emerald-700"
             >
               <X className="h-4 w-4" />
             </button>
@@ -1733,10 +1793,10 @@ export default function CareerGPSReactComponent() {
             >
               <X className="h-4 w-4" />
             </button>
-            <div className="grid h-14 w-14 place-items-center rounded-full bg-orange-500/10 text-orange-600">
+            <div className="grid h-14 w-14 place-items-center rounded-full bg-emerald-700/10 text-emerald-800">
               <Lock className="h-6 w-6" />
             </div>
-            <h3 className="mt-5 font-serif text-4xl font-semibold">
+            <h3 className="mt-5 font-display text-4xl font-semibold">
               Login to CareerGPS
             </h3>
             <p className="mt-2 text-slate-600">
@@ -1750,7 +1810,7 @@ export default function CareerGPSReactComponent() {
                 Email
                 <input
                   type="email"
-                  className="rounded-2xl border border-neutral-950/10 bg-white px-4 py-3 outline-none focus:border-orange-500"
+                  className="rounded-2xl border border-neutral-950/10 bg-white px-4 py-3 outline-none focus:border-emerald-700"
                   placeholder="student@example.com"
                 />
               </label>
@@ -1758,11 +1818,11 @@ export default function CareerGPSReactComponent() {
                 Password
                 <input
                   type="password"
-                  className="rounded-2xl border border-neutral-950/10 bg-white px-4 py-3 outline-none focus:border-orange-500"
+                  className="rounded-2xl border border-neutral-950/10 bg-white px-4 py-3 outline-none focus:border-emerald-700"
                   placeholder="••••••••"
                 />
               </label>
-              <button className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-neutral-950 px-6 py-4 font-bold text-white transition hover:bg-orange-500">
+              <button className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-neutral-950 px-6 py-4 font-bold text-white transition hover:bg-emerald-700">
                 Submit <ArrowRight className="h-4 w-4" />
               </button>
             </form>
@@ -1780,7 +1840,7 @@ function ChipRow({ items, active, setActive }) {
         <button
           key={item}
           onClick={() => setActive(item)}
-          className={`shrink-0 rounded border px-4 py-2 font-mono text-[11px] uppercase tracking-wider transition ${active === item ? "border-orange-500 bg-orange-500 text-white shadow-lg shadow-orange-500/25" : "border-neutral-950/10 bg-[#f7f1e8] text-slate-600 hover:border-orange-500 hover:text-orange-600"}`}
+          className={`shrink-0 rounded border px-4 py-2 text-[11px] uppercase tracking-wider transition ${active === item ? "border-emerald-700 bg-emerald-700 text-white shadow-lg shadow-emerald-700/25" : "border-neutral-950/10 bg-[#f7f1e8] text-slate-600 hover:border-emerald-700 hover:text-emerald-800"}`}
         >
           {item}
         </button>
@@ -1801,15 +1861,15 @@ function PricingCard({
 }) {
   return (
     <div
-      className={`reveal relative rounded border p-7 shadow-2xl ${recommended ? "border-orange-500 bg-[#fffaf2] text-neutral-950 shadow-orange-500/10" : "border-white/10 bg-white/5 text-white shadow-black/20"}`}
+      className={`reveal relative rounded border p-7 shadow-2xl ${recommended ? "border-emerald-700 bg-[#fffaf2] text-neutral-950 shadow-emerald-700/10" : "border-white/10 bg-white/5 text-white shadow-black/20"}`}
     >
       {recommended && (
-        <div className="absolute right-6 top-6 rounded-full bg-orange-500 px-4 py-2 font-mono text-[11px] uppercase tracking-widest text-white">
+        <div className="absolute right-6 top-6 rounded-full bg-emerald-700 px-4 py-2 text-[11px] uppercase tracking-widest text-white">
           Recommended
         </div>
       )}
-      <h3 className="pr-28 font-serif text-3xl font-semibold">{title}</h3>
-      <div className="mt-6 font-serif text-5xl font-black text-orange-500">
+      <h3 className="pr-28 font-display text-3xl font-semibold">{title}</h3>
+      <div className="mt-6 font-display text-5xl font-black text-emerald-700">
         {price}
       </div>
       <p className={`mt-2 ${recommended ? "text-slate-600" : "text-white/65"}`}>
@@ -1818,7 +1878,7 @@ function PricingCard({
       <ul className="mt-7 space-y-4">
         {items.map((item) => (
           <li key={item} className="flex gap-3">
-            <Check className="mt-1 h-5 w-5 shrink-0 text-orange-500" />
+            <Check className="mt-1 h-5 w-5 shrink-0 text-emerald-700" />
             <span className={recommended ? "text-slate-700" : "text-white/75"}>
               {item}
             </span>
@@ -1827,12 +1887,12 @@ function PricingCard({
       </ul>
       <a
         href="#home"
-        className={`mt-8 inline-flex w-full items-center justify-center rounded-full px-6 py-4 font-bold transition ${variant === "gold" ? "bg-orange-500 text-white hover:bg-white hover:text-neutral-950" : "bg-neutral-950 text-white hover:bg-orange-500"}`}
+        className={`mt-8 inline-flex w-full items-center justify-center rounded-full px-6 py-4 font-bold transition ${variant === "gold" ? "bg-emerald-700 text-white hover:bg-white hover:text-neutral-950" : "bg-neutral-950 text-white hover:bg-emerald-700"}`}
       >
         {cta}
       </a>
       <p
-        className={`mt-5 font-serif text-sm italic leading-6 ${recommended ? "text-slate-500" : "text-white/50"}`}
+        className={`mt-5 font-display text-sm italic leading-6 ${recommended ? "text-slate-500" : "text-white/50"}`}
       >
         {note}
       </p>

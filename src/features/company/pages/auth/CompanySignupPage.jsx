@@ -272,14 +272,16 @@ const CompanySignupPage = () => {
         <div className="hidden lg:block space-y-8">
           <div>
             <div className="flex items-center gap-2 font-bold mb-4">
-              <span className="px-3 py-1 rounded-full text-sm bg-orange-100 text-orange-600 font-medium">
-                RecruitPro
+              <span className="px-3 py-1 rounded-full text-sm bg-indigo-100 font-medium">
+                <span className="text-indigo-600">First</span>
+                <span className="text-slate-800">Job</span>
+                <span className="text-indigo-600">India</span>
               </span>
             </div>
 
             <h1 className="text-5xl font-extrabold tracking-tight leading-tight text-slate-900">
               Scale your team with{" "}
-              <span className="text-orange-600">Architectural Precision.</span>
+              <span className="text-indigo-600">Architectural Precision.</span>
             </h1>
 
             <p className="text-xl mt-6 max-w-md text-slate-600">
@@ -292,7 +294,7 @@ const CompanySignupPage = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="p-6 rounded shadow-sm bg-white border border-slate-200">
-              <span className="text-4xl mb-3 text-orange-600 block">👥</span>
+              <span className="text-4xl mb-3 text-indigo-600 block">👥</span>
               <h3 className="font-bold text-lg text-slate-900">Talent Pool</h3>
               <p className="text-sm mt-2 text-slate-600">
                 Access a curated network of over 1.2M qualified professionals.
@@ -300,7 +302,7 @@ const CompanySignupPage = () => {
             </div>
 
             <div className="p-6 rounded shadow-sm bg-white border border-slate-200">
-              <span className="text-4xl mb-3 text-orange-600 block">📊</span>
+              <span className="text-4xl mb-3 text-indigo-600 block">📊</span>
               <h3 className="font-bold text-lg text-slate-900">Smart Insights</h3>
               <p className="text-sm mt-2 text-slate-600">
                 Data-driven reports to optimize your hiring funnel velocity.
@@ -316,7 +318,7 @@ const CompanySignupPage = () => {
             />
             <div>
               <p className="text-sm italic text-slate-600">
-                "RecruitPro transformed our hiring process from a mess of
+                "FirstJobIndia transformed our hiring process from a mess of
                 spreadsheets to a streamlined, high-performance engine."
               </p>
               <p className="text-xs font-bold mt-3 text-slate-900">
@@ -332,7 +334,7 @@ const CompanySignupPage = () => {
               <h2 className="text-3xl font-extrabold text-slate-900">
                 Create Employer Account
               </h2>
-              <p className="mt-2 inline-block px-3 py-1 rounded-full text-sm bg-orange-50 text-orange-600 font-medium">
+              <p className="mt-2 inline-block px-3 py-1 rounded-full text-sm bg-indigo-50 text-indigo-600 font-medium">
                 Step {step} of 2:{" "}
                 {step === 1 ? "Account Verification" : "Company Details"}
               </p>
@@ -417,7 +419,7 @@ const CompanySignupPage = () => {
                     type="button"
                     onClick={handleSendOtp}
                     disabled={isSendingOtp || isLoading}
-                    className="mt-3 whitespace-nowrap px-5 py-3 text-sm font-bold text-orange-500 hover:text-orange-700 border-b border-gray-300 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="mt-3 whitespace-nowrap px-5 py-3 text-sm font-bold text-indigo-500 hover:text-indigo-700 border-b border-gray-300 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                   >
                     {isSendingOtp
                       ? "Sending..."
@@ -441,15 +443,15 @@ const CompanySignupPage = () => {
                   name="agreeTerms"
                   checked={formData.agreeTerms}
                   onChange={handleChange}
-                  className="w-5 h-5 mt-0.5 accent-orange-600 cursor-pointer"
+                  className="w-5 h-5 mt-0.5 accent-indigo-600 cursor-pointer"
                 />
                 <label htmlFor="terms" className="text-sm text-slate-600">
                   I agree to the{" "}
-                  <Link to="/terms" className="underline text-orange-600 transition hover:text-orange-700">
+                  <Link to="/terms" className="underline text-indigo-600 transition hover:text-indigo-700">
                     Terms of Service
                   </Link>{" "}
                   and{" "}
-                  <Link to="/privacy-policy" className="underline text-orange-600 transition hover:text-orange-700">
+                  <Link to="/privacy-policy" className="underline text-indigo-600 transition hover:text-indigo-700">
                     Privacy Policy
                   </Link>
                 </label>
@@ -463,7 +465,7 @@ const CompanySignupPage = () => {
                 <button
                   type="submit"
                   disabled={isVerifyingOtp || isLoading}
-                  className="w-full py-4 font-bold flex items-center justify-center gap-2 transition-all bg-orange-600 hover:bg-orange-700 text-white shadow-md cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="w-full py-4 font-bold flex items-center justify-center gap-2 transition-all bg-indigo-600 hover:bg-indigo-700 text-white shadow-md cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {isVerifyingOtp || isLoading ? "Verifying..." : "Verify OTP"}
                   {!(isVerifyingOtp || isLoading) && <ArrowRight size={18} />}
@@ -476,7 +478,7 @@ const CompanySignupPage = () => {
 
           {step === 2 && (
             <form onSubmit={handleSubmitCompanyDetails} className="space-y-6" noValidate>
-              <div className="rounded border border-orange-200 bg-orange-50 p-4 text-sm text-orange-700">
+              <div className="rounded border border-indigo-200 bg-indigo-50 p-4 text-sm text-indigo-700">
                 Please fill accurate details. After approval your account will be created.
               </div>
 
@@ -534,7 +536,7 @@ const CompanySignupPage = () => {
                     className={`peer w-full border-0 border-b bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all ${
                       errors.location_id
                         ? "border-red-500 focus:border-red-500"
-                        : "border-slate-300 focus:border-orange-600"
+                        : "border-slate-300 focus:border-indigo-600"
                     }`}
                   />
                   <label
@@ -542,7 +544,7 @@ const CompanySignupPage = () => {
                       locationSearch
                         ? "top-0 text-xs"
                         : "top-5 text-sm peer-focus:top-0 peer-focus:text-xs"
-                    } ${errors.location_id ? "text-red-500" : "text-slate-500 peer-focus:text-orange-600"}`}
+                    } ${errors.location_id ? "text-red-500" : "text-slate-500 peer-focus:text-indigo-600"}`}
                   >
                     City / Location *
                   </label>
@@ -559,7 +561,7 @@ const CompanySignupPage = () => {
                       <li
                         key={loc.id}
                         onMouseDown={() => handleLocationSelect(loc)}
-                        className="cursor-pointer px-4 py-2 text-sm text-slate-700 hover:bg-orange-50 hover:text-orange-700"
+                        className="cursor-pointer px-4 py-2 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700"
                       >
                         {[loc.city, loc.state].filter(Boolean).join(", ") || loc.name || loc.id}
                       </li>
@@ -620,7 +622,7 @@ const CompanySignupPage = () => {
                 <button
                   type="submit"
                   disabled={isSubmittingProfile || isLoading}
-                  className="w-full py-4 font-bold flex items-center justify-center gap-2 transition-all bg-orange-600 hover:bg-orange-700 text-white shadow-md cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="w-full py-4 font-bold flex items-center justify-center gap-2 transition-all bg-indigo-600 hover:bg-indigo-700 text-white shadow-md cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {isSubmittingProfile || isLoading ? "Submitting..." : "Submit Details"}
                   {!(isSubmittingProfile || isLoading) && <ArrowRight size={18} />}
@@ -628,8 +630,8 @@ const CompanySignupPage = () => {
               </div>
 
               <p className="text-center text-sm text-slate-600">
-                Already using RecruitPro?{" "}
-                <Link to="/company/login" className="font-bold text-orange-600 hover:text-orange-700">
+                Already using FirstJobIndia?{" "}
+                <Link to="/company/login" className="font-bold text-indigo-600 hover:text-indigo-700">
                   Log in to your hub
                 </Link>
               </p>
@@ -652,7 +654,7 @@ const CompanySignupPage = () => {
 
               <Link
                 to="/company/login"
-                className="mt-2 w-full py-4 font-bold flex items-center justify-center gap-2 transition-all bg-orange-600 hover:bg-orange-700 text-white shadow-md"
+                className="mt-2 w-full py-4 font-bold flex items-center justify-center gap-2 transition-all bg-indigo-600 hover:bg-indigo-700 text-white shadow-md"
               >
                 Go to Login
                 <ArrowRight size={18} />
@@ -677,14 +679,14 @@ const FloatingInput = ({ label, type = "text", name, value, onChange, error }) =
         className={`peer w-full border-0 border-b bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all ${
           error
             ? "border-red-500 focus:border-red-500"
-            : "border-slate-300 focus:border-orange-600"
+            : "border-slate-300 focus:border-indigo-600"
         }`}
       />
       <label
         className={`pointer-events-none absolute left-0 top-5 text-sm transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs ${
           error
             ? "text-red-500 peer-focus:text-red-500"
-            : "text-slate-500 peer-focus:text-orange-600"
+            : "text-slate-500 peer-focus:text-indigo-600"
         }`}
       >
         {label}
@@ -704,14 +706,14 @@ const FloatingSelect = ({ label, name, value, onChange, error, children }) => (
         className={`peer w-full border-0 border-b bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all ${
           error
             ? "border-red-500 focus:border-red-500"
-            : "border-slate-300 focus:border-orange-600"
+            : "border-slate-300 focus:border-indigo-600"
         }`}
       >
         {children}
       </select>
       <label
         className={`pointer-events-none absolute left-0 top-0 text-xs transition-all duration-200 ${
-          error ? "text-red-500" : "text-slate-500 peer-focus:text-orange-600"
+          error ? "text-red-500" : "text-slate-500 peer-focus:text-indigo-600"
         }`}
       >
         {label}
@@ -734,8 +736,8 @@ const AuthFooter = ({ handleGoogleSignup }) => (
     <GoogleOAuthButton onCredential={handleGoogleSignup} text="signup_with" />
 
     <p className="text-center text-sm text-slate-600">
-      Already using RecruitPro?{" "}
-      <Link to="/company/login" className="font-bold text-orange-600 hover:text-orange-700">
+      Already using FirstJobIndia?{" "}
+      <Link to="/company/login" className="font-bold text-indigo-600 hover:text-indigo-700">
         Log in to your hub
       </Link>
     </p>

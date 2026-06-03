@@ -1,6 +1,13 @@
 import React, { useState, useMemo } from "react";
 import jobsData from "../../data/jobsData.json";
 import { Link } from "react-router-dom";
+import useSEO from "@/seo/useSEO";
+import seoMeta from "@/data/seoMeta";
+import {
+  buildWebPage,
+  buildBreadcrumbList,
+  buildItemListOfJobs,
+} from "@/seo/schemas";
 
 // --- Minimal SVG Icons ---
 const MagnifyingGlassIcon = () => (
@@ -83,7 +90,7 @@ const BookmarkIcon = () => (
     viewBox="0 0 24 24"
     strokeWidth={1.5}
     stroke="currentColor"
-    className="w-4 h-4 text-slate-400 hover:text-orange-500 transition-colors cursor-pointer"
+    className="w-4 h-4 text-slate-400 hover:text-indigo-600 transition-colors cursor-pointer"
   >
     <path
       strokeLinecap="round"
@@ -117,7 +124,7 @@ const JobCard = ({ job }) => (
         {job.logoLetter}
       </div>
       <div>
-        <h3 className="text-[15px] font-semibold text-slate-800 leading-tight mb-1 group-hover:text-orange-600 transition-colors">
+        <h3 className="text-[15px] font-semibold text-slate-800 leading-tight mb-1 group-hover:text-indigo-600 transition-colors">
           {job.title}
         </h3>
         <p className="text-sm text-slate-500 mb-2">{job.company}</p>
@@ -128,7 +135,7 @@ const JobCard = ({ job }) => (
           <span className="flex items-center gap-1">
             <ClockIcon /> {job.time}
           </span>
-          <span className="text-orange-500 font-semibold">{job.salary}</span>
+          <span className="text-slate-900 font-semibold">{job.salary}</span>
         </div>
       </div>
     </div>
@@ -145,7 +152,7 @@ const JobCard = ({ job }) => (
         <Link
           to={`/jobs/${job.id}`}
           state={{ job, allJobs: jobsData }}
-          className="px-4 py-1.5 bg-orange-500 text-white rounded text-xs font-medium hover:bg-orange-600 transition-colors shadow-sm"
+          className="px-4 py-1.5 bg-indigo-600 text-white rounded text-xs font-medium hover:bg-indigo-700 transition-colors shadow-sm"
         >
           Apply
         </Link>
@@ -155,12 +162,12 @@ const JobCard = ({ job }) => (
 );
 
 const TopCompanyCard = ({ company }) => (
-  <div className="p-5 rounded border border-slate-100 bg-white hover:border-orange-200 hover:shadow-sm transition-all duration-300 flex flex-col items-center text-center">
+  <div className="p-5 rounded border border-slate-100 bg-white hover:border-slate-200 hover:shadow-sm transition-all duration-300 flex flex-col items-center text-center">
     <div className="w-14 h-14 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center mb-3 text-lg font-bold text-slate-700">
       {company.logo}
     </div>
     <h4 className="font-semibold text-sm text-slate-800">{company.name}</h4>
-    <p className="text-xs font-medium mt-1 text-orange-500 bg-orange-50 px-3 py-1 rounded-full">
+    <p className="text-xs font-medium mt-1 text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
       {company.openPositions} Open Positions
     </p>
   </div>
@@ -223,15 +230,38 @@ const JobsPage = () => {
     { id: 4, name: "Apple", logo: "A", openPositions: 8 },
   ];
 
+  const meta = seoMeta["/jobs"];
+  const breadcrumbs = [
+    { name: "Home", path: "/" },
+    { name: "Jobs", path: meta.path },
+  ];
+  const seoElement = useSEO({
+    title: meta.title,
+    description: meta.description,
+    path: meta.path,
+    graph: [
+      buildWebPage({
+        path: meta.path,
+        title: meta.title,
+        description: meta.description,
+        breadcrumbPath: meta.path,
+      }),
+      buildBreadcrumbList(breadcrumbs, meta.path),
+      buildItemListOfJobs(filteredJobs.slice(0, 20), "/jobs"),
+    ],
+  });
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50/50 text-slate-800">
+      {seoElement}
       {/* Minimal Header */}
       <div className="pt-12 pb-8 text-center px-4 bg-white border-b border-slate-100">
         <h1 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
-          Find Your Dream Job
+          Browse first jobs in India
         </h1>
         <p className="mt-2 text-sm text-slate-500">
-          Browse thousands of job openings from top companies.
+          Verified openings for freshers across IT, sales, design, operations,
+          and more.
         </p>
       </div>
 
@@ -256,7 +286,7 @@ const JobsPage = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Job title..."
-                    className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-400 text-sm text-slate-700 placeholder-slate-400 transition-all"
+                    className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 text-sm text-slate-700 placeholder-slate-400 transition-all"
                   />
                   <span className="absolute left-3 top-3">
                     <MagnifyingGlassIcon />
@@ -272,7 +302,7 @@ const JobsPage = () => {
                 <select
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 rounded focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-400 text-sm text-slate-700 appearance-none cursor-pointer transition-all"
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 text-sm text-slate-700 appearance-none cursor-pointer transition-all"
                 >
                   <option value="">All Locations</option>
                   <option value="London">London, UK</option>
@@ -288,7 +318,7 @@ const JobsPage = () => {
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 rounded focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-400 text-sm text-slate-700 appearance-none cursor-pointer transition-all"
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-100 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 text-sm text-slate-700 appearance-none cursor-pointer transition-all"
                 >
                   <option value="">All Categories</option>
                   <option value="Private">Private</option>
@@ -311,7 +341,7 @@ const JobsPage = () => {
                       <div
                         className={`w-4 h-4 border-2 rounded flex items-center justify-center transition-all duration-200 ${
                           selectedTypes.includes(type)
-                            ? "bg-orange-500 border-orange-500"
+                            ? "bg-indigo-600 border-indigo-600"
                             : "border-slate-300 group-hover:border-slate-400"
                         }`}
                       >
@@ -360,7 +390,7 @@ const JobsPage = () => {
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-sm font-semibold text-slate-900">
                 Showing{" "}
-                <span className="text-orange-500">{filteredJobs.length}</span>{" "}
+                <span className="text-slate-900 font-semibold">{filteredJobs.length}</span>{" "}
                 Jobs
               </h2>
               <div className="flex items-center text-xs gap-2 text-slate-500">
@@ -379,7 +409,8 @@ const JobsPage = () => {
             {filteredJobs.length === 0 ? (
               <div className="text-center py-20 border border-dashed border-slate-200 rounded bg-white">
                 <p className="text-slate-400 font-medium">
-                  No jobs found matching your filters.
+                  No matches yet. Try a broader city or fewer filters; new
+                  fresher roles arrive daily.
                 </p>
               </div>
             ) : (
@@ -395,9 +426,12 @@ const JobsPage = () => {
         {/* Top Companies Section */}
         <div className="mt-20 mb-10">
           <div className="text-center mb-8">
-            <h2 className="text-xl font-bold text-slate-900">Top Companies</h2>
+            <h2 className="text-xl font-bold text-slate-900">
+              Recruiters hiring this month
+            </h2>
             <p className="mt-1 text-sm text-slate-500">
-              See all companies and available positions
+              Indian companies who hired freshers through FirstJobIndia this
+              season.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">

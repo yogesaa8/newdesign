@@ -109,7 +109,7 @@ const CompanyLogin = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-orange-600 cursor-pointer"
+                    className="absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 transition hover:text-indigo-600 cursor-pointer"
                   >
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
@@ -122,7 +122,7 @@ const CompanyLogin = () => {
               <div className="text-right">
                 <Link
                   to="/company/reset-password"
-                  className="text-sm text-orange-600 hover:underline"
+                  className="text-sm text-indigo-600 hover:underline"
                 >
                   Forgot password?
                 </Link>
@@ -135,7 +135,7 @@ const CompanyLogin = () => {
                 name="remember"
                 checked={formData.remember}
                 onChange={handleChange}
-                className="w-4 h-4 accent-orange-600 cursor-pointer"
+                className="w-4 h-4 accent-indigo-600 cursor-pointer"
               />
               <span className="text-sm text-slate-600">Remember me</span>
             </label>
@@ -143,7 +143,7 @@ const CompanyLogin = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3.5 font-medium flex items-center justify-center gap-2 transition bg-orange-600 hover:bg-orange-700 text-white shadow-md cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full py-3.5 font-medium flex items-center justify-center gap-2 transition bg-indigo-600 hover:bg-indigo-700 text-white shadow-md cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {isLoading ? "Signing in..." : "Sign In →"}
             </button>
@@ -159,8 +159,8 @@ const CompanyLogin = () => {
             />
 
             <div className="text-center text-sm pt-4 text-slate-600">
-              New to RecruitPro?{" "}
-              <Link to="/company/signup" className="font-medium text-orange-600 hover:underline">
+              New to FirstJobIndia?{" "}
+              <Link to="/company/signup" className="font-medium text-indigo-600 hover:underline">
                 Sign Up your company
               </Link>
             </div>
@@ -171,7 +171,11 @@ const CompanyLogin = () => {
           <div>
             <h2 className="text-5xl font-extrabold leading-tight text-slate-900">
               Hire smarter with{" "}
-              <span className="text-orange-600">RecruitPro.</span>
+              <span>
+                <span className="text-indigo-600">First</span>
+                <span className="text-slate-900">Job</span>
+                <span className="text-indigo-600">India.</span>
+              </span>
             </h2>
 
             <p className="mt-6 text-lg text-slate-600 leading-8">
@@ -197,7 +201,7 @@ const CompanyLogin = () => {
             </div>
           </div>
 
-          <div className="bg-orange-50 border border-orange-100 rounded p-5">
+          <div className="bg-indigo-50 border border-indigo-100 rounded p-5">
             <p className="text-sm text-slate-700">
               Trusted by{" "}
               <span className="font-bold text-emerald-600">2,500+</span>{" "}
@@ -227,9 +231,9 @@ const FloatingInput = ({
       onChange={onChange}
       placeholder=" "
       autoComplete={autoComplete}
-      className="peer w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all focus:border-orange-600"
+      className="peer w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all focus:border-indigo-600"
     />
-    <label className="pointer-events-none absolute left-0 top-5 text-sm text-slate-500 transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-orange-600 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs">
+    <label className="pointer-events-none absolute left-0 top-5 text-sm text-slate-500 transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-indigo-600 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs">
       {label}
     </label>
     {children}

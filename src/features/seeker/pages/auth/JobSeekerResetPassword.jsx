@@ -18,10 +18,10 @@ const FloatingInput = ({
         onChange={onChange}
         placeholder=" "
         required={required}
-        className="peer w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all focus:border-orange-600"
+        className="peer w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all focus:border-indigo-600"
       />
 
-      <label className="pointer-events-none absolute left-0 top-5 text-sm text-slate-500 transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-orange-600 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs">
+      <label className="pointer-events-none absolute left-0 top-5 text-sm text-slate-500 transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-indigo-600 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs">
         {label}
       </label>
     </div>
@@ -118,7 +118,7 @@ const JobSeekerResetPassword = () => {
 
               <button
                 type="submit"
-                className="w-full p-4 font-bold transition-all shadow-lg bg-orange-600 hover:bg-orange-700 text-white"
+                className="w-full p-4 font-bold transition-all shadow-lg bg-indigo-600 hover:bg-indigo-700 text-white"
               >
                 Send OTP
               </button>
@@ -128,7 +128,7 @@ const JobSeekerResetPassword = () => {
                   Remember your password?{" "}
                   <Link
                     to="/seeker/login"
-                    className="font-bold transition-colors hover:text-orange-600"
+                    className="font-bold transition-colors hover:text-indigo-600"
                   >
                     Login
                   </Link>

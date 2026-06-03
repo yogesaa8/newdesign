@@ -270,7 +270,7 @@ const SecuritySettings = () => {
       {/* Footer Metric Row */}
       <footer className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-6 py-12 opacity-40 md:flex-row md:px-12">
         <div className="text-xs font-medium uppercase tracking-widest text-slate-500">
-          RecruitPro Employer Portal v4.2.0
+          FirstJobIndia Employer Portal v4.2.0
         </div>
         <div className="flex gap-6">
           <span className="cursor-pointer text-xs font-medium uppercase tracking-widest text-slate-500 hover:opacity-70">

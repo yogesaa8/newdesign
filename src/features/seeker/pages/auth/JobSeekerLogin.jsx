@@ -24,10 +24,10 @@ const FloatingInput = ({
         placeholder=" "
         required={required}
         autoComplete={autoComplete}
-        className="peer w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all focus:border-orange-600"
+        className="peer w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all focus:border-indigo-600"
       />
 
-      <label className="pointer-events-none absolute left-0 top-5 text-sm text-slate-500 transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-orange-600 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs">
+      <label className="pointer-events-none absolute left-0 top-5 text-sm text-slate-500 transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-indigo-600 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs">
         {label}
       </label>
 
@@ -164,7 +164,7 @@ const JobSeekerLogin = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 text-xl text-slate-500 transition hover:text-orange-600 cursor-pointer"
+                    className="absolute right-0 top-1/2 -translate-y-1/2 text-xl text-slate-500 transition hover:text-indigo-600 cursor-pointer"
                   >
                     {showPassword ? <FiEyeOff /> : <FiEye />}
                   </button>
@@ -173,7 +173,7 @@ const JobSeekerLogin = () => {
                 <div className="text-right">
                   <Link
                     to="/seeker/reset-password"
-                    className="text-xs font-semibold transition-colors hover:text-orange-600"
+                    className="text-xs font-semibold transition-colors hover:text-indigo-600"
                   >
                     Forgot Password?
                   </Link>
@@ -186,7 +186,7 @@ const JobSeekerLogin = () => {
                   name="remember"
                   checked={formData.remember}
                   onChange={handleChange}
-                  className="w-4 h-4 accent-orange-600 cursor-pointer"
+                  className="w-4 h-4 accent-indigo-600 cursor-pointer"
                 />
                 Remember me
               </label>
@@ -194,7 +194,7 @@ const JobSeekerLogin = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full p-4 font-bold transition-all shadow-lg bg-orange-600 hover:bg-orange-700 text-white cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
+                className="w-full p-4 font-bold transition-all shadow-lg bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {isLoading ? "Logging in..." : "Login"}
               </button>
@@ -220,7 +220,7 @@ const JobSeekerLogin = () => {
                   Don't have an account?{" "}
                   <Link
                     to="/seeker/signup"
-                    className="font-bold transition-colors hover:text-orange-600"
+                    className="font-bold transition-colors hover:text-indigo-600"
                   >
                     Sign Up
                   </Link>

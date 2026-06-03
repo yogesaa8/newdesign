@@ -10,7 +10,7 @@ export const adminTabs = [
 
 export const adminProfile = {
   name: "Admin User",
-  email: "admin@jobportal.com",
+  email: "admin@firstjobindia.com",
   role: "Super Admin",
   phone: "+91 98765 43210",
   location: "India",

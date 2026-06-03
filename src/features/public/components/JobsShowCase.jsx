@@ -192,16 +192,17 @@ const JobList = () => {
           <div>
             {/* Changed text-neutral-100 to text-neutral-900 so it's visible on light background */}
             <h1 className="text-3xl md:text-4xl font-bold text-black tracking-tight">
-              Featured Jobs
+              First jobs hiring this week
             </h1>
             {/* Changed text-neutral-500 to text-neutral-600 */}
             <p className="text-black mt-2 text-sm md:text-base">
-              Browse current openings from top employers hiring new talent now.
+              Live fresher openings across India, hand-checked by our team
+              before they go on the board.
             </p>
           </div>
           {/* Changed indigo colors to neutral/black so it matches light theme */}
           <button className="text-sm font-medium text-neutral-900 hover:text-neutral-700 transition-colors hover:underline cursor-pointer whitespace-nowrap">
-            Browse jobs
+            See all openings
           </button>
         </div>
         {/* Grid Layout */}

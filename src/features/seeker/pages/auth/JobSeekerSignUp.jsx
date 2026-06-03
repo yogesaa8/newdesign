@@ -28,10 +28,10 @@ const FloatingInput = ({
         placeholder=" "
         minLength={minLength}
         required={required}
-        className="peer w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all focus:border-orange-600"
+        className="peer w-full border-0 border-b border-slate-300 bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all focus:border-indigo-600"
       />
 
-      <label className="pointer-events-none absolute left-0 top-5 text-sm text-slate-500 transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-orange-600 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs">
+      <label className="pointer-events-none absolute left-0 top-5 text-sm text-slate-500 transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-focus:text-indigo-600 peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs">
         {label}
       </label>
 
@@ -186,7 +186,7 @@ const JobSeekerSignUp = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 text-xl text-slate-500 transition hover:text-orange-600 cursor-pointer"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 text-xl text-slate-500 transition hover:text-indigo-600 cursor-pointer"
                 >
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </button>
@@ -224,7 +224,7 @@ const JobSeekerSignUp = () => {
                 <button
                   type="button"
                   onClick={() => setShowRetypePassword(!showRetypePassword)}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 text-xl text-slate-500 transition hover:text-orange-600 cursor-pointer"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 text-xl text-slate-500 transition hover:text-indigo-600 cursor-pointer"
                 >
                   {showRetypePassword ? <FiEyeOff /> : <FiEye />}
                 </button>
@@ -248,13 +248,13 @@ const JobSeekerSignUp = () => {
                 <input
                   type="checkbox"
                   required
-                  className="w-4 h-4 accent-orange-600 cursor-pointer"
+                  className="w-4 h-4 accent-indigo-600 cursor-pointer"
                 />
                 <p className="text-sm">
                   I agree to the{" "}
                   <Link
                     to="/terms"
-                    className="font-medium underline text-orange-600 transition hover:text-orange-700"
+                    className="font-medium underline text-indigo-600 transition hover:text-indigo-700"
                   >
                     Terms & Conditions
                   </Link>
@@ -264,7 +264,7 @@ const JobSeekerSignUp = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-4 font-bold bg-orange-600 hover:bg-orange-700 text-white shadow-md transition-all cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
+                className="w-full py-4 font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-md transition-all cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {isLoading ? "Sending OTP..." : "Sign Up"}
               </button>
@@ -290,7 +290,7 @@ const JobSeekerSignUp = () => {
                   Already have an account?{" "}
                   <Link
                     to="/seeker/login"
-                    className="font-bold transition-colors hover:text-orange-600"
+                    className="font-bold transition-colors hover:text-indigo-600"
                   >
                     Login
                   </Link>

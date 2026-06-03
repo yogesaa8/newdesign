@@ -11,25 +11,24 @@ const FeaturesSection = () => {
         {/* Header Section */}
         <div className="mb-16 text-center">
           <h2 className="text-4xl text-center font-bold leading-tight mb-6 max-w-max lg:max-w-3xl lg:mx-auto bg-clip-text text-transparent bg-gradient-to-b from-white to-zinc-400">
-            Designed for career growth, fast hiring, and trusted employer
-            matches
+            Built for your first job, not your fifth.
           </h2>
           <p className="text-base font-normal text-zinc-400 lg:max-w-2xl lg:mx-auto mb-10">
-            Built to help graduates and early professionals discover jobs, build
-            resumes, and land interviews with confidence.
+            FirstJobIndia gives freshers the resume, the analytics, and the
+            recruiter access that older job boards reserve for senior talent.
           </p>
           <div className="flex flex-col justify-center md:flex-row gap-4 max-w-lg mx-auto md:max-w-2xl lg:max-w-full">
             <a
-              href="javascript:;"
+              href="/jobs"
               className="cursor-pointer py-3 px-8 rounded-full flex items-center justify-center text-sm font-semibold bg-white text-black hover:bg-zinc-200 transition-all duration-300 hover:shadow-[0_0_30px_-5px_rgba(255,255,255,0.3)]"
             >
-              Explore Jobs
+              See first jobs
             </a>
             <a
-              href="javascript:;"
+              href="/company/login"
               className="cursor-pointer border border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:text-white py-3 px-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300"
             >
-              Browse Companies
+              For employers
             </a>
           </div>
         </div>
@@ -71,11 +70,11 @@ const FeaturesSection = () => {
                     </svg>
                   </div>
                   <h3 className="text-xl font-bold xl:text-2xl py-4 w-full xl:w-64 text-white">
-                    AI Resume Matching for Fresher Talent
+                    AI resume builder, tuned for freshers
                   </h3>
                   <p className="text-sm font-normal w-full mb-8 xl:w-64 text-zinc-400 leading-relaxed">
-                    Match your skills with the best entry-level roles and get
-                    noticed by hiring teams faster.
+                    Generate, edit, and tailor your resume with generative AI
+                    prompts written for Indian freshers, not generic templates.
                   </p>
                 </div>
                 <button className="self-start py-2.5 px-6 border border-zinc-700 hover:border-purple-500 text-zinc-300 hover:text-purple-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300">
@@ -141,11 +140,11 @@ const FeaturesSection = () => {
                 </svg>
               </div>
               <h3 className="py-4 text-lg font-bold xl:text-xl text-white">
-                Verified companies & remote opportunities
+                Verified Indian employers
               </h3>
               <p className="text-sm font-normal mb-8 text-zinc-400 leading-relaxed">
-                Discover vetted employers and remote-first roles that support
-                fast career growth.
+                Every recruiter is vetted before posting, so you only apply to
+                companies that actually pay and actually call back.
               </p>
               <button className="self-start py-2.5 px-6 border border-zinc-700 hover:border-blue-500 text-zinc-300 hover:text-blue-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300">
                 Learn More
@@ -200,11 +199,12 @@ const FeaturesSection = () => {
                 </svg>
               </div>
               <h3 className="py-4 text-lg font-bold xl:text-xl text-white">
-                One-click apply & career guidance
+                Career-readiness analytics
               </h3>
               <p className="text-sm font-normal mb-8 text-zinc-400 leading-relaxed">
-                Apply quickly to multiple roles and get expert tips for resume
-                review and interview prep.
+                Track your readiness score across resume, skills, and
+                interviews. We tell you what to fix before the recruiter sees
+                it.
               </p>
               <button className="self-start py-2.5 px-6 border border-zinc-700 hover:border-emerald-500 text-zinc-300 hover:text-emerald-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300">
                 Learn More

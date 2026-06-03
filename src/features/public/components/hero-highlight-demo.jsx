@@ -23,8 +23,8 @@ export default function HeroHighlightDemo() {
         }}
         className="text-xl sm:text-2xl px-4 md:text-4xl lg:text-5xl font-bold max-w-4xl leading-relaxed lg:leading-snug text-center mx-auto"
       >
-        Explore fresher jobs from top{" "}
-        <Highlight> employers worldwide</Highlight>.
+        Explore verified fresher jobs from India&apos;s most active{" "}
+        <Highlight> hiring teams</Highlight>.
       </motion.h1>
     </HeroHighlight>
   );

@@ -3,12 +3,21 @@ import { Outlet } from 'react-router-dom';
 import CompanySidebar from './CompanySidebar';
 import CompanyHeader from './CompanyHeader';
 import Breadcrumb from '../../../components/ui/Breadcrumb';
+import useSEO from "@/seo/useSEO";
 
 const CompanyLayout = () => {
  const [sidebarOpen, setSidebarOpen] = useState(false);
 
+ const seoElement = useSEO({
+  title: "Company Dashboard | FirstJobIndia",
+  description: "Private FirstJobIndia employer dashboard.",
+  path: "/company",
+  noindex: true,
+ });
+
  return (
  <div className="flex min-h-screen">
+ {seoElement}
  {/* Mobile sidebar backdrop */}
  {sidebarOpen && (
  <div

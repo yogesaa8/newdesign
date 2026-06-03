@@ -1,11 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "../../components/Footer";
+import useSEO from "@/seo/useSEO";
+import seoMeta from "@/data/seoMeta";
+import { buildWebPage, buildBreadcrumbList } from "@/seo/schemas";
 
 const sections = [
   {
     title: "Use of the Platform",
-    body: "HireLaunch helps job seekers discover opportunities and helps companies manage hiring activity. You agree to use the platform only for lawful hiring, recruiting, career, and account-management purposes.",
+    body: "FirstJobIndia helps job seekers discover opportunities and helps companies manage hiring activity. You agree to use the platform only for lawful hiring, recruiting, career, and account-management purposes.",
   },
   {
     title: "Account Responsibilities",
@@ -21,7 +24,7 @@ const sections = [
   },
   {
     title: "Content Ownership",
-    body: "You retain ownership of content you provide. By submitting content, you allow HireLaunch to host, process, display, and share it as needed to provide the services you request.",
+    body: "You retain ownership of content you provide. By submitting content, you allow FirstJobIndia to host, process, display, and share it as needed to provide the services you request.",
   },
   {
     title: "Service Changes",
@@ -30,12 +33,44 @@ const sections = [
 ];
 
 const TermsConditions = () => {
+  const meta = seoMeta["/terms"];
+  const seoElement = useSEO({
+    title: meta.title,
+    description: meta.description,
+    path: meta.path,
+    graph: [
+      buildWebPage({
+        path: meta.path,
+        title: meta.title,
+        description: meta.description,
+        breadcrumbPath: meta.path,
+      }),
+      buildBreadcrumbList(
+        [
+          { name: "Home", path: "/" },
+          { name: "Terms & Conditions", path: meta.path },
+        ],
+        meta.path,
+      ),
+    ],
+  });
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
+      {seoElement}
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
-          <Link to="/" className="text-xl font-extrabold text-slate-900">
-            HireLaunch
+          <Link to="/" className="flex items-center gap-2 text-xl font-extrabold text-slate-900">
+            <img
+              src="/images/logos/fji_orange.png"
+              alt="FirstJobIndia"
+              className="h-7 w-7 object-contain"
+            />
+            <span>
+              <span>First</span>
+              <span className="text-orange-600">Job</span>
+              <span>India</span>
+            </span>
           </Link>
           <Link
             to="/job-seeker/login"
@@ -62,7 +97,7 @@ const TermsConditions = () => {
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">
             Last updated: May 7, 2026. These terms explain the basic rules for
-            using HireLaunch as a job seeker, employer, recruiter, or visitor.
+            using FirstJobIndia as a job seeker, employer, recruiter, or visitor.
           </p>
         </div>
 
@@ -81,7 +116,7 @@ const TermsConditions = () => {
         <section className="mt-8 rounded border border-orange-100 bg-orange-50 p-6">
           <h2 className="text-xl font-bold">Questions</h2>
           <p className="mt-3 leading-7 text-slate-700">
-            For questions about these terms, contact the HireLaunch support team
+            For questions about these terms, contact the FirstJobIndia support team
             through the support page or your account dashboard.
           </p>
         </section>

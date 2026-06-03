@@ -179,7 +179,7 @@ const SeekerVerifyOtp = () => {
                     ref={inputRefs[index]}
                     onChange={(e) => handleChange(e, index)}
                     onKeyDown={(e) => handleKeyDown(e, index)}
-                    className="h-12 w-12 border-0 border-b-2 border-slate-300 bg-transparent text-center text-xl font-bold outline-none transition-all focus:border-orange-600 sm:h-16 sm:w-16 sm:text-2xl"
+                    className="h-12 w-12 border-0 border-b-2 border-slate-300 bg-transparent text-center text-xl font-bold outline-none transition-all focus:border-indigo-600 sm:h-16 sm:w-16 sm:text-2xl"
                   />
                 ))}
               </div>
@@ -187,7 +187,7 @@ const SeekerVerifyOtp = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full p-4 font-bold transition-all shadow-lg bg-orange-600 hover:bg-orange-700 text-white disabled:cursor-not-allowed disabled:opacity-70"
+                className="w-full p-4 font-bold transition-all shadow-lg bg-indigo-600 hover:bg-indigo-700 text-white disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {isLoading ? "Verifying..." : "Verify Code"}
               </button>

@@ -105,9 +105,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       <div className="flex items-center justify-between px-6 py-6 border-b border-slate-100">
         <NavLink to="/seeker/dashboard" className="flex items-center gap-3">
           <div className="p-2 bg-orange-100 rounded-xl">
-            <FiBriefcase size={22} className="text-orange-600" />
+            <img
+              src="/images/logos/fji_orange.png"
+              alt="FirstJobIndia"
+              className="h-[22px] w-[22px] object-contain"
+            />
           </div>
-          <span className="text-xl font-bold text-slate-800">JobPortal</span>
+          <span className="text-xl font-bold text-slate-800">
+            <span>First</span>
+            <span className="text-orange-600">Job</span>
+            <span>India</span>
+          </span>
         </NavLink>
 
         <button

@@ -3,40 +3,40 @@ import { useNavigate } from "react-router-dom";
 
 export const projects = [
   {
-    title: "Remote Work",
+    title: "Engineering & IT",
     description:
-      "Explore flexible remote roles across product, engineering, and operations teams.",
-    link: "/jobs?category=remote",
+      "Software, QA, DevOps, and platform roles for engineering freshers across India.",
+    link: "/jobs?category=engineering",
   },
   {
-    title: "Startup Hiring",
+    title: "Sales & Business",
     description:
-      "Fast-growing startups seeking fresh talent for design, developers, and business roles.",
-    link: "/jobs?category=startup",
+      "Inside sales, business development, and account roles open to graduates of any stream.",
+    link: "/jobs?category=sales",
   },
   {
     title: "Data & Analytics",
     description:
-      "Positions for analysts, data scientists, and reporting professionals driving business insight.",
+      "Entry-level analyst, BI, and reporting roles in Indian product and services companies.",
     link: "/jobs?category=data",
   },
   {
     title: "Design & UX",
     description:
-      "Creative roles in UX, UI, product design, and research for early-career talent.",
+      "Visual design, UX research, and product design roles for design-school graduates.",
     link: "/jobs?category=design",
   },
   {
-    title: "Product Management",
+    title: "Marketing & Content",
     description:
-      "Build customer-focused products with roles in roadmap, strategy, and execution.",
-    link: "/jobs?category=product",
+      "Digital marketing, content, and brand roles for first-time marketers in India.",
+    link: "/jobs?category=marketing",
   },
   {
-    title: "DevOps & Cloud",
+    title: "Operations & Support",
     description:
-      "Infrastructure and automation roles for distributed teams and modern cloud stacks.",
-    link: "/jobs?category=devops",
+      "Operations, customer support, and HR roles that take freshers in their first season.",
+    link: "/jobs?category=operations",
   },
 ];
 

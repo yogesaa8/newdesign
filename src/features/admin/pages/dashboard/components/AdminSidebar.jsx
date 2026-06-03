@@ -1,9 +1,17 @@
 const AdminSidebar = ({ activeTab, tabs, onLogout, onTabChange }) => {
   return (
     <aside className="hidden md:flex w-64 flex-col border-r border-slate-200 bg-white">
-      <div className="border-b border-slate-100 p-6">
+      <div className="flex items-center gap-3 border-b border-slate-100 p-6">
+        <img
+          src="/images/logos/fji_orange.png"
+          alt="FirstJobIndia"
+          className="h-8 w-8 object-contain"
+        />
         <h1 className="text-2xl font-bold text-slate-800">
-          JobPortal<span className="text-orange-600">.admin</span>
+          <span>First</span>
+          <span className="text-orange-600">Job</span>
+          <span>India</span>
+          <span className="text-orange-600">.admin</span>
         </h1>
       </div>
       <nav className="flex-1 space-y-2 p-4">

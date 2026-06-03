@@ -1,0 +1,695 @@
+/* Resume Builder styles. Every rule is scoped under .rb-scope so the dark theme,
+   base resets and generic utility classes (mt-2, text-xs, muted, btn, card, etc.)
+   never leak into the rest of the app. The builder root in ResumeLanding.jsx is
+   wrapped in a div with className "rb-scope". Keyframes are kept global. */
+
+.rb-scope {
+  --bg-0: #0a0b0e;
+  --bg-1: #111317;
+  --bg-2: #16181d;
+  --bg-3: #1c1f25;
+  --bg-4: #23272e;
+  --line: #2a2e36;
+  --line-2: #353a44;
+  --ink-0: #f5f5f7;
+  --ink-1: #d4d4d8;
+  --ink-2: #a1a1aa;
+  --ink-3: #71717a;
+  --ink-4: #52525b;
+  --accent: #FF6B35;
+  --accent-2: #FF8758;
+  --accent-soft: rgba(255, 107, 53, 0.12);
+  --accent-line: rgba(255, 107, 53, 0.32);
+  --ok: #34d399;
+  --warn: #fbbf24;
+  --danger: #f87171;
+  --shadow-1: 0 1px 0 rgba(255,255,255,0.04) inset, 0 1px 2px rgba(0,0,0,0.4);
+  --shadow-2: 0 10px 30px -10px rgba(0,0,0,0.6), 0 4px 12px -4px rgba(0,0,0,0.4);
+  --font-display: "Sora", "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-serif: "Source Serif 4", "Source Serif Pro", Georgia, serif;
+}
+.rb-scope * { box-sizing: border-box; }
+.rb-scope { margin: 0; padding: 0; }
+.rb-scope a { color: inherit; text-decoration: none; }
+.rb-scope {
+  font-family: var(--font-body);
+  background: var(--bg-0);
+  color: var(--ink-0);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+.rb-scope .app-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(255,107,53,0.08), transparent 60%),
+    radial-gradient(800px 400px at -10% 30%, rgba(255,107,53,0.04), transparent 60%),
+    var(--bg-0);
+}
+.rb-scope .topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(10, 11, 14, 0.85);
+  backdrop-filter: saturate(160%) blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.rb-scope .topbar-inner {
+  max-width: 1400px; margin: 0 auto;
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 20px;
+}
+.rb-scope .brand {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 16px;
+  letter-spacing: -0.01em;
+}
+.rb-scope .brand-mark {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), #ff8a4f);
+  display: grid; place-items: center;
+  color: #1b0a02;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(255,107,53,0.4);
+}
+.rb-scope .brand-sub {
+  color: var(--ink-2); font-weight: 400; font-size: 12px;
+  border-left: 1px solid var(--line); padding-left: 10px; margin-left: 4px;
+}
+.rb-scope .topbar-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.rb-scope .topbar-tag {
+  font-size: 11px;
+  color: var(--ink-2);
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  padding: 4px 8px; border-radius: 6px;
+  display: inline-flex; align-items: center; gap: 6px;
+  white-space: nowrap;
+}
+.rb-scope .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(52,211,153,0.18); }
+.rb-scope .btn {
+  font-family: var(--font-body);
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 16px;
+  font-size: 13px; font-weight: 500;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  background: transparent; color: var(--ink-0);
+}
+.rb-scope .btn-primary {
+  background: linear-gradient(180deg, var(--accent-2), var(--accent));
+  color: #1b0a02;
+  font-weight: 600;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.25) inset, 0 6px 20px -6px rgba(255,107,53,0.5);
+}
+.rb-scope .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 1px 0 rgba(255,255,255,0.3) inset, 0 10px 24px -6px rgba(255,107,53,0.6); }
+.rb-scope .btn-primary:active { transform: translateY(0); }
+.rb-scope .btn-ghost { background: var(--bg-2); border-color: var(--line); color: var(--ink-1); }
+.rb-scope .btn-ghost:hover { background: var(--bg-3); border-color: var(--line-2); color: var(--ink-0); }
+.rb-scope .btn-soft { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-2); }
+.rb-scope .btn-soft:hover { background: rgba(255,107,53,0.18); }
+.rb-scope .btn-sm { padding: 6px 10px; font-size: 12px; border-radius: 8px; }
+.rb-scope .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.rb-scope .btn-icon { padding: 8px; border-radius: 8px; background: var(--bg-2); border: 1px solid var(--line); color: var(--ink-1); cursor: pointer; }
+.rb-scope .btn-icon:hover { background: var(--bg-3); color: var(--ink-0); }
+.rb-scope .card {
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow-1);
+}
+.rb-scope .card-pad { padding: 20px; }
+.rb-scope .surface {
+  background: var(--bg-1); border: 1px solid var(--line); border-radius: 12px;
+}
+.rb-scope .field { display: flex; flex-direction: column; gap: 6px; }
+.rb-scope .field-label {
+  font-size: 12px; color: var(--ink-2); font-weight: 500;
+  display: flex; align-items: center; gap: 6px;
+}
+.rb-scope .field-label .req { color: var(--accent); }
+.rb-scope .field-help { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+.rb-scope .input, .rb-scope .textarea, .rb-scope .select {
+  width: 100%;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  color: var(--ink-0);
+  font-family: inherit; font-size: 13px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+.rb-scope .input::placeholder, .rb-scope .textarea::placeholder { color: var(--ink-4); }
+.rb-scope .input:focus, .rb-scope .textarea:focus, .rb-scope .select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  background: var(--bg-2);
+}
+.rb-scope .textarea { resize: vertical; min-height: 88px; line-height: 1.55; }
+.rb-scope .input-prefix {
+  display: flex; align-items: center;
+  background: var(--bg-2); border: 1px solid var(--line); border-radius: 9px;
+  overflow: hidden;
+}
+.rb-scope .input-prefix span { padding: 0 10px; color: var(--ink-3); font-size: 12px; border-right: 1px solid var(--line); height: 100%; display: flex; align-items: center; }
+.rb-scope .input-prefix .input { border: 0; border-radius: 0; background: transparent; }
+.rb-scope .input-prefix:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.rb-scope .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.rb-scope .field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.rb-scope .step-rail {
+  display: flex; align-items: center; gap: 4px;
+  padding: 12px 20px;
+  background: var(--bg-1);
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+}
+.rb-scope .step-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 12px 6px 10px;
+  border-radius: 999px;
+  font-size: 12px; font-weight: 500;
+  color: var(--ink-3);
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+}
+.rb-scope .step-pill:hover { color: var(--ink-1); background: var(--bg-2); }
+.rb-scope .step-pill.active {
+  color: var(--ink-0); background: var(--bg-3); border-color: var(--line-2);
+}
+.rb-scope .step-pill.done { color: var(--ok); }
+.rb-scope .step-pill .num {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--bg-3); display: grid; place-items: center;
+  font-size: 11px; font-weight: 600;
+  border: 1px solid var(--line-2);
+}
+.rb-scope .step-pill.active .num { background: var(--accent); color: #1b0a02; border-color: transparent; }
+.rb-scope .step-pill.done .num { background: rgba(52,211,153,0.15); color: var(--ok); border-color: rgba(52,211,153,0.3); }
+.rb-scope .step-pill-divider { color: var(--ink-4); padding: 0 2px; }
+.rb-scope .progress-bar {
+  height: 2px; background: var(--bg-2); position: relative; overflow: hidden;
+}
+.rb-scope .progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 0 12px rgba(255,107,53,0.6);
+}
+.rb-scope .builder-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(420px, 560px);
+  gap: 0;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: calc(100vh - 110px);
+}
+.rb-scope .form-pane { padding: 28px 28px 80px; min-width: 0; }
+.rb-scope .preview-pane {
+  border-left: 1px solid var(--line);
+  background: var(--bg-1);
+  position: sticky; top: 110px;
+  height: calc(100vh - 110px);
+  display: flex; flex-direction: column;
+}
+.rb-scope .preview-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; border-bottom: 1px solid var(--line);
+  gap: 12px;
+}
+.rb-scope .preview-tabs { display: flex; gap: 2px; background: var(--bg-2); padding: 3px; border-radius: 8px; }
+.rb-scope .preview-tab {
+  padding: 5px 10px; font-size: 11px; border-radius: 6px;
+  cursor: pointer; color: var(--ink-2); font-weight: 500;
+  border: 0; background: transparent;
+}
+.rb-scope .preview-tab.active { background: var(--bg-3); color: var(--ink-0); box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset; }
+.rb-scope .preview-canvas {
+  flex: 1; overflow: auto;
+  padding: 24px;
+  background:
+    radial-gradient(800px 400px at 50% 0%, rgba(255,107,53,0.04), transparent 70%),
+    var(--bg-0);
+  display: flex; justify-content: center; align-items: flex-start;
+}
+.rb-scope .preview-frame {
+  background: #fff;
+  color: #111;
+  width: 100%; max-width: 480px;
+  aspect-ratio: 1 / 1.414; 
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04);
+  border-radius: 4px;
+  overflow: hidden;
+  transform-origin: top center;
+  position: relative;
+}
+.rb-scope .section-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+}
+.rb-scope .section-sub {
+  color: var(--ink-2); font-size: 13px; margin: 0 0 24px;
+}
+.rb-scope .section-mini-label {
+  text-transform: uppercase; letter-spacing: 0.08em;
+  font-size: 10px; font-weight: 600;
+  color: var(--ink-3);
+  display: flex; align-items: center; gap: 6px;
+  white-space: nowrap;
+}
+.rb-scope .tip {
+  display: flex; gap: 10px;
+  padding: 10px 12px;
+  background: rgba(255, 107, 53, 0.06);
+  border: 1px solid rgba(255, 107, 53, 0.18);
+  border-radius: 10px;
+  font-size: 12px; color: var(--ink-1);
+}
+.rb-scope .tip-icon { color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+.rb-scope .tip strong { color: var(--ink-0); }
+.rb-scope .template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+.rb-scope .template-card {
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  font-family: inherit; color: inherit;
+}
+.rb-scope .template-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--line-2);
+  box-shadow: var(--shadow-2);
+}
+.rb-scope .template-card.selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow-2);
+}
+.rb-scope .template-card-preview {
+  height: 220px;
+  background: #f5f5f7;
+  position: relative;
+  overflow: hidden;
+}
+.rb-scope .template-card-body { padding: 14px 16px 16px; }
+.rb-scope .template-card h4 {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-size: 15px; font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.rb-scope .template-card p {
+  margin: 0;
+  font-size: 12px; color: var(--ink-2); line-height: 1.45;
+}
+.rb-scope .template-card-meta {
+  display: flex; align-items: center; gap: 6px; margin-top: 10px; flex-wrap: wrap;
+}
+.rb-scope .chip {
+  font-size: 10px; font-weight: 500;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: var(--bg-3);
+  color: var(--ink-2);
+  border: 1px solid var(--line);
+  white-space: nowrap;
+}
+.rb-scope .chip-ats {
+  background: rgba(52,211,153,0.1);
+  color: var(--ok);
+  border-color: rgba(52,211,153,0.25);
+}
+.rb-scope .template-card-check {
+  position: absolute; top: 10px; right: 10px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--accent); color: #1b0a02;
+  display: grid; place-items: center;
+  box-shadow: 0 4px 12px rgba(255,107,53,0.5);
+  opacity: 0; transform: scale(0.6);
+  transition: all 0.2s ease;
+}
+.rb-scope .template-card.selected .template-card-check { opacity: 1; transform: scale(1); }
+.rb-scope .tag-input-wrap {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 6px;
+  display: flex; flex-wrap: wrap; gap: 6px;
+  min-height: 44px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.rb-scope .tag-input-wrap:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.rb-scope .tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 4px 4px 10px;
+  background: var(--bg-3);
+  border: 1px solid var(--line-2);
+  color: var(--ink-0);
+  border-radius: 7px;
+  font-size: 12px;
+}
+.rb-scope .tag button {
+  background: transparent; border: 0; color: var(--ink-3);
+  padding: 2px; cursor: pointer; display: grid; place-items: center;
+  border-radius: 4px;
+}
+.rb-scope .tag button:hover { background: var(--bg-4); color: var(--danger); }
+.rb-scope .tag-input-wrap input {
+  flex: 1; min-width: 120px;
+  background: transparent; border: 0; outline: none;
+  color: var(--ink-0); font-family: inherit; font-size: 13px;
+  padding: 4px 6px;
+}
+.rb-scope .tag-suggestions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.rb-scope .tag-sugg {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; padding: 4px 9px;
+  background: transparent;
+  border: 1px dashed var(--line-2);
+  color: var(--ink-2);
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.rb-scope .tag-sugg:hover { color: var(--accent); border-color: var(--accent-line); background: var(--accent-soft); }
+.rb-scope .repeater-item {
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  position: relative;
+}
+.rb-scope .repeater-item:hover { border-color: var(--line-2); }
+.rb-scope .repeater-item-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.rb-scope .repeater-item-title {
+  font-family: var(--font-display);
+  font-size: 13px; font-weight: 600;
+  display: flex; align-items: center; gap: 8px;
+}
+.rb-scope .repeater-item-title .num-chip {
+  background: var(--accent-soft); color: var(--accent-2);
+  border: 1px solid var(--accent-line);
+  width: 22px; height: 22px; border-radius: 50%;
+  font-size: 11px; display: grid; place-items: center;
+  font-weight: 600;
+}
+.rb-scope .add-btn {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 1.5px dashed var(--line-2);
+  color: var(--ink-2);
+  border-radius: 12px;
+  font-family: inherit; font-size: 13px; font-weight: 500;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all 0.15s;
+}
+.rb-scope .add-btn:hover { border-color: var(--accent-line); color: var(--accent); background: var(--accent-soft); }
+.rb-scope .skill-group-tabs {
+  display: flex; gap: 4px; background: var(--bg-2);
+  padding: 4px; border-radius: 10px; margin-bottom: 14px;
+  border: 1px solid var(--line);
+}
+.rb-scope .skill-group-tab {
+  flex: 1;
+  padding: 8px 12px; font-size: 12px; font-weight: 500;
+  border-radius: 7px; cursor: pointer; border: 0;
+  background: transparent; color: var(--ink-2);
+  font-family: inherit;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.rb-scope .skill-group-tab.active { background: var(--bg-3); color: var(--ink-0); box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset; }
+.rb-scope .skill-group-tab .count { font-size: 10px; color: var(--ink-3); background: var(--bg-1); padding: 1px 5px; border-radius: 4px; }
+.rb-scope .skill-group-tab.active .count { background: var(--accent); color: #1b0a02; }
+.rb-scope .objective-template {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  font-size: 12px; color: var(--ink-1);
+  line-height: 1.55;
+  transition: all 0.15s;
+}
+.rb-scope .objective-template:hover { border-color: var(--line-2); background: var(--bg-3); }
+.rb-scope .objective-template.selected { border-color: var(--accent); background: var(--accent-soft); color: var(--ink-0); }
+.rb-scope .objective-template-tag { font-size: 10px; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.rb-scope .wizard-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.rb-scope .char-counter {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; color: var(--ink-3);
+}
+.rb-scope .char-meter {
+  width: 80px; height: 4px;
+  background: var(--bg-3); border-radius: 999px; overflow: hidden;
+}
+.rb-scope .char-meter-fill { height: 100%; background: var(--ok); transition: all 0.2s; }
+.rb-scope .resume {
+  font-family: "Inter", system-ui, sans-serif;
+  color: #1a1a1a;
+  font-size: 9.2px;
+  line-height: 1.45;
+  height: 100%;
+  width: 100%;
+  padding: 28px 32px;
+  overflow: hidden;
+}
+.rb-scope .resume h1 { font-size: 22px; margin: 0; letter-spacing: -0.01em; font-weight: 700; }
+.rb-scope .resume h2 {
+  font-size: 11px; margin: 0 0 6px;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  font-weight: 600;
+}
+.rb-scope .resume h3 { font-size: 10px; font-weight: 600; margin: 0; }
+.rb-scope .resume p, .rb-scope .resume li { font-size: 9px; line-height: 1.5; }
+.rb-scope .resume ul { padding-left: 14px; margin: 4px 0; }
+.rb-scope .resume li { margin-bottom: 2px; }
+.rb-scope .resume .muted { color: #555; }
+.rb-scope .resume hr { border: 0; border-top: 1px solid #e3e3e6; margin: 10px 0; }
+.rb-scope .empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--ink-3);
+}
+.rb-scope .empty-state svg { width: 96px; height: 96px; margin: 0 auto 16px; opacity: 0.7; }
+.rb-scope ::-webkit-scrollbar { width: 10px; height: 10px; }
+.rb-scope ::-webkit-scrollbar-track { background: var(--bg-0); }
+.rb-scope ::-webkit-scrollbar-thumb { background: var(--bg-3); border-radius: 10px; border: 2px solid var(--bg-0); }
+.rb-scope ::-webkit-scrollbar-thumb:hover { background: var(--bg-4); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.rb-scope .fade-up { animation: fadeUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.rb-scope .stagger > * { animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.rb-scope .stagger > *:nth-child(1) { animation-delay: 0.02s; }
+.rb-scope .stagger > *:nth-child(2) { animation-delay: 0.06s; }
+.rb-scope .stagger > *:nth-child(3) { animation-delay: 0.10s; }
+.rb-scope .stagger > *:nth-child(4) { animation-delay: 0.14s; }
+.rb-scope .stagger > *:nth-child(5) { animation-delay: 0.18s; }
+.rb-scope .stagger > *:nth-child(6) { animation-delay: 0.22s; }
+.rb-scope .swatch-row { display: flex; gap: 8px; }
+.rb-scope .swatch {
+  width: 28px; height: 28px; border-radius: 8px; cursor: pointer;
+  border: 2px solid transparent;
+  position: relative;
+  transition: transform 0.15s;
+}
+.rb-scope .swatch:hover { transform: scale(1.08); }
+.rb-scope .swatch.selected { border-color: var(--ink-0); box-shadow: 0 0 0 3px var(--accent-soft); }
+.rb-scope .photo-upload {
+  width: 96px; height: 96px;
+  border-radius: 12px;
+  background: var(--bg-2);
+  border: 1.5px dashed var(--line-2);
+  display: grid; place-items: center;
+  cursor: pointer;
+  color: var(--ink-3);
+  font-size: 11px;
+  position: relative; overflow: hidden;
+}
+.rb-scope .photo-upload:hover { border-color: var(--accent-line); color: var(--accent); }
+.rb-scope .photo-upload img { width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 1024px) {
+  .rb-scope .builder-grid { grid-template-columns: 1fr; }
+  .rb-scope .preview-pane { position: static; height: auto; border-left: 0; border-top: 1px solid var(--line); }
+  .rb-scope .preview-canvas { padding: 32px 16px; }
+  .rb-scope .preview-frame { max-width: 380px; }
+}
+@media (max-width: 640px) {
+  .rb-scope .form-pane { padding: 20px 16px 60px; }
+  .rb-scope .field-row, .rb-scope .field-row-3 { grid-template-columns: 1fr; }
+  .rb-scope .topbar-actions .btn-label { display: none; }
+}
+.rb-scope .pdf-capture .resume { padding: 36px 40px; font-size: 11px; }
+.rb-scope .pdf-capture .resume h1 { font-size: 26px; }
+.rb-scope .toolbar-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: 11px; color: var(--ink-2);
+  background: var(--bg-1);
+  flex-wrap: wrap;
+}
+.rb-scope .toolbar-row select.mini-select {
+  background: var(--bg-2); border: 1px solid var(--line);
+  color: var(--ink-0); font-family: inherit; font-size: 11px;
+  padding: 4px 8px; border-radius: 6px;
+}
+.rb-scope .kbd {
+  font-family: var(--font-mono); font-size: 10px;
+  background: var(--bg-3); border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  padding: 1px 5px; border-radius: 4px; color: var(--ink-2);
+}
+.rb-scope .divider-line { height: 1px; background: var(--line); margin: 20px 0; }
+.rb-scope .ai-panel {
+  background:
+    radial-gradient(400px 120px at 100% 0%, rgba(255,107,53,0.07), transparent 70%),
+    var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  margin-top: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.rb-scope .ai-panel::before {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: 14px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,107,53,0.5), transparent 40%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.6;
+}
+.rb-scope .ai-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.rb-scope .ai-panel-title {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-weight: 600; font-size: 14px;
+  color: var(--ink-0);
+}
+.rb-scope .ai-panel-title svg { color: var(--accent); }
+.rb-scope .ai-panel-sub { font-size: 12px; color: var(--ink-2); margin: 6px 0 0; }
+.rb-scope .ai-tag {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 6px; border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #1b0a02;
+}
+.rb-scope .ai-btn { position: relative; }
+.rb-scope .ai-btn svg { color: inherit; }
+.rb-scope .ai-spinner {
+  width: 13px; height: 13px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: aiSpin 0.7s linear infinite;
+  opacity: 0.8;
+}
+@keyframes aiSpin { to { transform: rotate(360deg); } }
+.rb-scope .ai-error {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--danger);
+  background: rgba(248,113,113,0.08);
+  border: 1px solid rgba(248,113,113,0.22);
+  border-radius: 8px; padding: 8px 10px; margin-top: 10px;
+}
+.rb-scope .ai-diff {
+  margin-top: 10px;
+  background: var(--bg-2);
+  border: 1px solid var(--accent-line);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.rb-scope .ai-diff-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px; background: var(--accent-soft);
+  font-size: 12px; font-weight: 600; color: var(--accent-2);
+}
+.rb-scope .ai-diff-head > span { display: flex; align-items: center; gap: 6px; }
+.rb-scope .ai-diff-list { margin: 0; padding: 10px 12px 12px 28px; }
+.rb-scope .ai-diff-list li { font-size: 12.5px; color: var(--ink-1); margin-bottom: 6px; line-height: 1.5; }
+.rb-scope .ai-options .objective-template { animation: fadeUp 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+.rb-scope .ai-review { margin-top: 14px; }
+.rb-scope .ai-review-top { display: flex; align-items: center; gap: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.rb-scope .ai-review-score { display: flex; align-items: baseline; gap: 4px; }
+.rb-scope .ai-review-score-num { font-family: var(--font-display); font-weight: 800; font-size: 38px; line-height: 1; color: var(--accent); }
+.rb-scope .ai-review-score-lbl { font-size: 13px; color: var(--ink-3); }
+.rb-scope .ai-review-verdict { font-size: 14px; color: var(--ink-1); font-weight: 500; flex: 1; }
+.rb-scope .ai-review-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px; }
+.rb-scope .ai-review-list { margin: 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.rb-scope .ai-review-list li {
+  font-size: 12.5px; color: var(--ink-1); line-height: 1.5;
+  padding-left: 18px; position: relative;
+}
+.rb-scope .ai-review-list.ok li::before { content: "✓"; position: absolute; left: 0; color: var(--ok); font-weight: 700; }
+.rb-scope .ai-review-list.warn li::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+.rb-scope .ai-tailor-result { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+.rb-scope .ai-tailor-match { display: flex; align-items: center; gap: 14px; }
+.rb-scope .ai-skeleton-card { background: var(--bg-2); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+.rb-scope .ai-skeleton-line {
+  height: 9px; border-radius: 5px; margin-bottom: 8px;
+  background: linear-gradient(90deg, var(--bg-3) 25%, var(--bg-4) 50%, var(--bg-3) 75%);
+  background-size: 200% 100%;
+  animation: aiShimmer 1.3s ease-in-out infinite;
+}
+@keyframes aiShimmer { to { background-position: -200% 0; } }
+@media (max-width: 640px) {
+  .rb-scope .ai-options { grid-template-columns: 1fr !important; }
+  .rb-scope .ai-review-cols { grid-template-columns: 1fr !important; }
+}
+.rb-scope .row { display: flex; align-items: center; }
+.rb-scope .gap-2 { gap: 8px; }
+.rb-scope .gap-3 { gap: 12px; }
+.rb-scope .gap-4 { gap: 16px; }
+.rb-scope .gap-6 { gap: 24px; }
+.rb-scope .mt-2 { margin-top: 8px; }
+.rb-scope .mt-3 { margin-top: 12px; }
+.rb-scope .mt-4 { margin-top: 16px; }
+.rb-scope .mt-6 { margin-top: 24px; }
+.rb-scope .mb-2 { margin-bottom: 8px; }
+.rb-scope .mb-3 { margin-bottom: 12px; }
+.rb-scope .mb-4 { margin-bottom: 16px; }
+.rb-scope .mb-6 { margin-bottom: 24px; }
+.rb-scope .flex-col { display: flex; flex-direction: column; }
+.rb-scope .text-sm { font-size: 12px; }
+.rb-scope .text-xs { font-size: 11px; }
+.rb-scope .muted { color: var(--ink-2); }
+.rb-scope .muted-2 { color: var(--ink-3); }

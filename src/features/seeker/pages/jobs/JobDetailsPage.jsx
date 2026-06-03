@@ -2,6 +2,13 @@ import React, { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import jobsData from "../../data/jobsData.json";
+import useSEO from "@/seo/useSEO";
+import seoMeta from "@/data/seoMeta";
+import {
+  buildWebPage,
+  buildBreadcrumbList,
+  buildJobPosting,
+} from "@/seo/schemas";
 
 const MapPinIcon = () => (
   <svg
@@ -93,9 +100,55 @@ const JobDetailsPage = () => {
     return allJobs.filter((item) => item.id !== job.id).slice(0, 3);
   }, [allJobs, job]);
 
+  const jobMetaTemplate = seoMeta["/jobs/:jobId"];
+  const jobPath = job ? `/jobs/${job.id}` : "/jobs";
+  const jobCity = job && job.location ? job.location.split(",")[0].trim() : "";
+  const jobTitleString = job
+    ? jobMetaTemplate.titleTemplate
+        .replace("{jobTitle}", job.title)
+        .replace("{company}", job.company)
+        .replace("{city}", jobCity)
+    : "Job not found | FirstJobIndia";
+  const jobDescriptionString = job
+    ? jobMetaTemplate.descriptionTemplate
+        .replace("{jobTitle}", job.title)
+        .replace("{company}", job.company)
+        .replace("{city}", jobCity)
+        .replace("{type}", job.type || "Full Time")
+        .replace("{experience}", job.experience || "Entry level")
+        .replace("{salary}", job.salary || "Competitive")
+    : "This job is no longer available on FirstJobIndia.";
+
+  const seoElement = useSEO({
+    title: jobTitleString,
+    description: jobDescriptionString,
+    path: jobPath,
+    noindex: !job,
+    graph: job
+      ? [
+          buildWebPage({
+            path: jobPath,
+            title: jobTitleString,
+            description: jobDescriptionString,
+            breadcrumbPath: jobPath,
+          }),
+          buildBreadcrumbList(
+            [
+              { name: "Home", path: "/" },
+              { name: "Jobs", path: "/jobs" },
+              { name: job.title, path: jobPath },
+            ],
+            jobPath,
+          ),
+          buildJobPosting(job, jobPath),
+        ]
+      : [],
+  });
+
   if (!job)
     return (
       <div className="min-h-screen flex items-center justify-center text-slate-500">
+        {seoElement}
         Job not found.
       </div>
     );
@@ -133,8 +186,8 @@ const JobDetailsPage = () => {
       toast("Please fill Name and Resume fields", {
         style: {
           borderRadius: "25px",
-          background: "#FF6900",
-          color: "#000",
+          background: "#f97316",
+          color: "#ffffff",
         },
       });
     }
@@ -143,8 +196,8 @@ const JobDetailsPage = () => {
   const showLoginToast = () => {
     toast.error("Please login first to apply for this job!", {
       style: {
-        background: "#FF6900",
-        color: "#000",
+        background: "#f97316",
+        color: "#ffffff",
         borderRadius: "25px",
       },
     });
@@ -173,14 +226,15 @@ const JobDetailsPage = () => {
 
   return (
     <div className="min-h-screen bg-slate-50/50 text-slate-800 font-sans">
+      {seoElement}
       {/* Minimal Header */}
       <div className="pt-12 pb-8 text-center px-4 bg-white border-b border-slate-100">
         <h1 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
-          Find Your Dream Job
+          Apply to your first job
         </h1>
         <p className="mt-2 text-sm text-slate-500">
           You are applying for{" "}
-          <span className="font-semibold text-orange-500">{job.title}</span>.
+          <span className="font-semibold text-slate-900">{job.title}</span>.
         </p>
       </div>
 
@@ -189,7 +243,7 @@ const JobDetailsPage = () => {
         {/* Left Section */}
         <section className="lg:col-span-8">
           <div className="rounded border border-slate-100 bg-white p-8">
-            <span className="text-xs font-medium px-3 py-1 rounded-full bg-orange-50 text-orange-500 border border-orange-100">
+            <span className="text-xs font-medium px-3 py-1 rounded-full bg-slate-50 text-slate-600 border border-slate-100">
               {job.time}
             </span>
 
@@ -203,14 +257,14 @@ const JobDetailsPage = () => {
               {job.applyLink ? (
                 <button
                   onClick={handleApplyViaWeb}
-                  className="px-8 py-2.5 rounded bg-orange-500 text-white text-sm font-medium hover:bg-orange-600 transition-colors shadow-sm"
+                  className="px-8 py-2.5 rounded bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm"
                 >
                   Apply via Web
                 </button>
               ) : (
                 <button
                   onClick={handleApplyJob}
-                  className="px-8 py-2.5 rounded bg-orange-500 text-white text-sm font-medium hover:bg-orange-600 transition-colors shadow-sm"
+                  className="px-8 py-2.5 rounded bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm"
                 >
                   Apply Job
                 </button>
@@ -222,7 +276,7 @@ const JobDetailsPage = () => {
                 <BriefcaseIcon /> {job.category}
               </span>
               <span>{job.type}</span>
-              <span className="text-orange-500 font-semibold">
+              <span className="text-slate-900 font-semibold">
                 {job.salary}
               </span>
               <span className="flex items-center">
@@ -245,7 +299,7 @@ const JobDetailsPage = () => {
                 <ul className="space-y-3">
                   {job.responsibilities.map((resp, i) => (
                     <li key={i} className="flex items-start gap-2">
-                      <span className="mt-1.5 w-1.5 h-1.5 bg-orange-400 rounded-full flex-shrink-0"></span>
+                      <span className="mt-1.5 w-1.5 h-1.5 bg-slate-300 rounded-full flex-shrink-0"></span>
                       {resp}
                     </li>
                   ))}
@@ -259,7 +313,7 @@ const JobDetailsPage = () => {
                 <ul className="space-y-3">
                   {job.skills.map((skill, i) => (
                     <li key={i} className="flex items-start gap-2">
-                      <span className="mt-1.5 w-1.5 h-1.5 bg-orange-400 rounded-full flex-shrink-0"></span>
+                      <span className="mt-1.5 w-1.5 h-1.5 bg-slate-300 rounded-full flex-shrink-0"></span>
                       {skill}
                     </li>
                   ))}
@@ -309,7 +363,7 @@ const JobDetailsPage = () => {
                     <p className="text-sm text-slate-500">{related.company}</p>
                     <div className="flex gap-4 mt-2 text-xs text-slate-400">
                       <span>{related.category}</span>
-                      <span className="text-orange-500 font-semibold">
+                      <span className="text-slate-900 font-semibold">
                         {related.salary}
                       </span>
                     </div>
@@ -342,13 +396,13 @@ const JobDetailsPage = () => {
                 { label: "Category", value: job.category },
                 { label: "Experience", value: job.experience },
                 { label: "Degree", value: job.degree },
-                { label: "Offered Salary", value: job.salary, isOrange: true },
+                { label: "Offered Salary", value: job.salary, emphasize: true },
                 { label: "Location", value: job.location },
               ].map((item, i) => (
                 <div key={i} className="flex justify-between">
                   <span className="text-slate-400">{item.label}</span>
                   <span
-                    className={`font-medium text-right ${item.isOrange ? "text-orange-500" : "text-slate-700"}`}
+                    className={`text-right ${item.emphasize ? "font-semibold text-slate-900" : "font-medium text-slate-700"}`}
                   >
                     {item.value}
                   </span>
@@ -365,24 +419,24 @@ const JobDetailsPage = () => {
           {/* Contact Form */}
           <div className="rounded border border-slate-100 bg-white p-8">
             <h3 className="text-lg font-semibold text-slate-900 mb-6">
-              Send Us Message
+              Ask the recruiter
             </h3>
 
             <div className="space-y-4">
               <input
-                className="w-full rounded p-2.5 bg-slate-50 border border-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-400 transition-all"
+                className="w-full rounded p-2.5 bg-slate-50 border border-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all"
                 placeholder="Full name"
               />
               <input
-                className="w-full rounded p-2.5 bg-slate-50 border border-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-400 transition-all"
+                className="w-full rounded p-2.5 bg-slate-50 border border-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all"
                 placeholder="Email Address"
               />
               <input
-                className="w-full rounded p-2.5 bg-slate-50 border border-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-400 transition-all"
+                className="w-full rounded p-2.5 bg-slate-50 border border-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all"
                 placeholder="Phone Number"
               />
               <textarea
-                className="w-full rounded p-2.5 bg-slate-50 border border-slate-100 text-sm h-28 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-400 transition-all resize-none"
+                className="w-full rounded p-2.5 bg-slate-50 border border-slate-100 text-sm h-28 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all resize-none"
                 placeholder="Your Message"
               ></textarea>
 
@@ -400,9 +454,9 @@ const JobDetailsPage = () => {
           <div className="rounded-xl max-w-lg w-full bg-white shadow-xl border border-slate-100 overflow-hidden flex flex-col max-h-[90vh]">
             {isSuccess ? (
               <div className="flex flex-col items-center justify-center p-12 text-center flex-grow">
-                <div className="w-16 h-16 rounded-full bg-orange-50 border border-orange-100 flex items-center justify-center mb-4">
+                <div className="w-16 h-16 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center mb-4">
                   <svg
-                    className="w-8 h-8 text-orange-500"
+                    className="w-8 h-8 text-indigo-600"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -476,7 +530,7 @@ const JobDetailsPage = () => {
                       onClick={() => setActiveTab(0)}
                       className={`pb-3 px-1 mr-6 text-sm font-medium transition-colors border-b-2 ${
                         activeTab === 0
-                          ? "border-orange-500 text-orange-600"
+                          ? "border-indigo-600 text-indigo-600"
                           : "border-transparent text-slate-400 hover:text-slate-600"
                       }`}
                     >
@@ -487,7 +541,7 @@ const JobDetailsPage = () => {
                       onClick={() => setActiveTab(1)}
                       className={`pb-3 px-1 text-sm font-medium transition-colors border-b-2 ${
                         activeTab === 1
-                          ? "border-orange-500 text-orange-600"
+                          ? "border-indigo-600 text-indigo-600"
                           : "border-transparent text-slate-400 hover:text-slate-600"
                       }`}
                     >
@@ -512,7 +566,7 @@ const JobDetailsPage = () => {
                             value={formData.name}
                             onChange={handleInputChange}
                             placeholder="John Doe"
-                            className="w-full rounded-lg p-2.5 bg-slate-50 border border-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-400 transition-all"
+                            className="w-full rounded-lg p-2.5 bg-slate-50 border border-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all"
                             required
                           />
                         </div>
@@ -526,7 +580,7 @@ const JobDetailsPage = () => {
                             value={formData.email}
                             onChange={handleInputChange}
                             placeholder="john@example.com"
-                            className="w-full rounded-lg p-2.5 bg-slate-50 border border-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-400 transition-all"
+                            className="w-full rounded-lg p-2.5 bg-slate-50 border border-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all"
                             required
                           />
                         </div>
@@ -542,7 +596,7 @@ const JobDetailsPage = () => {
                           value={formData.phone}
                           onChange={handleInputChange}
                           placeholder="+1 (555) 000-0000"
-                          className="w-full rounded-lg p-2.5 bg-slate-50 border border-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-400 transition-all"
+                          className="w-full rounded-lg p-2.5 bg-slate-50 border border-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all"
                         />
                       </div>
 
@@ -554,7 +608,7 @@ const JobDetailsPage = () => {
                             (PDF, DOC)
                           </span>
                         </label>
-                        <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center cursor-pointer hover:border-orange-300 hover:bg-orange-50/30 transition-all bg-slate-50/50">
+                        <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center cursor-pointer hover:border-indigo-300 hover:bg-indigo-50/30 transition-all bg-slate-50/50">
                           <input
                             type="file"
                             name="resume"
@@ -564,7 +618,7 @@ const JobDetailsPage = () => {
                             required
                           />
                           {formData.resume ? (
-                            <p className="text-xs mt-2 text-orange-500 font-medium flex items-center justify-center gap-1">
+                            <p className="text-xs mt-2 text-indigo-600 font-medium flex items-center justify-center gap-1">
                               <svg
                                 className="w-3.5 h-3.5"
                                 fill="none"
@@ -596,7 +650,7 @@ const JobDetailsPage = () => {
                             (Optional)
                           </span>
                         </label>
-                        <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center cursor-pointer hover:border-orange-300 hover:bg-orange-50/30 transition-all bg-slate-50/50">
+                        <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center cursor-pointer hover:border-indigo-300 hover:bg-indigo-50/30 transition-all bg-slate-50/50">
                           <input
                             type="file"
                             name="coverLetter"
@@ -610,7 +664,7 @@ const JobDetailsPage = () => {
                             className="w-full cursor-pointer text-xs text-slate-500"
                           />
                           {formData.coverLetter ? (
-                            <p className="text-xs mt-2 text-orange-500 font-medium flex items-center justify-center gap-1">
+                            <p className="text-xs mt-2 text-indigo-600 font-medium flex items-center justify-center gap-1">
                               <svg
                                 className="w-3.5 h-3.5"
                                 fill="none"
@@ -648,7 +702,7 @@ const JobDetailsPage = () => {
                           value={formData.portfolio}
                           onChange={handleInputChange}
                           placeholder="https://linkedin.com/in/yourprofile"
-                          className="w-full rounded-lg p-2.5 bg-slate-50 border border-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-400 transition-all"
+                          className="w-full rounded-lg p-2.5 bg-slate-50 border border-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all"
                         />
                       </div>
                     </div>
@@ -658,9 +712,9 @@ const JobDetailsPage = () => {
                     <div className="space-y-5">
                       <div className="bg-orange-50 border-l-4 border-orange-400 p-3 rounded-r-lg mb-2">
                         <p className="text-xs text-orange-600 leading-relaxed">
-                          <span className="font-semibold">💡 Note:</span>{" "}
-                          Answering these briefly increases your selection
-                          chances by 40%.
+                          <span className="font-semibold">Note:</span>{" "}
+                          Answering each question in two to three sentences
+                          makes a stronger first impression with recruiters.
                         </p>
                       </div>
 
@@ -676,7 +730,7 @@ const JobDetailsPage = () => {
                           value={formData.question1}
                           onChange={handleInputChange}
                           placeholder="I am excited about this opportunity because..."
-                          className="w-full rounded-lg p-2.5 bg-slate-50 border border-slate-100 text-sm h-24 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-400 transition-all resize-none"
+                          className="w-full rounded-lg p-2.5 bg-slate-50 border border-slate-100 text-sm h-24 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all resize-none"
                         />
                       </div>
 
@@ -692,7 +746,7 @@ const JobDetailsPage = () => {
                           value={formData.question2}
                           onChange={handleInputChange}
                           placeholder="In my previous role, I achieved..."
-                          className="w-full rounded-lg p-2.5 bg-slate-50 border border-slate-100 text-sm h-24 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-400 transition-all resize-none"
+                          className="w-full rounded-lg p-2.5 bg-slate-50 border border-slate-100 text-sm h-24 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all resize-none"
                         />
                       </div>
 
@@ -709,8 +763,8 @@ const JobDetailsPage = () => {
                           name="question3"
                           value={formData.question3}
                           onChange={handleInputChange}
-                          placeholder="e.g., $60k - $80k"
-                          className="w-full rounded-lg p-2.5 bg-slate-50 border border-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-400 transition-all"
+                          placeholder="e.g., 4.5 to 6 LPA"
+                          className="w-full rounded-lg p-2.5 bg-slate-50 border border-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all"
                         />
                       </div>
                     </div>
@@ -756,7 +810,7 @@ const JobDetailsPage = () => {
                       <button
                         type="submit"
                         onClick={handleApplySubmit}
-                        className="flex-1 px-4 py-2.5 rounded-lg bg-orange-500 text-white text-sm font-medium hover:bg-orange-600 transition-colors shadow-sm"
+                        className="flex-1 px-4 py-2.5 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm"
                       >
                         Submit Application
                       </button>

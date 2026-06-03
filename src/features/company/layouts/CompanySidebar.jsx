@@ -60,18 +60,23 @@ const CompanySidebar = ({ sidebarOpen }) => {
       >
         {/* Logo Section */}
         <div
-          className={`mb-6 border-b border-slate-100 py-4 ${!sidebarOpen ? "md:px-2 md:text-center" : "px-3"}`}
+          className={`mb-6 flex items-center gap-3 border-b border-slate-100 py-4 ${!sidebarOpen ? "md:justify-center md:px-2 md:text-center" : "px-3"}`}
         >
-          <h1
-            className={`text-2xl font-extrabold text-orange-600 tracking-tight ${!sidebarOpen ? "md:text-lg" : ""}`}
-          >
-            {sidebarOpen ? "RecruitPro" : "RP"}
-          </h1>
-          <p
-            className={`text-sm text-slate-500 font-medium ${!sidebarOpen ? "md:hidden" : ""}`}
-          >
-            Enterprise Hub
-          </p>
+          <img
+            src="/images/logos/fji_orange.png"
+            alt="FirstJobIndia"
+            className={`h-8 w-8 object-contain ${!sidebarOpen ? "md:h-7 md:w-7" : ""}`}
+          />
+          <div className={`${!sidebarOpen ? "md:hidden" : ""}`}>
+            <h1
+              className={`text-2xl font-extrabold tracking-tight ${!sidebarOpen ? "md:text-lg" : ""}`}
+            >
+              <span className="text-orange-600">First</span>
+              <span className="text-slate-800">Job</span>
+              <span className="text-orange-600">India</span>
+            </h1>
+            <p className="text-sm text-slate-500 font-medium">Enterprise Hub</p>
+          </div>
         </div>
 
         {/* Navigation */}

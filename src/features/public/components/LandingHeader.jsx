@@ -28,10 +28,10 @@ export function NavbarDemo() {
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
             <NavbarButton as={Link} to="/seeker/login" variant="secondary">
-              Login
+              Sign in
             </NavbarButton>
             <NavbarButton as={Link} to="/seeker/signup" variant="primary">
-              Sign Up
+              Start free
             </NavbarButton>
           </div>
         </NavBody>
@@ -93,7 +93,7 @@ export function NavbarDemo() {
                 variant="primary"
                 className="w-full"
               >
-                Login
+                Sign in
               </NavbarButton>
 
               <NavbarButton
@@ -102,7 +102,7 @@ export function NavbarDemo() {
                 variant="primary"
                 className="w-full"
               >
-                Sign Up
+                Start free
               </NavbarButton>
             </div>
           </MobileNavMenu>

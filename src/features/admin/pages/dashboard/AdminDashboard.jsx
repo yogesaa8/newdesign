@@ -10,6 +10,7 @@ import ApprovalsTab from "./components/ApprovalsTab";
 import MobileAdminNav from "./components/MobileAdminNav";
 import OverviewTab from "./components/OverviewTab";
 import PlaceholderTab from "./components/PlaceholderTab";
+import useSEO from "@/seo/useSEO";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -21,8 +22,16 @@ export default function AdminDashboard() {
     navigate("/admin/login");
   };
 
+  const seoElement = useSEO({
+    title: "Admin Dashboard | FirstJobIndia",
+    description: "Private FirstJobIndia admin dashboard.",
+    path: "/admin/dashboard",
+    noindex: true,
+  });
+
   return (
     <div className="flex h-screen font-sans bg-slate-50">
+      {seoElement}
       <AdminSidebar
         activeTab={activeTab}
         tabs={adminTabs}

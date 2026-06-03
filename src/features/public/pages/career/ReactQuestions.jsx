@@ -1,3 +1,11 @@
+import useSEO from "@/seo/useSEO";
+import seoMeta from "@/data/seoMeta";
+import {
+  buildWebPage,
+  buildBreadcrumbList,
+  buildBook,
+} from "@/seo/schemas";
+
 export default function MinimalEbookLanding() {
   const categories = [
     {
@@ -93,22 +101,52 @@ export default function MinimalEbookLanding() {
     {
       title: "Complete Placement Preparation",
       href: "#placement-preparation",
-      gradient: "hover:from-orange-400 hover:to-pink-500",
+      gradient: "from-indigo-600 to-indigo-800",
     },
     {
       title: "Professional Communication Guide",
       href: "#communication",
-      gradient: "hover:from-blue-400 hover:to-cyan-400",
+      gradient: "from-sky-500 to-cyan-700",
     },
     {
       title: "Aptitude Preparation Handbook",
       href: "#aptitude",
-      gradient: "hover:from-violet-500 hover:to-fuchsia-500",
+      gradient: "from-violet-500 to-indigo-700",
     },
   ];
 
+  const meta = seoMeta["/e-book"];
+  const seoElement = useSEO({
+    title: meta.title,
+    description: meta.description,
+    path: meta.path,
+    graph: [
+      buildWebPage({
+        path: meta.path,
+        title: meta.title,
+        description: meta.description,
+        breadcrumbPath: meta.path,
+      }),
+      buildBreadcrumbList(
+        [
+          { name: "Home", path: "/" },
+          { name: "E-book", path: meta.path },
+        ],
+        meta.path,
+      ),
+      buildBook({
+        name: "FirstJobIndia Learning Library for Fresher Interviews",
+        description:
+          "Curated PDFs, notes, and mock-test packs for Indian freshers preparing for first interviews across communication, aptitude, frontend, backend, and HR rounds.",
+        path: meta.path,
+        inLanguage: "en-IN",
+      }),
+    ],
+  });
+
   return (
-    <div className="min-h-screen bg-[#f5f5f2] text-black px-6 md:px-14 py-10 font-sans">
+    <div className="min-h-screen bg-[#f5f5f2] text-black px-6 md:px-14 py-10 font-body">
+      {seoElement}
       {/* Hero Section */}
       <section className="relative overflow-hidden rounded-[40px] border border-black/10 bg-white px-8 md:px-14 py-16 shadow-sm">
         <div className="absolute top-0 right-0 w-72 h-72 rounded-full bg-black/5 blur-3xl" />
@@ -116,28 +154,28 @@ export default function MinimalEbookLanding() {
         <div className="relative z-10 grid md:grid-cols-2 gap-10 items-center">
           <div>
             <p className="text-sm tracking-[0.25em] uppercase text-black/50 mb-5">
-              Curated Learning PDFs
+              Free for FirstJobIndia members
             </p>
 
             <h1 className="text-5xl md:text-7xl leading-[0.95] tracking-tight font-light">
-              Learn Faster.
+              Interview-ready,
               <br />
-              Grow Smarter.
+              fresher-focused.
             </h1>
 
             <p className="mt-7 text-black/60 text-lg leading-8 max-w-xl">
-              Premium ebooks & PDFs for freshers and experienced professionals.
-              Simple notes, practical concepts, interview prep and real-world
-              learning resources — all in one place.
+              Curated PDFs, notes, and mock-test packs for Indian freshers
+              preparing for their first interview. Communication, aptitude,
+              frontend, backend, and HR rounds, all in one library.
             </p>
 
             <div className="mt-10 flex flex-wrap gap-4">
               <button className="px-7 py-3 rounded-full bg-black text-white text-sm tracking-wide hover:scale-[1.02] transition">
-                Explore PDFs
+                Open the library
               </button>
 
               <button className="px-7 py-3 rounded-full border border-black/10 bg-white text-sm tracking-wide hover:bg-black hover:text-white transition">
-                View Collection
+                Browse by topic
               </button>
             </div>
           </div>
@@ -156,7 +194,7 @@ export default function MinimalEbookLanding() {
                 </div>
 
                 <div className="text-sm text-black/50">
-                  Beginner → Advanced Learning
+                  From beginner to interview-ready
                 </div>
               </div>
             </div>
@@ -168,11 +206,11 @@ export default function MinimalEbookLanding() {
       <section className="mt-20 overflow-hidden">
         <div className="mb-8">
           <p className="uppercase tracking-[0.25em] text-black/40 text-sm">
-            Featured Collection
+            Featured this month
           </p>
 
           <h2 className="mt-3 text-4xl md:text-5xl font-light tracking-tight">
-            Our Top 3 Trending Books
+            Most downloaded this month
           </h2>
         </div>
 
@@ -182,19 +220,19 @@ export default function MinimalEbookLanding() {
               <a
                 key={index}
                 href={book.href}
-                className={`group min-w-[320px] rounded-[32px] bg-[#e7e7e2] p-6 transition-all duration-500 hover:text-white bg-gradient-to-br ${book.gradient}`}
+                className={`min-w-[320px] rounded-[32px] p-6 bg-gradient-to-br ${book.gradient}`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs uppercase tracking-[0.2em] text-black/40 group-hover:text-white/70 transition">
+                  <span className="text-xs uppercase tracking-[0.2em] text-white/70">
                     Trending PDF
                   </span>
 
-                  <span className="text-sm text-black/40 group-hover:text-white/70 transition">
+                  <span className="text-sm text-white/70">
                     View
                   </span>
                 </div>
 
-                <h3 className="mt-10 text-3xl font-light leading-tight text-black group-hover:text-white transition duration-500">
+                <h3 className="mt-10 text-3xl font-light leading-tight text-white">
                   {book.title}
                 </h3>
               </a>
@@ -217,6 +255,15 @@ export default function MinimalEbookLanding() {
       {/* PDF Showcase Section */}
       <section className="mt-16 space-y-8">
         {categories.map((category, categoryIndex) => {
+          const coverColor =
+            category.category === "Communication"
+              ? "bg-cyan-800"
+              : category.category === "Aptitude"
+                ? "bg-violet-800"
+                : category.category === "Placement Preparation"
+                  ? "bg-indigo-800"
+                  : "bg-black";
+
           return (
             <div
               key={categoryIndex}
@@ -249,7 +296,7 @@ export default function MinimalEbookLanding() {
                       {/* Left PDF */}
                       <div className="flex justify-center lg:justify-start">
                         <div className="w-[240px] rotate-[-4deg] rounded-[30px] border border-black/10 bg-[#ecece7] p-4 transition duration-300 hover:rotate-0">
-                          <div className="aspect-[3/4] rounded-[24px] bg-black text-white p-6 flex flex-col justify-between">
+                          <div className={`aspect-[3/4] rounded-[24px] ${coverColor} text-white p-6 flex flex-col justify-between`}>
                             <div>
                               <div className="w-12 h-12 rounded-2xl bg-white text-black flex items-center justify-center text-xs font-medium">
                                 PDF

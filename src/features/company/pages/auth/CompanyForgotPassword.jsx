@@ -59,14 +59,16 @@ const CompanyForgotPassword = () => {
         <div className="hidden lg:block space-y-8">
           <div>
             <div className="flex items-center gap-2 font-bold mb-4">
-              <span className="px-3 py-1 rounded-full text-sm bg-orange-100 text-orange-600 font-medium">
-                RecruitPro
+              <span className="px-3 py-1 rounded-full text-sm bg-indigo-100 font-medium">
+                <span className="text-indigo-600">First</span>
+                <span className="text-slate-800">Job</span>
+                <span className="text-indigo-600">India</span>
               </span>
             </div>
 
             <h1 className="text-5xl font-extrabold tracking-tight leading-tight text-slate-900">
               Regain access with{" "}
-              <span className="text-orange-600">Secure Recovery.</span>
+              <span className="text-indigo-600">Secure Recovery.</span>
             </h1>
 
             <p className="text-xl mt-6 max-w-md text-slate-600">
@@ -78,7 +80,7 @@ const CompanyForgotPassword = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="p-6 rounded shadow-sm bg-white border border-slate-200">
-              <span className="text-4xl mb-3 text-orange-600 block">🔐</span>
+              <span className="text-4xl mb-3 text-indigo-600 block">🔐</span>
               <h3 className="font-bold text-lg text-slate-900">
                 End-to-End Encrypted
               </h3>
@@ -89,7 +91,7 @@ const CompanyForgotPassword = () => {
             </div>
 
             <div className="p-6 rounded shadow-sm bg-white border border-slate-200">
-              <span className="text-4xl mb-3 text-orange-600 block">⚡</span>
+              <span className="text-4xl mb-3 text-indigo-600 block">⚡</span>
               <h3 className="font-bold text-lg text-slate-900">
                 Instant Recovery
               </h3>
@@ -127,7 +129,7 @@ const CompanyForgotPassword = () => {
               Forgot Password?
             </h2>
 
-            <p className="mt-2 inline-block px-3 py-1 rounded-full text-sm bg-orange-50 text-orange-600 font-medium">
+            <p className="mt-2 inline-block px-3 py-1 rounded-full text-sm bg-indigo-50 text-indigo-600 font-medium">
               Employer Account Recovery
             </p>
           </div>
@@ -158,7 +160,7 @@ const CompanyForgotPassword = () => {
                     setIsSuccess(false);
                     setEmail("");
                   }}
-                  className="text-orange-600 font-bold hover:underline"
+                  className="text-indigo-600 font-bold hover:underline"
                 >
                   try again
                 </button>
@@ -192,7 +194,7 @@ const CompanyForgotPassword = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-4 font-bold flex items-center justify-center gap-2 transition-all bg-orange-600 hover:bg-orange-700 text-white shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full py-4 font-bold flex items-center justify-center gap-2 transition-all bg-indigo-600 hover:bg-indigo-700 text-white shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <>
@@ -231,7 +233,7 @@ const CompanyForgotPassword = () => {
                 Remembered your password?{" "}
                 <Link
                   to="/company/login"
-                  className="font-bold text-orange-600 hover:text-orange-700"
+                  className="font-bold text-indigo-600 hover:text-indigo-700"
                 >
                   Log in to your hub
                 </Link>
@@ -264,7 +266,7 @@ const FloatingInput = ({
           className={`peer w-full border-0 border-b bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all ${
             error
               ? "border-red-500 focus:border-red-500"
-              : "border-slate-300 focus:border-orange-600"
+              : "border-slate-300 focus:border-indigo-600"
           }`}
         />
 
@@ -272,7 +274,7 @@ const FloatingInput = ({
           className={`pointer-events-none absolute left-0 top-5 text-sm transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs ${
             error
               ? "text-red-500 peer-focus:text-red-500"
-              : "text-slate-500 peer-focus:text-orange-600"
+              : "text-slate-500 peer-focus:text-indigo-600"
           }`}
         >
           {label}

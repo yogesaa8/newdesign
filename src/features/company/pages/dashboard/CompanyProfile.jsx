@@ -318,7 +318,7 @@ const CompanyProfile = () => {
               Company Profile
             </h1>
             <p className="max-w-xl font-body text-sm text-slate-500 md:text-base">
-              Manage your organization's public identity across the RecruitPro
+              Manage your organization's public identity across the FirstJobIndia
               network. This information is visible to potential applicants.
             </p>
           </div>

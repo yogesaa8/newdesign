@@ -5,7 +5,8 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import PublicLayout from "../features/public/layouts/PublicLayout";
 import LandingHomePage from "../features/public/pages/home/LandingHomePage";
 import CollegeMainPage from "../features/public/pages/college/CollegeMainPage";
-import ResumeLanding from "../features/public/pages/resume/ResumeLanding";
+import ResumeLanding from "../features/public/resume/ResumeLanding";
+import ResumeBuilder from "../features/public/resume/ResumeBuilder";
 
 /* JOB SEEKER IMPORTS */
 import JobsPage from "../features/seeker/pages/jobs/JobsPage";
@@ -53,6 +54,7 @@ import ReviewPage from "../features/public/pages/Review";
 import TermsConditions from "../features/public/pages/TermsConditions";
 import PrivacyPolicy from "../features/public/pages/PrivacyPolicy";
 import ReactSlides from "../features/public/pages/career/ReactQuestions";
+import NoindexRouteLayout from "../seo/NoindexRouteLayout";
 
 const AppRoutes = () => {
   return (
@@ -64,6 +66,7 @@ const AppRoutes = () => {
         <Route path="/jobs" element={<JobsPage />} />
         <Route path="/jobs/:jobId" element={<JobDetailsPage />} />
         <Route path="/resume" element={<ResumeLanding />} />
+        <Route path="/resume/builder" element={<ResumeBuilder />} />
         <Route path="/college" element={<CollegeMainPage />} />
         <Route path="/reviews" element={<ReviewPage />} />
         <Route path="/blog" element={<Blog />} />
@@ -71,26 +74,31 @@ const AppRoutes = () => {
         <Route path="/career-gps" element={<CareerGPS />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsConditions />} />
-        <Route path="/terms-condition" element={<TermsConditions />} />
+        <Route
+          path="/terms-condition"
+          element={<Navigate to="/terms" replace />}
+        />
       </Route>
 
       {/* AUTH ROUTES (Form pages) */}
       <Route element={<PublicLayout />}>
-        <Route path="/seeker/login" element={<JobSeekerLogin />} />
-        <Route path="/seeker/signup" element={<JobSeekerSignUp />} />
-        <Route
-          path="/seeker/reset-password"
-          element={<JobSeekerResetPassword />}
-        />
-        <Route path="/seeker/verify-otp" element={<SeekerVerifyOtp />} />
+        <Route element={<NoindexRouteLayout />}>
+          <Route path="/seeker/login" element={<JobSeekerLogin />} />
+          <Route path="/seeker/signup" element={<JobSeekerSignUp />} />
+          <Route
+            path="/seeker/reset-password"
+            element={<JobSeekerResetPassword />}
+          />
+          <Route path="/seeker/verify-otp" element={<SeekerVerifyOtp />} />
 
-        <Route path="/company/login" element={<CompanyLogin />} />
-        <Route path="/company/signup" element={<CompanySignupPage />} />
-        <Route
-          path="/company/reset-password"
-          element={<CompanyForgotPassword />}
-        />
-        <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/company/login" element={<CompanyLogin />} />
+          <Route path="/company/signup" element={<CompanySignupPage />} />
+          <Route
+            path="/company/reset-password"
+            element={<CompanyForgotPassword />}
+          />
+          <Route path="/admin/login" element={<AdminLogin />} />
+        </Route>
       </Route>
 
       {/* JOB SEEKER DASHBOARD */}
