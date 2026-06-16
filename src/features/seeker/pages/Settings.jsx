@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from "react-hot-toast";
 import { FiUser, FiLock, FiBell, FiEye, FiEyeOff, FiGlobe, FiShield, FiAlertTriangle, FiTrash2 } from 'react-icons/fi';
 import Breadcrumb from '../../../components/ui/Breadcrumb';
 
@@ -10,7 +11,7 @@ const Settings = () => {
   const handleDeleteAccount = (e) => {
     e.preventDefault();
     if (window.confirm('PERMANENTLY DELETE ACCOUNT? This action cannot be undone.')) {
-      alert('Account scheduled for deletion. You will be logged out.');
+      toast.success('Account scheduled for deletion. You will be logged out.');
     }
   };
 

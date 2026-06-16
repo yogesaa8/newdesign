@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../../store";
 import { useCompanyStore } from "../../store/companyStore";
@@ -89,30 +90,6 @@ const emptyQuestion = {
 
 const numberOrEmpty = (value) => (value === "" ? "" : Number(value));
 
-const pickNameValue = (...values) =>
-  values.find(
-    (value) => typeof value === "string" && value.trim() && !value.trim().includes("@"),
-  ) || "";
-
-const hasRequiredAccountName = (user) => {
-  const profile = user?.profile ?? {};
-  const company = user?.company ?? {};
-  const firstName = user?.first_name || profile.first_name || "";
-  const lastName = user?.last_name || profile.last_name || "";
-  const fullName = pickNameValue(
-    user?.full_name,
-    profile.full_name,
-    profile.name,
-    user?.name,
-    company.contact_person,
-  );
-
-  if (firstName.trim() && lastName.trim()) return true;
-  if (fullName.includes("@")) return false;
-
-  return fullName.trim().split(/\s+/).filter(Boolean).length >= 2;
-};
-
 const toJobPayload = (formData, isPublished) => ({
   ...formData,
   min_salary: numberOrEmpty(formData.min_salary),
@@ -149,8 +126,7 @@ const CreateJobListing = () => {
   const navigate = useNavigate();
   const locationRef = useRef(null);
   const accessToken = useAuthStore((state) => state.accessToken);
-  const user = useAuthStore((state) => state.user);
-  const { createCompanyJob, createJobQuestion, isSaving, error, clearError } =
+  const { createCompanyJob, createJobQuestion, isSaving, clearError } =
     useCompanyStore();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState(emptyJobForm);
@@ -160,7 +136,12 @@ const CreateJobListing = () => {
   const [locationResults, setLocationResults] = useState([]);
   const [isSearchingLocations, setIsSearchingLocations] = useState(false);
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
-  const [formError, setFormError] = useState("");
+  const [, setFormError] = useState("");
+
+  const showFormError = (message) => {
+    setFormError(message);
+    toast.error(message);
+  };
 
   useEffect(() => {
     if (locationSearch.trim().length < 2 || formData.location_id) {
@@ -261,7 +242,7 @@ const CreateJobListing = () => {
 
     const missing = requiredFields.find(([field]) => !String(formData[field] || "").trim());
     if (missing) {
-      setFormError(missing[1]);
+      showFormError(missing[1]);
       return false;
     }
 
@@ -270,7 +251,7 @@ const CreateJobListing = () => {
       formData.max_salary !== "" &&
       Number(formData.min_salary) > Number(formData.max_salary)
     ) {
-      setFormError("Minimum salary cannot be greater than maximum salary.");
+      showFormError("Minimum salary cannot be greater than maximum salary.");
       return false;
     }
 
@@ -279,7 +260,7 @@ const CreateJobListing = () => {
       formData.experience_max !== "" &&
       Number(formData.experience_min) > Number(formData.experience_max)
     ) {
-      setFormError("Minimum experience cannot be greater than maximum experience.");
+      showFormError("Minimum experience cannot be greater than maximum experience.");
       return false;
     }
 
@@ -289,7 +270,7 @@ const CreateJobListing = () => {
   const handleAddQuestion = () => {
     const text = questionDraft.question_text.trim();
     if (!text) {
-      setFormError("Question text is required.");
+      showFormError("Question text is required.");
       return;
     }
 
@@ -300,7 +281,7 @@ const CreateJobListing = () => {
         .filter(Boolean);
 
       if (options.length < 2) {
-        setFormError("Single and multiple choice questions need at least 2 options.");
+        showFormError("Single and multiple choice questions need at least 2 options.");
         return;
       }
     }
@@ -315,13 +296,7 @@ const CreateJobListing = () => {
 
   const handleSubmit = async (isPublished) => {
     if (!accessToken) {
-      setFormError("Session expired. Please sign in again.");
-      return;
-    }
-
-    if (!hasRequiredAccountName(user)) {
-      setFormError("Please add your first and last name in Security settings before posting a job.");
-      navigate("/company/settings/security");
+      showFormError("Session expired. Please sign in again.");
       return;
     }
 
@@ -344,12 +319,16 @@ const CreateJobListing = () => {
       }
 
       navigate("/company/jobs");
+      toast.success(isPublished ? "Job published successfully." : "Job draft saved successfully.");
     } catch (submitError) {
       if (submitError.code === "COMPANY_NOT_APPROVED") {
-        setFormError(
+        showFormError(
           "Your company profile is pending admin approval. Save this as a draft until publishing is enabled.",
         );
+        return;
       }
+
+      showFormError(submitError.message);
     }
   };
 
@@ -381,12 +360,6 @@ const CreateJobListing = () => {
           ))}
         </div>
       </div>
-
-      {(formError || error) && (
-        <div className="mb-4 rounded-[8px] border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
-          {formError || error}
-        </div>
-      )}
 
       <section className="rounded-[8px] border border-[#E7DDD6] bg-white p-5 md:p-6">
         {currentStep === 1 ? (

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import {
   FiUser,
   FiLock,
@@ -23,7 +24,7 @@ const Settings = () => {
         "PERMANENTLY DELETE ACCOUNT? This action cannot be undone.",
       )
     ) {
-      alert("Account scheduled for deletion. You will be logged out.");
+      toast.success("Account scheduled for deletion. You will be logged out.");
     }
   };
 

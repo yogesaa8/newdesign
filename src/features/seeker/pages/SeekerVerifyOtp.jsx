@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react'
+import toast from "react-hot-toast";
 import AuthLayout from '../layouts/AuthLayout'
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -32,7 +33,7 @@ const SeekerVerifyOtp = () => {
         if (otpValue.length === 4) {
             navigate('/dashboard');
         } else {
-            alert('Please enter a 4-digit code.');
+            toast.error('Please enter a 4-digit code.');
         }
     };
 

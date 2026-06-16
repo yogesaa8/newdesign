@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 import { HeroHighlight } from "../../components/ui/hero-highlight";
 
 const audienceTheme = {
@@ -170,16 +172,18 @@ export const AuthButton = ({
 };
 
 export const AuthAlert = ({ type = "error", children }) => {
-  const styles =
-    type === "success"
-      ? "border-green-100 bg-green-50 text-green-700"
-      : "border-red-100 bg-red-50 text-red-700";
+  useEffect(() => {
+    if (!children) return;
 
-  return (
-    <div className={`rounded-[8px] border px-4 py-3 text-sm ${styles}`}>
-      {children}
-    </div>
-  );
+    if (type === "success") {
+      toast.success(children);
+      return;
+    }
+
+    toast.error(children);
+  }, [children, type]);
+
+  return null;
 };
 
 export const AuthDivider = ({ label = "Or continue with" }) => (

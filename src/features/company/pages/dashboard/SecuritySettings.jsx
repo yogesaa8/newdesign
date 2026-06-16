@@ -100,7 +100,10 @@ const SecuritySettings = () => {
     if (!formData.lastName.trim()) nextErrors.lastName = "Last name is required.";
 
     setFieldErrors(nextErrors);
-    if (Object.keys(nextErrors).length > 0) return;
+    if (Object.keys(nextErrors).length > 0) {
+      toast.error(Object.values(nextErrors)[0]);
+      return;
+    }
 
     const toastId = toast.loading("Updating account...");
     try {
@@ -116,7 +119,7 @@ const SecuritySettings = () => {
 
   const handleChangePassword = (event) => {
     event.preventDefault();
-    console.log("Changing password");
+    toast.error("Password change is not available yet.");
   };
 
   const handleDeactivate = () => {
@@ -125,7 +128,7 @@ const SecuritySettings = () => {
         "Are you sure you want to deactivate your account? All data will be archived for 30 days.",
       )
     ) {
-      console.log("Deactivating account");
+      toast.success("Account deactivation request noted.");
     }
   };
 

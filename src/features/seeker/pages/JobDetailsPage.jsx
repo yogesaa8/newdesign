@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { Link, useLocation } from "react-router-dom";
 
 const JobDetailsPage = () => {
@@ -46,8 +47,9 @@ const JobDetailsPage = () => {
         setIsSuccess(false);
         setFormData({ name: "", resume: null, question1: "", question2: "" });
       }, 2000);
+      toast.success("Application submitted successfully.");
     } else {
-      alert("Please fill Name and Resume fields");
+      toast.error("Please fill Name and Resume fields.");
     }
   };
 

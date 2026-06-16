@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../../../../store";
 import { useCompanyStore } from "../../store/companyStore";
@@ -57,7 +58,6 @@ const JobList = () => {
     isLoading,
     isDeleting,
     isJobActionLoading,
-    error,
     fetchCompanyJobs,
     publishCompanyJob,
     pauseCompanyJob,
@@ -75,7 +75,6 @@ const JobList = () => {
     city: "",
     include_deleted: false,
   });
-  const [notice, setNotice] = useState("");
 
   const apiFilters = useMemo(
     () => ({
@@ -87,12 +86,13 @@ const JobList = () => {
 
   useEffect(() => {
     if (!accessToken) return;
-    fetchCompanyJobs(apiFilters, accessToken).catch(() => {});
+    fetchCompanyJobs(apiFilters, accessToken).catch((fetchError) => {
+      toast.error(fetchError.message);
+    });
   }, [accessToken, apiFilters, fetchCompanyJobs]);
 
   const updateFilter = (name, value) => {
     clearError();
-    setNotice("");
     setFilters((prev) => ({
       ...prev,
       [name]: value,
@@ -100,37 +100,40 @@ const JobList = () => {
     }));
   };
 
-  const runJobAction = async (action) => {
+  const runJobAction = async (action, successMessage) => {
     if (!accessToken) {
-      setNotice("Session expired. Please sign in again.");
+      toast.error("Session expired. Please sign in again.");
       return;
     }
 
     clearError();
-    setNotice("");
 
     try {
       await action();
       await fetchCompanyJobs(apiFilters, accessToken);
+      toast.success(successMessage);
     } catch (actionError) {
       if (actionError.code === "COMPANY_NOT_APPROVED") {
-        setNotice(
+        toast.error(
           "Your company profile is pending admin approval. You can create draft jobs, but publishing will be enabled after approval.",
         );
+        return;
       }
+
+      toast.error(actionError.message);
     }
   };
 
   const handlePause = (jobId) => {
     const reason = window.prompt("Pause reason", "Hiring is temporarily paused.");
     if (reason === null) return;
-    runJobAction(() => pauseCompanyJob(jobId, reason, accessToken));
+    runJobAction(() => pauseCompanyJob(jobId, reason, accessToken), "Job paused successfully.");
   };
 
   const handleDelete = (jobId) => {
     const reason = window.prompt("Delete reason", "Position is no longer required.");
     if (reason === null) return;
-    runJobAction(() => deleteCompanyJob(jobId, reason, accessToken));
+    runJobAction(() => deleteCompanyJob(jobId, reason, accessToken), "Job deleted successfully.");
   };
 
   const canGoBack = Number(jobPagination.page) > 1;
@@ -156,12 +159,6 @@ const JobList = () => {
           Post job
         </Link>
       </div>
-
-      {(error || notice) && (
-        <div className="mb-4 rounded-[8px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">
-          {notice || error}
-        </div>
-      )}
 
       <section className="mb-4 grid grid-cols-1 gap-3 rounded-[8px] border border-[#E7DDD6] bg-white p-4 md:grid-cols-3 xl:grid-cols-6">
         <input
@@ -287,7 +284,10 @@ const JobList = () => {
                           {jobState === "draft" && (
                             <button
                               onClick={() =>
-                                runJobAction(() => publishCompanyJob(job.id, accessToken))
+                                runJobAction(
+                                  () => publishCompanyJob(job.id, accessToken),
+                                  "Job published successfully.",
+                                )
                               }
                               disabled={isJobActionLoading}
                               className="rounded-[8px] border border-green-200 bg-green-50 px-3 py-1.5 text-xs font-bold text-green-700 disabled:opacity-60"
@@ -309,7 +309,10 @@ const JobList = () => {
                           {jobState === "paused" && (
                             <button
                               onClick={() =>
-                                runJobAction(() => resumeCompanyJob(job.id, accessToken))
+                                runJobAction(
+                                  () => resumeCompanyJob(job.id, accessToken),
+                                  "Job resumed successfully.",
+                                )
                               }
                               disabled={isJobActionLoading}
                               className="rounded-[8px] border border-green-200 bg-green-50 px-3 py-1.5 text-xs font-bold text-green-700 disabled:opacity-60"

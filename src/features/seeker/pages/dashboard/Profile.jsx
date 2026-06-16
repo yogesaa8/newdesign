@@ -29,8 +29,13 @@ const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editItem, setEditItem] = useState(null);
   const [description, setDescription] = useState("");
-  const [submitError, setSubmitError] = useState("");
+  const [, setSubmitError] = useState("");
   const [isDeleteProfileOpen, setIsDeleteProfileOpen] = useState(false);
+
+  const showSubmitError = (message) => {
+    setSubmitError(message);
+    toast.error(message);
+  };
 
   const [locationSearch, setLocationSearch] = useState("");
   const [locationResults, setLocationResults] = useState([]);
@@ -106,6 +111,10 @@ const Profile = () => {
   ]);
 
   useEffect(() => {
+    if (error) toast.error(error);
+  }, [error]);
+
+  useEffect(() => {
     if (editItem) {
       setDescription(editItem.description || "");
     } else {
@@ -178,7 +187,7 @@ const Profile = () => {
 
   const handleDelete = async (section, id) => {
     if (!accessToken) {
-      setSubmitError("Session expired. Please login again.");
+      showSubmitError("Session expired. Please login again.");
       return;
     }
 
@@ -196,15 +205,14 @@ const Profile = () => {
         toast.success("Education deleted successfully.");
       }
     } catch (error) {
-      setSubmitError(error.message);
-      toast.error(error.message);
+      showSubmitError(error.message);
     }
   };
 
   const handleSave = async (e) => {
     e.preventDefault();
     if (!accessToken) {
-      setSubmitError("Session expired. Please login again.");
+      showSubmitError("Session expired. Please login again.");
       return;
     }
 
@@ -261,7 +269,7 @@ const Profile = () => {
         }
       } else if (modalType === "profile") {
         if (!selectedLocationId) {
-          setSubmitError("Please select a location from the dropdown.");
+          showSubmitError("Please select a location from the dropdown.");
           return;
         }
         const profilePayload = {
@@ -288,20 +296,19 @@ const Profile = () => {
           toast.success("Profile updated successfully.");
         }
       } else {
-        setSubmitError("This section is not connected to the API.");
+        showSubmitError("This section is not connected to the API.");
         return;
       }
 
       closeModal();
     } catch (error) {
-      setSubmitError(error.message);
-      toast.error(error.message);
+      showSubmitError(error.message);
     }
   };
 
   const handleDeleteProfile = async () => {
     if (!accessToken) {
-      setSubmitError("Session expired. Please login again.");
+      showSubmitError("Session expired. Please login again.");
       return;
     }
 
@@ -311,8 +318,7 @@ const Profile = () => {
       setSubmitError("");
       toast.success("Profile deleted successfully.");
     } catch (error) {
-      setSubmitError(error.message);
-      toast.error(error.message);
+      showSubmitError(error.message);
     }
   };
 
@@ -334,15 +340,9 @@ const Profile = () => {
     <>
       <Breadcrumb pageName="My Profile" />
 
-      {(isLoading || error) && (
+      {isLoading && (
         <div className="mb-4 rounded border border-[#EADFD9] bg-white px-4 py-3 text-sm text-[#6F6F76] shadow-sm">
-          {isLoading ? "Loading seeker profile..." : error}
-        </div>
-      )}
-
-      {submitError && !isModalOpen && (
-        <div className="mb-4 rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 shadow-sm">
-          {submitError}
+          Loading seeker profile...
         </div>
       )}
 
@@ -1152,12 +1152,6 @@ const Profile = () => {
             </>
           )}
 
-          {submitError && (
-            <div className="rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-              {submitError}
-            </div>
-          )}
-
           <div className="flex justify-end gap-3 border-t border-[#EADFD9] pt-4">
             <button
               type="button"
@@ -1197,12 +1191,6 @@ const Profile = () => {
               </p>
             </div>
           </div>
-
-          {submitError && (
-            <div className="rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-              {submitError}
-            </div>
-          )}
 
           <div className="flex justify-end gap-3 border-t border-[#EADFD9] pt-4">
             <button

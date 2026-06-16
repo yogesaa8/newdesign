@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../../store";
@@ -24,7 +25,7 @@ const AdminLogin = () => {
     e.preventDefault();
 
     if (!formData.email.trim() || !formData.password.trim()) {
-      alert("Please fill all fields");
+      toast.error("Please fill all fields.");
       return;
     }
 
@@ -37,6 +38,7 @@ const AdminLogin = () => {
     });
 
     navigate("/admin/dashboard");
+    toast.success("Signed in successfully.");
   };
 
   return (

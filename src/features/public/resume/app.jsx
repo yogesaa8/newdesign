@@ -1,4 +1,5 @@
 import React from "react";
+import toast from "react-hot-toast";
 
 /* global window */
 // Resume Builder - main app shell
@@ -95,7 +96,7 @@ function App() {
         .save();
     } catch (err) {
       console.error("PDF download failed", err);
-      alert("Sorry, the PDF could not be generated. Please try again.");
+      toast.error("Sorry, the PDF could not be generated. Please try again.");
     } finally {
       frame.style.transform = prevTransform;
       setDownloading(false);

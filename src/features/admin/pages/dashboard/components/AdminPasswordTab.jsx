@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const initialForm = {
   currentPassword: "",
@@ -8,12 +9,10 @@ const initialForm = {
 
 const AdminPasswordTab = () => {
   const [formData, setFormData] = useState(initialForm);
-  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setMessage("");
   };
 
   const handleSubmit = (e) => {
@@ -24,17 +23,17 @@ const AdminPasswordTab = () => {
       !formData.newPassword ||
       !formData.confirmPassword
     ) {
-      setMessage("Please fill all password fields.");
+      toast.error("Please fill all password fields.");
       return;
     }
 
     if (formData.newPassword !== formData.confirmPassword) {
-      setMessage("New password and confirm password do not match.");
+      toast.error("New password and confirm password do not match.");
       return;
     }
 
     setFormData(initialForm);
-    setMessage("Password updated successfully.");
+    toast.success("Password updated successfully.");
   };
 
   return (
@@ -85,18 +84,6 @@ const AdminPasswordTab = () => {
             className="w-full rounded border border-slate-300 px-4 py-3 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
           />
         </label>
-
-        {message && (
-          <p
-            className={`rounded px-4 py-3 text-sm font-medium ${
-              message.includes("success")
-                ? "bg-green-50 text-green-600"
-                : "bg-red-50 text-red-600"
-            }`}
-          >
-            {message}
-          </p>
-        )}
 
         <button
           type="submit"

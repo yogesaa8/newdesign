@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import {
   CheckCircle2,
@@ -48,7 +49,6 @@ const ReviewPage = () => {
     image: null,
   });
   const [preview, setPreview] = useState("");
-  const [message, setMessage] = useState("");
 
   const handleChange = (event) => {
     const { name, value, files } = event.target;
@@ -58,7 +58,7 @@ const ReviewPage = () => {
       if (!file) return;
 
       if (!file.type.startsWith("image/")) {
-        alert("Please upload image files only.");
+        toast.error("Please upload image files only.");
         return;
       }
 
@@ -74,11 +74,11 @@ const ReviewPage = () => {
     event.preventDefault();
 
     if (!formData.name.trim() || !formData.issue.trim()) {
-      alert("Please fill all required fields.");
+      toast.error("Please fill all required fields.");
       return;
     }
 
-    setMessage("Thank you. Your feedback has been submitted.");
+    toast.success("Thank you. Your feedback has been submitted.");
     setFormData({ name: "", issue: "", image: null });
     setPreview("");
   };
@@ -236,12 +236,6 @@ const ReviewPage = () => {
             onSubmit={handleSubmit}
             className="rounded-[8px] border border-[#EADFD9] bg-white/75 p-5 shadow-sm backdrop-blur md:p-6"
           >
-            {message && (
-              <div className="mb-5 rounded-[8px] border border-green-100 bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">
-                {message}
-              </div>
-            )}
-
             <div>
               <label htmlFor="name" className={labelClass}>
                 Name
