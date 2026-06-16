@@ -101,17 +101,17 @@ export default function MinimalEbookLanding() {
     {
       title: "Complete Placement Preparation",
       href: "#placement-preparation",
-      gradient: "from-indigo-600 to-indigo-800",
+      gradient: "from-[#8500FA] to-[#6D00D2]",
     },
     {
       title: "Professional Communication Guide",
       href: "#communication",
-      gradient: "from-sky-500 to-cyan-700",
+      gradient: "from-[#FF6B35] to-[#FF9566]",
     },
     {
       title: "Aptitude Preparation Handbook",
       href: "#aptitude",
-      gradient: "from-violet-500 to-indigo-700",
+      gradient: "from-[#C6AFFF] to-[#8500FA]",
     },
   ];
 
@@ -145,12 +145,10 @@ export default function MinimalEbookLanding() {
   });
 
   return (
-    <div className="min-h-screen bg-[#f5f5f2] text-black px-6 md:px-14 py-10 font-body">
+    <div className="min-h-screen bg-[#FFF7F3] px-6 py-10 font-body text-[#0A0A0A] md:px-14">
       {seoElement}
       {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-[40px] border border-black/10 bg-white px-8 md:px-14 py-16 shadow-sm">
-        <div className="absolute top-0 right-0 w-72 h-72 rounded-full bg-black/5 blur-3xl" />
-
+      <section className="relative overflow-hidden rounded-[8px] border border-[#EADFD9] bg-white px-8 py-16 shadow-sm md:px-14">
         <div className="relative z-10 grid md:grid-cols-2 gap-10 items-center">
           <div>
             <p className="text-sm tracking-[0.25em] uppercase text-black/50 mb-5">
@@ -170,21 +168,21 @@ export default function MinimalEbookLanding() {
             </p>
 
             <div className="mt-10 flex flex-wrap gap-4">
-              <button className="px-7 py-3 rounded-full bg-black text-white text-sm tracking-wide hover:scale-[1.02] transition">
+              <button className="rounded-[8px] bg-[#FF6B35] px-7 py-3 text-sm tracking-wide text-white transition hover:bg-[#FF9566]">
                 Open the library
               </button>
 
-              <button className="px-7 py-3 rounded-full border border-black/10 bg-white text-sm tracking-wide hover:bg-black hover:text-white transition">
+              <button className="rounded-[8px] border border-[#EADFD9] bg-white px-7 py-3 text-sm tracking-wide transition hover:border-[#C6AFFF] hover:text-[#8500FA]">
                 Browse by topic
               </button>
             </div>
           </div>
 
           <div className="relative flex justify-center md:justify-end">
-            <div className="w-[260px] rotate-[-8deg] rounded-[28px] border border-black/10 bg-[#ecece7] p-4 shadow-xl">
-              <div className="aspect-[3/4] rounded-[22px] bg-white p-6 flex flex-col justify-between">
+            <div className="w-[260px] rotate-[-8deg] rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2] p-4 shadow-xl">
+              <div className="aspect-[3/4] rounded-[8px] bg-white p-6 flex flex-col justify-between">
                 <div>
-                  <div className="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center text-xs">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-[8px] bg-[#111114] text-xs text-white">
                     PDF
                   </div>
 
@@ -220,7 +218,7 @@ export default function MinimalEbookLanding() {
               <a
                 key={index}
                 href={book.href}
-                className={`min-w-[320px] rounded-[32px] p-6 bg-gradient-to-br ${book.gradient}`}
+                className={`min-w-[320px] rounded-[8px] p-6 bg-gradient-to-br ${book.gradient}`}
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs uppercase tracking-[0.2em] text-white/70">
@@ -257,12 +255,12 @@ export default function MinimalEbookLanding() {
         {categories.map((category, categoryIndex) => {
           const coverColor =
             category.category === "Communication"
-              ? "bg-cyan-800"
+              ? "bg-[#8500FA]"
               : category.category === "Aptitude"
-                ? "bg-violet-800"
+                ? "bg-[#6D00D2]"
                 : category.category === "Placement Preparation"
-                  ? "bg-indigo-800"
-                  : "bg-black";
+                  ? "bg-[#FF6B35]"
+                  : "bg-[#111114]";
 
           return (
             <div
@@ -291,14 +289,14 @@ export default function MinimalEbookLanding() {
                   return (
                     <div
                       key={index}
-                      className="grid lg:grid-cols-[320px_1fr] gap-8 items-center rounded-[36px] p-6 md:p-8"
+                      className="grid items-center gap-8 rounded-[8px] p-6 md:p-8 lg:grid-cols-[320px_1fr]"
                     >
                       {/* Left PDF */}
                       <div className="flex justify-center lg:justify-start">
-                        <div className="w-[240px] rotate-[-4deg] rounded-[30px] border border-black/10 bg-[#ecece7] p-4 transition duration-300 hover:rotate-0">
-                          <div className={`aspect-[3/4] rounded-[24px] ${coverColor} text-white p-6 flex flex-col justify-between`}>
+                        <div className="w-[240px] rotate-[-4deg] rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2] p-4 transition duration-300 hover:rotate-0">
+                          <div className={`aspect-[3/4] rounded-[8px] ${coverColor} text-white p-6 flex flex-col justify-between`}>
                             <div>
-                              <div className="w-12 h-12 rounded-2xl bg-white text-black flex items-center justify-center text-xs font-medium">
+                              <div className="flex h-12 w-12 items-center justify-center rounded-[8px] bg-white text-xs font-medium text-[#0A0A0A]">
                                 PDF
                               </div>
 
@@ -331,11 +329,11 @@ export default function MinimalEbookLanding() {
                         </div>
 
                         <div className="mt-8 flex flex-wrap gap-4">
-                          <button className="px-7 py-3 rounded-full bg-black text-white text-sm transition hover:scale-[1.03]">
+                          <button className="rounded-[8px] bg-[#FF6B35] px-7 py-3 text-sm text-white transition hover:bg-[#FF9566]">
                             Download PDF
                           </button>
 
-                          <button className="px-7 py-3 rounded-full bg-black/5 text-sm transition hover:bg-black hover:text-white">
+                          <button className="rounded-[8px] bg-[#F7F5F2] px-7 py-3 text-sm transition hover:bg-[#111114] hover:text-white">
                             Mock Test
                           </button>
                         </div>

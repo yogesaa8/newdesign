@@ -51,6 +51,16 @@ h6 {
 /* Light theme */
 :root {
   --radius: 1rem;
+  --fji-bg: #fff7f3;
+  --fji-surface: #ffffff;
+  --fji-surface-soft: #f7f5f2;
+  --fji-border: #eadfd9;
+  --fji-text: #0a0a0a;
+  --fji-muted: #6f6f76;
+  --fji-orange: #ff6b35;
+  --fji-orange-soft: #ff9566;
+  --fji-purple: #8500fa;
+  --fji-purple-soft: #c6afff;
 }
 
 /* Base layer */
@@ -66,20 +76,60 @@ h6 {
 
 /* Reusable components */
 @layer components {
+  .fji-page {
+    @apply min-h-screen bg-[#FFF7F3] text-[#0A0A0A];
+  }
+
+  .fji-container {
+    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .fji-card {
+    @apply rounded-[8px] border border-[#EADFD9] bg-white;
+  }
+
+  .fji-card-soft {
+    @apply rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2];
+  }
+
+  .fji-kicker {
+    @apply text-sm font-semibold uppercase tracking-wider text-[#8500FA];
+  }
+
+  .fji-heading {
+    @apply font-bold tracking-tight text-[#0A0A0A];
+  }
+
+  .fji-copy {
+    @apply leading-7 text-[#6F6F76];
+  }
+
+  .fji-primary-btn {
+    @apply inline-flex items-center justify-center rounded-[8px] bg-[#FF6B35] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#FF9566];
+  }
+
+  .fji-secondary-btn {
+    @apply inline-flex items-center justify-center rounded-[8px] border border-[#EADFD9] bg-white px-3 py-2 text-sm font-semibold text-[#0A0A0A] transition hover:border-[#C6AFFF] hover:text-[#8500FA];
+  }
+
+  .fji-input {
+    @apply rounded-[8px] border border-[#EADFD9] bg-white px-4 py-3 text-sm text-[#0A0A0A] outline-none transition focus:border-[#8500FA] focus:ring-2 focus:ring-[#8500FA]/15;
+  }
+
   .job-card {
-    @apply rounded-2xl p-5 hover:-translate-y-1 transition-all duration-300;
+    @apply rounded-[8px] p-5 transition-all duration-300;
   }
 
   .primary-btn {
-    @apply px-5 py-2.5 rounded-xl font-semibold transition-all duration-200;
+    @apply rounded-[8px] px-5 py-2.5 font-semibold transition-all duration-200;
   }
 
   .secondary-btn {
-    @apply px-5 py-2.5 rounded-xl font-semibold transition-all duration-200;
+    @apply rounded-[8px] px-5 py-2.5 font-semibold transition-all duration-200;
   }
 
   .input-field {
-    @apply w-full rounded-xl px-4 py-3 text-sm outline-none focus:ring-4;
+    @apply w-full rounded-[8px] px-4 py-3 text-sm outline-none focus:ring-4;
   }
 
   .section-title {

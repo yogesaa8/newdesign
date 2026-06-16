@@ -1,9 +1,13 @@
+/* eslint-disable react-hooks/set-state-in-effect -- Editable profile state mirrors store data and async location search. */
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useAuthStore } from "../../../../store/authStore";
 import { useCompanyStore } from "../../store/companyStore";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "");
+
+const defaultLogo =
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuDJ3f2qzL0V93PhiZPpjgYkVEgbI3JXfdy6cL8hLdECdWCBq5Z0TaMpL8XaaNlU73kcE76A5EIcPxoasMrjhVDKDja_PYo_xZEYZHsSqD8_6ick9ERGf_C59n1C2GcdT6snX0RAVW02jdMPJmnLzncNhinQHjKZLKbxmAmjzsG73U6K9mMm-k0rp60jRi4tejgrCVRY0i3ryWo2ZSQVv_U-F1W0F7gJOqZnR0z0zQYmyD3LqHYVlF9HxfmAkYwt0MwaUjDadi6M3S-g";
 
 const getWebsiteValue = (url = "") => url.replace(/^https?:\/\//, "");
 
@@ -87,19 +91,12 @@ const CompanyProfile = () => {
   const [locationResults, setLocationResults] = useState([]);
   const [isSearchingLocations, setIsSearchingLocations] = useState(false);
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
-  const locationRef = useRef(null);
-
   const [hasChanges, setHasChanges] = useState(false);
-   const [logoPreview, setLogoPreview] = useState(
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuDJ3f2qzL0V93PhiZPpjgYkVEgbI3JXfdy6cL8hLdECdWCBq5Z0TaMpL8XaaNlU73kcE76A5EIcPxoasMrjhVDKDja_PYo_xZEYZHsSqD8_6ick9ERGf_C59n1C2GcdT6snX0RAVW02jdMPJmnLzncNhinQHjKZLKbxmAmjzsG73U6K9mMm-k0rp60jRi4tejgrCVRY0i3ryWo2ZSQVv_U-F1W0F7gJOqZnR0z0zQYmyD3LqHYVlF9HxfmAkYwt0MwaUjDadi6M3S-g",
-  );
-  const [coverPreview, setCoverPreview] = useState(
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuBhN6YagKu3-ziidYGc7lfq8TgKFiNUdzKc9r9yMZEwxHRfcNwTaCUMdv-VanhEs6fquPhNiy-FlUS8bOtJ7Y15dCz_sIoV5JwMh_Q1gjf8Bqr3XHJLcczelQvvopTJ1SHjtovPOrjzTM8D2h6WTtqt90OL9XOhhNtDi5X6zQH6eYRtt-Um_c1gFdevaFCvXkYxrDXFdR6CftDCZp07qGL7fkKN7YeSiHhtVmrxDdc0t3j2oEVUY-X9hy8mFwqNvmnVJ3CO_5PK8O4b",
-  );
+  const [logoPreview, setLogoPreview] = useState(defaultLogo);
+  const locationRef = useRef(null);
 
   useEffect(() => {
     if (!accessToken) return;
-
     fetchCompanyProfile(accessToken).catch(() => {});
   }, [accessToken, fetchCompanyProfile]);
 
@@ -114,12 +111,11 @@ const CompanyProfile = () => {
     if (nextFormData.locationName) {
       setLocationSearch(nextFormData.locationName);
     } else if (nextFormData.locationId) {
-      // API returned only location_id — resolve it to a display label
       fetch(`${API_BASE_URL}/locations`)
-        .then((r) => r.json())
+        .then((response) => response.json())
         .then((payload) => {
           const list = getLocationList(payload);
-          const found = list.find((l) => l.id === nextFormData.locationId);
+          const found = list.find((location) => location.id === nextFormData.locationId);
           const label = found ? getLocationLabel(found) : "";
           setLocationSearch(label);
           setFormData((prev) => ({ ...prev, locationName: label }));
@@ -177,24 +173,18 @@ const CompanyProfile = () => {
     return Object.keys(nextErrors).length === 0;
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setHasChanges(true);
-    if (fieldErrors[name]) {
-      setFieldErrors((prev) => ({ ...prev, [name]: "" }));
-    }
+    if (fieldErrors[name]) setFieldErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleLocationSearchChange = (e) => {
-    const { value } = e.target;
+  const handleLocationSearchChange = (event) => {
+    const { value } = event.target;
     setLocationSearch(value);
     setShowLocationDropdown(true);
-    setFormData((prev) => ({
-      ...prev,
-      locationId: "",
-      locationName: value,
-    }));
+    setFormData((prev) => ({ ...prev, locationId: "", locationName: value }));
     setHasChanges(true);
     if (fieldErrors.locationId) {
       setFieldErrors((prev) => ({ ...prev, locationId: "" }));
@@ -204,46 +194,30 @@ const CompanyProfile = () => {
   const handleLocationSelect = (location) => {
     const label = getLocationLabel(location);
     setLocationSearch(label);
-    setFormData((prev) => ({
-      ...prev,
-      locationId: location.id,
-      locationName: label,
-    }));
+    setFormData((prev) => ({ ...prev, locationId: location.id, locationName: label }));
     setLocationResults([]);
     setShowLocationDropdown(false);
     setHasChanges(true);
     setFieldErrors((prev) => ({ ...prev, locationId: "" }));
   };
 
-  const handleLogoUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogoPreview(reader.result);
-        setHasChanges(true);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleLogoUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setLogoPreview(reader.result);
+      setHasChanges(true);
+    };
+    reader.readAsDataURL(file);
   };
 
-  const handleLogoUrlChange = (e) => {
-    const { value } = e.target;
+  const handleLogoUrlChange = (event) => {
+    const { value } = event.target;
     setFormData((prev) => ({ ...prev, logoUrl: value }));
     if (value) setLogoPreview(value);
     setHasChanges(true);
-  };
-
-  const handleCoverUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCoverPreview(reader.result);
-        setHasChanges(true);
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   const handleSave = async () => {
@@ -265,10 +239,9 @@ const CompanyProfile = () => {
         await completeCompanyProfile(toApiPayload(formData), accessToken);
       }
       setHasChanges(false);
-      toast.success(
-        company ? "Profile updated successfully." : "Profile saved successfully.",
-        { id: toastId },
-      );
+      toast.success(company ? "Profile updated successfully." : "Profile saved successfully.", {
+        id: toastId,
+      });
     } catch (err) {
       toast.error(err.message, { id: toastId });
     }
@@ -278,6 +251,7 @@ const CompanyProfile = () => {
     const nextFormData = toFormData(company);
     setFormData(nextFormData);
     setLocationSearch(nextFormData.locationName);
+    setLogoPreview(nextFormData.logoUrl || defaultLogo);
     setFieldErrors({});
     setHasChanges(false);
   };
@@ -298,6 +272,7 @@ const CompanyProfile = () => {
       const nextFormData = toFormData();
       setFormData(nextFormData);
       setLocationSearch(nextFormData.locationName);
+      setLogoPreview(defaultLogo);
       setFieldErrors({});
       setHasChanges(false);
       toast.success("Company profile deleted successfully.", { id: toastId });
@@ -306,404 +281,289 @@ const CompanyProfile = () => {
     }
   };
 
+  const inputClass =
+    "w-full rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] px-4 py-3 text-sm font-semibold text-[#111114] outline-none transition focus:border-[#8500FA] focus:bg-white";
+  const labelClass =
+    "mb-2 block text-xs font-bold uppercase tracking-[0.08em] text-[#77737D]";
   const characterCount = formData.description.length;
 
   return (
-    <div className="overflow-y-auto p-4 md:p-8">
-      <div className="mx-auto max-w-5xl space-y-8">
-        {/* Page Header */}
-        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-          <div>
-            <h1 className="mb-2 font-headline text-3xl font-extrabold tracking-tight text-slate-800 md:text-4xl">
-              Company Profile
-            </h1>
-            <p className="max-w-xl font-body text-sm text-slate-500 md:text-base">
-              Manage your organization's public identity across the FirstJobIndia
-              network. This information is visible to potential applicants.
-            </p>
+    <div className="mx-auto w-full max-w-6xl px-4 py-6 md:px-8 md:py-8">
+      <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#8500FA]">
+            Profile
+          </p>
+          <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-[#111114] md:text-3xl">
+            Company profile
+          </h1>
+          {isLoading && <p className="mt-1 text-sm text-[#77737D]">Loading profile...</p>}
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={handleDeleteProfile}
+            disabled={isDeleting || !company}
+            className="rounded-[8px] border border-red-200 bg-white px-4 py-2.5 text-sm font-bold text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+            type="button"
+          >
+            {isDeleting ? "Deleting..." : "Delete"}
+          </button>
+          <button
+            onClick={handleDiscard}
+            disabled={!hasChanges}
+            className="rounded-[8px] border border-[#E7DDD6] bg-white px-4 py-2.5 text-sm font-bold text-[#4F4D55] transition-colors hover:bg-[#F7F5F2] disabled:cursor-not-allowed disabled:opacity-50"
+            type="button"
+          >
+            Discard
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={isSaving}
+            className="rounded-[8px] bg-[#FF6B35] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#E85F2F] disabled:cursor-not-allowed disabled:opacity-70"
+            type="button"
+          >
+            {isSaving ? "Saving..." : "Save"}
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[320px_1fr]">
+        <aside className="rounded-[8px] border border-[#E7DDD6] bg-white p-5">
+          <p className="text-sm font-bold text-[#111114]">Logo</p>
+          <label
+            htmlFor="logo-upload"
+            className="mt-4 flex cursor-pointer flex-col items-center rounded-[8px] border border-dashed border-[#D9CDC5] bg-[#FDFBF9] p-5 text-center transition-colors hover:bg-white"
+          >
+            <img
+              src={logoPreview}
+              alt="Employer logo"
+              className="h-24 w-24 rounded-[8px] object-cover"
+            />
+            <span className="mt-3 text-sm font-bold text-[#8500FA]">Upload logo</span>
+            <input
+              id="logo-upload"
+              type="file"
+              accept="image/png,image/jpeg,image/svg+xml"
+              className="hidden"
+              onChange={handleLogoUpload}
+            />
+          </label>
+
+          <div className="mt-5">
+            <label className={labelClass}>Logo URL</label>
+            <input
+              name="logoUrl"
+              value={formData.logoUrl}
+              onChange={handleLogoUrlChange}
+              className={inputClass}
+              placeholder="https://example.com/logo.png"
+              type="text"
+            />
           </div>
 
-          {/* Desktop Action Buttons */}
-          <div className="hidden gap-3 md:flex">
-            <button
-              onClick={handleDeleteProfile}
-              disabled={isDeleting || !company}
-              className="rounded border border-red-200 bg-white px-6 py-2.5 font-semibold text-red-600 shadow-sm transition-all duration-200 hover:bg-red-50 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
-            >
-              {isDeleting ? "Deleting..." : "Delete Profile"}
-            </button>
+          <div className="mt-5 rounded-[8px] border border-[#EFE7E1] bg-[#F7F5F2] p-4">
+            <p className="text-xs font-bold uppercase tracking-[0.08em] text-[#77737D]">
+              Status
+            </p>
+            <p className="mt-1 text-sm font-semibold text-[#111114]">
+              {company ? "Profile saved" : "Profile incomplete"}
+            </p>
+          </div>
+        </aside>
+
+        <section className="rounded-[8px] border border-[#E7DDD6] bg-white p-5 md:p-6">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div>
+              <label className={labelClass}>Company name *</label>
+              <input
+                name="companyName"
+                value={formData.companyName}
+                onChange={handleInputChange}
+                className={`${inputClass} ${fieldErrors.companyName ? "border-red-400" : ""}`}
+                type="text"
+              />
+              {fieldErrors.companyName && (
+                <p className="mt-1 text-sm text-red-600">{fieldErrors.companyName}</p>
+              )}
+            </div>
+
+            <div>
+              <label className={labelClass}>Industry *</label>
+              <select
+                name="industry"
+                value={formData.industry}
+                onChange={handleInputChange}
+                className={`${inputClass} ${fieldErrors.industry ? "border-red-400" : ""}`}
+              >
+                <option value="">Select industry</option>
+                <option value="Technology">Technology</option>
+                <option value="Technology & SaaS">Technology & SaaS</option>
+                <option>Financial Services</option>
+                <option>Healthcare</option>
+                <option>Manufacturing</option>
+                <option>E-commerce</option>
+                <option>Education</option>
+              </select>
+              {fieldErrors.industry && (
+                <p className="mt-1 text-sm text-red-600">{fieldErrors.industry}</p>
+              )}
+            </div>
+
+            <div>
+              <label className={labelClass}>Company size *</label>
+              <select
+                name="companySize"
+                value={formData.companySize}
+                onChange={handleInputChange}
+                className={`${inputClass} ${fieldErrors.companySize ? "border-red-400" : ""}`}
+              >
+                <option value="">Select size</option>
+                <option value="1-10">1-10</option>
+                <option value="11-50">11-50</option>
+                <option value="51-200">51-200</option>
+                <option value="201-1000">201-1000</option>
+                <option value="1000+">1000+</option>
+              </select>
+              {fieldErrors.companySize && (
+                <p className="mt-1 text-sm text-red-600">{fieldErrors.companySize}</p>
+              )}
+            </div>
+
+            <div ref={locationRef} className="relative">
+              <label className={labelClass}>City / location *</label>
+              <input
+                value={locationSearch}
+                onChange={handleLocationSearchChange}
+                onFocus={() => locationSearch.length >= 2 && setShowLocationDropdown(true)}
+                className={`${inputClass} ${fieldErrors.locationId ? "border-red-400" : ""}`}
+                placeholder="Search city"
+                type="text"
+              />
+              {isSearchingLocations && (
+                <span className="absolute right-3 top-10 text-xs font-semibold text-[#77737D]">
+                  Searching
+                </span>
+              )}
+              {showLocationDropdown && locationResults.length > 0 && (
+                <ul className="absolute z-20 mt-1 max-h-48 w-full overflow-y-auto rounded-[8px] border border-[#E7DDD6] bg-white shadow-[0_18px_45px_rgba(17,17,20,0.08)]">
+                  {locationResults.map((location) => (
+                    <li
+                      key={location.id}
+                      onMouseDown={() => handleLocationSelect(location)}
+                      className="cursor-pointer px-4 py-2 text-sm font-semibold text-[#4F4D55] hover:bg-[#F7F5F2]"
+                    >
+                      {getLocationLabel(location)}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {fieldErrors.locationId && (
+                <p className="mt-1 text-sm text-red-600">{fieldErrors.locationId}</p>
+              )}
+            </div>
+
+            <div>
+              <label className={labelClass}>Website</label>
+              <input
+                name="websiteUrl"
+                value={formData.websiteUrl}
+                onChange={handleInputChange}
+                className={inputClass}
+                placeholder="company.com"
+                type="text"
+              />
+            </div>
+
+            <div>
+              <label className={labelClass}>LinkedIn</label>
+              <input
+                name="linkedinUrl"
+                value={formData.linkedinUrl}
+                onChange={handleInputChange}
+                className={inputClass}
+                placeholder="https://linkedin.com/company/name"
+                type="text"
+              />
+            </div>
+
+            <div>
+              <label className={labelClass}>Contact person</label>
+              <input
+                name="contactPerson"
+                value={formData.contactPerson}
+                onChange={handleInputChange}
+                className={inputClass}
+                type="text"
+              />
+            </div>
+
+            <div>
+              <label className={labelClass}>Contact designation</label>
+              <input
+                name="contactDesignation"
+                value={formData.contactDesignation}
+                onChange={handleInputChange}
+                className={inputClass}
+                type="text"
+              />
+            </div>
+
+            <div>
+              <label className={labelClass}>GSTIN</label>
+              <input
+                name="gstin"
+                value={formData.gstin}
+                onChange={handleInputChange}
+                className={inputClass}
+                type="text"
+              />
+            </div>
+
+            <div className="md:col-span-2">
+              <div className="mb-2 flex items-center justify-between gap-3">
+                <label className="block text-xs font-bold uppercase tracking-[0.08em] text-[#77737D]">
+                  Description
+                </label>
+                <span className="text-xs font-semibold text-[#77737D]">
+                  {characterCount}/2000
+                </span>
+              </div>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                maxLength={2000}
+                className="min-h-36 w-full resize-y rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] px-4 py-3 text-sm leading-6 text-[#111114] outline-none transition focus:border-[#8500FA] focus:bg-white"
+                placeholder="What candidates should know before applying."
+              />
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {hasChanges && (
+        <div className="fixed bottom-4 left-4 right-4 z-50 flex items-center justify-between gap-3 rounded-[8px] border border-[#E7DDD6] bg-white/95 p-3 shadow-[0_18px_45px_rgba(17,17,20,0.12)] backdrop-blur md:hidden">
+          <span className="text-sm font-bold text-[#111114]">Unsaved changes</span>
+          <div className="flex gap-2">
             <button
               onClick={handleDiscard}
-              className="rounded border border-slate-300 bg-white px-6 py-2.5 font-semibold text-slate-700 shadow-sm transition-all duration-200 hover:bg-slate-50 hover:shadow-md"
+              className="rounded-[8px] border border-[#E7DDD6] px-3 py-2 text-xs font-bold text-[#4F4D55]"
+              type="button"
             >
               Discard
             </button>
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="rounded bg-orange-600 px-8 py-2.5 font-semibold text-white shadow-sm transition-all duration-200 hover:bg-orange-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+              className="rounded-[8px] bg-[#FF6B35] px-4 py-2 text-xs font-bold text-white disabled:opacity-70"
+              type="button"
             >
-              {isSaving ? "Saving..." : "Save Changes"}
+              {isSaving ? "Saving..." : "Save"}
             </button>
           </div>
         </div>
-
-        {/* Bento-style Form Layout */}
-        <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-12">
-          {/* Left Column: Identity & Branding */}
-          <div className="space-y-4 md:space-y-6 lg:col-span-4">
-            {/* Logo Upload Card */}
-            <div className="rounded border border-slate-200 bg-white p-4 shadow-sm md:p-6">
-              <h3 className="mb-4 font-headline text-base font-bold text-slate-800 md:mb-6 md:text-lg">
-                Organization Logo
-              </h3>
-              <div className="flex flex-col items-center">
-                <label
-                  htmlFor="logo-upload"
-                  className="group relative mb-4 cursor-pointer"
-                >
-                  <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded border-2 border-dashed border-slate-200 transition-colors group-hover:border-orange-300 md:h-32 md:w-32">
-                    <img
-                      alt="Employer Logo"
-                      className="h-full w-full object-cover"
-                      src={logoPreview}
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center rounded bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-                      <span className="text-3xl text-white material-symbols-outlined">
-                        cloud_upload
-                      </span>
-                    </div>
-                  </div>
-                  <input
-                    id="logo-upload"
-                    type="file"
-                    accept="image/png,image/jpeg,image/svg+xml"
-                    className="hidden"
-                    onChange={handleLogoUpload}
-                  />
-                </label>
-                <p className="text-center text-xs leading-relaxed text-slate-400">
-                  Recommended size: 512x512px.
-                  <br />
-                  PNG or SVG preferred. Max 2MB.
-                </p>
-              </div>
-            </div>
-
-            {/* Social Media Links */}
-            <div className="rounded border border-slate-200 bg-white p-4 shadow-sm md:p-6">
-              <h3 className="mb-4 font-headline text-base font-bold text-slate-800 md:text-lg">
-                Digital Presence
-              </h3>
-              <div className="space-y-4">
-                <div className="space-y-1">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    LinkedIn URL
-                  </label>
-                  <div className="flex items-center gap-2 rounded border border-slate-200 bg-slate-50 px-3 py-2 transition focus-within:border-orange-400 focus-within:bg-white focus-within:ring-1 focus-within:ring-orange-400">
-                    <span className="text-sm text-slate-400 material-symbols-outlined">
-                      link
-                    </span>
-                    <input
-                      name="linkedinUrl"
-                      value={formData.linkedinUrl}
-                      onChange={handleInputChange}
-                      className="w-full border-none p-0 text-sm text-slate-700 outline-none focus:ring-0"
-                      type="text"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    GSTIN
-                  </label>
-                  <div className="flex items-center gap-2 rounded border border-slate-200 bg-slate-50 px-3 py-2 transition focus-within:border-orange-400 focus-within:bg-white focus-within:ring-1 focus-within:ring-orange-400">
-                    <span className="text-sm text-slate-400 material-symbols-outlined">
-                      badge
-                    </span>
-                    <input
-                      name="gstin"
-                      value={formData.gstin}
-                      onChange={handleInputChange}
-                      className="w-full border-none p-0 text-sm text-slate-700 outline-none focus:ring-0"
-                      type="text"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    Logo URL
-                  </label>
-                  <div className="flex items-center gap-2 rounded border border-slate-200 bg-slate-50 px-3 py-2 transition focus-within:border-orange-400 focus-within:bg-white focus-within:ring-1 focus-within:ring-orange-400">
-                    <span className="text-sm text-slate-400 material-symbols-outlined">
-                      image
-                    </span>
-                    <input
-                      name="logoUrl"
-                      value={formData.logoUrl}
-                      onChange={handleLogoUrlChange}
-                      placeholder="https://example.com/logo.png"
-                      className="w-full border-none p-0 text-sm text-slate-700 outline-none focus:ring-0"
-                      type="text"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column: Details & Description */}
-          <div className="space-y-4 md:space-y-6 lg:col-span-8">
-            {/* General Info Card */}
-            <div className="rounded border border-slate-200 bg-white p-4 shadow-sm md:p-8">
-              <h3 className="mb-4 font-headline text-base font-bold text-slate-800 md:mb-8 md:text-lg">
-                Core Details
-              </h3>
-              <div className="grid grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-2 md:gap-x-8 md:gap-y-6">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    Company Name *
-                  </label>
-                  <input
-                    name="companyName"
-                    value={formData.companyName}
-                    onChange={handleInputChange}
-                    className={`w-full rounded border bg-slate-50 px-4 py-3 font-medium text-slate-800 outline-none transition focus:bg-white focus:ring-1 ${
-                      fieldErrors.companyName
-                        ? "border-red-400 focus:border-red-400 focus:ring-red-400"
-                        : "border-slate-200 focus:border-orange-400 focus:ring-orange-400"
-                    }`}
-                    type="text"
-                  />
-                  {fieldErrors.companyName && (
-                    <p className="text-sm text-red-500">{fieldErrors.companyName}</p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    Industry *
-                  </label>
-                  <div className="relative">
-                    <select
-                      name="industry"
-                      value={formData.industry}
-                      onChange={handleInputChange}
-                      className={`w-full appearance-none rounded border bg-slate-50 px-4 py-3 font-medium text-slate-800 outline-none transition focus:bg-white focus:ring-1 ${
-                        fieldErrors.industry
-                          ? "border-red-400 focus:border-red-400 focus:ring-red-400"
-                          : "border-slate-200 focus:border-orange-400 focus:ring-orange-400"
-                      }`}
-                    >
-                      <option value="">Select industry</option>
-                      <option value="Technology">Technology</option>
-                      <option value="Technology & SaaS">Technology & SaaS</option>
-                      <option>Financial Services</option>
-                      <option>Healthcare</option>
-                      <option>Manufacturing</option>
-                      <option>E-commerce</option>
-                      <option>Education</option>
-                    </select>
-                    <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 material-symbols-outlined text-sm">
-                      expand_more
-                    </span>
-                  </div>
-                  {fieldErrors.industry && (
-                    <p className="text-sm text-red-500">{fieldErrors.industry}</p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    Company Size *
-                  </label>
-                  <div className="relative">
-                    <select
-                      name="companySize"
-                      value={formData.companySize}
-                      onChange={handleInputChange}
-                      className={`w-full appearance-none rounded border bg-slate-50 px-4 py-3 font-medium text-slate-800 outline-none transition focus:bg-white focus:ring-1 ${
-                        fieldErrors.companySize
-                          ? "border-red-400 focus:border-red-400 focus:ring-red-400"
-                          : "border-slate-200 focus:border-orange-400 focus:ring-orange-400"
-                      }`}
-                    >
-                      <option value="">Select size</option>
-                      <option value="1-10">1-10</option>
-                      <option value="11-50">11-50</option>
-                      <option value="51-200">51-200</option>
-                      <option value="201-1000">201-1000</option>
-                      <option value="1000+">1000+</option>
-                    </select>
-                    <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 material-symbols-outlined text-sm">
-                      expand_more
-                    </span>
-                  </div>
-                  {fieldErrors.companySize && (
-                    <p className="text-sm text-red-500">{fieldErrors.companySize}</p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    Website URL
-                  </label>
-                  <div className="flex items-center rounded border border-slate-200 bg-slate-50 px-4 py-3 transition focus-within:border-orange-400 focus-within:bg-white focus-within:ring-1 focus-within:ring-orange-400">
-                    <span className="mr-2 text-sm text-slate-400">https://</span>
-                    <input
-                      name="websiteUrl"
-                      value={formData.websiteUrl}
-                      onChange={handleInputChange}
-                      className="w-full border-none p-0 font-medium text-slate-700 outline-none focus:ring-0"
-                      type="text"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    Contact Person
-                  </label>
-                  <input
-                    name="contactPerson"
-                    value={formData.contactPerson}
-                    onChange={handleInputChange}
-                    className="w-full rounded border border-slate-200 bg-slate-50 px-4 py-3 font-medium text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
-                    type="text"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    Contact Designation
-                  </label>
-                  <input
-                    name="contactDesignation"
-                    value={formData.contactDesignation}
-                    onChange={handleInputChange}
-                    className="w-full rounded border border-slate-200 bg-slate-50 px-4 py-3 font-medium text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
-                    type="text"
-                  />
-                </div>
-
-                <div ref={locationRef} className="relative space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    City / Location *
-                  </label>
-                  <input
-                    type="text"
-                    value={locationSearch}
-                    onChange={handleLocationSearchChange}
-                    onFocus={() => locationSearch.length >= 2 && setShowLocationDropdown(true)}
-                    placeholder="Search city"
-                    className={`w-full rounded border bg-slate-50 px-4 py-3 font-medium text-slate-800 outline-none transition focus:bg-white focus:ring-1 ${
-                      fieldErrors.locationId
-                        ? "border-red-400 focus:border-red-400 focus:ring-red-400"
-                        : "border-slate-200 focus:border-orange-400 focus:ring-orange-400"
-                    }`}
-                  />
-                  {isSearchingLocations && (
-                    <span className="absolute right-3 top-9 text-xs text-slate-400">
-                      Searching...
-                    </span>
-                  )}
-                  {showLocationDropdown && locationResults.length > 0 && (
-                    <ul className="absolute z-20 mt-1 max-h-48 w-full overflow-y-auto rounded border border-slate-200 bg-white shadow-lg">
-                      {locationResults.map((location) => (
-                        <li
-                          key={location.id}
-                          onMouseDown={() => handleLocationSelect(location)}
-                          className="cursor-pointer px-4 py-2 text-sm text-slate-700 hover:bg-orange-50 hover:text-orange-700"
-                        >
-                          {getLocationLabel(location)}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  {fieldErrors.locationId && (
-                    <p className="text-sm text-red-500">{fieldErrors.locationId}</p>
-                  )}
-                </div>
-
-                <div className="space-y-2 pt-2 md:col-span-2 md:pt-4">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                      Company Description
-                    </label>
-                    <span className="text-[10px] font-medium text-slate-400">
-                      {characterCount} / 2000 characters
-                    </span>
-                  </div>
-                  <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleInputChange}
-                    maxLength={2000}
-                    className="w-full resize-none rounded border border-slate-200 bg-slate-50 px-4 py-3 leading-relaxed text-sm text-slate-700 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
-                    placeholder="Describe your company culture, mission, and what makes your organization a great place to work..."
-                    rows="8"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Secondary Banner Image */}
-            <div className="group relative h-40 overflow-hidden rounded md:h-48">
-              <img
-                alt="Office Culture"
-                className="h-full w-full object-cover"
-                src={coverPreview}
-              />
-              <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/60 to-transparent p-4 md:p-6">
-                <h4 className="font-headline text-base font-bold text-white md:text-lg">
-                  Office Showcase
-                </h4>
-                <p className="text-xs text-white/80 md:text-sm">
-                  Update your cover photo to give candidates a glimpse of your
-                  workspace.
-                </p>
-              </div>
-              <label
-                htmlFor="cover-upload"
-                className="absolute right-3 top-3 cursor-pointer rounded-full border border-white/30 bg-black/40 px-3 py-1.5 text-xs font-bold text-white backdrop-blur-md transition-all hover:bg-black/60 md:right-4 md:top-4"
-              >
-                Change Cover
-                <input
-                  id="cover-upload"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleCoverUpload}
-                />
-              </label>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Action Bar - Fixed at bottom */}
-        {hasChanges && (
-          <div className="fixed bottom-4 left-4 right-4 z-50 flex items-center justify-between rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-xl backdrop-blur-md md:hidden">
-            <span className="text-xs font-bold text-slate-700">Unsaved Changes</span>
-            <div className="flex gap-2">
-              <button
-                onClick={handleDiscard}
-                className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-xs font-bold text-slate-700"
-              >
-                Discard
-              </button>
-              <button
-                onClick={handleSave}
-                disabled={isSaving}
-                className="rounded-lg bg-orange-600 px-6 py-2 text-xs font-bold text-white shadow-md disabled:cursor-not-allowed disabled:opacity-70"
-              >
-                {isSaving ? "Saving..." : "Save Now"}
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 };

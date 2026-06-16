@@ -176,6 +176,24 @@ const persistAuthenticatedUser = ({
   });
 };
 
+const persistUpdatedUser = ({ user, role, accessToken, refreshToken }) => {
+  persistSession({ user, role, refreshToken });
+
+  const storedAuth = getStoredAuth();
+  if (storedAuth?.user) {
+    localStorage.setItem(
+      AUTH_STORAGE_KEY,
+      JSON.stringify({
+        ...storedAuth,
+        user,
+        role,
+        accessToken: accessToken || storedAuth.accessToken,
+        refreshToken: refreshToken || storedAuth.refreshToken,
+      })
+    );
+  }
+};
+
 const buildUser = (payload, fallback = {}) => {
   const data = getResponseData(payload);
   const user = data?.user ?? payload?.user ?? data ?? {};
@@ -614,6 +632,59 @@ export const useAuthStore = create((set, get) => ({
 
       sessionStorage.removeItem(PENDING_AUTH_STORAGE_KEY);
       set({ pendingVerification: null, isLoading: false, error: null });
+      return payload;
+    } catch (error) {
+      set({ isLoading: false, error: error.message });
+      throw error;
+    }
+  },
+  updateCompanyAccountName: async ({ firstName, lastName }) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const token = get().accessToken;
+      const currentUser = get().user;
+
+      if (!token) {
+        throw new Error("Session expired. Please login again.");
+      }
+
+      const fullName = [firstName, lastName].map((value) => value.trim()).filter(Boolean).join(" ");
+      const payload = await apiRequest("/profile", {
+        method: "PUT",
+        token,
+        body: JSON.stringify({ contact_person: fullName }),
+      });
+      const data = getResponseData(payload);
+      const profile = data?.profile ?? data?.company ?? payload?.profile ?? {};
+      const nextUser = {
+        ...currentUser,
+        name: fullName,
+        full_name: fullName,
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        profile: {
+          ...(currentUser?.profile ?? {}),
+          ...profile,
+          name: fullName,
+          full_name: fullName,
+          first_name: firstName.trim(),
+          last_name: lastName.trim(),
+        },
+        company: {
+          ...(currentUser?.company ?? {}),
+          contact_person: fullName,
+        },
+      };
+
+      persistUpdatedUser({
+        user: nextUser,
+        role: get().role,
+        accessToken: token,
+        refreshToken: get().refreshToken,
+      });
+
+      set({ user: nextUser, isLoading: false, error: null });
       return payload;
     } catch (error) {
       set({ isLoading: false, error: error.message });

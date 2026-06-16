@@ -1,613 +1,804 @@
-import React, { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../../../store";
+import { useCompanyStore } from "../../store/companyStore";
+
+const API_BASE_URL = (
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://nodebackend-smx3.onrender.com/api/v1"
+).replace(/\/$/, "");
+
+const jobTypeOptions = [
+  ["full_time", "Full time"],
+  ["part_time", "Part time"],
+  ["internship", "Internship"],
+  ["contract", "Contract"],
+  ["freelance", "Freelance"],
+  ["temporary", "Temporary"],
+];
+
+const workModeOptions = [
+  ["remote", "Remote"],
+  ["onsite", "Onsite"],
+  ["hybrid", "Hybrid"],
+];
+
+const salaryTypeOptions = [
+  ["monthly", "Monthly"],
+  ["yearly", "Yearly"],
+  ["hourly", "Hourly"],
+  ["stipend", "Stipend"],
+];
+
+const questionTypeOptions = [
+  ["text", "Text"],
+  ["number", "Number"],
+  ["yes_no", "Yes / No"],
+  ["single_choice", "Single choice"],
+  ["multiple_choice", "Multiple choice"],
+  ["file_upload", "File upload"],
+  ["url", "URL"],
+];
+
+const choiceQuestionTypes = ["single_choice", "multiple_choice"];
+
+const getLocationList = (payload) => {
+  const data = payload?.data ?? payload?.result ?? payload;
+  return data?.locations ?? data?.items ?? (Array.isArray(data) ? data : []);
+};
+
+const getLocationLabel = (location = {}) =>
+  [location.city, location.state].filter(Boolean).join(", ") ||
+  location.name ||
+  location.location_name ||
+  "";
+
+const emptyJobForm = {
+  job_title: "",
+  job_type: "internship",
+  work_mode: "remote",
+  location_id: "",
+  job_location: "",
+  city: "",
+  state: "",
+  country: "India",
+  min_salary: "",
+  max_salary: "",
+  salary_currency: "INR",
+  salary_type: "monthly",
+  experience_min: "",
+  experience_max: "",
+  education_required: "",
+  short_description: "",
+  full_description: "",
+  responsibilities: "",
+  requirements: "",
+  benefits: "",
+  openings: 1,
+  application_deadline: "",
+  is_featured: false,
+  is_urgent: false,
+};
+
+const emptyQuestion = {
+  question_text: "",
+  question_type: "text",
+  is_required: false,
+  optionsText: "",
+};
+
+const numberOrEmpty = (value) => (value === "" ? "" : Number(value));
+
+const pickNameValue = (...values) =>
+  values.find(
+    (value) => typeof value === "string" && value.trim() && !value.trim().includes("@"),
+  ) || "";
+
+const hasRequiredAccountName = (user) => {
+  const profile = user?.profile ?? {};
+  const company = user?.company ?? {};
+  const firstName = user?.first_name || profile.first_name || "";
+  const lastName = user?.last_name || profile.last_name || "";
+  const fullName = pickNameValue(
+    user?.full_name,
+    profile.full_name,
+    profile.name,
+    user?.name,
+    company.contact_person,
+  );
+
+  if (firstName.trim() && lastName.trim()) return true;
+  if (fullName.includes("@")) return false;
+
+  return fullName.trim().split(/\s+/).filter(Boolean).length >= 2;
+};
+
+const toJobPayload = (formData, isPublished) => ({
+  ...formData,
+  min_salary: numberOrEmpty(formData.min_salary),
+  max_salary: numberOrEmpty(formData.max_salary),
+  experience_min: numberOrEmpty(formData.experience_min),
+  experience_max: numberOrEmpty(formData.experience_max),
+  openings: numberOrEmpty(formData.openings),
+  is_published: isPublished,
+});
+
+const toQuestionPayload = (question, index) => {
+  const payload = {
+    question_text: question.question_text,
+    question_type: question.question_type,
+    is_required: question.is_required,
+    order_number: index + 1,
+  };
+
+  if (choiceQuestionTypes.includes(question.question_type)) {
+    payload.options = question.optionsText
+      .split("\n")
+      .map((option) => option.trim())
+      .filter(Boolean)
+      .map((option_text, optionIndex) => ({
+        option_text,
+        order_number: optionIndex + 1,
+      }));
+  }
+
+  return payload;
+};
 
 const CreateJobListing = () => {
+  const navigate = useNavigate();
+  const locationRef = useRef(null);
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const user = useAuthStore((state) => state.user);
+  const { createCompanyJob, createJobQuestion, isSaving, error, clearError } =
+    useCompanyStore();
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState({
-    jobTitle: "",
-    jobType: "Full-time",
-    location: "",
-    salaryMin: "",
-    salaryMax: "",
-    description: "",
-    skillInput: "",
-  });
+  const [formData, setFormData] = useState(emptyJobForm);
+  const [questions, setQuestions] = useState([]);
+  const [questionDraft, setQuestionDraft] = useState(emptyQuestion);
+  const [locationSearch, setLocationSearch] = useState("");
+  const [locationResults, setLocationResults] = useState([]);
+  const [isSearchingLocations, setIsSearchingLocations] = useState(false);
+  const [showLocationDropdown, setShowLocationDropdown] = useState(false);
+  const [formError, setFormError] = useState("");
 
-  const [skills, setSkills] = useState([
-    { id: 1, name: "React.js" },
-    { id: 2, name: "Tailwind CSS" },
-  ]);
+  useEffect(() => {
+    if (locationSearch.trim().length < 2 || formData.location_id) {
+      return undefined;
+    }
 
-  // Requirements State
-  const [customQuestions, setCustomQuestions] = useState([]);
-  const [questionInput, setQuestionInput] = useState("");
-  const [questionSuggestions] = useState([
-    "Why should we hire you?",
-    "What are your salary expectations?",
-    "Are you willing to relocate?",
-    "What is your notice period?",
-    "Do you have experience working remotely?",
-    "Describe a challenging project you handled.",
-    "What are your long-term career goals?",
-    "Why are you leaving your current job?",
-  ]);
+    const timer = setTimeout(async () => {
+      setIsSearchingLocations(true);
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/locations?search=${encodeURIComponent(locationSearch.trim())}`,
+        );
+        const payload = await response.json();
+        setLocationResults(getLocationList(payload));
+      } catch {
+        setLocationResults([]);
+      } finally {
+        setIsSearchingLocations(false);
+      }
+    }, 300);
 
-  const [showSuggestions, setShowSuggestions] = useState(false);
+    return () => clearTimeout(timer);
+  }, [locationSearch, formData.location_id]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (locationRef.current && !locationRef.current.contains(event.target)) {
+        setShowLocationDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleInputChange = (event) => {
+    const { name, value, checked, type } = event.target;
+    clearError();
+    setFormError("");
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
-  const handleAddSkill = () => {
-    if (formData.skillInput.trim()) {
-      const newSkill = {
-        id: Date.now(),
-        name: formData.skillInput.trim(),
-      };
-      setSkills((prev) => [...prev, newSkill]);
-      setFormData((prev) => ({ ...prev, skillInput: "" }));
+  const handleQuestionChange = (event) => {
+    const { name, value, checked, type } = event.target;
+    setFormError("");
+    setQuestionDraft((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleLocationSearchChange = (event) => {
+    const { value } = event.target;
+    clearError();
+    setFormError("");
+    setLocationSearch(value);
+    setShowLocationDropdown(value.trim().length >= 2);
+    setFormData((prev) => ({
+      ...prev,
+      location_id: "",
+      job_location: value,
+      city: "",
+      state: "",
+    }));
+
+    if (value.trim().length < 2) {
+      setLocationResults([]);
     }
   };
 
-  const handleRemoveSkill = (skillId) => {
-    setSkills((prev) => prev.filter((skill) => skill.id !== skillId));
+  const handleLocationSelect = (location) => {
+    const label = getLocationLabel(location);
+    setLocationSearch(label);
+    setLocationResults([]);
+    setShowLocationDropdown(false);
+    setFormData((prev) => ({
+      ...prev,
+      location_id: location.id,
+      job_location: label,
+      city: location.city || prev.city,
+      state: location.state || prev.state,
+      country: location.country || prev.country,
+    }));
   };
 
-  // Question Functionalities
-  const handleAddQuestion = (questionText) => {
-    const text = questionText.trim() || questionInput.trim();
+  const validateJob = () => {
+    const requiredFields = [
+      ["job_title", "Job title is required."],
+      ["job_type", "Job type is required."],
+      ["work_mode", "Work mode is required."],
+      ["location_id", "Please select a location from the dropdown."],
+      ["full_description", "Full description is required."],
+      ["application_deadline", "Application deadline is required."],
+    ];
+
+    const missing = requiredFields.find(([field]) => !String(formData[field] || "").trim());
+    if (missing) {
+      setFormError(missing[1]);
+      return false;
+    }
+
     if (
-      text &&
-      !customQuestions.some(
-        (q) => q.question.toLowerCase() === text.toLowerCase(),
-      )
+      formData.min_salary !== "" &&
+      formData.max_salary !== "" &&
+      Number(formData.min_salary) > Number(formData.max_salary)
     ) {
-      setCustomQuestions((prev) => [
-        ...prev,
-        { id: Date.now(), question: text },
-      ]);
-      setQuestionInput("");
-      setShowSuggestions(false);
+      setFormError("Minimum salary cannot be greater than maximum salary.");
+      return false;
     }
-  };
 
-  const handleRemoveQuestion = (id) => {
-    setCustomQuestions((prev) => prev.filter((q) => q.id !== id));
-  };
-
-  const handleNext = () => {
-    if (currentStep < 2) {
-      setCurrentStep((prev) => prev + 1);
+    if (
+      formData.experience_min !== "" &&
+      formData.experience_max !== "" &&
+      Number(formData.experience_min) > Number(formData.experience_max)
+    ) {
+      setFormError("Minimum experience cannot be greater than maximum experience.");
+      return false;
     }
+
+    return true;
   };
 
-  const handleBack = () => {
-    if (currentStep > 1) {
-      setCurrentStep((prev) => prev - 1);
+  const handleAddQuestion = () => {
+    const text = questionDraft.question_text.trim();
+    if (!text) {
+      setFormError("Question text is required.");
+      return;
     }
+
+    if (choiceQuestionTypes.includes(questionDraft.question_type)) {
+      const options = questionDraft.optionsText
+        .split("\n")
+        .map((option) => option.trim())
+        .filter(Boolean);
+
+      if (options.length < 2) {
+        setFormError("Single and multiple choice questions need at least 2 options.");
+        return;
+      }
+    }
+
+    setQuestions((prev) => [...prev, { ...questionDraft, id: Date.now() }]);
+    setQuestionDraft(emptyQuestion);
   };
 
-  const handleSaveDraft = () => {
-    const dataToSave = { ...formData, skills, customQuestions };
-    console.log("Saving draft:", dataToSave);
-    alert("Draft saved successfully!");
+  const handleRemoveQuestion = (questionId) => {
+    setQuestions((prev) => prev.filter((question) => question.id !== questionId));
   };
 
-  const handlePublish = () => {
-    const dataToPublish = { ...formData, skills, customQuestions };
-    console.log("Publishing job:", dataToPublish);
-    alert("Job Published successfully!");
+  const handleSubmit = async (isPublished) => {
+    if (!accessToken) {
+      setFormError("Session expired. Please sign in again.");
+      return;
+    }
+
+    if (!hasRequiredAccountName(user)) {
+      setFormError("Please add your first and last name in Security settings before posting a job.");
+      navigate("/company/settings/security");
+      return;
+    }
+
+    if (!validateJob()) {
+      setCurrentStep(1);
+      return;
+    }
+
+    clearError();
+    setFormError("");
+
+    try {
+      const payload = await createCompanyJob(toJobPayload(formData, isPublished), accessToken);
+      const job = payload?.data?.job;
+
+      if (job?.id) {
+        for (const [index, question] of questions.entries()) {
+          await createJobQuestion(job.id, toQuestionPayload(question, index), accessToken);
+        }
+      }
+
+      navigate("/company/jobs");
+    } catch (submitError) {
+      if (submitError.code === "COMPANY_NOT_APPROVED") {
+        setFormError(
+          "Your company profile is pending admin approval. Save this as a draft until publishing is enabled.",
+        );
+      }
+    }
   };
 
   return (
-    <div className="flex-1">
-      <main className="overflow-y-auto p-8">
-        <div className="mx-auto max-w-4xl">
-          {/* Header */}
-          <div className="mb-10">
-            <h1 className="mb-2 font-headline text-4xl font-extrabold tracking-tight text-slate-800">
-              Create New Job Listing
-            </h1>
-            <p className="text-slate-500">
-              Follow the steps to attract the best talent for your enterprise
-              team.
-            </p>
-          </div>
-
-          {/* Multi-Step Indicator */}
-          <div className="mb-12 flex items-center gap-4">
-            <div
-              className="group flex cursor-pointer items-center gap-2"
-              onClick={() => setCurrentStep(1)}
+    <div className="mx-auto w-full max-w-5xl px-4 py-6 md:px-8 md:py-8">
+      <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#8500FA]">
+            New job
+          </p>
+          <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-[#111114] md:text-3xl">
+            Post a job
+          </h1>
+        </div>
+        <div className="flex rounded-[8px] border border-[#E7DDD6] bg-white p-1">
+          {[1, 2].map((step) => (
+            <button
+              key={step}
+              onClick={() => setCurrentStep(step)}
+              className={`rounded-[8px] px-3 py-2 text-sm font-bold transition-colors ${
+                currentStep === step
+                  ? "bg-[#111114] text-white"
+                  : "text-[#4F4D55] hover:bg-[#F7F5F2]"
+              }`}
+              type="button"
             >
-              <div
-                className={`flex h-10 w-10 items-center justify-center rounded-full font-bold transition-colors ${
-                  currentStep >= 1
-                    ? "bg-orange-600 text-white"
-                    : "bg-slate-100 text-slate-500"
-                }`}
-              >
-                1
-              </div>
-              <span
-                className={`font-semibold transition-colors ${
-                  currentStep >= 1 ? "text-slate-800" : "text-slate-500"
-                }`}
-              >
-                Job Details
-              </span>
-            </div>
-            <div className="h-px flex-1 bg-slate-200"></div>
-            <div
-              className="group flex cursor-pointer items-center gap-2"
-              onClick={() => setCurrentStep(2)}
-            >
-              <div
-                className={`flex h-10 w-10 items-center justify-center rounded-full font-bold transition-colors ${
-                  currentStep >= 2
-                    ? "bg-orange-600 text-white"
-                    : "bg-slate-100 text-slate-500"
-                }`}
-              >
-                2
-              </div>
-              <span
-                className={`font-medium transition-colors ${
-                  currentStep >= 2 ? "text-slate-800" : "text-slate-500"
-                }`}
-              >
-                Requirements
-              </span>
-            </div>
-          </div>
+              {step === 1 ? "Role" : "Screening"}
+            </button>
+          ))}
+        </div>
+      </div>
 
-          {/* Form Card */}
-          <div className="space-y-10 rounded border border-slate-200 bg-white p-8 shadow-sm">
-            {/* STEP 1: Job Details */}
-            {currentStep === 1 && (
-              <>
-                <section className="space-y-6">
-                  <div>
-                    <label
-                      className="mb-2 block text-sm font-bold uppercase tracking-wider text-slate-400"
-                      htmlFor="jobTitle"
-                    >
-                      Job Title
-                    </label>
-                    <input
-                      id="jobTitle"
-                      name="jobTitle"
-                      value={formData.jobTitle}
-                      onChange={handleInputChange}
-                      className="w-full rounded border border-slate-300 bg-slate-50 p-4 text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
-                      placeholder="e.g. Senior Frontend Architect"
-                      type="text"
-                    />
-                  </div>
+      {(formError || error) && (
+        <div className="mb-4 rounded-[8px] border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
+          {formError || error}
+        </div>
+      )}
 
-                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                    <div>
-                      <label
-                        className="mb-2 block text-sm font-bold uppercase tracking-wider text-slate-400"
-                        htmlFor="jobType"
+      <section className="rounded-[8px] border border-[#E7DDD6] bg-white p-5 md:p-6">
+        {currentStep === 1 ? (
+          <div className="space-y-5">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <Field label="Job title">
+                <input
+                  name="job_title"
+                  value={formData.job_title}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                  placeholder="React Developer Intern"
+                  type="text"
+                />
+              </Field>
+              <div ref={locationRef} className="relative">
+                <Field label="City / location">
+                  <input
+                    value={locationSearch}
+                    onChange={handleLocationSearchChange}
+                    onFocus={() =>
+                      locationSearch.trim().length >= 2 && setShowLocationDropdown(true)
+                    }
+                    className={inputClass}
+                    placeholder="Search city"
+                    type="text"
+                  />
+                </Field>
+                {isSearchingLocations && (
+                  <span className="absolute right-3 top-10 text-xs font-semibold text-[#77737D]">
+                    Searching
+                  </span>
+                )}
+                {showLocationDropdown && locationResults.length > 0 && (
+                  <ul className="absolute z-20 mt-1 max-h-48 w-full overflow-y-auto rounded-[8px] border border-[#E7DDD6] bg-white shadow-[0_18px_45px_rgba(17,17,20,0.08)]">
+                    {locationResults.map((location) => (
+                      <li
+                        key={location.id}
+                        onMouseDown={() => handleLocationSelect(location)}
+                        className="cursor-pointer px-4 py-2 text-sm font-semibold text-[#4F4D55] hover:bg-[#F7F5F2]"
                       >
-                        Job Type
-                      </label>
-                      <div className="relative">
-                        <select
-                          id="jobType"
-                          name="jobType"
-                          value={formData.jobType}
-                          onChange={handleInputChange}
-                          className="w-full appearance-none rounded border border-slate-300 bg-slate-50 p-4 pr-10 text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
-                        >
-                          <option>Full-time</option>
-                          <option>Contract</option>
-                          <option>Part-time</option>
-                          <option>Freelance</option>
-                        </select>
-                        <span className="material-symbols-outlined pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">
-                          expand_more
-                        </span>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label
-                        className="mb-2 block text-sm font-bold uppercase tracking-wider text-slate-400"
-                        htmlFor="location"
-                      >
-                        Location
-                      </label>
-                      <div className="relative">
-                        <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                          location_on
-                        </span>
-                        <input
-                          id="location"
-                          name="location"
-                          value={formData.location}
-                          onChange={handleInputChange}
-                          className="w-full rounded border border-slate-300 bg-slate-50 p-4 pl-12 text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
-                          placeholder="San Francisco, CA (or Remote)"
-                          type="text"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <section className="space-y-6">
-                  <div>
-                    <label className="mb-2 block text-sm font-bold uppercase tracking-wider text-slate-400">
-                      Salary Range (Annual)
-                    </label>
-                    <div className="flex items-center gap-4">
-                      <div className="relative flex-1">
-                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">
-                          ${" "}
-                        </span>
-                        <input
-                          name="salaryMin"
-                          value={formData.salaryMin}
-                          onChange={handleInputChange}
-                          className="w-full rounded border border-slate-300 bg-slate-50 p-4 pl-8 text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
-                          placeholder="80,000"
-                          type="number"
-                        />
-                      </div>
-                      <span className="font-medium text-slate-500">to</span>
-                      <div className="relative flex-1">
-                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">
-                          ${" "}
-                        </span>
-                        <input
-                          name="salaryMax"
-                          value={formData.salaryMax}
-                          onChange={handleInputChange}
-                          className="w-full rounded border border-slate-300 bg-slate-50 p-4 pl-8 text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
-                          placeholder="120,000"
-                          type="number"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="mb-2 block text-sm font-bold uppercase tracking-wider text-slate-400">
-                      Job Description
-                    </label>
-                    <div className="overflow-hidden rounded border border-slate-200 bg-white transition focus-within:border-orange-400 focus-within:ring-1 focus-within:ring-orange-400">
-                      <div className="flex items-center gap-2 border-b border-slate-200 bg-slate-50 p-2">
-                        <button
-                          className="rounded p-2 text-slate-500 transition-colors hover:bg-white hover:text-orange-600"
-                          type="button"
-                        >
-                          <span className="material-symbols-outlined">
-                            format_bold
-                          </span>
-                        </button>
-                        <button
-                          className="rounded p-2 text-slate-500 transition-colors hover:bg-white hover:text-orange-600"
-                          type="button"
-                        >
-                          <span className="material-symbols-outlined">
-                            format_italic
-                          </span>
-                        </button>
-                        <button
-                          className="rounded p-2 text-slate-500 transition-colors hover:bg-white hover:text-orange-600"
-                          type="button"
-                        >
-                          <span className="material-symbols-outlined">
-                            format_list_bulleted
-                          </span>
-                        </button>
-                        <button
-                          className="rounded p-2 text-slate-500 transition-colors hover:bg-white hover:text-orange-600"
-                          type="button"
-                        >
-                          <span className="material-symbols-outlined">
-                            link
-                          </span>
-                        </button>
-                        <div className="mx-1 h-6 w-px bg-slate-200"></div>
-                        <button
-                          className="rounded p-2 text-slate-500 transition-colors hover:bg-white hover:text-orange-600"
-                          type="button"
-                        >
-                          <span className="material-symbols-outlined">
-                            image
-                          </span>
-                        </button>
-                      </div>
-                      <textarea
-                        name="description"
-                        value={formData.description}
-                        onChange={handleInputChange}
-                        className="w-full border-none p-4 text-sm text-slate-700 outline-none focus:ring-0"
-                        placeholder="Describe the role, responsibilities, and team culture..."
-                        rows="8"
-                      />
-                    </div>
-                  </div>
-                </section>
-
-                <section className="space-y-4">
-                  <div>
-                    <label className="mb-2 block text-sm font-bold uppercase tracking-wider text-slate-400">
-                      Required Skills
-                    </label>
-                    <div className="relative">
-                      <input
-                        name="skillInput"
-                        value={formData.skillInput}
-                        onChange={handleInputChange}
-                        onKeyPress={(e) =>
-                          e.key === "Enter" &&
-                          (e.preventDefault(), handleAddSkill())
-                        }
-                        className="w-full rounded border border-slate-300 bg-slate-50 p-4 pr-20 text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
-                        placeholder="Add a skill (e.g. React, Python, Figma)"
-                        type="text"
-                      />
-                      <button
-                        onClick={handleAddSkill}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 rounded bg-orange-600 px-4 py-1.5 text-sm font-bold text-white transition-opacity hover:bg-orange-700"
-                        type="button"
-                      >
-                        Add
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {skills.map((skill) => (
-                      <span
-                        key={skill.id}
-                        className="flex items-center gap-2 rounded bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-700"
-                      >
-                        {skill.name}
-                        <button
-                          onClick={() => handleRemoveSkill(skill.id)}
-                          className="material-symbols-outlined text-sm text-slate-400 hover:text-slate-600"
-                          type="button"
-                        >
-                          close
-                        </button>
-                      </span>
+                        {getLocationLabel(location)}
+                      </li>
                     ))}
-                  </div>
-                </section>
-              </>
+                  </ul>
+                )}
+              </div>
+              <Field label="Job type">
+                <select
+                  name="job_type"
+                  value={formData.job_type}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                >
+                  {jobTypeOptions.map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <Field label="Work mode">
+                <select
+                  name="work_mode"
+                  value={formData.work_mode}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                >
+                  {workModeOptions.map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <Field label="Readable location">
+                <input
+                  name="job_location"
+                  value={formData.job_location}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                  placeholder="Pune, Maharashtra, India"
+                  type="text"
+                />
+              </Field>
+              <Field label="Application deadline">
+                <input
+                  name="application_deadline"
+                  value={formData.application_deadline}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                  type="date"
+                />
+              </Field>
+              <Field label="City">
+                <input name="city" value={formData.city} onChange={handleInputChange} className={inputClass} />
+              </Field>
+              <Field label="State">
+                <input name="state" value={formData.state} onChange={handleInputChange} className={inputClass} />
+              </Field>
+              <Field label="Country">
+                <input
+                  name="country"
+                  value={formData.country}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                />
+              </Field>
+              <Field label="Openings">
+                <input
+                  name="openings"
+                  value={formData.openings}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                  min="1"
+                  type="number"
+                />
+              </Field>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+              <Field label="Salary from">
+                <input
+                  name="min_salary"
+                  value={formData.min_salary}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                  type="number"
+                />
+              </Field>
+              <Field label="Salary to">
+                <input
+                  name="max_salary"
+                  value={formData.max_salary}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                  type="number"
+                />
+              </Field>
+              <Field label="Currency">
+                <input
+                  name="salary_currency"
+                  value={formData.salary_currency}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                />
+              </Field>
+              <Field label="Salary type">
+                <select
+                  name="salary_type"
+                  value={formData.salary_type}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                >
+                  {salaryTypeOptions.map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <Field label="Experience min">
+                <input
+                  name="experience_min"
+                  value={formData.experience_min}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                  type="number"
+                />
+              </Field>
+              <Field label="Experience max">
+                <input
+                  name="experience_max"
+                  value={formData.experience_max}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                  type="number"
+                />
+              </Field>
+              <Field label="Education">
+                <input
+                  name="education_required"
+                  value={formData.education_required}
+                  onChange={handleInputChange}
+                  className={inputClass}
+                  placeholder="Any graduate"
+                />
+              </Field>
+            </div>
+
+            <Field label="Short description">
+              <input
+                name="short_description"
+                value={formData.short_description}
+                onChange={handleInputChange}
+                className={inputClass}
+                placeholder="Frontend internship for freshers with React basics."
+              />
+            </Field>
+
+            <Field label="Full description">
+              <textarea
+                name="full_description"
+                value={formData.full_description}
+                onChange={handleInputChange}
+                className={`${inputClass} min-h-32 resize-y leading-6`}
+                placeholder="Describe the role, team, expectations, and process."
+              />
+            </Field>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              <Field label="Responsibilities">
+                <textarea
+                  name="responsibilities"
+                  value={formData.responsibilities}
+                  onChange={handleInputChange}
+                  className={`${inputClass} min-h-28 resize-y leading-6`}
+                />
+              </Field>
+              <Field label="Requirements">
+                <textarea
+                  name="requirements"
+                  value={formData.requirements}
+                  onChange={handleInputChange}
+                  className={`${inputClass} min-h-28 resize-y leading-6`}
+                />
+              </Field>
+              <Field label="Benefits">
+                <textarea
+                  name="benefits"
+                  value={formData.benefits}
+                  onChange={handleInputChange}
+                  className={`${inputClass} min-h-28 resize-y leading-6`}
+                />
+              </Field>
+            </div>
+
+            <div className="flex flex-wrap gap-4">
+              <label className="flex items-center gap-2 text-sm font-semibold text-[#4F4D55]">
+                <input
+                  name="is_urgent"
+                  checked={formData.is_urgent}
+                  onChange={handleInputChange}
+                  className="h-4 w-4 accent-[#8500FA]"
+                  type="checkbox"
+                />
+                Urgent
+              </label>
+              <label className="flex items-center gap-2 text-sm font-semibold text-[#4F4D55]">
+                <input
+                  name="is_featured"
+                  checked={formData.is_featured}
+                  onChange={handleInputChange}
+                  className="h-4 w-4 accent-[#8500FA]"
+                  type="checkbox"
+                />
+                Featured
+              </label>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-5">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_180px_140px]">
+              <Field label="Question">
+                <input
+                  name="question_text"
+                  value={questionDraft.question_text}
+                  onChange={handleQuestionChange}
+                  className={inputClass}
+                  placeholder="Why are you interested in this role?"
+                />
+              </Field>
+              <Field label="Type">
+                <select
+                  name="question_type"
+                  value={questionDraft.question_type}
+                  onChange={handleQuestionChange}
+                  className={inputClass}
+                >
+                  {questionTypeOptions.map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <label className="flex items-end gap-2 pb-3 text-sm font-semibold text-[#4F4D55]">
+                <input
+                  name="is_required"
+                  checked={questionDraft.is_required}
+                  onChange={handleQuestionChange}
+                  className="h-4 w-4 accent-[#8500FA]"
+                  type="checkbox"
+                />
+                Required
+              </label>
+            </div>
+
+            {choiceQuestionTypes.includes(questionDraft.question_type) && (
+              <Field label="Options, one per line">
+                <textarea
+                  name="optionsText"
+                  value={questionDraft.optionsText}
+                  onChange={handleQuestionChange}
+                  className={`${inputClass} min-h-28 resize-y leading-6`}
+                  placeholder={"Diploma\nGraduate\nPost Graduate"}
+                />
+              </Field>
             )}
 
-            {/* STEP 2: Requirements & Custom Questions */}
-            {currentStep === 2 && (
-              <section className="space-y-8">
-                <div>
-                  <div className="mb-4 flex items-center justify-between">
-                    <label className="text-sm font-bold uppercase tracking-wider text-slate-400">
-                      Custom Application Questions
-                    </label>
-                    <span className="rounded bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">
-                      {customQuestions.length} Added
-                    </span>
-                  </div>
+            <button
+              onClick={handleAddQuestion}
+              className="rounded-[8px] bg-[#111114] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#2B2B31]"
+              type="button"
+            >
+              Add question
+            </button>
 
-                  <p className="mb-6 text-sm text-slate-500">
-                    Add specific questions for candidates to answer when
-                    applying. You can write your own or use our suggestions.
-                  </p>
-
-                  <div className="relative mb-6">
-                    <input
-                      type="text"
-                      value={questionInput}
-                      onChange={(e) => setQuestionInput(e.target.value)}
-                      onFocus={() => setShowSuggestions(true)}
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault();
-                          handleAddQuestion(questionInput);
-                        }
-                      }}
-                      className="w-full rounded border border-slate-300 bg-slate-50 p-4 pr-28 text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
-                      placeholder="Type a custom question..."
-                    />
-                    <div className="absolute right-3 top-1/2 flex -translate-y-1/2 gap-2">
-                      <button
-                        onClick={() => setShowSuggestions(!showSuggestions)}
-                        className="rounded border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 transition hover:bg-slate-50"
-                        type="button"
-                      >
-                        Suggest
-                      </button>
-                      <button
-                        onClick={() => handleAddQuestion(questionInput)}
-                        className="rounded bg-orange-600 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-orange-700"
-                        type="button"
-                      >
-                        Add
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Suggestions Dropdown */}
-                  {showSuggestions && (
-                    <div className="mb-8 rounded border border-slate-200 bg-white p-4 shadow-lg">
-                      <div className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400">
-                        <span className="material-symbols-outlined text-sm text-orange-500">
-                          auto_awesome
-                        </span>
-                        Suggested Questions
-                      </div>
-                      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-                        {questionSuggestions.map((suggestion, index) => {
-                          const isAdded = customQuestions.some(
-                            (q) =>
-                              q.question.toLowerCase() ===
-                              suggestion.toLowerCase(),
-                          );
-                          return (
-                            <button
-                              key={index}
-                              onClick={() =>
-                                !isAdded && handleAddQuestion(suggestion)
-                              }
-                              disabled={isAdded}
-                              className={`flex items-center gap-3 rounded border p-3 text-left text-sm transition ${
-                                isAdded
-                                  ? "cursor-not-allowed border-green-100 bg-green-50 text-green-600"
-                                  : "border-slate-100 bg-slate-50 text-slate-700 hover:border-orange-200 hover:bg-orange-50"
-                              }`}
-                              type="button"
-                            >
-                              {isAdded ? (
-                                <span className="material-symbols-outlined text-base text-green-500">
-                                  check_circle
-                                </span>
-                              ) : (
-                                <span className="material-symbols-outlined text-base text-slate-400">
-                                  add_circle_outline
-                                </span>
-                              )}
-                              <span className="font-medium">{suggestion}</span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Added Questions List */}
-                  {customQuestions.length > 0 && (
-                    <div className="space-y-3">
-                      <h4 className="text-sm font-bold text-slate-700">
-                        Added Questions:
-                      </h4>
-                      {customQuestions.map((q, index) => (
-                        <div
-                          key={q.id}
-                          className="group flex items-center justify-between rounded border border-slate-200 bg-white p-4 shadow-sm transition hover:border-slate-300"
-                        >
-                          <div className="flex items-center gap-4">
-                            <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-orange-50 text-sm font-bold text-orange-600">
-                              {index + 1}
-                            </span>
-                            <p className="text-sm font-medium text-slate-800">
-                              {q.question}
-                            </p>
-                          </div>
-                          <button
-                            onClick={() => handleRemoveQuestion(q.id)}
-                            className="rounded p-2 text-slate-400 opacity-0 transition group-hover:opacity-100 hover:bg-red-50 hover:text-red-500"
-                            type="button"
-                          >
-                            <span className="material-symbols-outlined text-lg">
-                              delete
-                            </span>
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {customQuestions.length === 0 && !showSuggestions && (
-                    <div className="flex flex-col items-center justify-center rounded border-2 border-dashed border-slate-200 py-12 text-center">
-                      <span className="material-symbols-outlined mb-3 text-4xl text-slate-300">
-                        quiz
-                      </span>
-                      <p className="font-semibold text-slate-500">
-                        No custom questions added yet
-                      </p>
-                      <p className="mt-1 text-sm text-slate-400">
-                        Click 'Suggest' to see common questions or type your
-                        own.
-                      </p>
-                    </div>
-                  )}
+            <div className="space-y-2">
+              {questions.length === 0 ? (
+                <div className="rounded-[8px] border border-dashed border-[#D9CDC5] bg-[#FDFBF9] p-5 text-sm font-semibold text-[#77737D]">
+                  Screening questions are optional.
                 </div>
-              </section>
-            )}
+              ) : (
+                questions.map((question, index) => (
+                  <div
+                    key={question.id}
+                    className="flex items-start justify-between gap-3 rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] p-4"
+                  >
+                    <div>
+                      <p className="text-sm font-semibold text-[#111114]">
+                        {index + 1}. {question.question_text}
+                      </p>
+                      <p className="mt-1 text-xs font-semibold text-[#77737D]">
+                        {questionTypeOptions.find(([value]) => value === question.question_type)?.[1]}
+                        {question.is_required ? " - Required" : ""}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleRemoveQuestion(question.id)}
+                      className="material-symbols-outlined text-[18px] text-[#8A8690] hover:text-red-600"
+                      type="button"
+                      aria-label="Remove question"
+                    >
+                      delete
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        )}
 
-            {/* Footer Actions */}
-            <div className="flex items-center justify-between border-t border-slate-200 pt-10">
+        <div className="mt-6 flex flex-col-reverse justify-between gap-3 border-t border-[#EFE7E1] pt-5 sm:flex-row sm:items-center">
+          <button
+            onClick={() => handleSubmit(false)}
+            disabled={isSaving}
+            className="rounded-[8px] border border-[#E7DDD6] bg-white px-4 py-2.5 text-sm font-bold text-[#4F4D55] transition-colors hover:bg-[#F7F5F2] disabled:opacity-60"
+            type="button"
+          >
+            {isSaving ? "Saving..." : "Save draft"}
+          </button>
+          <div className="flex gap-2">
+            {currentStep === 2 && (
               <button
-                onClick={handleSaveDraft}
-                className="px-6 py-3 font-bold text-slate-500 transition-colors hover:text-slate-800"
+                onClick={() => setCurrentStep(1)}
+                className="rounded-[8px] border border-[#E7DDD6] bg-white px-4 py-2.5 text-sm font-bold text-[#4F4D55] transition-colors hover:bg-[#F7F5F2]"
                 type="button"
               >
-                Save as Draft
+                Back
               </button>
-              <div className="flex gap-4">
-                {currentStep > 1 && (
-                  <button
-                    onClick={handleBack}
-                    className="rounded border border-slate-300 bg-white px-8 py-3 font-bold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 hover:shadow-md"
-                    type="button"
-                  >
-                    Back
-                  </button>
-                )}
-                {currentStep < 2 ? (
-                  <button
-                    onClick={handleNext}
-                    className="flex items-center gap-2 rounded bg-orange-600 px-10 py-3 font-bold text-white shadow-lg transition-transform hover:scale-[1.02] hover:bg-orange-700"
-                    type="button"
-                  >
-                    Next Step
-                    <span className="material-symbols-outlined">
-                      arrow_forward
-                    </span>
-                  </button>
-                ) : (
-                  <button
-                    onClick={handlePublish}
-                    className="flex items-center gap-2 rounded bg-orange-600 px-10 py-3 font-bold text-white shadow-lg transition-transform hover:scale-[1.02] hover:bg-orange-700"
-                    type="button"
-                  >
-                    Publish Job
-                    <span className="material-symbols-outlined">send</span>
-                  </button>
-                )}
-              </div>
-            </div>
+            )}
+            {currentStep === 1 ? (
+              <button
+                onClick={() => {
+                  if (validateJob()) setCurrentStep(2);
+                }}
+                className="rounded-[8px] bg-[#FF6B35] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#E85F2F]"
+                type="button"
+              >
+                Continue
+              </button>
+            ) : (
+              <button
+                onClick={() => handleSubmit(true)}
+                disabled={isSaving}
+                className="rounded-[8px] bg-[#FF6B35] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#E85F2F] disabled:opacity-60"
+                type="button"
+              >
+                {isSaving ? "Publishing..." : "Publish job"}
+              </button>
+            )}
           </div>
-
-          {/* Tips / Sidebar Content */}
-          {currentStep === 1 && (
-            <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
-              <div className="rounded border border-slate-200 bg-orange-50/50 p-6">
-                <div className="mb-3 flex items-center gap-3">
-                  <span className="material-symbols-outlined text-orange-600">
-                    lightbulb
-                  </span>
-                  <h3 className="font-bold text-slate-800">Writing Tips</h3>
-                </div>
-                <p className="text-sm leading-relaxed text-slate-600">
-                  Clearly define the first 90 days. Candidates love knowing
-                  exactly what success looks like in a new role.
-                </p>
-              </div>
-              <div className="rounded border border-slate-200 bg-slate-50 p-6">
-                <div className="mb-3 flex items-center gap-3">
-                  <span className="material-symbols-outlined text-orange-600">
-                    auto_awesome
-                  </span>
-                  <h3 className="font-bold text-slate-800">AI Optimizer</h3>
-                </div>
-                <p className="text-sm leading-relaxed text-slate-600">
-                  Your description has a high readability score! Consider adding
-                  more specific technical milestones.
-                </p>
-              </div>
-            </div>
-          )}
         </div>
-      </main>
+      </section>
     </div>
   );
 };
+
+const inputClass =
+  "w-full rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] px-4 py-3 text-sm font-semibold text-[#111114] outline-none transition focus:border-[#8500FA] focus:bg-white";
+
+const Field = ({ label, children }) => (
+  <label className="block">
+    <span className="mb-2 block text-xs font-bold uppercase tracking-[0.08em] text-[#77737D]">
+      {label}
+    </span>
+    {children}
+  </label>
+);
 
 export default CreateJobListing;

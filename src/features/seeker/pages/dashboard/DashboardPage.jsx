@@ -27,7 +27,7 @@ const DashboardPage = () => {
       {/* Greeting */}
       <div className="mb-6">
         <h1 className="text-3xl font-bold">Good Morning, Yogesh 👋</h1>
-        <p className="text-slate-500 mt-1">
+        <p className="text-[#6F6F76] mt-1">
           Track your applications, interviews and career progress.
         </p>
       </div>
@@ -37,13 +37,13 @@ const DashboardPage = () => {
         {stats.map((stat, index) => (
           <div
             key={index}
-            className="border border-slate-200 bg-white py-6 px-7 shadow-sm hover:shadow-md transition-all"
+            className="border border-[#EADFD9] bg-white py-6 px-7 shadow-sm hover:shadow-md transition-all"
           >
             <div
-              className={`flex h-11 w-11 items-center justify-center rounded-xl
+              className={`flex h-11 w-11 items-center justify-center rounded-[8px]
               ${
                 index === 0
-                  ? "bg-orange-100 text-orange-600"
+                  ? "bg-[#FFF1E9] text-[#FF6B35]"
                   : index === 1
                     ? "bg-blue-100 text-blue-600"
                     : index === 2
@@ -60,7 +60,7 @@ const DashboardPage = () => {
             <div className="mt-4 flex items-end justify-between">
               <div>
                 <h4 className="text-2xl font-bold">{stat.value}</h4>
-                <span className="text-sm text-slate-500">{stat.label}</span>
+                <span className="text-sm text-[#6F6F76]">{stat.label}</span>
               </div>
 
               <span
@@ -86,46 +86,46 @@ const DashboardPage = () => {
         {/* Left */}
         <div className="col-span-12 xl:col-span-8">
           {/* Profile Completion */}
-          <div className="border border-slate-200 bg-white px-6 pt-6 pb-6 shadow-sm">
+          <div className="border border-[#EADFD9] bg-white px-6 pt-6 pb-6 shadow-sm">
             <div className="mb-6 flex justify-between items-center">
               <h4 className="text-xl font-semibold">Profile Completion</h4>
-              <span className="font-medium text-orange-600">
+              <span className="font-medium text-[#FF6B35]">
                 {profileData.completion}% Complete
               </span>
             </div>
 
-            <div className="relative mb-6 h-4 w-full rounded-full bg-slate-200">
+            <div className="relative mb-6 h-4 w-full rounded-full bg-[#E6DAD2]">
               <div
-                className="absolute left-0 h-full rounded-full bg-orange-600"
+                className="absolute left-0 h-full rounded-full bg-[#FF6B35]"
                 style={{ width: `${profileData.completion}%` }}
               />
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div className="p-4 rounded bg-orange-50 border border-orange-100">
-                <p className="text-sm text-slate-500">Applications</p>
+              <div className="p-4 rounded bg-[#FFF7F3] border border-[#F3D3C4]">
+                <p className="text-sm text-[#6F6F76]">Applications</p>
                 <p className="text-lg font-bold">12 Pending</p>
               </div>
 
               <div className="p-4 rounded bg-blue-50 border border-blue-100">
-                <p className="text-sm text-slate-500">Interviews</p>
+                <p className="text-sm text-[#6F6F76]">Interviews</p>
                 <p className="text-lg font-bold">2 This Week</p>
               </div>
 
               <div className="p-4 rounded bg-purple-50 border border-purple-100">
-                <p className="text-sm text-slate-500">Messages</p>
+                <p className="text-sm text-[#6F6F76]">Messages</p>
                 <p className="text-lg font-bold">5 Unread</p>
               </div>
             </div>
           </div>
 
           {/* Applications */}
-          <div className="mt-6  border border-slate-200 bg-white px-6 pt-6 pb-3 shadow-sm">
+          <div className="mt-6  border border-[#EADFD9] bg-white px-6 pt-6 pb-3 shadow-sm">
             <div className="mb-6 flex justify-between items-center">
               <h4 className="text-xl font-semibold">Recent Applications</h4>
               <button
                 onClick={() => navigate("/seeker/dashboard/applications")}
-                className="text-sm font-medium text-orange-600 hover:underline"
+                className="text-sm font-medium text-[#FF6B35] hover:underline"
               >
                 View All
               </button>
@@ -135,7 +135,7 @@ const DashboardPage = () => {
               <div
                 key={key}
                 className={`grid grid-cols-4 items-center py-4 ${
-                  key !== 3 ? "border-b border-slate-100" : ""
+                  key !== 3 ? "border-b border-[#EFE7E1]" : ""
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -166,7 +166,7 @@ const DashboardPage = () => {
                   </span>
                 </div>
 
-                <div className="text-slate-500">{app.date}</div>
+                <div className="text-[#6F6F76]">{app.date}</div>
               </div>
             ))}
           </div>
@@ -175,8 +175,8 @@ const DashboardPage = () => {
         {/* Right */}
         <div className="col-span-12 xl:col-span-4">
           {/* Recommended Jobs */}
-          <div className="border border-slate-200 bg-white shadow-sm">
-            <div className="border-b border-slate-300 px-6 py-4">
+          <div className="border border-[#EADFD9] bg-white shadow-sm">
+            <div className="border-b border-[#D8C9C0] px-6 py-4">
               <h3 className="font-semibold">Recommended Jobs</h3>
             </div>
 
@@ -184,7 +184,7 @@ const DashboardPage = () => {
               {savedJobs.map((job, key) => (
                 <div
                   key={key}
-                  className="flex items-center gap-4 border-b border-slate-300 pb-4 last:border-0 hover:bg-slate-50  p-2 transition-all"
+                  className="flex items-center gap-4 border-b border-[#D8C9C0] pb-4 last:border-0 hover:bg-[#F7F5F2]  p-2 transition-all"
                 >
                   <img
                     src={job.logo}
@@ -194,37 +194,37 @@ const DashboardPage = () => {
 
                   <div className="flex-1">
                     <h5 className="font-medium">{job.title}</h5>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-[#6F6F76]">
                       {job.company} • {job.location}
                     </p>
                   </div>
 
-                  <button className="text-orange-600 hover:scale-110 transition">
+                  <button className="text-[#FF6B35] hover:scale-110 transition">
                     <FiExternalLink size={18} />
                   </button>
                 </div>
               ))}
 
-              <button className="w-full py-3 font-bold bg-orange-600 hover:bg-orange-700 text-white shadow-md transition-all">
+              <button className="w-full py-3 font-bold bg-[#FF6B35] hover:bg-[#FF9566] text-white shadow-md transition-all">
                 View More Jobs
               </button>
             </div>
           </div>
 
           {/* Activity */}
-          <div className="mt-6 border border-slate-200 bg-white shadow-sm">
-            <div className="border-b border-slate-300 px-6 py-4">
+          <div className="mt-6 border border-[#EADFD9] bg-white shadow-sm">
+            <div className="border-b border-[#D8C9C0] px-6 py-4">
               <h3 className="font-semibold">Recent Activity</h3>
             </div>
 
             <div className="p-6 space-y-6">
               <div className="flex gap-4">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-100 text-orange-600">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FFF1E9] text-[#FF6B35]">
                   <FiBriefcase size={18} />
                 </div>
                 <div>
                   <p className="text-sm font-medium">Applied to Google</p>
-                  <p className="text-xs text-slate-500">2 hours ago</p>
+                  <p className="text-xs text-[#6F6F76]">2 hours ago</p>
                 </div>
               </div>
 
@@ -236,7 +236,7 @@ const DashboardPage = () => {
                   <p className="text-sm font-medium">
                     Interview scheduled with Stripe
                   </p>
-                  <p className="text-xs text-slate-500">Yesterday</p>
+                  <p className="text-xs text-[#6F6F76]">Yesterday</p>
                 </div>
               </div>
 
@@ -248,7 +248,7 @@ const DashboardPage = () => {
                   <p className="text-sm font-medium">
                     Saved Frontend role at Spotify
                   </p>
-                  <p className="text-xs text-slate-500">3 days ago</p>
+                  <p className="text-xs text-[#6F6F76]">3 days ago</p>
                 </div>
               </div>
             </div>

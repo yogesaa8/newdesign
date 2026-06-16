@@ -6,20 +6,35 @@ import { useAuthStore } from "../../../store";
 const pickFirst = (...values) =>
   values.find((value) => typeof value === "string" && value.trim())?.trim();
 
+const pickName = (...values) =>
+  values
+    .find(
+      (value) =>
+        typeof value === "string" && value.trim() && !value.trim().includes("@")
+    )
+    ?.trim();
+
 const getCompanyProfile = (user) => {
   const company = user?.company ?? {};
   const profile = user?.profile ?? {};
+  const recruiterName = pickName(
+    [user?.first_name, user?.last_name].filter(Boolean).join(" "),
+    [profile?.first_name, profile?.last_name].filter(Boolean).join(" "),
+    profile?.full_name,
+    profile?.name,
+    user?.full_name,
+    user?.name,
+    company?.contact_person
+  );
   const name = pickFirst(
+    recruiterName,
     company?.company_name,
     company?.companyName,
     company?.name,
     user?.company_name,
     user?.companyName,
-    user?.name,
-    user?.full_name,
     profile?.company_name,
     profile?.companyName,
-    profile?.name,
     user?.email,
     "Company"
   );
@@ -76,112 +91,82 @@ const CompanyHeader = ({ sidebarOpen, setSidebarOpen }) => {
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white shadow-sm">
-      <div className="flex items-center justify-between gap-4 px-4 py-4 md:px-8">
-        {/* Desktop hamburger (To toggle desktop mini sidebar) */}
+    <header className="sticky top-0 z-40 border-b border-[#E7DDD6] bg-white/90 backdrop-blur-md">
+      <div className="flex items-center justify-between gap-4 px-4 py-3 md:px-8">
         <button
-          className="hidden rounded-lg p-2 text-slate-600 transition-colors hover:bg-slate-100 md:block"
+          className="rounded-[8px] border border-[#E7DDD6] bg-white p-2 text-[#4F4D55] transition-colors hover:bg-[#F7F5F2] md:hidden"
           onClick={() => setSidebarOpen(!sidebarOpen)}
           aria-label="Toggle sidebar"
         >
           <FiMenu size={20} />
         </button>
 
-        {/* Mobile hamburger (To toggle mobile full sidebar overlay) */}
-        <button
-          className="rounded-lg p-2 text-slate-600 transition-colors hover:bg-slate-100 md:hidden"
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          aria-label="Toggle sidebar"
-        >
-          <FiMenu size={20} />
-        </button>
-
-        {/* Search Bar */}
-        <div className="hidden max-w-md flex-1 items-center gap-4 sm:flex">
-          <div className="relative flex-1">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-              search
-            </span>
-            <input
-              type="text"
-              placeholder="Search resources..."
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-10 pr-4 text-sm text-slate-700 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
-            />
-          </div>
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-[#111114]">Employer workspace</p>
+          <p className="hidden text-xs text-[#77737D] sm:block">
+            Jobs, applicants, profile, and security.
+          </p>
         </div>
 
-        {/* Right Side Icons */}
-        <div className="ml-auto flex items-center gap-2 md:gap-4">
-          <button className="rounded-lg p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700">
-            <span className="material-symbols-outlined">notifications</span>
-          </button>
-          <button className="hidden rounded-lg p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700 sm:block">
-            <span className="material-symbols-outlined">chat_bubble</span>
-          </button>
-          <button className="hidden rounded-lg p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700 sm:block">
-            <span className="material-symbols-outlined">help</span>
-          </button>
-
-          {/* User Profile Dropdown */}
-          <div className="relative ml-2 md:ml-4" ref={profileRef}>
+        <div className="ml-auto flex items-center gap-2">
+          <div className="relative" ref={profileRef}>
             <button
               onClick={() => setIsProfileOpen(!isProfileOpen)}
-              className="flex items-center gap-3 rounded-lg border-l border-slate-200 pl-3 transition-colors hover:bg-slate-50 md:pl-4"
+              className="flex items-center gap-3 rounded-[8px] border border-[#E7DDD6] bg-white px-2 py-1.5 transition-colors hover:bg-[#F7F5F2] md:px-3"
             >
               <div className="hidden text-right lg:block">
-                <p className="text-sm font-semibold text-slate-800">
+                <p className="max-w-44 truncate text-sm font-semibold text-[#111114]">
                   {profile.name}
                 </p>
-                <p className="text-xs text-slate-500">{profile.role}</p>
+                <p className="text-xs text-[#77737D]">{profile.role}</p>
               </div>
               {profile.avatar ? (
                 <img
                   src={profile.avatar}
                   alt={profile.name}
-                  className="h-9 w-9 rounded-full border-2 border-white object-cover shadow-sm md:h-10 md:w-10"
+                  className="h-9 w-9 rounded-[8px] object-cover"
                 />
               ) : (
-                <span className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-white bg-orange-100 text-sm font-bold text-orange-700 shadow-sm md:h-10 md:w-10">
+                <span className="flex h-9 w-9 items-center justify-center rounded-[8px] bg-[#F1E7FF] text-sm font-bold text-[#8500FA]">
                   {profile.initial}
                 </span>
               )}
             </button>
 
-            {/* Dropdown Menu */}
             {isProfileOpen && (
-              <div className="absolute right-0 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
-                <div className="border-b border-slate-100 px-4 py-3 lg:hidden">
-                  <p className="text-sm font-semibold text-slate-800">
+              <div className="absolute right-0 mt-2 w-56 overflow-hidden rounded-[8px] border border-[#E7DDD6] bg-white shadow-[0_18px_45px_rgba(17,17,20,0.08)]">
+                <div className="border-b border-[#EFE7E1] px-4 py-3 lg:hidden">
+                  <p className="text-sm font-semibold text-[#111114]">
                     {profile.name}
                   </p>
-                  <p className="text-xs text-slate-500">{profile.email}</p>
+                  <p className="truncate text-xs text-[#77737D]">{profile.role}</p>
                 </div>
                 <div className="p-2">
                   <Link
                     to="/company/profile"
                     onClick={() => setIsProfileOpen(false)}
-                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-orange-600"
+                    className="flex w-full items-center gap-3 rounded-[8px] px-3 py-2.5 text-sm font-medium text-[#4F4D55] transition-colors hover:bg-[#F7F5F2] hover:text-[#111114]"
                   >
-                    <span className="material-symbols-outlined text-lg text-slate-400">
+                    <span className="material-symbols-outlined text-lg text-[#8A8690]">
                       person
                     </span>
-                    My Profile
+                    Company profile
                   </Link>
                   <Link
                     to="/company/settings/security"
                     onClick={() => setIsProfileOpen(false)}
-                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-orange-600"
+                    className="flex w-full items-center gap-3 rounded-[8px] px-3 py-2.5 text-sm font-medium text-[#4F4D55] transition-colors hover:bg-[#F7F5F2] hover:text-[#111114]"
                   >
-                    <span className="material-symbols-outlined text-lg text-slate-400">
+                    <span className="material-symbols-outlined text-lg text-[#8A8690]">
                       settings
                     </span>
                     Settings
                   </Link>
                 </div>
-                <div className="border-t border-slate-100 p-2">
+                <div className="border-t border-[#EFE7E1] p-2">
                   <button
                     onClick={handleLogout}
-                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-500 transition-colors hover:bg-red-50"
+                    className="flex w-full items-center gap-3 rounded-[8px] px-3 py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
                   >
                     <span className="material-symbols-outlined text-lg">
                       logout

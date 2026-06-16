@@ -1,12 +1,12 @@
 import React from "react";
 
-const AuthLayout = ({ children, title, subtitle, description }) => {
+const AuthLayout = ({ children }) => {
   return (
-    <div className="flex min-h-screen w-full bg-indigo-600 overflow-hidden">
+    <div className="flex min-h-screen w-full overflow-hidden bg-[#FFF7F3]">
       {/* Left Side: Branding & Info (Hidden on mobile) */}
-      <div className="hidden lg:flex w-1/2 flex-col justify-center px-16 xl:px-24 text-white relative">
+      <div className="relative hidden w-1/2 flex-col justify-center bg-[#F7F5F2] px-16 text-[#0A0A0A] lg:flex xl:px-24">
         <div className="absolute top-12 left-16 flex items-center gap-2">
-          <div className="bg-white/80 p-2 rounded-xl">
+          <div className="bg-white/80 p-2 rounded-[8px]">
             <img
               src="/images/logos/fji_orange.png"
               alt="FirstJobIndia"
@@ -15,7 +15,7 @@ const AuthLayout = ({ children, title, subtitle, description }) => {
           </div>
           <span className="text-2xl font-bold tracking-tight">
             <span>First</span>
-            <span className="text-orange-300">Job</span>
+            <span className="text-[#FF6B35]">Job</span>
             <span>India</span>
           </span>
         </div>
@@ -24,37 +24,33 @@ const AuthLayout = ({ children, title, subtitle, description }) => {
           <h1 className="text-6xl xl:text-7xl font-extrabold tracking-tight">
             Hey, Hello!
           </h1>
-          <h2 className="text-2xl font-semibold opacity-90">
+          <h2 className="text-2xl font-semibold text-[#0A0A0A]">
             Join The Waitlist For The Design System!
           </h2>
-          <p className="max-w-md text-lg opacity-70 leading-relaxed">
+          <p className="max-w-md text-lg leading-relaxed text-[#6F6F76]">
             We provide all the advantages that can simplify all your financial
             transactions without any further requirements
           </p>
         </div>
-
-        {/* Decorative elements */}
-        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
-        <div className="absolute top-40 right-0 w-64 h-64 bg-indigo-300/20 rounded-full blur-3xl"></div>
       </div>
 
       {/* Right Side: Auth Card Container */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center lg:justify-end bg-indigo-600">
-        <div className="w-full h-full lg:h-[95%] lg:rounded-l-[4rem] bg-white dark:bg-boxdark p-8 sm:p-12 xl:p-20 flex flex-col justify-center shadow-2xl relative">
+      <div className="flex w-full items-center justify-center bg-[#FFF7F3] lg:w-1/2 lg:justify-end">
+        <div className="relative flex h-full w-full flex-col justify-center bg-white p-8 shadow-2xl sm:p-12 lg:h-[95%] lg:rounded-l-[8px] xl:p-20">
           <div className="max-w-md mx-auto w-full">
             {/* Mobile Logo */}
             <div className="lg:hidden flex justify-center mb-8">
               <div className="flex items-center gap-2">
-                <div className="bg-indigo-600 p-2 rounded-xl shadow-lg shadow-indigo-600/20">
+                <div className="rounded-[8px] bg-[#FFF1E9] p-2 shadow-lg shadow-[#FF6B35]/10">
                   <img
                     src="/images/logos/fji_orange.png"
                     alt="FirstJobIndia"
                     className="h-6 w-6 object-contain"
                   />
                 </div>
-                <span className="text-indigo-600 text-2xl font-bold tracking-tight">
+                <span className="text-2xl font-bold tracking-tight text-[#0A0A0A]">
                   <span>First</span>
-                  <span className="text-orange-600">Job</span>
+                  <span className="text-[#FF6B35]">Job</span>
                   <span>India</span>
                 </span>
               </div>

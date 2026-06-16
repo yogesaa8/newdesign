@@ -43,7 +43,9 @@ const GoogleOAuthButton = ({
   const onCredentialRef = useRef(onCredential);
   const onErrorRef = useRef(onError);
   const disabledRef = useRef(disabled);
-  const [status, setStatus] = useState("loading");
+  const [status, setStatus] = useState(() =>
+    GOOGLE_CLIENT_ID ? "loading" : "missing-client-id",
+  );
 
   useEffect(() => {
     onCredentialRef.current = onCredential;
@@ -52,12 +54,11 @@ const GoogleOAuthButton = ({
   }, [disabled, onCredential, onError]);
 
   useEffect(() => {
-    let isMounted = true;
-
     if (!GOOGLE_CLIENT_ID) {
-      setStatus("missing-client-id");
       return undefined;
     }
+
+    let isMounted = true;
 
     loadGoogleIdentityScript()
       .then(() => {
@@ -102,7 +103,7 @@ const GoogleOAuthButton = ({
       <button
         type="button"
         disabled
-        className="flex w-full cursor-not-allowed items-center justify-center border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-400"
+        className="flex w-full cursor-not-allowed items-center justify-center rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2] px-4 py-3 text-sm font-semibold text-[#9F9FA9]"
       >
         Google Client ID missing
       </button>
@@ -114,7 +115,7 @@ const GoogleOAuthButton = ({
       <button
         type="button"
         disabled
-        className="flex w-full cursor-not-allowed items-center justify-center border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-400"
+        className="flex w-full cursor-not-allowed items-center justify-center rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2] px-4 py-3 text-sm font-semibold text-[#9F9FA9]"
       >
         Google sign-in unavailable
       </button>

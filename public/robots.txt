@@ -1,0 +1,101 @@
+User-agent: *
+Allow: /
+Disallow: /seeker/dashboard/
+Disallow: /seeker/login
+Disallow: /seeker/signup
+Disallow: /seeker/reset-password
+Disallow: /seeker/verify-otp
+Disallow: /company/
+Disallow: /admin/
+
+User-agent: Googlebot
+Allow: /
+Disallow: /seeker/dashboard/
+Disallow: /seeker/login
+Disallow: /seeker/signup
+Disallow: /seeker/reset-password
+Disallow: /seeker/verify-otp
+Disallow: /company/
+Disallow: /admin/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /seeker/dashboard/
+Disallow: /seeker/login
+Disallow: /seeker/signup
+Disallow: /seeker/reset-password
+Disallow: /seeker/verify-otp
+Disallow: /company/
+Disallow: /admin/
+
+User-agent: GPTBot
+Allow: /
+Disallow: /seeker/dashboard/
+Disallow: /seeker/login
+Disallow: /seeker/signup
+Disallow: /seeker/reset-password
+Disallow: /seeker/verify-otp
+Disallow: /company/
+Disallow: /admin/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /seeker/dashboard/
+Disallow: /seeker/login
+Disallow: /seeker/signup
+Disallow: /seeker/reset-password
+Disallow: /seeker/verify-otp
+Disallow: /company/
+Disallow: /admin/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /seeker/dashboard/
+Disallow: /seeker/login
+Disallow: /seeker/signup
+Disallow: /seeker/reset-password
+Disallow: /seeker/verify-otp
+Disallow: /company/
+Disallow: /admin/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /seeker/dashboard/
+Disallow: /seeker/login
+Disallow: /seeker/signup
+Disallow: /seeker/reset-password
+Disallow: /seeker/verify-otp
+Disallow: /company/
+Disallow: /admin/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /seeker/dashboard/
+Disallow: /seeker/login
+Disallow: /seeker/signup
+Disallow: /seeker/reset-password
+Disallow: /seeker/verify-otp
+Disallow: /company/
+Disallow: /admin/
+
+User-agent: CCBot
+Allow: /
+Disallow: /seeker/dashboard/
+Disallow: /seeker/login
+Disallow: /seeker/signup
+Disallow: /seeker/reset-password
+Disallow: /seeker/verify-otp
+Disallow: /company/
+Disallow: /admin/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /seeker/dashboard/
+Disallow: /seeker/login
+Disallow: /seeker/signup
+Disallow: /seeker/reset-password
+Disallow: /seeker/verify-otp
+Disallow: /company/
+Disallow: /admin/
+
+Sitemap: https://www.firstjobindia.in/sitemap.xml

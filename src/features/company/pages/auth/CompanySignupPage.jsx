@@ -1,8 +1,19 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowRight, CheckCircle } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { useAuthStore } from "../../../../store";
 import GoogleOAuthButton from "../../../../components/auth/GoogleOAuthButton";
+import {
+  AuthAlert,
+  AuthButton,
+  AuthDivider,
+  AuthFooterText,
+  AuthHeader,
+  AuthInput,
+  AuthSelect,
+  AuthShell,
+} from "../../../auth/AuthUI";
+import { authLinkClass } from "../../../auth/authConstants";
 
 const API_BASE_URL = (
   import.meta.env.VITE_API_BASE_URL ||
@@ -11,7 +22,6 @@ const API_BASE_URL = (
 
 const CompanySignupPage = () => {
   const navigate = useNavigate();
-
   const {
     isLoading,
     error: storeError,
@@ -25,7 +35,6 @@ const CompanySignupPage = () => {
 
   const [step, setStep] = useState(1);
   const [otpSent, setOtpSent] = useState(false);
-
   const [formData, setFormData] = useState({
     email: "",
     phone_no: "",
@@ -42,32 +51,30 @@ const CompanySignupPage = () => {
     contact_designation: "",
     agreeTerms: false,
   });
-
   const [errors, setErrors] = useState({});
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
   const [isSubmittingProfile, setIsSubmittingProfile] = useState(false);
-
-  // Location search state
   const [locationSearch, setLocationSearch] = useState("");
   const [locationResults, setLocationResults] = useState([]);
   const [isSearchingLocations, setIsSearchingLocations] = useState(false);
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   const locationRef = useRef(null);
 
-  // Debounced location search
   useEffect(() => {
     if (locationSearch.length < 2) {
-      setLocationResults([]);
-      return;
+      return undefined;
     }
 
     const timer = setTimeout(async () => {
       setIsSearchingLocations(true);
       try {
-        const res = await fetch(`${API_BASE_URL}/locations?search=${encodeURIComponent(locationSearch)}`);
+        const res = await fetch(
+          `${API_BASE_URL}/locations?search=${encodeURIComponent(locationSearch)}`,
+        );
         const data = await res.json();
-        const list = data?.data ?? data?.locations ?? (Array.isArray(data) ? data : []);
+        const list =
+          data?.data ?? data?.locations ?? (Array.isArray(data) ? data : []);
         setLocationResults(list);
       } catch {
         setLocationResults([]);
@@ -79,10 +86,9 @@ const CompanySignupPage = () => {
     return () => clearTimeout(timer);
   }, [locationSearch]);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (locationRef.current && !locationRef.current.contains(e.target)) {
+    const handleClickOutside = (event) => {
+      if (locationRef.current && !locationRef.current.contains(event.target)) {
         setShowLocationDropdown(false);
       }
     };
@@ -90,25 +96,23 @@ const CompanySignupPage = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const getPasswordStrength = (password) => {
-    if (!password) return { level: 0, text: "", color: "" };
+  const passwordStrength = (() => {
+    const password = formData.password;
+    if (!password) return { level: 0, text: "", className: "bg-[#EADFD9]" };
     let strength = 0;
-    if (password.length >= 8) strength++;
-    if (/[A-Z]/.test(password)) strength++;
-    if (/[0-9]/.test(password)) strength++;
-    if (/[^A-Za-z0-9]/.test(password)) strength++;
-    if (strength <= 1) return { level: 25, text: "Weak", color: "bg-red-500" };
-    if (strength === 2) return { level: 50, text: "Fair", color: "bg-yellow-500" };
-    if (strength === 3) return { level: 75, text: "Good", color: "bg-blue-500" };
-    return { level: 100, text: "Strong", color: "bg-emerald-500" };
-  };
+    if (password.length >= 8) strength += 1;
+    if (/[A-Z]/.test(password)) strength += 1;
+    if (/[0-9]/.test(password)) strength += 1;
+    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+    if (strength <= 1) return { level: 25, text: "Weak", className: "bg-red-500" };
+    if (strength === 2) return { level: 50, text: "Fair", className: "bg-yellow-500" };
+    if (strength === 3) return { level: 75, text: "Good", className: "bg-[#8500FA]" };
+    return { level: 100, text: "Strong", className: "bg-green-600" };
+  })();
 
-  const pwdStrength = getPasswordStrength(formData.password);
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const handleChange = (event) => {
+    const { name, value, type, checked } = event.target;
     clearError();
-
     setFormData((prev) => ({
       ...prev,
       [name]:
@@ -126,65 +130,68 @@ const CompanySignupPage = () => {
   };
 
   const handleLocationSelect = (loc) => {
-    const displayName = [loc.city, loc.state].filter(Boolean).join(", ") || loc.name || loc.id;
-    setFormData((prev) => ({ ...prev, location_id: loc.id, location_name: displayName }));
+    const displayName =
+      [loc.city, loc.state].filter(Boolean).join(", ") || loc.name || loc.id;
+    setFormData((prev) => ({
+      ...prev,
+      location_id: loc.id,
+      location_name: displayName,
+    }));
     setLocationSearch(displayName);
     setShowLocationDropdown(false);
     if (errors.location_id) setErrors((prev) => ({ ...prev, location_id: "" }));
   };
 
-  const handleLocationSearchChange = (e) => {
-    const val = e.target.value;
-    setLocationSearch(val);
+  const handleLocationSearchChange = (event) => {
+    const value = event.target.value;
+    setLocationSearch(value);
     setShowLocationDropdown(true);
-    if (!val) {
+    if (value.length < 2) {
+      setLocationResults([]);
+      setShowLocationDropdown(false);
+    }
+    if (!value) {
       setFormData((prev) => ({ ...prev, location_id: "", location_name: "" }));
     }
   };
 
   const validateRegisterFields = () => {
-    const newErrors = {};
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required.";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address.";
+    const nextErrors = {};
+    if (!formData.email.trim()) nextErrors.email = "Email is required.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      nextErrors.email = "Please enter a valid email address.";
     }
-    if (!formData.phone_no.trim()) {
-      newErrors.phone_no = "Phone number is required.";
-    } else if (formData.phone_no.length !== 10) {
-      newErrors.phone_no = "Phone number must be 10 digits.";
+    if (!formData.phone_no.trim()) nextErrors.phone_no = "Phone number is required.";
+    else if (formData.phone_no.length !== 10) {
+      nextErrors.phone_no = "Phone number must be 10 digits.";
     }
-    if (!formData.password) {
-      newErrors.password = "Password is required.";
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters.";
+    if (!formData.password) nextErrors.password = "Password is required.";
+    else if (formData.password.length < 8) {
+      nextErrors.password = "Password must be at least 8 characters.";
     }
     if (!formData.agreeTerms) {
-      newErrors.agreeTerms = "You must agree to the terms to continue.";
+      nextErrors.agreeTerms = "You must agree to the terms to continue.";
     }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
   };
 
   const validateOtp = () => {
-    const newErrors = {};
-    if (!formData.otp.trim()) {
-      newErrors.otp = "OTP is required.";
-    } else if (formData.otp.length !== 6) {
-      newErrors.otp = "OTP must be 6 digits.";
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    const nextErrors = {};
+    if (!formData.otp.trim()) nextErrors.otp = "OTP is required.";
+    else if (formData.otp.length !== 6) nextErrors.otp = "OTP must be 6 digits.";
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
   };
 
   const validateCompanyDetails = () => {
-    const newErrors = {};
-    if (!formData.company_name.trim()) newErrors.company_name = "Company name is required.";
-    if (!formData.industry.trim()) newErrors.industry = "Industry is required.";
-    if (!formData.company_size.trim()) newErrors.company_size = "Company size is required.";
-    if (!formData.location_id) newErrors.location_id = "Location is required.";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    const nextErrors = {};
+    if (!formData.company_name.trim()) nextErrors.company_name = "Company name is required.";
+    if (!formData.industry.trim()) nextErrors.industry = "Industry is required.";
+    if (!formData.company_size.trim()) nextErrors.company_size = "Company size is required.";
+    if (!formData.location_id) nextErrors.location_id = "Location is required.";
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
   };
 
   const handleSendOtp = async () => {
@@ -208,8 +215,8 @@ const CompanySignupPage = () => {
     }
   };
 
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
+  const handleVerifyOtp = async (event) => {
+    event.preventDefault();
     if (!otpSent) {
       setErrors({ otp: "Please send OTP first." });
       return;
@@ -227,8 +234,8 @@ const CompanySignupPage = () => {
     }
   };
 
-  const handleSubmitCompanyDetails = async (e) => {
-    e.preventDefault();
+  const handleSubmitCompanyDetails = async (event) => {
+    event.preventDefault();
     if (!validateCompanyDetails()) return;
     setIsSubmittingProfile(true);
     try {
@@ -241,7 +248,9 @@ const CompanySignupPage = () => {
       if (formData.gstin.trim()) payload.gstin = formData.gstin.trim();
       if (formData.website.trim()) payload.website = formData.website.trim();
       if (formData.contact_person.trim()) payload.contact_person = formData.contact_person.trim();
-      if (formData.contact_designation.trim()) payload.contact_designation = formData.contact_designation.trim();
+      if (formData.contact_designation.trim()) {
+        payload.contact_designation = formData.contact_designation.trim();
+      }
 
       await completeCompanyProfile(payload);
       setStep(3);
@@ -267,481 +276,296 @@ const CompanySignupPage = () => {
   const apiError = errors.api || storeError;
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-slate-50">
-      <div className="max-w-6xl w-full grid lg:grid-cols-2 gap-12 items-center">
-        <div className="hidden lg:block space-y-8">
-          <div>
-            <div className="flex items-center gap-2 font-bold mb-4">
-              <span className="px-3 py-1 rounded-full text-sm bg-indigo-100 font-medium">
-                <span className="text-indigo-600">First</span>
-                <span className="text-slate-800">Job</span>
-                <span className="text-indigo-600">India</span>
-              </span>
-            </div>
+    <AuthShell audience="company" mode="signup">
+      {step < 3 && (
+        <AuthHeader
+          eyebrow="Create employer account"
+          title={step === 1 ? "Verify your work email." : "Add company details."}
+          description={
+            step === 1
+              ? "Create a secure employer login before adding your hiring profile."
+              : "Accurate details help us keep fresher jobs verified and trustworthy."
+          }
+        />
+      )}
 
-            <h1 className="text-5xl font-extrabold tracking-tight leading-tight text-slate-900">
-              Scale your team with{" "}
-              <span className="text-indigo-600">Architectural Precision.</span>
-            </h1>
+      {apiError && step < 3 && <AuthAlert>{apiError}</AuthAlert>}
 
-            <p className="text-xl mt-6 max-w-md text-slate-600">
-              Join{" "}
-              <span className="text-emerald-500 font-semibold">2,500+</span>{" "}
-              enterprise teams using our portal to discover, interview, and hire
-              top-tier global talent.
-            </p>
-          </div>
+      {step === 1 && (
+        <form onSubmit={handleVerifyOtp} className="mt-6 space-y-5" noValidate>
+          <AuthInput
+            label="Work email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            error={errors.email}
+            autoComplete="email"
+          />
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-6 rounded shadow-sm bg-white border border-slate-200">
-              <span className="text-4xl mb-3 text-indigo-600 block">👥</span>
-              <h3 className="font-bold text-lg text-slate-900">Talent Pool</h3>
-              <p className="text-sm mt-2 text-slate-600">
-                Access a curated network of over 1.2M qualified professionals.
-              </p>
-            </div>
+          <AuthInput
+            label="Phone number"
+            name="phone_no"
+            type="tel"
+            value={formData.phone_no}
+            onChange={handleChange}
+            error={errors.phone_no}
+            autoComplete="tel"
+          />
 
-            <div className="p-6 rounded shadow-sm bg-white border border-slate-200">
-              <span className="text-4xl mb-3 text-indigo-600 block">📊</span>
-              <h3 className="font-bold text-lg text-slate-900">Smart Insights</h3>
-              <p className="text-sm mt-2 text-slate-600">
-                Data-driven reports to optimize your hiring funnel velocity.
-              </p>
-            </div>
-          </div>
+          <AuthInput
+            label="Password"
+            name="password"
+            type="password"
+            value={formData.password}
+            onChange={handleChange}
+            error={errors.password}
+            autoComplete="new-password"
+          />
 
-          <div className="p-6 rounded shadow-sm bg-white border border-slate-200 flex gap-4">
-            <img
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAl3l-J04KKwSMMx5_NlvS1c1qk1srNaMcYp1vlA78ZqQjbTAbcm8CQ1URaj9MWurif9i219-VHeYlJHZIbr7zrYLDHhm5s0oL8Jp1s4go2zpa_ReWg10oQOLueKNIcXFfciYhxj3ZVSgc8tE5dIGM4JA690YtIX64anMZdn5nzEN0cG199pLfD0IIXAON-yMK28pdeMDFqvkSJX5mm3XqEUHqj8TDR2dEOjVVjlDo-Tyj0D-wvl3sakZM49mMyd9Vky1PX2IsL7f8A"
-              alt="Sarah Chen"
-              className="w-12 h-12 rounded-full object-cover"
-            />
+          {formData.password && (
             <div>
-              <p className="text-sm italic text-slate-600">
-                "FirstJobIndia transformed our hiring process from a mess of
-                spreadsheets to a streamlined, high-performance engine."
-              </p>
-              <p className="text-xs font-bold mt-3 text-slate-900">
-                — Sarah Chen, Head of Talent at NexaFlow
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="rounded shadow-xl p-10 bg-white border border-slate-200">
-          {step < 3 && (
-            <div className="mb-8">
-              <h2 className="text-3xl font-extrabold text-slate-900">
-                Create Employer Account
-              </h2>
-              <p className="mt-2 inline-block px-3 py-1 rounded-full text-sm bg-indigo-50 text-indigo-600 font-medium">
-                Step {step} of 2:{" "}
-                {step === 1 ? "Account Verification" : "Company Details"}
-              </p>
-            </div>
-          )}
-
-          {apiError && step < 3 && (
-            <div className="mb-4 p-3 rounded bg-red-50 border border-red-200 text-sm text-red-600">
-              {apiError}
-            </div>
-          )}
-
-          {step === 1 && (
-            <form onSubmit={handleVerifyOtp} className="space-y-6" noValidate>
-              <FloatingInput
-                label="Email Address"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                error={errors.email}
-              />
-
-              <FloatingInput
-                label="Phone Number"
-                name="phone_no"
-                type="tel"
-                value={formData.phone_no}
-                onChange={handleChange}
-                error={errors.phone_no}
-              />
-
-              <FloatingInput
-                label="Password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                error={errors.password}
-              />
-
-              {formData.password && (
-                <div className="-mt-3">
-                  <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full ${pwdStrength.color} rounded-full transition-all duration-300`}
-                      style={{ width: `${pwdStrength.level}%` }}
-                    />
-                  </div>
-                  <p
-                    className={`text-xs mt-1 ${
-                      pwdStrength.level <= 25
-                        ? "text-red-500"
-                        : pwdStrength.level <= 50
-                          ? "text-yellow-600"
-                          : pwdStrength.level <= 75
-                            ? "text-blue-500"
-                            : "text-emerald-500"
-                    }`}
-                  >
-                    {pwdStrength.text}
-                  </p>
-                </div>
-              )}
-
-              <div>
-                <div className="flex items-start gap-3">
-                  <div className="flex-1">
-                    <FloatingInput
-                      label="Enter OTP"
-                      name="otp"
-                      type="text"
-                      value={formData.otp}
-                      onChange={handleChange}
-                      error={errors.otp}
-                    />
-                  </div>
-
-                  <div className="mt-4 h-12 w-px bg-gray-300" />
-
-                  <button
-                    type="button"
-                    onClick={handleSendOtp}
-                    disabled={isSendingOtp || isLoading}
-                    className="mt-3 whitespace-nowrap px-5 py-3 text-sm font-bold text-indigo-500 hover:text-indigo-700 border-b border-gray-300 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
-                  >
-                    {isSendingOtp
-                      ? "Sending..."
-                      : otpSent
-                        ? "Resend OTP"
-                        : "Send OTP"}
-                  </button>
-                </div>
-
-                {otpSent && (
-                  <p className="mt-2 text-xs text-green-600">
-                    OTP sent successfully. Please check your email.
-                  </p>
-                )}
-              </div>
-
-              <div className="flex items-start gap-3">
-                <input
-                  type="checkbox"
-                  id="terms"
-                  name="agreeTerms"
-                  checked={formData.agreeTerms}
-                  onChange={handleChange}
-                  className="w-5 h-5 mt-0.5 accent-indigo-600 cursor-pointer"
+              <div className="h-1.5 overflow-hidden rounded-full bg-[#EADFD9]">
+                <div
+                  className={`h-full rounded-full transition-all ${passwordStrength.className}`}
+                  style={{ width: `${passwordStrength.level}%` }}
                 />
-                <label htmlFor="terms" className="text-sm text-slate-600">
-                  I agree to the{" "}
-                  <Link to="/terms" className="underline text-indigo-600 transition hover:text-indigo-700">
-                    Terms of Service
-                  </Link>{" "}
-                  and{" "}
-                  <Link to="/privacy-policy" className="underline text-indigo-600 transition hover:text-indigo-700">
-                    Privacy Policy
-                  </Link>
-                </label>
               </div>
-
-              {errors.agreeTerms && (
-                <p className="text-sm text-red-500 -mt-4">{errors.agreeTerms}</p>
-              )}
-
-              {otpSent && (
-                <button
-                  type="submit"
-                  disabled={isVerifyingOtp || isLoading}
-                  className="w-full py-4 font-bold flex items-center justify-center gap-2 transition-all bg-indigo-600 hover:bg-indigo-700 text-white shadow-md cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
-                >
-                  {isVerifyingOtp || isLoading ? "Verifying..." : "Verify OTP"}
-                  {!(isVerifyingOtp || isLoading) && <ArrowRight size={18} />}
-                </button>
-              )}
-
-              <AuthFooter handleGoogleSignup={handleGoogleSignup} />
-            </form>
-          )}
-
-          {step === 2 && (
-            <form onSubmit={handleSubmitCompanyDetails} className="space-y-6" noValidate>
-              <div className="rounded border border-indigo-200 bg-indigo-50 p-4 text-sm text-indigo-700">
-                Please fill accurate details. After approval your account will be created.
-              </div>
-
-              <FloatingInput
-                label="Company Name *"
-                name="company_name"
-                type="text"
-                value={formData.company_name}
-                onChange={handleChange}
-                error={errors.company_name}
-              />
-
-              <FloatingSelect
-                label="Industry *"
-                name="industry"
-                value={formData.industry}
-                onChange={handleChange}
-                error={errors.industry}
-              >
-                <option value=""></option>
-                <option value="Technology">Technology</option>
-                <option value="Healthcare">Healthcare</option>
-                <option value="Finance">Finance</option>
-                <option value="Manufacturing">Manufacturing</option>
-                <option value="Retail">Retail</option>
-                <option value="Education">Education</option>
-                <option value="Real Estate">Real Estate</option>
-                <option value="Other">Other</option>
-              </FloatingSelect>
-
-              <FloatingSelect
-                label="Company Size *"
-                name="company_size"
-                value={formData.company_size}
-                onChange={handleChange}
-                error={errors.company_size}
-              >
-                <option value=""></option>
-                <option value="1-10">1-10 Employees</option>
-                <option value="11-50">11-50 Employees</option>
-                <option value="51-200">51-200 Employees</option>
-                <option value="201-1000">201-1000 Employees</option>
-                <option value="1000+">1000+ Employees</option>
-              </FloatingSelect>
-
-              {/* Location Search */}
-              <div ref={locationRef} className="relative">
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={locationSearch}
-                    onChange={handleLocationSearchChange}
-                    onFocus={() => locationSearch.length >= 2 && setShowLocationDropdown(true)}
-                    placeholder=" "
-                    className={`peer w-full border-0 border-b bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all ${
-                      errors.location_id
-                        ? "border-red-500 focus:border-red-500"
-                        : "border-slate-300 focus:border-indigo-600"
-                    }`}
-                  />
-                  <label
-                    className={`pointer-events-none absolute left-0 text-sm transition-all duration-200 ${
-                      locationSearch
-                        ? "top-0 text-xs"
-                        : "top-5 text-sm peer-focus:top-0 peer-focus:text-xs"
-                    } ${errors.location_id ? "text-red-500" : "text-slate-500 peer-focus:text-indigo-600"}`}
-                  >
-                    City / Location *
-                  </label>
-                  {isSearchingLocations && (
-                    <span className="absolute right-0 top-1/2 -translate-y-1/2 text-xs text-slate-400">
-                      Searching...
-                    </span>
-                  )}
-                </div>
-
-                {showLocationDropdown && locationResults.length > 0 && (
-                  <ul className="absolute z-10 mt-1 w-full max-h-48 overflow-y-auto rounded border border-slate-200 bg-white shadow-lg">
-                    {locationResults.map((loc) => (
-                      <li
-                        key={loc.id}
-                        onMouseDown={() => handleLocationSelect(loc)}
-                        className="cursor-pointer px-4 py-2 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700"
-                      >
-                        {[loc.city, loc.state].filter(Boolean).join(", ") || loc.name || loc.id}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-
-                {errors.location_id && (
-                  <p className="text-sm text-red-500 mt-1">{errors.location_id}</p>
-                )}
-              </div>
-
-              <FloatingInput
-                label="GSTIN (optional)"
-                name="gstin"
-                type="text"
-                value={formData.gstin}
-                onChange={handleChange}
-                error={errors.gstin}
-              />
-
-              <FloatingInput
-                label="Company Website (optional)"
-                name="website"
-                type="url"
-                value={formData.website}
-                onChange={handleChange}
-                error={errors.website}
-              />
-
-              <FloatingInput
-                label="Contact Person (optional)"
-                name="contact_person"
-                type="text"
-                value={formData.contact_person}
-                onChange={handleChange}
-                error={errors.contact_person}
-              />
-
-              <FloatingInput
-                label="Contact Designation (optional)"
-                name="contact_designation"
-                type="text"
-                value={formData.contact_designation}
-                onChange={handleChange}
-                error={errors.contact_designation}
-              />
-
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  type="button"
-                  onClick={() => setStep(1)}
-                  className="w-full py-4 font-bold border border-slate-300 text-slate-700 transition-all hover:bg-slate-50 cursor-pointer"
-                >
-                  Back
-                </button>
-
-                <button
-                  type="submit"
-                  disabled={isSubmittingProfile || isLoading}
-                  className="w-full py-4 font-bold flex items-center justify-center gap-2 transition-all bg-indigo-600 hover:bg-indigo-700 text-white shadow-md cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
-                >
-                  {isSubmittingProfile || isLoading ? "Submitting..." : "Submit Details"}
-                  {!(isSubmittingProfile || isLoading) && <ArrowRight size={18} />}
-                </button>
-              </div>
-
-              <p className="text-center text-sm text-slate-600">
-                Already using FirstJobIndia?{" "}
-                <Link to="/company/login" className="font-bold text-indigo-600 hover:text-indigo-700">
-                  Log in to your hub
-                </Link>
+              <p className="mt-1 text-xs font-medium text-[#6F6F76]">
+                Password strength: {passwordStrength.text}
               </p>
-            </form>
-          )}
-
-          {step === 3 && (
-            <div className="text-center space-y-6 py-4">
-              <div className="mx-auto w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center">
-                <CheckCircle className="text-emerald-600" size={36} />
-              </div>
-
-              <div>
-                <h3 className="text-2xl font-bold text-slate-900">Details Submitted!</h3>
-                <p className="text-sm text-slate-600 mt-3 leading-relaxed">
-                  Your company profile is under review.<br />
-                  You'll receive an email once your account is approved.
-                </p>
-              </div>
-
-              <Link
-                to="/company/login"
-                className="mt-2 w-full py-4 font-bold flex items-center justify-center gap-2 transition-all bg-indigo-600 hover:bg-indigo-700 text-white shadow-md"
-              >
-                Go to Login
-                <ArrowRight size={18} />
-              </Link>
             </div>
           )}
+
+          <div className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
+            <AuthInput
+              label="OTP"
+              name="otp"
+              type="text"
+              value={formData.otp}
+              onChange={handleChange}
+              error={errors.otp}
+              inputMode="numeric"
+            />
+            <button
+              type="button"
+              onClick={handleSendOtp}
+              disabled={isSendingOtp || isLoading}
+              className="rounded-[8px] border border-[#EADFD9] bg-white px-4 py-3 text-sm font-semibold text-[#8500FA] transition hover:bg-[#F7F5F2] disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              {isSendingOtp ? "Sending..." : otpSent ? "Resend OTP" : "Send OTP"}
+            </button>
+          </div>
+
+          {otpSent && (
+            <AuthAlert type="success">
+              OTP sent successfully. Please check your email.
+            </AuthAlert>
+          )}
+
+          <label className="flex items-start gap-3 text-sm leading-6 text-[#6F6F76]">
+            <input
+              type="checkbox"
+              id="terms"
+              name="agreeTerms"
+              checked={formData.agreeTerms}
+              onChange={handleChange}
+              className="mt-1 h-4 w-4 accent-[var(--auth-accent)]"
+            />
+            <span>
+              I agree to the{" "}
+              <Link to="/terms" className={authLinkClass}>
+                Terms
+              </Link>{" "}
+              and{" "}
+              <Link to="/privacy-policy" className={authLinkClass}>
+                Privacy Policy
+              </Link>
+            </span>
+          </label>
+          {errors.agreeTerms && (
+            <p className="text-sm text-red-600">{errors.agreeTerms}</p>
+          )}
+
+          {otpSent && (
+            <AuthButton type="submit" disabled={isVerifyingOtp || isLoading}>
+              {isVerifyingOtp || isLoading ? "Verifying..." : "Verify OTP"}
+              {!(isVerifyingOtp || isLoading) && <ArrowRight className="h-4 w-4" />}
+            </AuthButton>
+          )}
+
+          <AuthDivider />
+          <GoogleOAuthButton onCredential={handleGoogleSignup} text="signup_with" />
+
+          <AuthFooterText>
+            Already using FirstJobIndia?{" "}
+            <Link to="/company/login" className={authLinkClass}>
+              Sign in
+            </Link>
+          </AuthFooterText>
+        </form>
+      )}
+
+      {step === 2 && (
+        <form
+          onSubmit={handleSubmitCompanyDetails}
+          className="mt-6 space-y-5"
+          noValidate
+        >
+          <AuthAlert type="success">
+            Please use accurate details. Your company account may be reviewed
+            before activation.
+          </AuthAlert>
+
+          <AuthInput
+            label="Company name"
+            name="company_name"
+            type="text"
+            value={formData.company_name}
+            onChange={handleChange}
+            error={errors.company_name}
+          />
+
+          <AuthSelect
+            label="Industry"
+            name="industry"
+            value={formData.industry}
+            onChange={handleChange}
+            error={errors.industry}
+          >
+            <option value="">Select industry</option>
+            <option value="Technology">Technology</option>
+            <option value="Healthcare">Healthcare</option>
+            <option value="Finance">Finance</option>
+            <option value="Manufacturing">Manufacturing</option>
+            <option value="Retail">Retail</option>
+            <option value="Education">Education</option>
+            <option value="Real Estate">Real Estate</option>
+            <option value="Other">Other</option>
+          </AuthSelect>
+
+          <AuthSelect
+            label="Company size"
+            name="company_size"
+            value={formData.company_size}
+            onChange={handleChange}
+            error={errors.company_size}
+          >
+            <option value="">Select size</option>
+            <option value="1-10">1-10 employees</option>
+            <option value="11-50">11-50 employees</option>
+            <option value="51-200">51-200 employees</option>
+            <option value="201-1000">201-1000 employees</option>
+            <option value="1000+">1000+ employees</option>
+          </AuthSelect>
+
+          <div ref={locationRef} className="relative">
+            <AuthInput
+              label="City / location"
+              type="text"
+              value={locationSearch}
+              onChange={handleLocationSearchChange}
+              onFocus={() =>
+                locationSearch.length >= 2 && setShowLocationDropdown(true)
+              }
+              error={errors.location_id}
+            />
+            {isSearchingLocations && (
+              <span className="absolute right-3 top-10 text-xs text-[#9F9FA9]">
+                Searching...
+              </span>
+            )}
+            {showLocationDropdown && locationResults.length > 0 && (
+              <ul className="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-[8px] border border-[#EADFD9] bg-white shadow-sm">
+                {locationResults.map((loc) => (
+                  <li
+                    key={loc.id}
+                    onMouseDown={() => handleLocationSelect(loc)}
+                    className="cursor-pointer px-4 py-2 text-sm text-[#0A0A0A] hover:bg-[#F7F5F2]"
+                  >
+                    {[loc.city, loc.state].filter(Boolean).join(", ") ||
+                      loc.name ||
+                      loc.id}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <AuthInput
+            label="GSTIN (optional)"
+            name="gstin"
+            type="text"
+            value={formData.gstin}
+            onChange={handleChange}
+            error={errors.gstin}
+          />
+
+          <AuthInput
+            label="Company website (optional)"
+            name="website"
+            type="url"
+            value={formData.website}
+            onChange={handleChange}
+            error={errors.website}
+          />
+
+          <AuthInput
+            label="Contact person (optional)"
+            name="contact_person"
+            type="text"
+            value={formData.contact_person}
+            onChange={handleChange}
+            error={errors.contact_person}
+          />
+
+          <AuthInput
+            label="Contact designation (optional)"
+            name="contact_designation"
+            type="text"
+            value={formData.contact_designation}
+            onChange={handleChange}
+            error={errors.contact_designation}
+          />
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <AuthButton
+              type="button"
+              variant="secondary"
+              onClick={() => setStep(1)}
+            >
+              Back
+            </AuthButton>
+            <AuthButton
+              type="submit"
+              disabled={isSubmittingProfile || isLoading}
+            >
+              {isSubmittingProfile || isLoading ? "Submitting..." : "Submit details"}
+            </AuthButton>
+          </div>
+        </form>
+      )}
+
+      {step === 3 && (
+        <div className="space-y-6 text-center">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-green-100 bg-green-50 text-green-700">
+            <CheckCircle2 className="h-8 w-8" />
+          </div>
+          <AuthHeader
+            title="Details submitted."
+            description="Your company profile is under review. We will email you once the account is approved."
+          />
+          <Link
+            to="/company/login"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-[8px] bg-[#FF6B35] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#FF9566]"
+          >
+            Go to sign in
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
-      </div>
-    </div>
+      )}
+    </AuthShell>
   );
 };
-
-const FloatingInput = ({ label, type = "text", name, value, onChange, error }) => (
-  <div>
-    <div className="relative">
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder=" "
-        className={`peer w-full border-0 border-b bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all ${
-          error
-            ? "border-red-500 focus:border-red-500"
-            : "border-slate-300 focus:border-indigo-600"
-        }`}
-      />
-      <label
-        className={`pointer-events-none absolute left-0 top-5 text-sm transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs ${
-          error
-            ? "text-red-500 peer-focus:text-red-500"
-            : "text-slate-500 peer-focus:text-indigo-600"
-        }`}
-      >
-        {label}
-      </label>
-    </div>
-    {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
-  </div>
-);
-
-const FloatingSelect = ({ label, name, value, onChange, error, children }) => (
-  <div>
-    <div className="relative">
-      <select
-        name={name}
-        value={value}
-        onChange={onChange}
-        className={`peer w-full border-0 border-b bg-transparent px-0 pb-3 pt-6 text-sm outline-none transition-all ${
-          error
-            ? "border-red-500 focus:border-red-500"
-            : "border-slate-300 focus:border-indigo-600"
-        }`}
-      >
-        {children}
-      </select>
-      <label
-        className={`pointer-events-none absolute left-0 top-0 text-xs transition-all duration-200 ${
-          error ? "text-red-500" : "text-slate-500 peer-focus:text-indigo-600"
-        }`}
-      >
-        {label}
-      </label>
-    </div>
-    {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
-  </div>
-);
-
-const AuthFooter = ({ handleGoogleSignup }) => (
-  <>
-    <div className="relative flex items-center justify-center py-2">
-      <div className="absolute inset-0 flex items-center gap-3">
-        <span className="border-t w-full" />
-        <span className="text-sm text-slate-400">OR</span>
-        <span className="border-t w-full" />
-      </div>
-    </div>
-
-    <GoogleOAuthButton onCredential={handleGoogleSignup} text="signup_with" />
-
-    <p className="text-center text-sm text-slate-600">
-      Already using FirstJobIndia?{" "}
-      <Link to="/company/login" className="font-bold text-indigo-600 hover:text-indigo-700">
-        Log in to your hub
-      </Link>
-    </p>
-  </>
-);
 
 export default CompanySignupPage;

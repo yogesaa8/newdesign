@@ -5,8 +5,8 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import PublicLayout from "../features/public/layouts/PublicLayout";
 import LandingHomePage from "../features/public/pages/home/LandingHomePage";
 import CollegeMainPage from "../features/public/pages/college/CollegeMainPage";
-import ResumeLanding from "../features/public/resume/ResumeLanding";
 import ResumeBuilder from "../features/public/resume/ResumeBuilder";
+import ResumeLanding from "../features/public/resume/ResumeLanding";
 
 /* JOB SEEKER IMPORTS */
 import JobsPage from "../features/seeker/pages/jobs/JobsPage";

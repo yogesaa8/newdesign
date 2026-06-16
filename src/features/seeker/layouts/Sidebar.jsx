@@ -43,7 +43,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           icon: <FiBriefcase size={18} />,
           path: "/seeker/dashboard/applications",
           badge: "NEW",
-          badgeColor: "bg-orange-100 text-orange-700",
+          badgeColor: "bg-[#FFF1E9] text-[#C84F1F]",
         },
         {
           name: "Saved Jobs",
@@ -98,29 +98,29 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
   return (
     <aside
-      className={`fixed left-0 top-0 z-50 flex h-screen w-72 flex-col bg-white border-r border-slate-200 shadow-xl transition-transform duration-300 lg:static lg:translate-x-0
+      className={`fixed left-0 top-0 z-50 flex h-screen w-72 flex-col bg-white border-r border-[#EADFD9] shadow-xl transition-transform duration-300 lg:static lg:translate-x-0
       ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-6 border-b border-slate-100">
+      <div className="flex items-center justify-between px-6 py-6 border-b border-[#EFE7E1]">
         <NavLink to="/seeker/dashboard" className="flex items-center gap-3">
-          <div className="p-2 bg-orange-100 rounded-xl">
+          <div className="p-2 bg-[#FFF1E9] rounded-[8px]">
             <img
               src="/images/logos/fji_orange.png"
               alt="FirstJobIndia"
               className="h-[22px] w-[22px] object-contain"
             />
           </div>
-          <span className="text-xl font-bold text-slate-800">
+          <span className="text-xl font-bold text-[#0A0A0A]">
             <span>First</span>
-            <span className="text-orange-600">Job</span>
+            <span className="text-[#FF6B35]">Job</span>
             <span>India</span>
           </span>
         </NavLink>
 
         <button
           onClick={() => setSidebarOpen(false)}
-          className="lg:hidden text-slate-500 hover:text-slate-800"
+          className="lg:hidden text-[#6F6F76] hover:text-[#0A0A0A]"
         >
           <FiX size={22} />
         </button>
@@ -130,7 +130,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       <div className="flex-1 overflow-y-auto px-4 py-6">
         {navItems.map((section, index) => (
           <div key={index} className="mb-8">
-            <h3 className="px-3 mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <h3 className="px-3 mb-3 text-xs font-semibold uppercase tracking-wider text-[#8A8690]">
               {section.title}
             </h3>
 
@@ -144,8 +144,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                       `group flex items-center justify-between rounded px-4 py-2 font-medium border transition-all duration-200
                         ${
                           isActive
-                            ? "bg-orange-50 text-orange-700 border-orange-100 shadow-sm"
-                            : "text-slate-600 border-transparent hover:bg-slate-50 hover:text-slate-900"
+                            ? "bg-[#FFF7F3] text-[#C84F1F] border-[#F3D3C4] shadow-sm"
+                            : "text-[#6F6F76] border-transparent hover:bg-[#F7F5F2] hover:text-[#0A0A0A]"
                         }`
                     }
                   >
@@ -170,20 +170,20 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       </div>
 
       {/* Bottom User Card */}
-      <div className="border-t border-slate-100 p-4 space-y-3">
-        <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50">
-          <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center font-bold text-orange-700">
+      <div className="border-t border-[#EFE7E1] p-4 space-y-3">
+        <div className="flex items-center gap-3 p-3 rounded-[8px] bg-[#F7F5F2]">
+          <div className="w-10 h-10 rounded-full bg-[#FFF1E9] flex items-center justify-center font-bold text-[#C84F1F]">
             Y
           </div>
           <div>
-            <p className="font-semibold text-sm text-slate-800">Yogesh</p>
-            <p className="text-xs text-slate-500">Job Seeker</p>
+            <p className="font-semibold text-sm text-[#0A0A0A]">Yogesh</p>
+            <p className="text-xs text-[#6F6F76]">Job Seeker</p>
           </div>
         </div>
 
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 rounded-xl border border-red-100 bg-red-50 py-3 text-red-600 font-medium hover:bg-red-100 transition"
+          className="w-full flex items-center justify-center gap-2 rounded-[8px] border border-red-100 bg-red-50 py-3 text-red-600 font-medium hover:bg-red-100 transition"
         >
           <FiLogOut size={18} />
           Logout

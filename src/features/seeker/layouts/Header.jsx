@@ -4,9 +4,6 @@ import { useAuthStore } from "../../../store";
 import {
   FiSearch,
   FiBell,
-  FiMoon,
-  FiSun,
-  FiChevronDown,
   FiUser,
   FiSettings,
   FiHelpCircle,
@@ -55,7 +52,7 @@ const getSeekerProfile = (user) => {
   };
 };
 
-const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
+const Header = ({ sidebarOpen, setSidebarOpen }) => {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
   const profile = getSeekerProfile(user);
@@ -93,7 +90,7 @@ const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/90 backdrop-blur-md">
+    <header className="sticky top-0 z-40 w-full border-b border-[#EADFD9] bg-white/90 backdrop-blur-md">
       <div className="flex items-center justify-between px-4 py-4 md:px-6 xl:px-10">
         {/* Left */}
         <div className="flex items-center gap-4">
@@ -102,7 +99,7 @@ const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
               e.stopPropagation();
               setSidebarOpen(!sidebarOpen);
             }}
-            className="lg:hidden p-2 rounded-xl border border-slate-200 hover:bg-slate-50 transition"
+            className="lg:hidden p-2 rounded-[8px] border border-[#EADFD9] hover:bg-[#F7F5F2] transition"
           >
             <FiMenu size={20} />
           </button>
@@ -112,16 +109,16 @@ const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
             <div className="relative">
               <FiSearch
                 size={18}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8A8690]"
               />
 
               <input
                 type="text"
                 placeholder="Search jobs, companies..."
-                className="w-72 xl:w-96 rounded-2xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-16 text-sm outline-none focus:border-orange-400 focus:bg-white transition"
+                className="w-72 xl:w-96 rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2] py-3 pl-11 pr-16 text-sm outline-none focus:border-[#8500FA] focus:bg-white transition"
               />
 
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 hidden lg:flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-1 text-xs text-slate-400">
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 hidden lg:flex items-center gap-1 rounded-lg border border-[#EADFD9] px-2 py-1 text-xs text-[#8A8690]">
                 <span>⌘</span>
                 <span>K</span>
               </div>
@@ -134,7 +131,7 @@ const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
           {/* Dark Mode */}
           {/* <button
             onClick={() => setDarkMode(!darkMode)}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 hover:bg-slate-50 transition"
+            className="flex h-10 w-10 items-center justify-center rounded-[8px] border border-[#EADFD9] hover:bg-[#F7F5F2] transition"
           >
             {darkMode ? <FiSun size={18} /> : <FiMoon size={18} />}
           </button> */}
@@ -143,7 +140,7 @@ const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
           <div className="relative" ref={notifRef}>
             <button
               onClick={() => setNotifOpen(!notifOpen)}
-              className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 hover:bg-slate-50 transition"
+              className="relative flex h-10 w-10 items-center justify-center rounded-[8px] border border-[#EADFD9] hover:bg-[#F7F5F2] transition"
             >
               <FiBell size={18} />
 
@@ -154,24 +151,24 @@ const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
             </button>
 
             {notifOpen && (
-              <div className="absolute right-0 mt-3 w-80 rounded-2xl border border-slate-200 bg-white shadow-xl">
+              <div className="absolute right-0 mt-3 w-80 rounded-[8px] border border-[#EADFD9] bg-white shadow-xl">
                 <div className="border-b px-5 py-4">
                   <h4 className="font-semibold">Notifications</h4>
                 </div>
 
                 <div className="p-4 space-y-4">
-                  <div className="rounded-xl bg-slate-50 p-3">
+                  <div className="rounded-[8px] bg-[#F7F5F2] p-3">
                     <p className="text-sm font-medium">
                       New job alert matched your profile
                     </p>
-                    <span className="text-xs text-slate-500">2 min ago</span>
+                    <span className="text-xs text-[#6F6F76]">2 min ago</span>
                   </div>
 
-                  <div className="rounded-xl bg-slate-50 p-3">
+                  <div className="rounded-[8px] bg-[#F7F5F2] p-3">
                     <p className="text-sm font-medium">
                       Recruiter viewed your profile
                     </p>
-                    <span className="text-xs text-slate-500">1 hour ago</span>
+                    <span className="text-xs text-[#6F6F76]">1 hour ago</span>
                   </div>
                 </div>
               </div>
@@ -183,25 +180,25 @@ const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
             <button
               ref={trigger}
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center gap-3 rounded-2xl p-1.5 hover:bg-slate-50 transition"
+              className="flex items-center gap-3 rounded-[8px] p-1.5 hover:bg-[#F7F5F2] transition"
             >
               {profile.avatar ? (
                 <img
                   src={profile.avatar}
                   alt={profile.name}
-                  className="h-11 w-11 rounded-xl object-cover"
+                  className="h-11 w-11 rounded-[8px] object-cover"
                 />
               ) : (
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-100 text-sm font-bold text-orange-700">
+                <span className="flex h-11 w-11 items-center justify-center rounded-[8px] bg-[#FFF1E9] text-sm font-bold text-[#C84F1F]">
                   {profile.initial}
                 </span>
               )}
 
               {/* <div className="hidden lg:block text-left">
-                <p className="text-sm font-semibold text-slate-800">
+                <p className="text-sm font-semibold text-[#0A0A0A]">
                   {profile.name}
                 </p>
-                <p className="text-xs text-slate-500">{profile.position}</p>
+                <p className="text-xs text-[#6F6F76]">{profile.position}</p>
               </div> */}
 
               {/* <FiChevronDown
@@ -213,17 +210,17 @@ const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
             {dropdownOpen && (
               <div
                 ref={dropdown}
-                className="absolute right-0 mt-3 w-72 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl"
+                className="absolute right-0 mt-3 w-72 overflow-hidden rounded-[8px] border border-[#EADFD9] bg-white shadow-xl"
               >
-                <div className="border-b border-slate-300 px-5 py-4">
+                <div className="border-b border-[#D8C9C0] px-5 py-4">
                   <h4 className="font-semibold">{profile.name}</h4>
-                  <p className="text-sm text-slate-500">{profile.email}</p>
+                  <p className="text-sm text-[#6F6F76]">{profile.email}</p>
                 </div>
 
                 <div className="p-3 space-y-1">
                   <Link
                     to="/seeker/dashboard/profile"
-                    className="flex items-center gap-3 rounded-xl px-3 py-3 hover:bg-slate-50"
+                    className="flex items-center gap-3 rounded-[8px] px-3 py-3 hover:bg-[#F7F5F2]"
                   >
                     <FiUser size={18} />
                     My Profile
@@ -231,7 +228,7 @@ const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
 
                   <Link
                     to="/seeker/dashboard/settings"
-                    className="flex items-center gap-3 rounded-xl px-3 py-3 hover:bg-slate-50"
+                    className="flex items-center gap-3 rounded-[8px] px-3 py-3 hover:bg-[#F7F5F2]"
                   >
                     <FiSettings size={18} />
                     Account Settings
@@ -239,17 +236,17 @@ const Header = ({ sidebarOpen, setSidebarOpen, darkMode, setDarkMode }) => {
 
                   <Link
                     to="/seeker/dashboard/support"
-                    className="flex items-center gap-3 rounded-xl px-3 py-3 hover:bg-slate-50"
+                    className="flex items-center gap-3 rounded-[8px] px-3 py-3 hover:bg-[#F7F5F2]"
                   >
                     <FiHelpCircle size={18} />
                     Support
                   </Link>
                 </div>
 
-                <div className="border-t border-slate-300 p-3">
+                <div className="border-t border-[#D8C9C0] p-3">
                   <button
                     onClick={handleLogout}
-                    className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-red-600 hover:bg-red-50"
+                    className="flex w-full items-center gap-3 rounded-[8px] px-3 py-3 text-red-600 hover:bg-red-50"
                   >
                     <FiLogOut size={18} />
                     Sign Out

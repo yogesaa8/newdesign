@@ -31,15 +31,15 @@ const sections = [
 
 const TermsConditions = () => {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <header className="border-b border-slate-200 bg-white">
+    <div className="fji-page">
+      <header className="border-b border-[#EADFD9] bg-[#FFF7F3]">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
-          <Link to="/" className="text-xl font-extrabold text-slate-900">
+          <Link to="/" className="text-xl font-extrabold text-[#0A0A0A]">
             HireLaunch
           </Link>
           <Link
             to="/seeker/login"
-            className="rounded bg-orange-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-orange-700 cursor-pointer"
+            className="fji-primary-btn cursor-pointer"
           >
             Login
           </Link>
@@ -50,17 +50,17 @@ const TermsConditions = () => {
         <div className="mb-10">
           <Link
             to="/"
-            className="inline-flex rounded px-3 py-2 text-sm font-semibold text-orange-600 transition hover:bg-orange-50"
+            className="fji-secondary-btn"
           >
             Back to home
           </Link>
-          <p className="mt-8 text-sm font-semibold uppercase tracking-wider text-orange-600">
+          <p className="fji-kicker mt-8">
             Legal
           </p>
-          <h1 className="mt-3 text-4xl font-extrabold tracking-tight sm:text-5xl">
+          <h1 className="fji-heading mt-3 text-4xl sm:text-5xl">
             Terms & Conditions
           </h1>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">
+          <p className="fji-copy mt-4 max-w-3xl text-base">
             Last updated: May 7, 2026. These terms explain the basic rules for
             using HireLaunch as a job seeker, employer, recruiter, or visitor.
           </p>
@@ -70,17 +70,17 @@ const TermsConditions = () => {
           {sections.map((section) => (
             <section
               key={section.title}
-              className="rounded border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-orange-50/40"
+              className="fji-card p-6 transition hover:bg-[#F7F5F2]"
             >
               <h2 className="text-xl font-bold">{section.title}</h2>
-              <p className="mt-3 leading-7 text-slate-600">{section.body}</p>
+              <p className="fji-copy mt-3">{section.body}</p>
             </section>
           ))}
         </div>
 
-        <section className="mt-8 rounded border border-orange-100 bg-orange-50 p-6">
+        <section className="fji-card-soft mt-8 p-6">
           <h2 className="text-xl font-bold">Questions</h2>
-          <p className="mt-3 leading-7 text-slate-700">
+          <p className="mt-3 leading-7 text-[#6F6F76]">
             For questions about these terms, contact the HireLaunch support team
             through the support page or your account dashboard.
           </p>

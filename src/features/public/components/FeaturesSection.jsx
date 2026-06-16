@@ -77,8 +77,11 @@ const FeaturesSection = () => {
                     prompts written for Indian freshers, not generic templates.
                   </p>
                 </div>
-                <button className="self-start py-2.5 px-6 border border-zinc-700 hover:border-purple-500 text-zinc-300 hover:text-purple-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300">
-                  Learn More
+                <a
+                  href="/resume"
+                  className="self-start py-2.5 px-6 border border-zinc-700 hover:border-purple-500 text-zinc-300 hover:text-purple-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
+                >
+                  Open resume
                   <svg
                     width="6"
                     height="10"
@@ -94,7 +97,7 @@ const FeaturesSection = () => {
                       strokeLinejoin="round"
                     ></path>
                   </svg>
-                </button>
+                </a>
               </div>
               <div className="relative hidden h-auto md:w-1/2 md:block overflow-hidden rounded-[20px]">
                 <img
@@ -146,8 +149,11 @@ const FeaturesSection = () => {
                 Every recruiter is vetted before posting, so you only apply to
                 companies that actually pay and actually call back.
               </p>
-              <button className="self-start py-2.5 px-6 border border-zinc-700 hover:border-blue-500 text-zinc-300 hover:text-blue-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300">
-                Learn More
+              <a
+                href="/jobs"
+                className="self-start py-2.5 px-6 border border-zinc-700 hover:border-blue-500 text-zinc-300 hover:text-blue-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
+              >
+                Browse jobs
                 <svg
                   width="6"
                   height="10"
@@ -163,7 +169,7 @@ const FeaturesSection = () => {
                     strokeLinejoin="round"
                   ></path>
                 </svg>
-              </button>
+              </a>
             </div>
           </div>
 
@@ -206,8 +212,11 @@ const FeaturesSection = () => {
                 interviews. We tell you what to fix before the recruiter sees
                 it.
               </p>
-              <button className="self-start py-2.5 px-6 border border-zinc-700 hover:border-emerald-500 text-zinc-300 hover:text-emerald-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300">
-                Learn More
+              <a
+                href="/career-gps"
+                className="self-start py-2.5 px-6 border border-zinc-700 hover:border-emerald-500 text-zinc-300 hover:text-emerald-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
+              >
+                Open CareerGPS
                 <svg
                   width="6"
                   height="10"
@@ -223,7 +232,155 @@ const FeaturesSection = () => {
                     strokeLinejoin="round"
                   ></path>
                 </svg>
-              </button>
+              </a>
+            </div>
+          </div>
+
+          {/* Card 4 */}
+          <div className="relative w-full h-auto group">
+            <div className="rounded-3xl p-6 xl:p-8 h-full border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm transition-all duration-500 hover:border-orange-500/50 hover:shadow-[0_0_40px_-10px_rgba(249,115,22,0.4)] hover:-translate-y-1">
+              <div className="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center mb-6 border border-orange-500/20 text-orange-400 font-bold">
+                C
+              </div>
+              <h3 className="py-4 text-lg font-bold xl:text-xl text-white">
+                College placement tools
+              </h3>
+              <p className="text-sm font-normal mb-8 text-zinc-400 leading-relaxed">
+                Help placement teams coordinate fresher drives, shortlist
+                students, and keep recruiter conversations in one place.
+              </p>
+              <a
+                href="/college"
+                className="self-start py-2.5 px-6 border border-zinc-700 hover:border-orange-500 text-zinc-300 hover:text-orange-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
+              >
+                View college
+                <svg
+                  width="6"
+                  height="10"
+                  viewBox="0 0 6 10"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1 9L3.58579 6.41421C4.25245 5.74755 4.58579 5.41421 4.58579 5C4.58579 4.58579 4.25245 4.25245 3.58579 3.58579L1 1"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          {/* Card 5 */}
+          <div className="relative w-full h-auto group">
+            <div className="rounded-3xl p-6 xl:p-8 h-full border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm transition-all duration-500 hover:border-purple-500/50 hover:shadow-[0_0_40px_-10px_rgba(168,85,247,0.4)] hover:-translate-y-1">
+              <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center mb-6 border border-purple-500/20 text-purple-400 font-bold">
+                E
+              </div>
+              <h3 className="py-4 text-lg font-bold xl:text-xl text-white">
+                Interview e-book library
+              </h3>
+              <p className="text-sm font-normal mb-8 text-zinc-400 leading-relaxed">
+                Download fresher-focused notes, communication guides, aptitude
+                prep, and interview practice packs from one library.
+              </p>
+              <a
+                href="/e-book"
+                className="self-start py-2.5 px-6 border border-zinc-700 hover:border-purple-500 text-zinc-300 hover:text-purple-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
+              >
+                Open library
+                <svg
+                  width="6"
+                  height="10"
+                  viewBox="0 0 6 10"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1 9L3.58579 6.41421C4.25245 5.74755 4.58579 5.41421 4.58579 5C4.58579 4.58579 4.25245 4.25245 3.58579 3.58579L1 1"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          {/* Card 6 */}
+          <div className="relative w-full h-auto group">
+            <div className="rounded-3xl p-6 xl:p-8 h-full border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm transition-all duration-500 hover:border-rose-500/50 hover:shadow-[0_0_40px_-10px_rgba(244,63,94,0.4)] hover:-translate-y-1">
+              <div className="w-12 h-12 rounded-xl bg-rose-500/10 flex items-center justify-center mb-6 border border-rose-500/20 text-rose-400 font-bold">
+                F
+              </div>
+              <h3 className="py-4 text-lg font-bold xl:text-xl text-white">
+                Product feedback
+              </h3>
+              <p className="text-sm font-normal mb-8 text-zinc-400 leading-relaxed">
+                Tell us what feels confusing, broken, or missing. Your feedback
+                helps us improve the fresher hiring experience.
+              </p>
+              <a
+                href="/reviews"
+                className="self-start py-2.5 px-6 border border-zinc-700 hover:border-rose-500 text-zinc-300 hover:text-rose-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
+              >
+                Send feedback
+                <svg
+                  width="6"
+                  height="10"
+                  viewBox="0 0 6 10"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1 9L3.58579 6.41421C4.25245 5.74755 4.58579 5.41421 4.58579 5C4.58579 4.58579 4.25245 4.25245 3.58579 3.58579L1 1"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          {/* Card 7 */}
+          <div className="relative w-full h-auto group">
+            <div className="rounded-3xl p-6 xl:p-8 h-full border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm transition-all duration-500 hover:border-amber-500/50 hover:shadow-[0_0_40px_-10px_rgba(245,158,11,0.4)] hover:-translate-y-1">
+              <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center mb-6 border border-amber-500/20 text-amber-400 font-bold">
+                H
+              </div>
+              <h3 className="py-4 text-lg font-bold xl:text-xl text-white">
+                Employer workspace
+              </h3>
+              <p className="text-sm font-normal mb-8 text-zinc-400 leading-relaxed">
+                Companies can post fresher roles, review applicants, and manage
+                hiring activity from a focused workspace.
+              </p>
+              <a
+                href="/company/login"
+                className="self-start py-2.5 px-6 border border-zinc-700 hover:border-amber-500 text-zinc-300 hover:text-amber-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
+              >
+                Employer login
+                <svg
+                  width="6"
+                  height="10"
+                  viewBox="0 0 6 10"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1 9L3.58579 6.41421C4.25245 5.74755 4.58579 5.41421 4.58579 5C4.58579 4.58579 4.25245 4.25245 3.58579 3.58579L1 1"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  ></path>
+                </svg>
+              </a>
             </div>
           </div>
         </div>

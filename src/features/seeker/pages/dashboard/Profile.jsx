@@ -335,7 +335,7 @@ const Profile = () => {
       <Breadcrumb pageName="My Profile" />
 
       {(isLoading || error) && (
-        <div className="mb-4 rounded border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600 shadow-sm">
+        <div className="mb-4 rounded border border-[#EADFD9] bg-white px-4 py-3 text-sm text-[#6F6F76] shadow-sm">
           {isLoading ? "Loading seeker profile..." : error}
         </div>
       )}
@@ -346,7 +346,7 @@ const Profile = () => {
         </div>
       )}
 
-      <div className="overflow-hidden rounded border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded border border-[#EADFD9] bg-white shadow-sm">
         <div className="relative z-20 h-35 md:h-65">
           {profile.cover ? (
             <img
@@ -360,7 +360,7 @@ const Profile = () => {
           <div className="absolute bottom-4 right-4">
             <button
               onClick={() => openModal("profile")}
-              className="flex items-center gap-2 rounded-lg bg-white/90 py-1.5 px-4 text-sm font-medium text-slate-700 shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:shadow-md"
+              className="flex items-center gap-2 rounded-lg bg-white/90 py-1.5 px-4 text-sm font-medium text-[#4F4D55] shadow-sm backdrop-blur-sm transition-all hover:bg-white hover:shadow-md"
             >
               <FiCamera size={16} /> Change Cover
             </button>
@@ -377,7 +377,7 @@ const Profile = () => {
                   className="h-full w-full rounded-full object-cover"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center rounded-full bg-orange-100 text-3xl font-bold text-orange-700 sm:text-5xl">
+                <div className="flex h-full w-full items-center justify-center rounded-full bg-[#FFF1E9] text-3xl font-bold text-[#C84F1F] sm:text-5xl">
                   {initials || "U"}
                 </div>
               )}
@@ -385,14 +385,14 @@ const Profile = () => {
           </div>
 
           <div className="mt-4">
-            <h3 className="mb-1.5 text-2xl font-semibold text-slate-800">
+            <h3 className="mb-1.5 text-2xl font-semibold text-[#0A0A0A]">
               {displayName}
             </h3>
-            <p className="font-medium text-slate-600">{displayRole}</p>
+            <p className="font-medium text-[#6F6F76]">{displayRole}</p>
 
             <div className="mx-auto max-w-180">
-              <h4 className="font-semibold text-slate-800">About Me</h4>
-              <p className="mt-4.5 text-slate-600">
+              <h4 className="font-semibold text-[#0A0A0A]">About Me</h4>
+              <p className="mt-4.5 text-[#6F6F76]">
                 {profile.bio || "Add your profile bio to help recruiters understand your goals."}
               </p>
             </div>
@@ -404,8 +404,8 @@ const Profile = () => {
                 rel="noopener noreferrer"
                 className={`rounded-full p-2 transition-all ${
                   profile.github_url
-                    ? "text-slate-500 hover:bg-orange-50 hover:text-orange-600"
-                    : "pointer-events-none text-slate-300"
+                    ? "text-[#6F6F76] hover:bg-[#FFF7F3] hover:text-[#FF6B35]"
+                    : "pointer-events-none text-[#B7AFA8]"
                 }`}
               >
                 <FiGithub size={20} />
@@ -416,8 +416,8 @@ const Profile = () => {
                 rel="noopener noreferrer"
                 className={`rounded-full p-2 transition-all ${
                   profile.linkedin_url
-                    ? "text-slate-500 hover:bg-orange-50 hover:text-orange-600"
-                    : "pointer-events-none text-slate-300"
+                    ? "text-[#6F6F76] hover:bg-[#FFF7F3] hover:text-[#FF6B35]"
+                    : "pointer-events-none text-[#B7AFA8]"
                 }`}
               >
                 <FiLinkedin size={20} />
@@ -428,8 +428,8 @@ const Profile = () => {
                 rel="noopener noreferrer"
                 className={`rounded-full p-2 transition-all ${
                   profile.portfolio_url
-                    ? "text-slate-500 hover:bg-orange-50 hover:text-orange-600"
-                    : "pointer-events-none text-slate-300"
+                    ? "text-[#6F6F76] hover:bg-[#FFF7F3] hover:text-[#FF6B35]"
+                    : "pointer-events-none text-[#B7AFA8]"
                 }`}
               >
                 <FiGlobe size={20} />
@@ -441,22 +441,22 @@ const Profile = () => {
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* API Profile */}
-        <div className="rounded border border-slate-200 bg-white shadow-sm lg:col-span-2">
-          <div className="flex items-center justify-between border-b border-slate-200 px-7 py-4">
-            <h3 className="flex items-center gap-2 font-medium text-slate-800">
-              <FiUser size={20} className="text-orange-600" /> Profile Details
+        <div className="rounded border border-[#EADFD9] bg-white shadow-sm lg:col-span-2">
+          <div className="flex items-center justify-between border-b border-[#EADFD9] px-7 py-4">
+            <h3 className="flex items-center gap-2 font-medium text-[#0A0A0A]">
+              <FiUser size={20} className="text-[#FF6B35]" /> Profile Details
             </h3>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => openModal("profile")}
-                className="flex items-center gap-1 text-sm font-medium text-slate-500 transition-all hover:text-orange-600 hover:underline"
+                className="flex items-center gap-1 text-sm font-medium text-[#6F6F76] transition-all hover:text-[#FF6B35] hover:underline"
               >
                 <FiEdit3 size={16} /> Edit
               </button>
               <button
                 onClick={() => setIsDeleteProfileOpen(true)}
                 disabled={isSaving}
-                className="flex items-center gap-1 text-sm font-medium text-slate-500 transition-all hover:text-red-600 hover:underline disabled:cursor-not-allowed disabled:opacity-70"
+                className="flex items-center gap-1 text-sm font-medium text-[#6F6F76] transition-all hover:text-red-600 hover:underline disabled:cursor-not-allowed disabled:opacity-70"
               >
                 <FiTrash2 size={16} /> Delete
               </button>
@@ -465,21 +465,21 @@ const Profile = () => {
           <div className="p-7">
             <div className="grid grid-cols-1 gap-x-6 gap-y-5 md:grid-cols-2">
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <label className="text-xs font-semibold uppercase tracking-wider text-[#8A8690]">
                   Full Name
                 </label>
-                <p className="mt-1 text-slate-700">
+                <p className="mt-1 text-[#4F4D55]">
                   {profile.full_name || profile.name || "Not added"}
                 </p>
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <label className="text-xs font-semibold uppercase tracking-wider text-[#8A8690]">
                   Location
                 </label>
-                <p className="mt-1 flex items-center gap-1 text-slate-700">
+                <p className="mt-1 flex items-center gap-1 text-[#4F4D55]">
                   {profile.location_city ? (
                     <>
-                      <FiMapPin size={14} className="text-orange-500" />
+                      <FiMapPin size={14} className="text-[#FF6B35]" />
                       {profile.location_state
                         ? `${profile.location_city}, ${profile.location_state}`
                         : profile.location_city}
@@ -490,90 +490,90 @@ const Profile = () => {
                 </p>
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <label className="text-xs font-semibold uppercase tracking-wider text-[#8A8690]">
                   Stream
                 </label>
-                <p className="mt-1 text-slate-700">
+                <p className="mt-1 text-[#4F4D55]">
                   {profile.stream || "Not added"}
                 </p>
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <label className="text-xs font-semibold uppercase tracking-wider text-[#8A8690]">
                   Degree
                 </label>
-                <p className="mt-1 text-slate-700">
+                <p className="mt-1 text-[#4F4D55]">
                   {profile.degree || "Not added"}
                 </p>
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <label className="text-xs font-semibold uppercase tracking-wider text-[#8A8690]">
                   Graduation Year
                 </label>
-                <p className="mt-1 text-slate-700">
+                <p className="mt-1 text-[#4F4D55]">
                   {profile.graduation_year || "Not added"}
                 </p>
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <label className="text-xs font-semibold uppercase tracking-wider text-[#8A8690]">
                   College
                 </label>
-                <p className="mt-1 text-slate-700">
+                <p className="mt-1 text-[#4F4D55]">
                   {profile.college_name_manual || "Not added"}
                 </p>
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <label className="text-xs font-semibold uppercase tracking-wider text-[#8A8690]">
                   Target Role
                 </label>
-                <p className="mt-1 text-slate-700">
+                <p className="mt-1 text-[#4F4D55]">
                   {profile.target_role || profile.position || "Not added"}
                 </p>
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <label className="text-xs font-semibold uppercase tracking-wider text-[#8A8690]">
                   Skills
                 </label>
-                <p className="mt-1 text-slate-700">
+                <p className="mt-1 text-[#4F4D55]">
                   {profile.skills || "Not added"}
                 </p>
               </div>
               <div className="md:col-span-2">
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <label className="text-xs font-semibold uppercase tracking-wider text-[#8A8690]">
                   Bio
                 </label>
-                <p className="mt-1 text-slate-700">
+                <p className="mt-1 text-[#4F4D55]">
                   {profile.bio || "Not added"}
                 </p>
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <label className="text-xs font-semibold uppercase tracking-wider text-[#8A8690]">
                   Cover Photo URL
                 </label>
-                <p className="mt-1 break-all text-slate-700">
+                <p className="mt-1 break-all text-[#4F4D55]">
                   {profile.cover_photo_url || "Not added"}
                 </p>
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <label className="text-xs font-semibold uppercase tracking-wider text-[#8A8690]">
                   LinkedIn URL
                 </label>
-                <p className="mt-1 break-all text-slate-700">
+                <p className="mt-1 break-all text-[#4F4D55]">
                   {profile.linkedin_url || "Not added"}
                 </p>
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <label className="text-xs font-semibold uppercase tracking-wider text-[#8A8690]">
                   GitHub URL
                 </label>
-                <p className="mt-1 break-all text-slate-700">
+                <p className="mt-1 break-all text-[#4F4D55]">
                   {profile.github_url || "Not added"}
                 </p>
               </div>
               <div>
-                <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <label className="text-xs font-semibold uppercase tracking-wider text-[#8A8690]">
                   Portfolio URL
                 </label>
-                <p className="mt-1 break-all text-slate-700">
+                <p className="mt-1 break-all text-[#4F4D55]">
                   {profile.portfolio_url || "Not added"}
                 </p>
               </div>
@@ -582,14 +582,14 @@ const Profile = () => {
         </div>
 
         {/* Projects */}
-        <div className="col-span-1 rounded border border-slate-200 bg-white shadow-sm lg:col-span-2">
-          <div className="flex items-center justify-between border-b border-slate-200 px-7 py-4">
-            <h3 className="flex items-center gap-2 font-medium text-slate-800">
-              <FiBriefcase size={20} className="text-orange-600" /> Projects
+        <div className="col-span-1 rounded border border-[#EADFD9] bg-white shadow-sm lg:col-span-2">
+          <div className="flex items-center justify-between border-b border-[#EADFD9] px-7 py-4">
+            <h3 className="flex items-center gap-2 font-medium text-[#0A0A0A]">
+              <FiBriefcase size={20} className="text-[#FF6B35]" /> Projects
             </h3>
             <button
               onClick={() => openModal("project")}
-              className="flex items-center gap-1 text-sm font-medium text-slate-500 transition-all hover:text-orange-600 hover:underline"
+              className="flex items-center gap-1 text-sm font-medium text-[#6F6F76] transition-all hover:text-[#FF6B35] hover:underline"
             >
               <FiPlus size={16} /> Add Project
             </button>
@@ -599,28 +599,28 @@ const Profile = () => {
               {projects.map((proj) => (
                 <div
                   key={proj.id}
-                  className="rounded border border-slate-200 bg-white p-5 transition-all hover:border-orange-300 hover:shadow-md"
+                  className="rounded border border-[#EADFD9] bg-white p-5 transition-all hover:border-[#FF9566] hover:shadow-md"
                 >
                   <div className="mb-2 flex items-start justify-between">
-                    <h4 className="font-bold text-slate-800">{proj.title}</h4>
+                    <h4 className="font-bold text-[#0A0A0A]">{proj.title}</h4>
                     <div className="flex gap-2">
                       <button
                         onClick={() => openModal("project", proj)}
-                        className="rounded-md p-1 text-slate-400 transition-all hover:bg-orange-50 hover:text-orange-600"
+                        className="rounded-md p-1 text-[#8A8690] transition-all hover:bg-[#FFF7F3] hover:text-[#FF6B35]"
                       >
                         <FiEdit3 size={16} />
                       </button>
                       <button
                         onClick={() => handleDelete("projects", proj.id)}
-                        className="rounded-md p-1 text-slate-400 transition-all hover:bg-red-50 hover:text-red-500"
+                        className="rounded-md p-1 text-[#8A8690] transition-all hover:bg-red-50 hover:text-red-500"
                       >
                         <FiTrash2 size={16} />
                       </button>
                     </div>
                   </div>
-                  <p className="mb-3 text-xs text-slate-500">{proj.duration}</p>
+                  <p className="mb-3 text-xs text-[#6F6F76]">{proj.duration}</p>
                   <div
-                    className="mb-4 text-sm text-slate-600 rich-text-content"
+                    className="mb-4 text-sm text-[#6F6F76] rich-text-content"
                     dangerouslySetInnerHTML={{ __html: proj.description }}
                   ></div>
                   <a
@@ -631,7 +631,7 @@ const Profile = () => {
                     }
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-sm font-medium text-orange-600 transition-all hover:text-orange-700 hover:underline"
+                    className="flex items-center gap-1 text-sm font-medium text-[#FF6B35] transition-all hover:text-[#C84F1F] hover:underline"
                   >
                     <FiExternalLink size={14} /> View Project
                   </a>
@@ -642,14 +642,14 @@ const Profile = () => {
         </div>
 
         {/* Experience */}
-        <div className="rounded border border-slate-200 bg-white shadow-sm">
-          <div className="flex items-center justify-between border-b border-slate-200 px-7 py-4">
-            <h3 className="flex items-center gap-2 font-medium text-slate-800">
-              <FiBriefcase size={20} className="text-orange-600" /> Experience
+        <div className="rounded border border-[#EADFD9] bg-white shadow-sm">
+          <div className="flex items-center justify-between border-b border-[#EADFD9] px-7 py-4">
+            <h3 className="flex items-center gap-2 font-medium text-[#0A0A0A]">
+              <FiBriefcase size={20} className="text-[#FF6B35]" /> Experience
             </h3>
             <button
               onClick={() => openModal("experience")}
-              className="flex items-center gap-1 text-sm font-medium text-slate-500 transition-all hover:text-orange-600 hover:underline"
+              className="flex items-center gap-1 text-sm font-medium text-[#6F6F76] transition-all hover:text-[#FF6B35] hover:underline"
             >
               <FiPlus size={16} /> Add
             </button>
@@ -659,32 +659,32 @@ const Profile = () => {
               {experiences.map((exp) => (
                 <div
                   key={exp.id}
-                  className="border-b border-slate-100 pb-4 last:border-0 last:pb-0"
+                  className="border-b border-[#EFE7E1] pb-4 last:border-0 last:pb-0"
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-bold text-slate-800">{exp.role}</h4>
-                      <p className="text-xs text-slate-500">
+                      <h4 className="font-bold text-[#0A0A0A]">{exp.role}</h4>
+                      <p className="text-xs text-[#6F6F76]">
                         {exp.company} • {exp.period}
                       </p>
                     </div>
                     <div className="flex gap-2">
                       <button
                         onClick={() => openModal("experience", exp)}
-                        className="rounded-md p-1 text-slate-400 transition-all hover:bg-orange-50 hover:text-orange-600"
+                        className="rounded-md p-1 text-[#8A8690] transition-all hover:bg-[#FFF7F3] hover:text-[#FF6B35]"
                       >
                         <FiEdit3 size={16} />
                       </button>
                       <button
                         onClick={() => handleDelete("experience", exp.id)}
-                        className="rounded-md p-1 text-slate-400 transition-all hover:bg-red-50 hover:text-red-500"
+                        className="rounded-md p-1 text-[#8A8690] transition-all hover:bg-red-50 hover:text-red-500"
                       >
                         <FiTrash2 size={16} />
                       </button>
                     </div>
                   </div>
                   <div
-                    className="mt-2 text-sm text-slate-600 rich-text-content"
+                    className="mt-2 text-sm text-[#6F6F76] rich-text-content"
                     dangerouslySetInnerHTML={{ __html: exp.description }}
                   ></div>
                 </div>
@@ -694,14 +694,14 @@ const Profile = () => {
         </div>
 
         {/* Education */}
-        <div className="col-span-1 rounded border border-slate-200 bg-white shadow-sm lg:col-span-2">
-          <div className="flex items-center justify-between border-b border-slate-200 px-7 py-4">
-            <h3 className="flex items-center gap-2 font-medium text-slate-800">
-              <FiAward size={20} className="text-orange-600" /> Education
+        <div className="col-span-1 rounded border border-[#EADFD9] bg-white shadow-sm lg:col-span-2">
+          <div className="flex items-center justify-between border-b border-[#EADFD9] px-7 py-4">
+            <h3 className="flex items-center gap-2 font-medium text-[#0A0A0A]">
+              <FiAward size={20} className="text-[#FF6B35]" /> Education
             </h3>
             <button
               onClick={() => openModal("education")}
-              className="flex items-center gap-1 text-sm font-medium text-slate-500 transition-all hover:text-orange-600 hover:underline"
+              className="flex items-center gap-1 text-sm font-medium text-[#6F6F76] transition-all hover:text-[#FF6B35] hover:underline"
             >
               <FiPlus size={16} /> Add
             </button>
@@ -711,25 +711,25 @@ const Profile = () => {
               {educations.map((edu) => (
                 <div
                   key={edu.id}
-                  className="rounded border border-slate-200 bg-white p-5 transition-all hover:border-orange-300 hover:shadow-md"
+                  className="rounded border border-[#EADFD9] bg-white p-5 transition-all hover:border-[#FF9566] hover:shadow-md"
                 >
                   <div className="mb-2 flex items-start justify-between">
                     <div>
-                      <h4 className="font-bold text-slate-800">{edu.degree}</h4>
-                      <p className="text-xs text-slate-500">
+                      <h4 className="font-bold text-[#0A0A0A]">{edu.degree}</h4>
+                      <p className="text-xs text-[#6F6F76]">
                         {edu.institution} • {edu.period}
                       </p>
                     </div>
                     <div className="flex gap-2">
                       <button
                         onClick={() => openModal("education", edu)}
-                        className="rounded-md p-1 text-slate-400 transition-all hover:bg-orange-50 hover:text-orange-600"
+                        className="rounded-md p-1 text-[#8A8690] transition-all hover:bg-[#FFF7F3] hover:text-[#FF6B35]"
                       >
                         <FiEdit3 size={16} />
                       </button>
                       <button
                         onClick={() => handleDelete("education", edu.id)}
-                        className="rounded-md p-1 text-slate-400 transition-all hover:bg-red-50 hover:text-red-500"
+                        className="rounded-md p-1 text-[#8A8690] transition-all hover:bg-red-50 hover:text-red-500"
                       >
                         <FiTrash2 size={16} />
                       </button>
@@ -737,7 +737,7 @@ const Profile = () => {
                   </div>
                   {edu.description && (
                     <div
-                      className="mt-2 line-clamp-3 text-sm text-slate-600 rich-text-content"
+                      className="mt-2 line-clamp-3 text-sm text-[#6F6F76] rich-text-content"
                       dangerouslySetInnerHTML={{ __html: edu.description }}
                     ></div>
                   )}
@@ -758,18 +758,18 @@ const Profile = () => {
             <>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     Full Name
                   </label>
                   <input
                     name="full_name"
                     defaultValue={profile.full_name || profile.name}
                     required
-                    className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                    className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     Location
                   </label>
                   <div className="relative" ref={locationDropdownRef}>
@@ -780,21 +780,21 @@ const Profile = () => {
                       onFocus={() => locationSearch && setShowLocationDropdown(true)}
                       placeholder="Search city or state..."
                       autoComplete="off"
-                      className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                      className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                     />
                     {locationLoading && (
-                      <span className="absolute right-3 top-2.5 text-xs text-slate-400">
+                      <span className="absolute right-3 top-2.5 text-xs text-[#8A8690]">
                         Searching...
                       </span>
                     )}
                     {showLocationDropdown && locationResults.length > 0 && (
-                      <div className="absolute z-50 mt-1 max-h-48 w-full overflow-y-auto rounded border border-slate-200 bg-white shadow-lg">
+                      <div className="absolute z-50 mt-1 max-h-48 w-full overflow-y-auto rounded border border-[#EADFD9] bg-white shadow-lg">
                         {locationResults.map((loc) => (
                           <button
                             key={loc.id}
                             type="button"
                             onMouseDown={() => handleSelectLocation(loc)}
-                            className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-slate-700 hover:bg-orange-50 hover:text-orange-700"
+                            className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm text-[#4F4D55] hover:bg-[#FFF7F3] hover:text-[#C84F1F]"
                           >
                             <FiMapPin size={13} className="shrink-0 text-orange-400" />
                             <span>
@@ -816,7 +816,7 @@ const Profile = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     Stream <span className="text-red-500">*</span>
                   </label>
                   {streams.length > 0 ? (
@@ -824,7 +824,7 @@ const Profile = () => {
                       name="stream"
                       defaultValue={profile.stream}
                       required
-                      className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                      className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                     >
                       <option value="">Select stream</option>
                       {streams.map((s) => (
@@ -839,12 +839,12 @@ const Profile = () => {
                       defaultValue={profile.stream}
                       required
                       placeholder="e.g. Engineering & Technology"
-                      className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                      className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                     />
                   )}
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     Degree <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -852,14 +852,14 @@ const Profile = () => {
                     defaultValue={profile.degree}
                     required
                     placeholder="e.g. B.Tech Computer Science"
-                    className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                    className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     Graduation Year <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -870,104 +870,104 @@ const Profile = () => {
                     min="1990"
                     max="2035"
                     placeholder="2025"
-                    className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                    className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     College Name
                   </label>
                   <input
                     name="college_name_manual"
                     defaultValue={profile.college_name_manual}
                     placeholder="e.g. MIT Pune"
-                    className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                    className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     Target Role
                   </label>
                   <input
                     name="target_role"
                     defaultValue={profile.target_role || profile.position}
-                    className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                    className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     Cover Photo URL
                   </label>
                   <input
                     name="cover_photo_url"
                     defaultValue={profile.cover_photo_url || profile.cover}
                     placeholder="https://example.com/cover.jpg"
-                    className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                    className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                   Bio
                 </label>
                 <textarea
                   name="bio"
                   defaultValue={profile.bio}
                   rows="4"
-                  className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-3 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                  className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-3 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     LinkedIn URL
                   </label>
                   <input
                     name="linkedin_url"
                     defaultValue={profile.linkedin_url}
                     placeholder="https://linkedin.com/in/..."
-                    className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                    className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     GitHub URL
                   </label>
                   <input
                     name="github_url"
                     defaultValue={profile.github_url}
                     placeholder="https://github.com/..."
-                    className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                    className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     Portfolio URL
                   </label>
                   <input
                     name="portfolio_url"
                     defaultValue={profile.portfolio_url}
                     placeholder="https://yourportfolio.com"
-                    className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                    className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     Skills
                   </label>
                   <input
                     name="skills"
                     defaultValue={profile.skills}
                     placeholder="React, Node.js, PostgreSQL"
-                    className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                    className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                   />
                 </div>
               </div>
@@ -980,7 +980,7 @@ const Profile = () => {
             <>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     {modalType === "education" ? "Degree" : "Title"}
                   </label>
                   <input
@@ -990,11 +990,11 @@ const Profile = () => {
                       editItem?.role
                     }
                     required
-                    className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                    className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                  <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     {modalType === "project"
                       ? "Duration"
                       : modalType === "experience"
@@ -1021,7 +1021,7 @@ const Profile = () => {
                       editItem?.institution
                     }
                     required
-                    className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                    className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                   />
                 </div>
               </div>
@@ -1029,7 +1029,7 @@ const Profile = () => {
               {modalType === "experience" && (
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                       Start Date
                     </label>
                     <input
@@ -1037,30 +1037,30 @@ const Profile = () => {
                       name="start_date"
                       defaultValue={editItem?.start_date}
                       required
-                      className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                      className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                     />
                   </div>
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                       End Date
                     </label>
                     <input
                       type="date"
                       name="end_date"
                       defaultValue={editItem?.end_date}
-                      className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                      className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                     />
                   </div>
                 </div>
               )}
 
               {modalType === "experience" && (
-                <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+                <label className="flex items-center gap-2 text-sm font-medium text-[#4F4D55]">
                   <input
                     type="checkbox"
                     name="is_current"
                     defaultChecked={Boolean(editItem?.is_current)}
-                    className="h-4 w-4 rounded border-slate-300 text-orange-600 focus:ring-orange-500"
+                    className="h-4 w-4 rounded border-[#D8C9C0] text-[#FF6B35] focus:ring-[#8500FA]"
                   />
                   Currently working here
                 </label>
@@ -1069,7 +1069,7 @@ const Profile = () => {
               {modalType === "education" && (
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                       Start Year
                     </label>
                     <input
@@ -1078,11 +1078,11 @@ const Profile = () => {
                       defaultValue={editItem?.start_year}
                       min="1950"
                       max="2100"
-                      className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                      className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                     />
                   </div>
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                       End Year
                     </label>
                     <input
@@ -1091,18 +1091,18 @@ const Profile = () => {
                       defaultValue={editItem?.end_year}
                       min="1950"
                       max="2100"
-                      className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                      className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                     />
                   </div>
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                       Grade
                     </label>
                     <input
                       name="grade"
                       defaultValue={editItem?.grade}
                       placeholder="8.5 CGPA"
-                      className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                      className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                     />
                   </div>
                 </div>
@@ -1111,41 +1111,41 @@ const Profile = () => {
               {modalType === "project" && (
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                       Project URL
                     </label>
                     <input
                       name="project_url"
                       defaultValue={editItem?.project_url || editItem?.link}
                       placeholder="https://github.com/..."
-                      className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                      className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                     />
                   </div>
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                       Tech Stack
                     </label>
                     <input
                       name="tech_stack"
                       defaultValue={editItem?.tech_stack || editItem?.techStack}
                       placeholder="React, Node.js"
-                      className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm outline-none transition focus:border-orange-400 focus:ring-1 focus:ring-orange-400"
+                      className="w-full rounded border border-[#D8C9C0] bg-[#F7F5F2] px-4 py-2 text-sm outline-none transition focus:border-[#8500FA] focus:ring-1 focus:ring-orange-400"
                     />
                   </div>
                 </div>
               )}
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                   Description
                 </label>
-                <div className="overflow-hidden rounded border border-slate-300 transition focus-within:border-orange-400 focus-within:ring-1 focus-within:ring-orange-400">
+                <div className="overflow-hidden rounded border border-[#D8C9C0] transition focus-within:border-orange-400 focus-within:ring-1 focus-within:ring-orange-400">
                   <ReactQuill
                     theme="snow"
                     value={description}
                     onChange={setDescription}
                     modules={quillModules}
-                    className=" [&_.ql-toolbar]:border-b [&_.ql-toolbar]:border-slate-200 [&_.ql-toolbar]:bg-slate-50 [&_.ql-container]:text-sm [&_.ql-stroke]:stroke-slate-500 [&_.ql-fill]:fill-slate-500 [&_.ql-picker-label]:text-slate-500 [&_.ql-active_.ql-stroke]:stroke-orange-600 [&_.ql-active_.ql-fill]:fill-orange-600 [&_.ql-active]:text-orange-600 [&_.ql-toolbar button:hover_.ql-stroke]:stroke-orange-600 [&_.ql-toolbar button:hover_.ql-fill]:fill-orange-600"
+                    className=" [&_.ql-toolbar]:border-b [&_.ql-toolbar]:border-[#EADFD9] [&_.ql-toolbar]:bg-[#F7F5F2] [&_.ql-container]:text-sm [&_.ql-stroke]:stroke-[#6F6F76] [&_.ql-fill]:fill-[#6F6F76] [&_.ql-picker-label]:text-[#6F6F76] [&_.ql-active_.ql-stroke]:stroke-[#FF6B35] [&_.ql-active_.ql-fill]:fill-[#FF6B35] [&_.ql-active]:text-[#FF6B35] [&_.ql-toolbar button:hover_.ql-stroke]:stroke-[#FF6B35] [&_.ql-toolbar button:hover_.ql-fill]:fill-[#FF6B35]"
                   />
                 </div>
               </div>
@@ -1158,18 +1158,18 @@ const Profile = () => {
             </div>
           )}
 
-          <div className="flex justify-end gap-3 border-t border-slate-200 pt-4">
+          <div className="flex justify-end gap-3 border-t border-[#EADFD9] pt-4">
             <button
               type="button"
               onClick={closeModal}
-              className="rounded border border-slate-300 bg-white px-6 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:bg-slate-50 hover:shadow-md"
+              className="rounded border border-[#D8C9C0] bg-white px-6 py-2 text-sm font-medium text-[#4F4D55] shadow-sm transition-all hover:bg-[#F7F5F2] hover:shadow-md"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSaving}
-              className="rounded bg-orange-600 px-6 py-2 text-sm font-medium text-white shadow-md transition-all hover:bg-orange-700 disabled:cursor-not-allowed disabled:opacity-70"
+              className="rounded bg-[#FF6B35] px-6 py-2 text-sm font-medium text-white shadow-md transition-all hover:bg-[#FF9566] disabled:cursor-not-allowed disabled:opacity-70"
             >
               {isSaving ? "Saving..." : "Save"}
             </button>
@@ -1188,10 +1188,10 @@ const Profile = () => {
               <FiAlertTriangle size={22} />
             </div>
             <div>
-              <h4 className="text-base font-semibold text-slate-900">
+              <h4 className="text-base font-semibold text-[#0A0A0A]">
                 Delete your seeker profile?
               </h4>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
+              <p className="mt-2 text-sm leading-6 text-[#6F6F76]">
                 Your profile details will be deleted, but your account will remain active.
                 You can complete your profile again later.
               </p>
@@ -1204,12 +1204,12 @@ const Profile = () => {
             </div>
           )}
 
-          <div className="flex justify-end gap-3 border-t border-slate-200 pt-4">
+          <div className="flex justify-end gap-3 border-t border-[#EADFD9] pt-4">
             <button
               type="button"
               onClick={() => setIsDeleteProfileOpen(false)}
               disabled={isSaving}
-              className="rounded border border-slate-300 bg-white px-6 py-2 text-sm font-medium text-slate-700 shadow-sm transition-all hover:bg-slate-50 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
+              className="rounded border border-[#D8C9C0] bg-white px-6 py-2 text-sm font-medium text-[#4F4D55] shadow-sm transition-all hover:bg-[#F7F5F2] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
             >
               Cancel
             </button>

@@ -37,7 +37,7 @@ const Applications = () => {
       case "Rejected":
         return "bg-red-50 text-red-700 border border-red-100";
       default:
-        return "bg-orange-50 text-orange-700 border border-orange-100";
+        return "bg-[#FFF7F3] text-[#C84F1F] border border-[#F3D3C4]";
     }
   };
 
@@ -59,21 +59,21 @@ const Applications = () => {
 
       {/* Stats */}
       <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
-        <div className="border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="border border-[#EADFD9] bg-white p-5 shadow-sm">
           <div className="flex items-center gap-3">
-            <FiBriefcase className="text-orange-600" size={22} />
+            <FiBriefcase className="text-[#FF6B35]" size={22} />
             <div>
-              <p className="text-sm text-slate-500">Total</p>
+              <p className="text-sm text-[#6F6F76]">Total</p>
               <h3 className="text-xl font-bold">{applications.length}</h3>
             </div>
           </div>
         </div>
 
-        <div className="border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="border border-[#EADFD9] bg-white p-5 shadow-sm">
           <div className="flex items-center gap-3">
-            <FiClock className="text-orange-500" size={22} />
+            <FiClock className="text-[#FF6B35]" size={22} />
             <div>
-              <p className="text-sm text-slate-500">Pending</p>
+              <p className="text-sm text-[#6F6F76]">Pending</p>
               <h3 className="text-xl font-bold">
                 {applications.filter((a) => a.status === "Pending").length}
               </h3>
@@ -81,11 +81,11 @@ const Applications = () => {
           </div>
         </div>
 
-        <div className="border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="border border-[#EADFD9] bg-white p-5 shadow-sm">
           <div className="flex items-center gap-3">
             <FiCheckCircle className="text-green-600" size={22} />
             <div>
-              <p className="text-sm text-slate-500">Shortlisted</p>
+              <p className="text-sm text-[#6F6F76]">Shortlisted</p>
               <h3 className="text-xl font-bold">
                 {applications.filter((a) => a.status === "Shortlisted").length}
               </h3>
@@ -93,11 +93,11 @@ const Applications = () => {
           </div>
         </div>
 
-        <div className="border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="border border-[#EADFD9] bg-white p-5 shadow-sm">
           <div className="flex items-center gap-3">
             <FiXCircle className="text-red-600" size={22} />
             <div>
-              <p className="text-sm text-slate-500">Rejected</p>
+              <p className="text-sm text-[#6F6F76]">Rejected</p>
               <h3 className="text-xl font-bold">
                 {applications.filter((a) => a.status === "Rejected").length}
               </h3>
@@ -107,18 +107,18 @@ const Applications = () => {
       </div>
 
       {/* Main Table */}
-      <div className="overflow-hidden rounded border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded border border-[#EADFD9] bg-white shadow-sm">
         {/* Header */}
-        <div className="flex flex-col gap-4 border-b border-slate-100 p-5 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-4 border-b border-[#EFE7E1] p-5 md:flex-row md:items-center md:justify-between">
           <div className="relative w-full md:w-96">
             <FiSearch
               size={18}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8A8690]"
             />
             <input
               type="text"
               placeholder="Search by company or role..."
-              className="w-full rounded border border-slate-200 py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-orange-200"
+              className="w-full rounded border border-[#EADFD9] py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-orange-200"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -126,7 +126,7 @@ const Applications = () => {
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <select
-              className="rounded border border-slate-200 px-4 py-3 outline-none focus:ring-2 focus:ring-orange-200"
+              className="rounded border border-[#EADFD9] px-4 py-3 outline-none focus:ring-2 focus:ring-orange-200"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
@@ -137,7 +137,7 @@ const Applications = () => {
               <option value="Rejected">Rejected</option>
             </select>
 
-            <button className="flex items-center justify-center gap-2 rounded border border-slate-200 px-5 py-3 font-medium hover:bg-slate-50 transition">
+            <button className="flex items-center justify-center gap-2 rounded border border-[#EADFD9] px-5 py-3 font-medium hover:bg-[#F7F5F2] transition">
               <FiFilter size={18} />
               Filter
             </button>
@@ -148,7 +148,7 @@ const Applications = () => {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[800px]">
             <thead>
-              <tr className="border-b border-slate-100 text-left text-sm text-slate-500">
+              <tr className="border-b border-[#EFE7E1] text-left text-sm text-[#6F6F76]">
                 <th className="px-6 py-4 font-semibold">Company & Role</th>
                 <th className="px-6 py-4 font-semibold">Location</th>
                 <th className="px-6 py-4 font-semibold">Applied Date</th>
@@ -166,11 +166,11 @@ const Applications = () => {
                   <tr
                     key={index}
                     onClick={() => handleViewDetails(app.id)}
-                    className="cursor-pointer border-b border-slate-100 hover:bg-slate-50 transition"
+                    className="cursor-pointer border-b border-[#EFE7E1] hover:bg-[#F7F5F2] transition"
                   >
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-4">
-                        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white p-2">
+                        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-[8px] border border-[#EADFD9] bg-white p-2">
                           <img
                             src={app.logo}
                             alt={app.company}
@@ -179,10 +179,10 @@ const Applications = () => {
                         </div>
 
                         <div>
-                          <h4 className="font-semibold text-slate-800">
+                          <h4 className="font-semibold text-[#0A0A0A]">
                             {app.jobTitle}
                           </h4>
-                          <p className="text-sm text-slate-500">
+                          <p className="text-sm text-[#6F6F76]">
                             {app.company}
                           </p>
                         </div>
@@ -190,11 +190,11 @@ const Applications = () => {
                     </td>
 
                     {/* Assuming you have location in mock data, else change app.location to a static string like "Remote" */}
-                    <td className="px-6 py-5 text-sm text-slate-600">
+                    <td className="px-6 py-5 text-sm text-[#6F6F76]">
                       {app.location || "Remote"}
                     </td>
 
-                    <td className="px-6 py-5 text-sm text-slate-600">
+                    <td className="px-6 py-5 text-sm text-[#6F6F76]">
                       {app.date}
                     </td>
 
@@ -214,7 +214,7 @@ const Applications = () => {
                         <button
                           title="Add Note"
                           onClick={(e) => handleAddNote(e, app.id)}
-                          className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition"
+                          className="rounded-lg p-2 text-[#8A8690] hover:bg-[#EFE7E1] hover:text-[#4F4D55] transition"
                         >
                           <FiEdit3 size={18} />
                         </button>
@@ -222,7 +222,7 @@ const Applications = () => {
                         {/* View Details Button */}
                         <button
                           title="View Details"
-                          className="rounded-lg p-2 text-slate-400 hover:bg-orange-50 hover:text-orange-600 transition"
+                          className="rounded-lg p-2 text-[#8A8690] hover:bg-[#FFF7F3] hover:text-[#FF6B35] transition"
                         >
                           <FiEye size={18} />
                         </button>
@@ -234,7 +234,7 @@ const Applications = () => {
                 <tr>
                   <td
                     colSpan="5"
-                    className="px-6 py-14 text-center text-slate-500"
+                    className="px-6 py-14 text-center text-[#6F6F76]"
                   >
                     No applications found.
                   </td>
@@ -245,22 +245,22 @@ const Applications = () => {
         </div>
 
         {/* Footer */}
-        <div className="flex flex-col gap-4 border-t border-slate-100 p-5 md:flex-row md:items-center md:justify-between">
-          <p className="text-sm text-slate-500">
+        <div className="flex flex-col gap-4 border-t border-[#EFE7E1] p-5 md:flex-row md:items-center md:justify-between">
+          <p className="text-sm text-[#6F6F76]">
             Showing {filteredApplications.length} of {applications.length}{" "}
             applications
           </p>
 
           <div className="flex items-center gap-2">
-            <button className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 hover:bg-slate-50">
+            <button className="flex h-9 w-9 items-center justify-center rounded-[8px] border border-[#EADFD9] hover:bg-[#F7F5F2]">
               <FiChevronLeft />
             </button>
 
-            <button className="flex h-9 min-w-[36px] items-center justify-center rounded-xl bg-orange-500 px-3 text-white shadow">
+            <button className="flex h-9 min-w-[36px] items-center justify-center rounded-[8px] bg-[#FF6B35] px-3 text-white shadow">
               1
             </button>
 
-            <button className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 hover:bg-slate-50">
+            <button className="flex h-9 w-9 items-center justify-center rounded-[8px] border border-[#EADFD9] hover:bg-[#F7F5F2]">
               <FiChevronRight />
             </button>
           </div>

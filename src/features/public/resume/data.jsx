@@ -269,11 +269,9 @@ const SECTION_TIPS = {
 // ACCENT PALETTES (for TwoColumn + Creative templates)
 // ============================================================
 const ACCENT_PALETTES = [
-  { id: "orange", name: "Sunrise Orange", color: "#E25C2A", soft: "#FFF4ED" },
-  { id: "indigo", name: "Deep Indigo", color: "#3D52A0", soft: "#EEF1F9" },
-  { id: "emerald", name: "Forest Emerald", color: "#0F7B5D", soft: "#EBF6F1" },
-  { id: "burgundy", name: "Burgundy Red", color: "#9A2A2A", soft: "#FBEFEF" },
-  { id: "graphite", name: "Graphite Black", color: "#1F1F23", soft: "#F1F1F3" },
+  { id: "purple", name: "AI Purple", color: "#8500FA", soft: "#F2E8FF" },
+  { id: "orange", name: "Action Orange", color: "#FF6B35", soft: "#FFF7F3" },
+  { id: "graphite", name: "Graphite Black", color: "#1D1D1E", soft: "#F7F5F2" },
 ];
 
 // ============================================================
@@ -281,7 +279,7 @@ const ACCENT_PALETTES = [
 // ============================================================
 const SAMPLE_RESUME = {
   selectedTemplate: "classic",
-  accent: "orange",
+  accent: "purple",
   jobCategory: "software",
   personal: {
     name: "Ananya Verma",

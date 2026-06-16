@@ -1,13 +1,78 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useAuthStore } from "../../../../store/authStore";
+
+const notificationOptions = [
+  {
+    key: "emailAlerts",
+    label: "Email alerts",
+    description: "Applicant and job updates.",
+  },
+  {
+    key: "pushAlerts",
+    label: "Push alerts",
+    description: "Important recruiter actions.",
+  },
+  {
+    key: "systemAlerts",
+    label: "System alerts",
+    description: "Security and platform notices.",
+  },
+];
+
+const splitName = (name = "") => {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  return {
+    firstName: parts[0] || "",
+    lastName: parts.slice(1).join(" "),
+  };
+};
+
+const pickNameValue = (...values) =>
+  values.find(
+    (value) => typeof value === "string" && value.trim() && !value.trim().includes("@"),
+  ) || "";
+
+const getNameParts = (user) => {
+  const profile = user?.profile ?? {};
+  const company = user?.company ?? {};
+  const fallback = splitName(
+    pickNameValue(
+      profile.full_name,
+      profile.name,
+      user?.full_name,
+      user?.name,
+      company.contact_person,
+    )
+  );
+
+  return {
+    firstName: user?.first_name || profile.first_name || fallback.firstName,
+    lastName: user?.last_name || profile.last_name || fallback.lastName,
+  };
+};
 
 const SecuritySettings = () => {
+  const { user, isLoading, updateCompanyAccountName } = useAuthStore();
+  const nameParts = getNameParts(user);
   const [formData, setFormData] = useState({
-    firstName: "Alexander",
-    lastName: "Henderson",
-    email: "a.henderson@recruitpro.com",
+    firstName: nameParts.firstName,
+    lastName: nameParts.lastName,
+    email: user?.email || "",
     currentPassword: "",
     newPassword: "",
   });
+  const [fieldErrors, setFieldErrors] = useState({});
+
+  useEffect(() => {
+    const nextNameParts = getNameParts(user);
+    setFormData((prev) => ({
+      ...prev,
+      firstName: nextNameParts.firstName,
+      lastName: nextNameParts.lastName,
+      email: user?.email || "",
+    }));
+  }, [user]);
 
   const [notifications, setNotifications] = useState({
     emailAlerts: true,
@@ -15,22 +80,42 @@ const SecuritySettings = () => {
     systemAlerts: true,
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (fieldErrors[name]) {
+      setFieldErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   const handleNotificationToggle = (type) => {
     setNotifications((prev) => ({ ...prev, [type]: !prev[type] }));
   };
 
-  const handleUpdateProfile = (e) => {
-    e.preventDefault();
-    console.log("Updating profile:", formData);
+  const handleUpdateProfile = async (event) => {
+    event.preventDefault();
+    const nextErrors = {};
+
+    if (!formData.firstName.trim()) nextErrors.firstName = "First name is required.";
+    if (!formData.lastName.trim()) nextErrors.lastName = "Last name is required.";
+
+    setFieldErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
+
+    const toastId = toast.loading("Updating account...");
+    try {
+      await updateCompanyAccountName({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+      });
+      toast.success("Account updated successfully.", { id: toastId });
+    } catch (error) {
+      toast.error(error.message, { id: toastId });
+    }
   };
 
-  const handleChangePassword = (e) => {
-    e.preventDefault();
+  const handleChangePassword = (event) => {
+    event.preventDefault();
     console.log("Changing password");
   };
 
@@ -44,243 +129,154 @@ const SecuritySettings = () => {
     }
   };
 
+  const inputClass =
+    "w-full rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] px-4 py-3 text-sm font-semibold text-[#111114] outline-none transition focus:border-[#8500FA] focus:bg-white";
+  const labelClass =
+    "mb-2 block text-xs font-bold uppercase tracking-[0.08em] text-[#77737D]";
+
   return (
-    <div className="min-h-screen">
-      <div className="mx-auto max-w-5xl p-6 md:p-12">
-        {/* Header Section */}
-        <div className="mb-12">
-          <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-slate-800 md:text-4xl">
-            Security Settings
-          </h1>
-          <p className="font-body text-slate-500">
-            Manage your enterprise account credentials and communication
-            preferences.
-          </p>
-        </div>
-
-        {/* Bento Grid Layout for Settings */}
-        <div className="grid grid-cols-12 gap-6 md:gap-8">
-          {/* Account Information (Large Card) */}
-          <div className="col-span-12 rounded border border-slate-200 bg-white p-6 shadow-sm lg:col-span-7 md:p-10">
-            <div className="mb-8 flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded bg-orange-50 text-orange-600">
-                <span className="material-symbols-outlined">person</span>
-              </div>
-              <h2 className="text-xl font-bold text-slate-800">
-                Account Information
-              </h2>
-            </div>
-            <form onSubmit={handleUpdateProfile} className="space-y-6">
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    First Name
-                  </label>
-                  <input
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    className="w-full rounded border border-slate-200 bg-slate-50 p-3 font-body text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
-                    type="text"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    Last Name
-                  </label>
-                  <input
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    className="w-full rounded border border-slate-200 bg-slate-50 p-3 font-body text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
-                    type="text"
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  Email Address
-                </label>
-                <input
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full rounded border border-slate-200 bg-slate-50 p-3 font-body text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
-                  type="email"
-                />
-              </div>
-              <div className="flex justify-end pt-4">
-                <button
-                  type="submit"
-                  className="rounded bg-orange-600 px-6 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:bg-orange-700 hover:shadow-lg"
-                >
-                  Update Profile
-                </button>
-              </div>
-            </form>
-          </div>
-
-          {/* Password Management (Action Card) */}
-          <div className="col-span-12 rounded border border-slate-200 bg-white p-6 shadow-sm lg:col-span-5 md:p-10">
-            <div className="mb-8 flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded bg-orange-50 text-orange-600">
-                <span className="material-symbols-outlined">lock_reset</span>
-              </div>
-              <h2 className="text-xl font-bold text-slate-800">
-                Password Management
-              </h2>
-            </div>
-            <form onSubmit={handleChangePassword} className="space-y-5">
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  Current Password
-                </label>
-                <input
-                  name="currentPassword"
-                  value={formData.currentPassword}
-                  onChange={handleInputChange}
-                  className="w-full rounded border border-slate-200 bg-slate-50 p-3 font-body text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
-                  placeholder="••••••••"
-                  type="password"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  New Password
-                </label>
-                <input
-                  name="newPassword"
-                  value={formData.newPassword}
-                  onChange={handleInputChange}
-                  className="w-full rounded border border-slate-200 bg-slate-50 p-3 font-body text-slate-800 outline-none transition focus:border-orange-400 focus:bg-white focus:ring-1 focus:ring-orange-400"
-                  placeholder="••••••••"
-                  type="password"
-                />
-              </div>
-              <div className="pt-4">
-                <button
-                  type="submit"
-                  className="w-full rounded border border-slate-200 bg-slate-50 px-6 py-3 text-sm font-semibold text-slate-700 transition-all hover:bg-slate-100 hover:text-slate-800"
-                >
-                  Change Password
-                </button>
-              </div>
-            </form>
-          </div>
-
-          {/* Notification Preferences (Full Width Horizontal Glass Card) */}
-          <div className="col-span-12 rounded border border-slate-200 bg-slate-50 p-6 shadow-sm backdrop-blur-md md:p-10">
-            <div className="flex flex-col justify-between gap-8 md:flex-row md:items-center">
-              <div className="max-w-48">
-                <div className="mb-4 flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded bg-orange-50 text-orange-600">
-                    <span className="material-symbols-outlined">
-                      notifications_active
-                    </span>
-                  </div>
-                  <h2 className="text-xl font-bold text-slate-800">
-                    Notifications
-                  </h2>
-                </div>
-                <p className="text-sm leading-relaxed text-slate-500">
-                  Choose how you want to be informed about new applicants,
-                  portal messages, and system updates.
-                </p>
-              </div>
-              <div className="grid flex-1 grid-cols-1 gap-6 md:grid-cols-3">
-                {/* Email Toggle */}
-                <div className="flex items-center justify-between rounded border border-slate-200 bg-white p-6 transition-all duration-300 hover:shadow-md">
-                  <div>
-                    <p className="font-bold text-slate-800">Email Alerts</p>
-                    <p className="text-xs text-slate-500">
-                      Application updates
-                    </p>
-                  </div>
-                  <label className="relative inline-flex cursor-pointer items-center">
-                    <input
-                      type="checkbox"
-                      checked={notifications.emailAlerts}
-                      onChange={() => handleNotificationToggle("emailAlerts")}
-                      className="sr-only peer"
-                    />
-                    <div className="h-6 w-11 rounded-full bg-slate-200 peer-checked:bg-orange-600 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-slate-200 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-focus:outline-none"></div>
-                  </label>
-                </div>
-
-                {/* Push Toggle */}
-                <div className="flex items-center justify-between rounded border border-slate-200 bg-white p-6 transition-all duration-300 hover:shadow-md">
-                  <div>
-                    <p className="font-bold text-slate-800">Push Alerts</p>
-                    <p className="text-xs text-slate-500">Direct messages</p>
-                  </div>
-                  <label className="relative inline-flex cursor-pointer items-center">
-                    <input
-                      type="checkbox"
-                      checked={notifications.pushAlerts}
-                      onChange={() => handleNotificationToggle("pushAlerts")}
-                      className="sr-only peer"
-                    />
-                    <div className="h-6 w-11 rounded-full bg-slate-200 peer-checked:bg-orange-600 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-slate-200 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-focus:outline-none"></div>
-                  </label>
-                </div>
-
-                {/* Platform Toggle */}
-                <div className="flex items-center justify-between rounded border border-slate-200 bg-white p-6 transition-all duration-300 hover:shadow-md">
-                  <div>
-                    <p className="font-bold text-slate-800">System Alerts</p>
-                    <p className="text-xs text-slate-500">
-                      Maintenance &amp; policy
-                    </p>
-                  </div>
-                  <label className="relative inline-flex cursor-pointer items-center">
-                    <input
-                      type="checkbox"
-                      checked={notifications.systemAlerts}
-                      onChange={() => handleNotificationToggle("systemAlerts")}
-                      className="sr-only peer"
-                    />
-                    <div className="h-6 w-11 rounded-full bg-slate-200 peer-checked:bg-orange-600 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-slate-200 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-focus:outline-none"></div>
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Danger Zone Section */}
-          <div className="col-span-12 mt-8 flex flex-col items-start justify-between gap-4 rounded border-2 border-dashed border-red-200 bg-red-50/30 p-6 md:flex-row md:items-center md:p-10">
-            <div>
-              <h3 className="mb-1 text-lg font-bold text-red-700">
-                Deactivate Account
-              </h3>
-              <p className="text-sm text-red-500">
-                Once you deactivate your enterprise portal, all data is archived
-                for 30 days.
-              </p>
-            </div>
-            <button
-              onClick={handleDeactivate}
-              className="whitespace-nowrap rounded border-2 border-red-300 bg-white px-6 py-2.5 text-sm font-bold text-red-600 transition-all hover:border-red-500 hover:bg-red-50"
-            >
-              Deactivate
-            </button>
-          </div>
-        </div>
+    <div className="mx-auto w-full max-w-6xl px-4 py-6 md:px-8 md:py-8">
+      <div className="mb-6">
+        <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#8500FA]">
+          Settings
+        </p>
+        <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-[#111114] md:text-3xl">
+          Security
+        </h1>
       </div>
 
-      {/* Footer Metric Row */}
-      <footer className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-6 py-12 opacity-40 md:flex-row md:px-12">
-        <div className="text-xs font-medium uppercase tracking-widest text-slate-500">
-          FirstJobIndia Employer Portal v4.2.0
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <section className="rounded-[8px] border border-[#E7DDD6] bg-white p-5 md:p-6">
+          <h2 className="text-base font-bold text-[#111114]">Account</h2>
+          <form onSubmit={handleUpdateProfile} className="mt-5 space-y-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <label className={labelClass}>First name</label>
+                <input
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                  className={`${inputClass} ${fieldErrors.firstName ? "border-red-400" : ""}`}
+                  type="text"
+                  autoComplete="given-name"
+                />
+                {fieldErrors.firstName && (
+                  <p className="mt-1 text-sm text-red-600">{fieldErrors.firstName}</p>
+                )}
+              </div>
+              <div>
+                <label className={labelClass}>Last name</label>
+                <input
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                  className={`${inputClass} ${fieldErrors.lastName ? "border-red-400" : ""}`}
+                  type="text"
+                  autoComplete="family-name"
+                />
+                {fieldErrors.lastName && (
+                  <p className="mt-1 text-sm text-red-600">{fieldErrors.lastName}</p>
+                )}
+              </div>
+            </div>
+            <div>
+              <label className={labelClass}>Email</label>
+              <input
+                name="email"
+                value={formData.email}
+                className={`${inputClass} cursor-not-allowed bg-[#EFE7E1] text-[#77737D]`}
+                type="email"
+                disabled
+                readOnly
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="rounded-[8px] bg-[#111114] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#2B2B31] disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              {isLoading ? "Updating..." : "Update account"}
+            </button>
+          </form>
+        </section>
+
+        <section className="rounded-[8px] border border-[#E7DDD6] bg-white p-5 md:p-6">
+          <h2 className="text-base font-bold text-[#111114]">Password</h2>
+          <form onSubmit={handleChangePassword} className="mt-5 space-y-4">
+            <div>
+              <label className={labelClass}>Current password</label>
+              <input
+                name="currentPassword"
+                value={formData.currentPassword}
+                onChange={handleInputChange}
+                className={inputClass}
+                placeholder="Current password"
+                type="password"
+              />
+            </div>
+            <div>
+              <label className={labelClass}>New password</label>
+              <input
+                name="newPassword"
+                value={formData.newPassword}
+                onChange={handleInputChange}
+                className={inputClass}
+                placeholder="New password"
+                type="password"
+              />
+            </div>
+            <button
+              type="submit"
+              className="rounded-[8px] bg-[#FF6B35] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#E85F2F]"
+            >
+              Change password
+            </button>
+          </form>
+        </section>
+      </div>
+
+      <section className="mt-4 rounded-[8px] border border-[#E7DDD6] bg-white p-5 md:p-6">
+        <h2 className="text-base font-bold text-[#111114]">Notifications</h2>
+        <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3">
+          {notificationOptions.map((option) => (
+            <label
+              key={option.key}
+              className="flex cursor-pointer items-center justify-between gap-4 rounded-[8px] border border-[#EFE7E1] bg-[#FDFBF9] p-4"
+            >
+              <span>
+                <span className="block text-sm font-bold text-[#111114]">
+                  {option.label}
+                </span>
+                <span className="mt-1 block text-xs text-[#77737D]">
+                  {option.description}
+                </span>
+              </span>
+              <input
+                type="checkbox"
+                checked={notifications[option.key]}
+                onChange={() => handleNotificationToggle(option.key)}
+                className="h-5 w-5 accent-[#8500FA]"
+              />
+            </label>
+          ))}
         </div>
-        <div className="flex gap-6">
-          <span className="cursor-pointer text-xs font-medium uppercase tracking-widest text-slate-500 hover:opacity-70">
-            Privacy Policy
-          </span>
-          <span className="cursor-pointer text-xs font-medium uppercase tracking-widest text-slate-500 hover:opacity-70">
-            Terms of Service
-          </span>
+      </section>
+
+      <section className="mt-4 flex flex-col justify-between gap-4 rounded-[8px] border border-red-200 bg-red-50/50 p-5 md:flex-row md:items-center md:p-6">
+        <div>
+          <h2 className="text-base font-bold text-red-700">Deactivate account</h2>
+          <p className="mt-1 text-sm text-red-600">
+            Hiring data is archived for 30 days after deactivation.
+          </p>
         </div>
-      </footer>
+        <button
+          onClick={handleDeactivate}
+          className="rounded-[8px] border border-red-200 bg-white px-4 py-2.5 text-sm font-bold text-red-600 transition-colors hover:bg-red-100"
+          type="button"
+        >
+          Deactivate
+        </button>
+      </section>
     </div>
   );
 };

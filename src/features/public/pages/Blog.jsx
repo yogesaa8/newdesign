@@ -40,16 +40,16 @@ const Blog = () => {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-24 sm:px-6 lg:px-8">
+    <main className="fji-page px-4 py-24 sm:px-6 lg:px-8">
       {seoElement}
       <section className="mx-auto max-w-2xl text-center">
-        <span className="inline-block rounded-full border border-orange-200 bg-orange-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-orange-700">
+        <span className="inline-block rounded-[8px] border border-[#EADFD9] bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#8500FA]">
           Launching soon
         </span>
-        <h1 className="mt-6 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+        <h1 className="fji-heading mt-6 text-4xl sm:text-5xl">
           Career advice for freshers.
         </h1>
-        <p className="mt-5 text-base leading-7 text-slate-600 sm:text-lg">
+        <p className="fji-copy mt-5 text-base sm:text-lg">
           We are still writing the first batch of articles on resumes, first
           interviews, salary negotiation, and choosing the right first role in
           India. Subscribe and we will email you the moment the first article
@@ -72,18 +72,18 @@ const Blog = () => {
               if (status !== "idle") setStatus("idle");
             }}
             placeholder="you@example.com"
-            className="flex-1 rounded-md border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+            className="fji-input flex-1"
           />
           <button
             type="submit"
-            className="rounded-md bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-orange-600"
+            className="rounded-[8px] bg-[#FF6B35] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#FF9566]"
           >
             Notify me
           </button>
         </form>
 
         {status === "submitted" && (
-          <p className="mt-4 text-sm text-emerald-700">
+          <p className="mt-4 text-sm text-green-700">
             Thanks. You are on the list and will hear from us when the first
             article goes live.
           </p>
@@ -94,7 +94,7 @@ const Blog = () => {
           </p>
         )}
 
-        <p className="mt-8 text-xs text-slate-500">
+        <p className="mt-8 text-xs text-[#6F6F76]">
           One email at launch, then a gentle weekly digest. Unsubscribe in one
           click.
         </p>

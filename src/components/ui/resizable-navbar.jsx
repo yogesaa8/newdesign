@@ -10,6 +10,8 @@ import {
 import React, { useRef, useState } from "react";
 import { cn } from "../../lib/utils";
 
+const MotionDiv = motion.div;
+
 export const Navbar = ({ children, className }) => {
   const ref = useRef(null);
   const { scrollY } = useScroll({
@@ -27,7 +29,7 @@ export const Navbar = ({ children, className }) => {
   });
 
   return (
-    <motion.div
+    <MotionDiv
       ref={ref}
       // IMPORTANT: Change this to class of `fixed` if you want the navbar to be fixed
       className={cn("sticky inset-x-0 top-0 z-40 w-full", className)}
@@ -37,20 +39,25 @@ export const Navbar = ({ children, className }) => {
           ? React.cloneElement(child, { visible })
           : child,
       )}
-    </motion.div>
+    </MotionDiv>
   );
 };
 
-export const NavBody = ({ children, className, visible }) => {
+export const NavBody = ({
+  children,
+  className,
+  visible,
+  disableScrollResize = false,
+}) => {
   return (
-    <motion.div
+    <MotionDiv
       animate={{
         backdropFilter: visible ? "blur(10px)" : "none",
         boxShadow: visible
           ? "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset"
           : "none",
-        width: visible ? "40%" : "100%",
-        y: visible ? 20 : 0,
+        width: visible && !disableScrollResize ? "40%" : "100%",
+        y: visible && !disableScrollResize ? 20 : 0,
       }}
       transition={{
         type: "spring",
@@ -67,7 +74,7 @@ export const NavBody = ({ children, className, visible }) => {
       )}
     >
       {children}
-    </motion.div>
+    </MotionDiv>
   );
 };
 
@@ -76,7 +83,7 @@ export const NavItems = ({ items, className, onItemClick }) => {
   const [hoveredChild, setHoveredChild] = useState(null);
 
   return (
-    <motion.div
+    <MotionDiv
       onMouseLeave={() => {
         setHovered(null);
         setHoveredChild(null);
@@ -102,7 +109,7 @@ export const NavItems = ({ items, className, onItemClick }) => {
               className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300"
             >
               {hovered === idx && (
-                <motion.div
+                <MotionDiv
                   layoutId="hovered"
                   className="absolute inset-0 h-full w-full rounded-full bg-gray-100 dark:bg-neutral-800"
                 />
@@ -129,7 +136,7 @@ export const NavItems = ({ items, className, onItemClick }) => {
                     className="relative block px-3 py-2 text-sm rounded-full text-neutral-600 dark:text-neutral-300"
                   >
                     {hoveredChild === i && (
-                      <motion.div
+                      <MotionDiv
                         layoutId="child-hover"
                         className="absolute inset-0 rounded-full bg-gray-100 dark:bg-neutral-800"
                         transition={{
@@ -148,23 +155,28 @@ export const NavItems = ({ items, className, onItemClick }) => {
           </div>
         );
       })}
-    </motion.div>
+    </MotionDiv>
   );
 };
 
-export const MobileNav = ({ children, className, visible }) => {
+export const MobileNav = ({
+  children,
+  className,
+  visible,
+  disableScrollResize = false,
+}) => {
   return (
-    <motion.div
+    <MotionDiv
       animate={{
         backdropFilter: visible ? "blur(10px)" : "none",
         boxShadow: visible
           ? "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset"
           : "none",
-        width: visible ? "90%" : "100%",
-        paddingRight: visible ? "12px" : "0px",
-        paddingLeft: visible ? "12px" : "0px",
-        borderRadius: visible ? "4px" : "2rem",
-        y: visible ? 20 : 0,
+        width: visible && !disableScrollResize ? "90%" : "100%",
+        paddingRight: visible && !disableScrollResize ? "12px" : "0px",
+        paddingLeft: visible && !disableScrollResize ? "12px" : "0px",
+        borderRadius: visible && !disableScrollResize ? "4px" : "2rem",
+        y: visible && !disableScrollResize ? 20 : 0,
       }}
       transition={{
         type: "spring",
@@ -178,7 +190,7 @@ export const MobileNav = ({ children, className, visible }) => {
       )}
     >
       {children}
-    </motion.div>
+    </MotionDiv>
   );
 };
 
@@ -195,11 +207,11 @@ export const MobileNavHeader = ({ children, className }) => {
   );
 };
 
-export const MobileNavMenu = ({ children, className, isOpen, onClose }) => {
+export const MobileNavMenu = ({ children, className, isOpen }) => {
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -209,7 +221,7 @@ export const MobileNavMenu = ({ children, className, isOpen, onClose }) => {
           )}
         >
           {children}
-        </motion.div>
+        </MotionDiv>
       )}
     </AnimatePresence>
   );
@@ -246,12 +258,13 @@ export const NavbarLogo = () => {
 
 export const NavbarButton = ({
   href,
-  as: Tag = "a",
+  as = "a",
   children,
   className,
   variant = "primary",
   ...props
 }) => {
+  const Component = as;
   const baseStyles =
     "px-4 py-2 rounded-md bg-white button bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
 
@@ -265,12 +278,12 @@ export const NavbarButton = ({
   };
 
   return (
-    <Tag
+    <Component
       href={href || undefined}
       className={cn(baseStyles, variantStyles[variant], className)}
       {...props}
     >
       {children}
-    </Tag>
+    </Component>
   );
 };

@@ -84,16 +84,16 @@ const Documents = () => {
     <>
       <Breadcrumb pageName="Documents" />
 
-      <div className="rounded border border-slate-200 bg-white shadow-sm">
+      <div className="rounded border border-[#EADFD9] bg-white shadow-sm">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
-          <h3 className="text-lg font-semibold text-slate-800">
+        <div className="flex items-center justify-between border-b border-[#EADFD9] px-6 py-4">
+          <h3 className="text-lg font-semibold text-[#0A0A0A]">
             All Documents
           </h3>
 
           <button
             onClick={handleUploadClick}
-            className="flex items-center gap-2 rounded-full bg-orange-600 px-6 py-2 text-sm font-medium text-white shadow-md transition-all hover:bg-orange-700"
+            className="flex items-center gap-2 rounded-full bg-[#FF6B35] px-6 py-2 text-sm font-medium text-white shadow-md transition-all hover:bg-[#FF9566]"
           >
             <FiPlus size={18} />
             Upload New
@@ -115,11 +115,11 @@ const Documents = () => {
             {docs.map((doc) => (
               <div
                 key={doc.id}
-                className="group rounded border border-slate-200 bg-white p-5 transition-all hover:-translate-y-1 hover:shadow-md"
+                className="group rounded border border-[#EADFD9] bg-white p-5 transition-all hover:-translate-y-1 hover:shadow-md"
               >
                 {/* Top */}
                 <div className="mb-4 flex items-center justify-between">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-50 text-orange-600">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-[8px] bg-[#FFF7F3] text-[#FF6B35]">
                     {doc.type === "Resume" ? (
                       <FiFileText size={22} />
                     ) : doc.type === "Certificate" ? (
@@ -131,7 +131,7 @@ const Documents = () => {
 
                   <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
                     <button
-                      className="rounded-lg p-2 text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+                      className="rounded-lg p-2 text-[#6F6F76] transition hover:bg-blue-50 hover:text-blue-600"
                       title="Download"
                     >
                       <FiDownload size={16} />
@@ -139,7 +139,7 @@ const Documents = () => {
 
                     <button
                       onClick={() => handleDelete(doc.id)}
-                      className="rounded-lg p-2 text-slate-500 transition hover:bg-red-50 hover:text-red-500"
+                      className="rounded-lg p-2 text-[#6F6F76] transition hover:bg-red-50 hover:text-red-500"
                       title="Delete"
                     >
                       <FiTrash2 size={16} />
@@ -149,21 +149,21 @@ const Documents = () => {
 
                 {/* Content */}
                 <h5
-                  className="truncate font-bold text-slate-800"
+                  className="truncate font-bold text-[#0A0A0A]"
                   title={doc.name}
                 >
                   {doc.name}
                 </h5>
 
-                <p className="mb-4 mt-1 text-xs text-slate-500">
+                <p className="mb-4 mt-1 text-xs text-[#6F6F76]">
                   {doc.type} • {doc.size}
                 </p>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between border-t border-slate-100 pt-3 text-xs">
-                  <span className="text-slate-500">{doc.date}</span>
+                <div className="flex items-center justify-between border-t border-[#EFE7E1] pt-3 text-xs">
+                  <span className="text-[#6F6F76]">{doc.date}</span>
 
-                  <button className="flex items-center gap-1 font-medium text-orange-600 transition hover:text-orange-700">
+                  <button className="flex items-center gap-1 font-medium text-[#FF6B35] transition hover:text-[#C84F1F]">
                     <FiEye size={12} />
                     View
                   </button>
@@ -175,17 +175,17 @@ const Documents = () => {
           {/* Upload Area */}
           <div
             onClick={handleUploadClick}
-            className="group mt-10 cursor-pointer rounded border-2 border-dashed border-slate-300 bg-slate-50 p-12 text-center transition-all hover:border-orange-400 hover:bg-orange-50"
+            className="group mt-10 cursor-pointer rounded border-2 border-dashed border-[#D8C9C0] bg-[#F7F5F2] p-12 text-center transition-all hover:border-orange-400 hover:bg-[#FFF7F3]"
           >
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white text-orange-600 shadow-sm transition-transform group-hover:scale-110">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white text-[#FF6B35] shadow-sm transition-transform group-hover:scale-110">
               <FiUploadCloud size={32} />
             </div>
 
-            <h4 className="mb-2 text-xl font-bold text-slate-800">
+            <h4 className="mb-2 text-xl font-bold text-[#0A0A0A]">
               Click to upload or drag and drop
             </h4>
 
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-[#6F6F76]">
               Support for PDF, DOCX, JPG (Max 5MB)
             </p>
           </div>

@@ -1,0 +1,44 @@
+# FirstJobIndia
+
+Your First Job, Our First Priority. FirstJobIndia helps freshers and first-time job seekers across India find verified roles, build recruiter-ready resumes, and follow a step-by-step career roadmap.
+
+## Public pages
+
+- [Home](https://www.firstjobindia.in/): Fresher jobs, resume builder, and Career GPS in one place.
+- [Fresher jobs](https://www.firstjobindia.in/jobs): Browse verified openings filtered by role, city, and salary.
+- [Resume builder](https://www.firstjobindia.in/resume): Free guided builder with recruiter-ready templates and PDF download.
+- [Career GPS](https://www.firstjobindia.in/career-gps): Readiness analytics for Indian freshers; scores resume, skills, exams, and study-abroad signals.
+- [College partner platform](https://www.firstjobindia.in/college): Campus placement workflow for colleges and universities.
+- [React interview e-book](https://www.firstjobindia.in/e-book): Curated React interview questions for fresher and junior frontend roles.
+- [Career advice blog](https://www.firstjobindia.in/blog): Articles on resumes, interviews, and choosing a career path.
+- [About FirstJobIndia](https://www.firstjobindia.in/about-us): Mission, services, and how the platform works.
+- [Send feedback](https://www.firstjobindia.in/reviews): Feedback, bug reports, and feature requests.
+- [Privacy policy](https://www.firstjobindia.in/privacy-policy)
+- [Terms and conditions](https://www.firstjobindia.in/terms)
+
+## Jobs
+
+- [All jobs](https://www.firstjobindia.in/jobs)
+- [Corporate Solutions Executive at Leffler and Sons](https://www.firstjobindia.in/jobs/1)
+- [Marketing Manager at Garcia PLC](https://www.firstjobindia.in/jobs/2)
+- [Financial Analyst at Thompson Group](https://www.firstjobindia.in/jobs/3)
+- [HR Business Partner at Wilson Corp](https://www.firstjobindia.in/jobs/4)
+- [Software Engineer at Davis Tech](https://www.firstjobindia.in/jobs/5)
+- [Sales Executive at Martinez Ltd](https://www.firstjobindia.in/jobs/6)
+- [Operations Manager at Anderson Inc](https://www.firstjobindia.in/jobs/7)
+- [Content Writer at Taylor Media](https://www.firstjobindia.in/jobs/8)
+- [Data Scientist at Brown Solutions](https://www.firstjobindia.in/jobs/9)
+- [Accountant at Miller Finance](https://www.firstjobindia.in/jobs/10)
+- [Product Manager at Harris Innovations](https://www.firstjobindia.in/jobs/11)
+- [Graphic Designer at Clark Creative](https://www.firstjobindia.in/jobs/12)
+- [Supply Chain Manager at Young Logistics](https://www.firstjobindia.in/jobs/13)
+- [Business Development Manager at King Enterprises](https://www.firstjobindia.in/jobs/14)
+- [Cyber Security Analyst at Walker Security](https://www.firstjobindia.in/jobs/15)
+
+## Resources
+
+- [Resume builder](https://www.firstjobindia.in/resume)
+- [Career GPS readiness dashboard](https://www.firstjobindia.in/career-gps)
+- [React interview e-book](https://www.firstjobindia.in/e-book)
+
+## Sitemap: https://www.firstjobindia.in/sitemap.xml

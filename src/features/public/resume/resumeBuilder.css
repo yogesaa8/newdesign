@@ -1,30 +1,30 @@
-/* Resume Builder styles. Every rule is scoped under .rb-scope so the dark theme,
+/* Resume Builder styles. Every rule is scoped under .rb-scope so the builder theme,
    base resets and generic utility classes (mt-2, text-xs, muted, btn, card, etc.)
    never leak into the rest of the app. The builder root in ResumeLanding.jsx is
    wrapped in a div with className "rb-scope". Keyframes are kept global. */
 
 .rb-scope {
-  --bg-0: #0a0b0e;
-  --bg-1: #111317;
-  --bg-2: #16181d;
-  --bg-3: #1c1f25;
-  --bg-4: #23272e;
-  --line: #2a2e36;
-  --line-2: #353a44;
-  --ink-0: #f5f5f7;
-  --ink-1: #d4d4d8;
-  --ink-2: #a1a1aa;
-  --ink-3: #71717a;
-  --ink-4: #52525b;
-  --accent: #FF6B35;
-  --accent-2: #FF8758;
-  --accent-soft: rgba(255, 107, 53, 0.12);
-  --accent-line: rgba(255, 107, 53, 0.32);
-  --ok: #34d399;
-  --warn: #fbbf24;
-  --danger: #f87171;
-  --shadow-1: 0 1px 0 rgba(255,255,255,0.04) inset, 0 1px 2px rgba(0,0,0,0.4);
-  --shadow-2: 0 10px 30px -10px rgba(0,0,0,0.6), 0 4px 12px -4px rgba(0,0,0,0.4);
+  --bg-0: #FFF7F3;
+  --bg-1: #FFFFFF;
+  --bg-2: #F7F5F2;
+  --bg-3: #EFE7E1;
+  --bg-4: #E6DAD2;
+  --line: #EADFD9;
+  --line-2: #D8C9C0;
+  --ink-0: #0A0A0A;
+  --ink-1: #2B2B31;
+  --ink-2: #6F6F76;
+  --ink-3: #8A8690;
+  --ink-4: #A6A0AA;
+  --accent: #8500FA;
+  --accent-2: #6D00D2;
+  --accent-soft: rgba(133, 0, 250, 0.14);
+  --accent-line: rgba(198, 175, 255, 0.34);
+  --ok: #16a34a;
+  --warn: #b7791f;
+  --danger: #dc2626;
+  --shadow-1: 0 1px 0 rgba(255,255,255,0.7) inset, 0 1px 2px rgba(17,17,20,0.06);
+  --shadow-2: 0 18px 45px -28px rgba(17,17,20,0.28), 0 4px 12px -8px rgba(17,17,20,0.18);
   --font-display: "Sora", "Plus Jakarta Sans", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
@@ -44,16 +44,13 @@
 }
 .rb-scope .app-shell {
   min-height: 100vh;
-  background:
-    radial-gradient(1200px 600px at 80% -10%, rgba(255,107,53,0.08), transparent 60%),
-    radial-gradient(800px 400px at -10% 30%, rgba(255,107,53,0.04), transparent 60%),
-    var(--bg-0);
+  background: var(--bg-0);
 }
 .rb-scope .topbar {
   position: sticky; top: 0; z-index: 50;
-  background: rgba(10, 11, 14, 0.85);
+  background: rgba(255, 247, 243, 0.94);
   backdrop-filter: saturate(160%) blur(10px);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid #EADFD9;
 }
 .rb-scope .topbar-inner {
   max-width: 1400px; margin: 0 auto;
@@ -65,26 +62,26 @@
   font-family: var(--font-display);
   font-weight: 700; font-size: 16px;
   letter-spacing: -0.01em;
+  color: #0A0A0A;
 }
 .rb-scope .brand-mark {
   width: 28px; height: 28px;
   border-radius: 8px;
-  background: linear-gradient(135deg, var(--accent), #ff8a4f);
+  background: var(--accent);
   display: grid; place-items: center;
-  color: #1b0a02;
+  color: #fff;
   font-weight: 800;
-  box-shadow: 0 2px 8px rgba(255,107,53,0.4);
 }
 .rb-scope .brand-sub {
-  color: var(--ink-2); font-weight: 400; font-size: 12px;
-  border-left: 1px solid var(--line); padding-left: 10px; margin-left: 4px;
+  color: #6F6F76; font-weight: 400; font-size: 12px;
+  border-left: 1px solid #EADFD9; padding-left: 10px; margin-left: 4px;
 }
 .rb-scope .topbar-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
 .rb-scope .topbar-tag {
   font-size: 11px;
-  color: var(--ink-2);
-  background: var(--bg-2);
-  border: 1px solid var(--line);
+  color: #6F6F76;
+  background: #F7F5F2;
+  border: 1px solid #EADFD9;
   padding: 4px 8px; border-radius: 6px;
   display: inline-flex; align-items: center; gap: 6px;
   white-space: nowrap;
@@ -95,25 +92,25 @@
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   padding: 10px 16px;
   font-size: 13px; font-weight: 500;
-  border-radius: 10px;
+  border-radius: 8px;
   border: 1px solid transparent;
   cursor: pointer;
   transition: all 0.15s ease;
   white-space: nowrap;
-  background: transparent; color: var(--ink-0);
+  background: transparent; color: #0A0A0A;
 }
 .rb-scope .btn-primary {
-  background: linear-gradient(180deg, var(--accent-2), var(--accent));
-  color: #1b0a02;
+  background: var(--accent);
+  color: #fff;
   font-weight: 600;
-  box-shadow: 0 1px 0 rgba(255,255,255,0.25) inset, 0 6px 20px -6px rgba(255,107,53,0.5);
+  box-shadow: 0 0 0 1px rgba(198,175,255,0.18) inset;
 }
-.rb-scope .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 1px 0 rgba(255,255,255,0.3) inset, 0 10px 24px -6px rgba(255,107,53,0.6); }
+.rb-scope .btn-primary:hover { background: #491EF7; transform: translateY(-1px); }
 .rb-scope .btn-primary:active { transform: translateY(0); }
-.rb-scope .btn-ghost { background: var(--bg-2); border-color: var(--line); color: var(--ink-1); }
-.rb-scope .btn-ghost:hover { background: var(--bg-3); border-color: var(--line-2); color: var(--ink-0); }
+.rb-scope .btn-ghost { background: #FFFFFF; border-color: #EADFD9; color: #0A0A0A; }
+.rb-scope .btn-ghost:hover { background: #F7F5F2; border-color: #C6AFFF; color: #8500FA; }
 .rb-scope .btn-soft { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-2); }
-.rb-scope .btn-soft:hover { background: rgba(255,107,53,0.18); }
+.rb-scope .btn-soft:hover { background: rgba(133,0,250,0.2); }
 .rb-scope .btn-sm { padding: 6px 10px; font-size: 12px; border-radius: 8px; }
 .rb-scope .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .rb-scope .btn-icon { padding: 8px; border-radius: 8px; background: var(--bg-2); border: 1px solid var(--line); color: var(--ink-1); cursor: pointer; }
@@ -121,12 +118,12 @@
 .rb-scope .card {
   background: var(--bg-1);
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 8px;
   box-shadow: var(--shadow-1);
 }
 .rb-scope .card-pad { padding: 20px; }
 .rb-scope .surface {
-  background: var(--bg-1); border: 1px solid var(--line); border-radius: 12px;
+  background: var(--bg-1); border: 1px solid var(--line); border-radius: 8px;
 }
 .rb-scope .field { display: flex; flex-direction: column; gap: 6px; }
 .rb-scope .field-label {
@@ -142,7 +139,7 @@
   color: var(--ink-0);
   font-family: inherit; font-size: 13px;
   padding: 10px 12px;
-  border-radius: 9px;
+  border-radius: 8px;
   transition: border-color 0.15s, box-shadow 0.15s;
   outline: none;
 }
@@ -155,7 +152,7 @@
 .rb-scope .textarea { resize: vertical; min-height: 88px; line-height: 1.55; }
 .rb-scope .input-prefix {
   display: flex; align-items: center;
-  background: var(--bg-2); border: 1px solid var(--line); border-radius: 9px;
+  background: var(--bg-2); border: 1px solid var(--line); border-radius: 8px;
   overflow: hidden;
 }
 .rb-scope .input-prefix span { padding: 0 10px; color: var(--ink-3); font-size: 12px; border-right: 1px solid var(--line); height: 100%; display: flex; align-items: center; }
@@ -173,7 +170,7 @@
 .rb-scope .step-pill {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 6px 12px 6px 10px;
-  border-radius: 999px;
+  border-radius: 8px;
   font-size: 12px; font-weight: 500;
   color: var(--ink-3);
   border: 1px solid transparent;
@@ -183,16 +180,16 @@
 }
 .rb-scope .step-pill:hover { color: var(--ink-1); background: var(--bg-2); }
 .rb-scope .step-pill.active {
-  color: var(--ink-0); background: var(--bg-3); border-color: var(--line-2);
+  color: #fff; background: #111114; border-color: #111114;
 }
 .rb-scope .step-pill.done { color: var(--ok); }
 .rb-scope .step-pill .num {
-  width: 20px; height: 20px; border-radius: 50%;
+  width: 20px; height: 20px; border-radius: 6px;
   background: var(--bg-3); display: grid; place-items: center;
   font-size: 11px; font-weight: 600;
   border: 1px solid var(--line-2);
 }
-.rb-scope .step-pill.active .num { background: var(--accent); color: #1b0a02; border-color: transparent; }
+.rb-scope .step-pill.active .num { background: var(--accent); color: #fff; border-color: transparent; }
 .rb-scope .step-pill.done .num { background: rgba(52,211,153,0.15); color: var(--ok); border-color: rgba(52,211,153,0.3); }
 .rb-scope .step-pill-divider { color: var(--ink-4); padding: 0 2px; }
 .rb-scope .progress-bar {
@@ -200,9 +197,8 @@
 }
 .rb-scope .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  background: var(--accent);
   transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-  box-shadow: 0 0 12px rgba(255,107,53,0.6);
 }
 .rb-scope .builder-grid {
   display: grid;
@@ -235,9 +231,7 @@
 .rb-scope .preview-canvas {
   flex: 1; overflow: auto;
   padding: 24px;
-  background:
-    radial-gradient(800px 400px at 50% 0%, rgba(255,107,53,0.04), transparent 70%),
-    var(--bg-0);
+  background: var(--bg-0);
   display: flex; justify-content: center; align-items: flex-start;
 }
 .rb-scope .preview-frame {
@@ -245,7 +239,7 @@
   color: #111;
   width: 100%; max-width: 480px;
   aspect-ratio: 1 / 1.414; 
-  box-shadow: 0 30px 60px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04);
+  box-shadow: 0 24px 60px -28px rgba(17,17,20,0.38), 0 0 0 1px rgba(17,17,20,0.08);
   border-radius: 4px;
   overflow: hidden;
   transform-origin: top center;
@@ -271,9 +265,9 @@
 .rb-scope .tip {
   display: flex; gap: 10px;
   padding: 10px 12px;
-  background: rgba(255, 107, 53, 0.06);
-  border: 1px solid rgba(255, 107, 53, 0.18);
-  border-radius: 10px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
+  border-radius: 8px;
   font-size: 12px; color: var(--ink-1);
 }
 .rb-scope .tip-icon { color: var(--accent); flex-shrink: 0; margin-top: 1px; }
@@ -286,7 +280,7 @@
 .rb-scope .template-card {
   background: var(--bg-1);
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 8px;
   padding: 0;
   cursor: pointer;
   text-align: left;
@@ -341,9 +335,9 @@
 .rb-scope .template-card-check {
   position: absolute; top: 10px; right: 10px;
   width: 24px; height: 24px; border-radius: 50%;
-  background: var(--accent); color: #1b0a02;
+  background: var(--accent); color: #fff;
   display: grid; place-items: center;
-  box-shadow: 0 4px 12px rgba(255,107,53,0.5);
+  box-shadow: 0 4px 12px rgba(133,0,250,0.4);
   opacity: 0; transform: scale(0.6);
   transition: all 0.2s ease;
 }
@@ -351,7 +345,7 @@
 .rb-scope .tag-input-wrap {
   background: var(--bg-2);
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 6px;
   display: flex; flex-wrap: wrap; gap: 6px;
   min-height: 44px;
@@ -397,7 +391,7 @@
 .rb-scope .repeater-item {
   background: var(--bg-1);
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 16px;
   margin-bottom: 12px;
   position: relative;
@@ -425,7 +419,7 @@
   background: transparent;
   border: 1.5px dashed var(--line-2);
   color: var(--ink-2);
-  border-radius: 12px;
+  border-radius: 8px;
   font-family: inherit; font-size: 13px; font-weight: 500;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -434,7 +428,7 @@
 .rb-scope .add-btn:hover { border-color: var(--accent-line); color: var(--accent); background: var(--accent-soft); }
 .rb-scope .skill-group-tabs {
   display: flex; gap: 4px; background: var(--bg-2);
-  padding: 4px; border-radius: 10px; margin-bottom: 14px;
+  padding: 4px; border-radius: 8px; margin-bottom: 14px;
   border: 1px solid var(--line);
 }
 .rb-scope .skill-group-tab {
@@ -447,11 +441,11 @@
 }
 .rb-scope .skill-group-tab.active { background: var(--bg-3); color: var(--ink-0); box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset; }
 .rb-scope .skill-group-tab .count { font-size: 10px; color: var(--ink-3); background: var(--bg-1); padding: 1px 5px; border-radius: 4px; }
-.rb-scope .skill-group-tab.active .count { background: var(--accent); color: #1b0a02; }
+.rb-scope .skill-group-tab.active .count { background: var(--accent); color: #fff; }
 .rb-scope .objective-template {
   background: var(--bg-2);
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 12px;
   cursor: pointer;
   text-align: left;
@@ -508,7 +502,7 @@
 .rb-scope .empty-state svg { width: 96px; height: 96px; margin: 0 auto 16px; opacity: 0.7; }
 .rb-scope ::-webkit-scrollbar { width: 10px; height: 10px; }
 .rb-scope ::-webkit-scrollbar-track { background: var(--bg-0); }
-.rb-scope ::-webkit-scrollbar-thumb { background: var(--bg-3); border-radius: 10px; border: 2px solid var(--bg-0); }
+.rb-scope ::-webkit-scrollbar-thumb { background: var(--bg-3); border-radius: 8px; border: 2px solid var(--bg-0); }
 .rb-scope ::-webkit-scrollbar-thumb:hover { background: var(--bg-4); }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 .rb-scope .fade-up { animation: fadeUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
@@ -530,7 +524,7 @@
 .rb-scope .swatch.selected { border-color: var(--ink-0); box-shadow: 0 0 0 3px var(--accent-soft); }
 .rb-scope .photo-upload {
   width: 96px; height: 96px;
-  border-radius: 12px;
+  border-radius: 8px;
   background: var(--bg-2);
   border: 1.5px dashed var(--line-2);
   display: grid; place-items: center;
@@ -575,11 +569,9 @@
 }
 .rb-scope .divider-line { height: 1px; background: var(--line); margin: 20px 0; }
 .rb-scope .ai-panel {
-  background:
-    radial-gradient(400px 120px at 100% 0%, rgba(255,107,53,0.07), transparent 70%),
-    var(--bg-1);
+  background: var(--bg-1);
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 8px;
   padding: 16px;
   margin-top: 16px;
   position: relative;
@@ -588,9 +580,9 @@
 .rb-scope .ai-panel::before {
   content: "";
   position: absolute; inset: 0;
-  border-radius: 14px;
+  border-radius: 8px;
   padding: 1px;
-  background: linear-gradient(135deg, rgba(255,107,53,0.5), transparent 40%);
+  background: linear-gradient(135deg, rgba(198,175,255,0.65), transparent 40%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor; mask-composite: exclude;
   pointer-events: none;
@@ -609,8 +601,8 @@
   font-size: 9px; font-weight: 700; letter-spacing: 0.04em;
   text-transform: uppercase;
   padding: 2px 6px; border-radius: 999px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #1b0a02;
+  background: var(--accent);
+  color: #fff;
 }
 .rb-scope .ai-btn { position: relative; }
 .rb-scope .ai-btn svg { color: inherit; }
@@ -635,7 +627,7 @@
   margin-top: 10px;
   background: var(--bg-2);
   border: 1px solid var(--accent-line);
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
 }
 .rb-scope .ai-diff-head {
@@ -663,7 +655,7 @@
 .rb-scope .ai-review-list.warn li::before { content: "→"; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
 .rb-scope .ai-tailor-result { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
 .rb-scope .ai-tailor-match { display: flex; align-items: center; gap: 14px; }
-.rb-scope .ai-skeleton-card { background: var(--bg-2); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+.rb-scope .ai-skeleton-card { background: var(--bg-2); border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
 .rb-scope .ai-skeleton-line {
   height: 9px; border-radius: 5px; margin-bottom: 8px;
   background: linear-gradient(90deg, var(--bg-3) 25%, var(--bg-4) 50%, var(--bg-3) 75%);
