@@ -4,7 +4,7 @@ import institute from '../../../assets/insti.png'
 const Institute = () => {
   return (
     <>
-      <section class="lg:pt-10 lg:pb-10 pt-0  lg:pl-8 h-full">
+      <section class="lg:pt-10 lg:pb-10 pt-0  lg:pl-8 lg:pr-8 h-full">
         <div class="rounded-2xl bg-indigo-50 py-10 overflow-hidden m-5 lg:m-0 2xl:py-16 xl:py-8  lg:rounded-tl-2xl lg:rounded-bl-2xl ">
           <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 gap-14 items-center lg:grid-cols-12 lg:gap-32">
