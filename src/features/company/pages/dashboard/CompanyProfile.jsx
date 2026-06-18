@@ -301,14 +301,14 @@ const CompanyProfile = () => {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          <button
+          {/* <button
             onClick={handleDeleteProfile}
             disabled={isDeleting || !company}
             className="rounded-[8px] border border-red-200 bg-white px-4 py-2.5 text-sm font-bold text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
             type="button"
           >
             {isDeleting ? "Deleting..." : "Delete"}
-          </button>
+          </button> */}
           <button
             onClick={handleDiscard}
             disabled={!hasChanges}

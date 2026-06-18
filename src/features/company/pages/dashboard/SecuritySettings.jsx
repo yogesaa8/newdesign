@@ -265,7 +265,7 @@ const SecuritySettings = () => {
         </div>
       </section>
 
-      <section className="mt-4 flex flex-col justify-between gap-4 rounded-[8px] border border-red-200 bg-red-50/50 p-5 md:flex-row md:items-center md:p-6">
+      {/* <section className="mt-4 flex flex-col justify-between gap-4 rounded-[8px] border border-red-200 bg-red-50/50 p-5 md:flex-row md:items-center md:p-6">
         <div>
           <h2 className="text-base font-bold text-red-700">Deactivate account</h2>
           <p className="mt-1 text-sm text-red-600">
@@ -279,7 +279,7 @@ const SecuritySettings = () => {
         >
           Deactivate
         </button>
-      </section>
+      </section> */}
     </div>
   );
 };
