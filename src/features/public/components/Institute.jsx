@@ -1,7 +1,8 @@
 import React from 'react'
 import institute from '../../../assets/insti.png'
+import { Link } from 'react-router-dom'
 
-const Institute = () => {
+const LandingInstitute = () => {
   return (
     <>
       <section class="lg:pt-10 lg:pb-10 pt-0  lg:pl-8 lg:pr-8 h-full">
@@ -23,9 +24,9 @@ const Institute = () => {
                   Students coming through our platform can now access guided offline learning, expert mentorship, and a better academic environment through our partner institute.
                 </p>
                 <div class="mt-8 mb-8 flex items-center justify-center lg:justify-start gap-4 flex-col sm:flex-row">
-                  <button class="bg-indigo-600 rounded-full py-3 px-7 text-base font-semibold text-white hover:bg-indigo-700 cursor-pointer transition-all duration-500 md:w-fit w-full">
+                  <Link to="/institute" class="bg-indigo-600 rounded-full py-3 px-7 text-base font-semibold text-white hover:bg-indigo-700 cursor-pointer transition-all duration-500 md:w-fit w-full">
                     Explore Program
-                  </button>
+                  </Link>
                   <button class="bg-transparent border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-100 py-3 px-7 text-base font-semibold rounded-full transition-all duration-500 md:w-fit w-full">
                     Know More
                   </button>
@@ -72,4 +73,4 @@ const Institute = () => {
   )
 }
 
-export default Institute
+export default LandingInstitute

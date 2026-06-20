@@ -10,7 +10,7 @@ import useSEO from "@/seo/useSEO";
 import seoMeta from "@/data/seoMeta";
 import { buildWebPage, buildFAQPage } from "@/seo/schemas";
 import faqs from "@/data/faqs";
-import Institute from "../../components/Institute";
+import LandingInstitute from "../../components/Institute";
 
 const LandingHomePage = () => {
   const meta = seoMeta["/"];
@@ -32,10 +32,10 @@ const LandingHomePage = () => {
     <div>
       {seoElement}
       <NavbarDemo />
+      <LandingInstitute/>
       <JobList />
       <HeroHighlightDemo />
       <GridBackgroundDemo />
-      <Institute/>
       <FeaturesSection />
       <FAQSection />
       <Footer />

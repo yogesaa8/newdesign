@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import {
   ArrowRight,
   CalendarDays,
@@ -16,18 +15,7 @@ import {
   UsersRound,
 } from "lucide-react";
 
-import {
-  MobileNav,
-  MobileNavHeader,
-  MobileNavMenu,
-  MobileNavToggle,
-  Navbar,
-  NavbarButton,
-  NavbarLogo,
-  NavBody,
-  NavItems,
-} from "../../../../components/ui/resizable-navbar";
-import navItems from "../../data/headerData.json";
+import PartnerHeader from "../../components/PartnerHeader";
 import useSEO from "@/seo/useSEO";
 import seoMeta from "@/data/seoMeta";
 import { buildWebPage, buildBreadcrumbList } from "@/seo/schemas";
@@ -107,7 +95,6 @@ const FeatureBlock = ({ icon, title, text, accent = "orange" }) => {
 };
 
 const CollegeMainPage = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const meta = seoMeta["/college"];
@@ -141,100 +128,7 @@ const CollegeMainPage = () => {
     <>
       {seoElement}
       <main className="min-h-screen bg-[#FFF7F3] text-[#0A0A0A]">
-        <div className="relative w-full bg-[#FFF7F3]">
-          <Navbar>
-            <NavBody disableScrollResize>
-              <NavbarLogo />
-              <NavItems items={navItems} />
-              <div className="flex items-center gap-4">
-                <NavbarButton
-                  as={Link}
-                  to="/company/login"
-                  variant="secondary"
-                  className="rounded-[8px] border border-[#EADFD9] bg-white text-[#0A0A0A] hover:border-[#C6AFFF] hover:text-[#8500FA]"
-                >
-                  Company login
-                </NavbarButton>
-                <NavbarButton
-                  as="a"
-                  href="#contact"
-                  variant="primary"
-                  className="rounded-[8px] bg-[#FF6B35] text-white hover:bg-[#FF9566]"
-                >
-                  College demo
-                </NavbarButton>
-              </div>
-            </NavBody>
-
-            <MobileNav disableScrollResize>
-              <MobileNavHeader>
-                <NavbarLogo />
-                <MobileNavToggle
-                  isOpen={isMobileMenuOpen}
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                />
-              </MobileNavHeader>
-
-              <MobileNavMenu
-                isOpen={isMobileMenuOpen}
-                onClose={() => setIsMobileMenuOpen(false)}
-              >
-                {navItems.map((item, idx) => (
-                  <div key={`mobile-link-${idx}`} className="w-full">
-                    {item.link && (
-                      <a
-                        href={item.link}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="block py-2 text-[#6F6F76] transition hover:text-[#0A0A0A]"
-                      >
-                        {item.name}
-                      </a>
-                    )}
-
-                    {item.children && (
-                      <div className="flex flex-col gap-2">
-                        <span className="py-2 font-medium text-[#0A0A0A]">
-                          {item.name}
-                        </span>
-
-                        <div className="ml-4 flex flex-col gap-2">
-                          {item.children.map((child, i) => (
-                            <a
-                              key={i}
-                              href={child.link}
-                              onClick={() => setIsMobileMenuOpen(false)}
-                              className="text-sm text-[#6F6F76] transition hover:text-[#8500FA]"
-                            >
-                              {child.name}
-                            </a>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-                <div className="flex w-full flex-col gap-4">
-                  <NavbarButton
-                    href="/company/login"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    variant="secondary"
-                    className="w-full rounded-[8px] border border-[#EADFD9] bg-white text-[#0A0A0A]"
-                  >
-                    Company login
-                  </NavbarButton>
-                  <NavbarButton
-                    href="#contact"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    variant="primary"
-                    className="w-full rounded-[8px] bg-[#FF6B35] text-white"
-                  >
-                    College demo
-                  </NavbarButton>
-                </div>
-              </MobileNavMenu>
-            </MobileNav>
-          </Navbar>
-        </div>
+        <PartnerHeader />
 
         <HeroHighlight
           containerClassName="border-b border-[#EADFD9] bg-[#FFF7F3]"

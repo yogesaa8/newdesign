@@ -55,6 +55,7 @@ import TermsConditions from "../features/public/pages/TermsConditions";
 import PrivacyPolicy from "../features/public/pages/PrivacyPolicy";
 import ReactSlides from "../features/public/pages/career/ReactQuestions";
 import NoindexRouteLayout from "../seo/NoindexRouteLayout";
+import InstituteMainPage from "../features/institute/InstituteMainPage";
 
 const AppRoutes = () => {
   return (
@@ -74,6 +75,7 @@ const AppRoutes = () => {
         <Route path="/career-gps" element={<CareerGPS />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsConditions />} />
+        <Route path="/institute" element={<InstituteMainPage/>}  />
         <Route
           path="/terms-condition"
           element={<Navigate to="/terms" replace />}
