@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
@@ -8,7 +8,8 @@ import {
   X,
 } from "lucide-react";
 import JobsPublicNav from "./JobsPublicNav";
-import jobsData from "../../data/jobsData.json";
+import { useAuthStore } from "../../../../store";
+import { useJobStore } from "../../store/jobStore";
 import useSEO from "@/seo/useSEO";
 import seoMeta from "@/data/seoMeta";
 import {
@@ -23,16 +24,53 @@ const INPUT_CLASS =
 const LABEL_CLASS = "mb-2 block text-xs font-semibold uppercase text-[#6F6F76]";
 
 const resetApplicationForm = {
-  name: "",
-  email: "",
-  phone: "",
-  resume: null,
-  coverLetter: null,
-  portfolio: "",
-  question1: "",
-  question2: "",
-  question3: "",
+  coverLetter: "",
+  answers: {},
 };
+
+const formatQuestionType = (type) =>
+  type ? type.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase()) : "Answer";
+
+const hasAnswerValue = (questionType, value) => {
+  if (questionType === "multiple_choice") return Array.isArray(value) && value.length > 0;
+  return value != null && String(value).trim() !== "";
+};
+
+const buildAnswerPayload = (questions, answers) =>
+  questions
+    .map((question) => {
+      const value = answers[question.id];
+
+      if (!hasAnswerValue(question.question_type, value)) {
+        return null;
+      }
+
+      const answer = { question_id: question.id };
+
+      switch (question.question_type) {
+        case "single_choice":
+          answer.selected_option_id = value;
+          break;
+        case "multiple_choice":
+          answer.selected_option_ids = value;
+          break;
+        case "file_upload":
+          answer.file_url = String(value).trim();
+          break;
+        case "url":
+          answer.url_answer = String(value).trim();
+          break;
+        case "text":
+        case "number":
+        case "yes_no":
+        default:
+          answer.answer_text = String(value).trim();
+          break;
+      }
+
+      return answer;
+    })
+    .filter(Boolean);
 
 const DetailRow = ({ label, value, highlight }) => (
   <div className="flex items-start justify-between gap-4 border-b border-[#EADFD9] pb-3 last:border-b-0 last:pb-0">
@@ -42,7 +80,7 @@ const DetailRow = ({ label, value, highlight }) => (
         highlight ? "text-[#8500FA]" : "text-[#0A0A0A]"
       }`}
     >
-      {value}
+      {value || "-"}
     </span>
   </div>
 );
@@ -61,22 +99,152 @@ const SectionList = ({ title, items }) => (
   </section>
 );
 
+const QuestionInput = ({ question, value, onChange }) => {
+  const options = question.options || [];
+
+  switch (question.question_type) {
+    case "number":
+      return (
+        <input
+          type="number"
+          value={value || ""}
+          onChange={(event) => onChange(event.target.value)}
+          placeholder="Enter a number"
+          className={INPUT_CLASS}
+        />
+      );
+    case "yes_no":
+      return (
+        <select
+          value={value || ""}
+          onChange={(event) => onChange(event.target.value)}
+          className={INPUT_CLASS}
+        >
+          <option value="">Select an answer</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      );
+    case "single_choice":
+      return (
+        <select
+          value={value || ""}
+          onChange={(event) => onChange(event.target.value)}
+          className={INPUT_CLASS}
+        >
+          <option value="">Select an option</option>
+          {options.map((option) => (
+            <option key={option.id} value={option.id}>
+              {option.option_text}
+            </option>
+          ))}
+        </select>
+      );
+    case "multiple_choice":
+      return (
+        <div className="space-y-2 rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2] p-3">
+          {options.map((option) => {
+            const selectedValues = Array.isArray(value) ? value : [];
+            return (
+              <label
+                key={option.id}
+                className="flex items-center gap-2 text-sm font-medium text-[#6F6F76]"
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedValues.includes(option.id)}
+                  onChange={(event) => {
+                    const nextValue = event.target.checked
+                      ? [...selectedValues, option.id]
+                      : selectedValues.filter((item) => item !== option.id);
+                    onChange(nextValue);
+                  }}
+                  className="h-4 w-4 accent-[#8500FA]"
+                />
+                {option.option_text}
+              </label>
+            );
+          })}
+        </div>
+      );
+    case "file_upload":
+      return (
+        <input
+          type="url"
+          value={value || ""}
+          onChange={(event) => onChange(event.target.value)}
+          placeholder="https://example.com/resume.pdf"
+          className={INPUT_CLASS}
+        />
+      );
+    case "url":
+      return (
+        <input
+          type="url"
+          value={value || ""}
+          onChange={(event) => onChange(event.target.value)}
+          placeholder="https://example.com/profile"
+          className={INPUT_CLASS}
+        />
+      );
+    case "text":
+    default:
+      return (
+        <textarea
+          value={value || ""}
+          onChange={(event) => onChange(event.target.value)}
+          placeholder="Write your answer"
+          className={`${INPUT_CLASS} h-24 resize-none`}
+        />
+      );
+  }
+};
+
 const JobDetailsPage = () => {
   const routeLocation = useLocation();
   const navigate = useNavigate();
   const { jobId } = useParams();
-  const allJobs = routeLocation.state?.allJobs?.length
-    ? routeLocation.state.allJobs
-    : jobsData;
-  const job =
-    routeLocation.state?.job ||
-    allJobs.find((item) => String(item.id) === String(jobId));
-  const isLoggedIn = false;
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const role = useAuthStore((state) => state.role);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const {
+    jobs,
+    selectedJob: storeSelectedJob,
+    isDetailLoading,
+    isApplying,
+    error,
+    applyError,
+    fetchJobDetail,
+    applyToJob,
+    clearApplyState,
+  } = useJobStore();
+  const fallbackJob =
+    String(routeLocation.state?.job?.id) === String(jobId)
+      ? routeLocation.state.job
+      : null;
+  const selectedJob =
+    String(storeSelectedJob?.id) === String(jobId) ? storeSelectedJob : null;
+  const job = selectedJob || fallbackJob;
+  const questions = useMemo(() => job?.questions || [], [job]);
 
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [formData, setFormData] = useState(resetApplicationForm);
   const [activeTab, setActiveTab] = useState(0);
+
+  useEffect(() => {
+    if (!jobId) return;
+    fetchJobDetail(jobId).catch(() => {});
+  }, [fetchJobDetail, jobId]);
+
+  useEffect(() => {
+    clearApplyState();
+  }, [clearApplyState, jobId]);
+
+  const allJobs = useMemo(
+    () => (jobs.length ? jobs : routeLocation.state?.allJobs || []),
+    [jobs, routeLocation.state?.allJobs],
+  );
 
   const relatedJobs = useMemo(() => {
     if (!job) return [];
@@ -95,7 +263,7 @@ const JobDetailsPage = () => {
 
   const jobMetaTemplate = seoMeta["/jobs/:jobId"];
   const jobPath = job ? `/jobs/${job.id}` : "/jobs";
-  const jobCity = job && job.location ? job.location.split(",")[0].trim() : "";
+  const jobCity = job?.city || (job?.location ? job.location.split(",")[0].trim() : "");
   const jobTitleString = job
     ? jobMetaTemplate.titleTemplate
         .replace("{jobTitle}", job.title)
@@ -107,7 +275,7 @@ const JobDetailsPage = () => {
         .replace("{jobTitle}", job.title)
         .replace("{company}", job.company)
         .replace("{city}", jobCity)
-        .replace("{type}", job.type || "Full Time")
+        .replace("{type}", job.jobTypeLabel || job.type || "Full Time")
         .replace("{experience}", job.experience || "Entry level")
         .replace("{salary}", job.salary || "Competitive")
     : "This job is no longer available on FirstJobIndia.";
@@ -138,14 +306,28 @@ const JobDetailsPage = () => {
       : [],
   });
 
+  if (isDetailLoading && !job) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#FFF7F3] px-4 text-center text-[#6F6F76]">
+        {seoElement}
+        <div>
+          <h1 className="text-2xl font-semibold text-[#0A0A0A]">
+            Loading job...
+          </h1>
+        </div>
+      </div>
+    );
+  }
+
   if (!job) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#FFF7F3] px-4 text-center text-[#6F6F76]">
         {seoElement}
         <div>
           <h1 className="text-2xl font-semibold text-[#0A0A0A]">
-            Job not found
+            {error ? "Could not load job" : "Job not found"}
           </h1>
+          {error && <p className="mt-2 text-sm text-[#6F6F76]">{error}</p>}
           <Link
             to="/jobs"
             className="mt-4 inline-flex items-center gap-2 rounded-[8px] bg-[#FF6B35] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#FF9566]"
@@ -162,31 +344,67 @@ const JobDetailsPage = () => {
     setShowApplyModal(false);
     setActiveTab(0);
     setFormData(resetApplicationForm);
+    clearApplyState();
   };
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleAnswerChange = (questionId, value) => {
+    clearApplyState();
+    setFormData((prev) => ({
+      ...prev,
+      answers: {
+        ...prev.answers,
+        [questionId]: value,
+      },
+    }));
   };
 
-  const handleFileChange = (event) => {
-    setFormData((prev) => ({ ...prev, resume: event.target.files[0] }));
-  };
+  const handleApplySubmit = async (event) => {
+    event?.preventDefault();
 
-  const handleApplySubmit = (event) => {
-    event.preventDefault();
-    if (formData.name && formData.email && formData.resume) {
+    if (!accessToken) {
+      toast.error("Session expired. Please sign in again.", {
+        style: {
+          background: "#FF6B35",
+          color: "#ffffff",
+          borderRadius: "8px",
+        },
+      });
+      navigate("/seeker/login");
+      return;
+    }
+
+    try {
+      const answers = buildAnswerPayload(questions, formData.answers);
+      const payload = await applyToJob(
+        job.id,
+        {
+          cover_letter: formData.coverLetter.trim(),
+          answers,
+        },
+        accessToken,
+      );
+
       setIsSuccess(true);
+      toast.success(payload?.message || "Application submitted successfully.");
       setTimeout(() => {
         setIsSuccess(false);
         closeApplyModal();
       }, 2000);
-    } else {
-      toast("Please add your name, email, and resume.", {
+    } catch (submitError) {
+      if (
+        submitError.code === "REQUIRED_QUESTION_NOT_ANSWERED" ||
+        submitError.code === "INVALID_JOB_QUESTION" ||
+        submitError.code === "INVALID_SELECTED_OPTION" ||
+        submitError.message.toLowerCase().includes("question")
+      ) {
+        setActiveTab(1);
+      }
+
+      toast.error(submitError.message, {
         style: {
-          borderRadius: "8px",
           background: "#FF6B35",
           color: "#ffffff",
+          borderRadius: "8px",
         },
       });
     }
@@ -206,26 +424,29 @@ const JobDetailsPage = () => {
   };
 
   const handleApplyJob = () => {
-    if (!isLoggedIn) {
+    if (!isAuthenticated || !accessToken) {
       showLoginToast();
       return;
     }
 
+    if (role !== "seeker") {
+      toast.error("Please use a seeker account to apply for jobs.", {
+        style: {
+          background: "#FF6B35",
+          color: "#ffffff",
+          borderRadius: "8px",
+        },
+      });
+      return;
+    }
+
+    clearApplyState();
     setShowApplyModal(true);
   };
 
-  const handleApplyViaWeb = () => {
-    if (!isLoggedIn) {
-      showLoginToast();
-      return;
-    }
-
-    window.open(job.applyLink, "_blank", "noopener,noreferrer");
-  };
-
-  const primaryApplyAction = job.applyLink ? handleApplyViaWeb : handleApplyJob;
-  const primaryApplyLabel = job.applyLink ? "Apply on company site" : "Apply now";
-  const canContinue = formData.name && formData.email && formData.resume;
+  const primaryApplyAction = handleApplyJob;
+  const primaryApplyLabel = "Apply now";
+  const canContinue = formData.coverLetter.length <= 2000;
 
   return (
     <div className="min-h-screen bg-[#FFF7F3] text-[#0A0A0A]">
@@ -254,7 +475,7 @@ const JobDetailsPage = () => {
                 {job.title}
               </h1>
               <p className="mt-3 text-base text-[#6F6F76]">
-                {job.company} · {job.location}
+                {job.company} - {job.location}
               </p>
             </div>
 
@@ -288,55 +509,81 @@ const JobDetailsPage = () => {
                 items={job.responsibilities}
               />
               <SectionList title="Skills recruiters expect" items={job.skills} />
+              {job.benefits?.length > 0 && (
+                <SectionList title="Benefits" items={job.benefits} />
+              )}
+              {questions.length > 0 && (
+                <section>
+                  <h3 className="text-xl font-semibold text-[#0A0A0A]">
+                    Screening questions
+                  </h3>
+                  <ul className="mt-4 space-y-3 text-sm leading-6 text-[#6F6F76]">
+                    {questions.map((question) => (
+                      <li key={question.id} className="flex gap-3">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#FF9566]" />
+                        <span>
+                          {question.question_text}
+                          <span className="ml-2 font-semibold text-[#8500FA]">
+                            {formatQuestionType(question.question_type)}
+                            {question.is_required ? " - Required" : ""}
+                          </span>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
             </div>
           </article>
 
-          <section>
-            <div className="mb-5">
-              <h2 className="text-2xl font-semibold text-[#0A0A0A]">
-                Related jobs
-              </h2>
-            </div>
+          {relatedJobs.length > 0 && (
+            <section>
+              <div className="mb-5">
+                <h2 className="text-2xl font-semibold text-[#0A0A0A]">
+                  Related jobs
+                </h2>
+              </div>
 
-            <div className="space-y-4">
-              {relatedJobs.map((related) => (
-                <article
-                  key={related.id}
-                  className="rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2] p-5 transition hover:border-[#FF9566] hover:bg-white"
-                >
-                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                      <span className="rounded-[8px] border border-green-100 bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">
-                        {related.type}
-                      </span>
-                      <h3 className="mt-3 text-base font-semibold text-[#0A0A0A]">
-                        {related.title}
-                      </h3>
-                      <p className="mt-1 text-sm text-[#6F6F76]">
-                        {related.company}
-                      </p>
-                      <div className="mt-2 flex flex-wrap gap-2 text-xs font-medium">
-                        <span className="text-[#6F6F76]">
-                          {related.category}
+              <div className="space-y-4">
+                {relatedJobs.map((related) => (
+                  <article
+                    key={related.id}
+                    className="rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2] p-5 transition hover:border-[#FF9566] hover:bg-white"
+                  >
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <span className="rounded-[8px] border border-green-100 bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">
+                          {related.type}
                         </span>
-                        <span className="font-semibold text-[#8500FA]">
-                          {related.salary}
-                        </span>
+                        <h3 className="mt-3 text-base font-semibold text-[#0A0A0A]">
+                          {related.title}
+                        </h3>
+                        <p className="mt-1 text-sm text-[#6F6F76]">
+                          {related.company}
+                        </p>
+                        <div className="mt-2 flex flex-wrap gap-2 text-xs font-medium">
+                          <span className="text-[#6F6F76]">
+                            {related.category}
+                          </span>
+                          <span className="font-semibold text-[#8500FA]">
+                            {related.salary}
+                          </span>
+                        </div>
                       </div>
+                      <Link
+                        to={`/jobs/${related.id}`}
+                        state={{ job: related, allJobs }}
+                        className="inline-flex items-center justify-center gap-2 rounded-[8px] border border-[#EADFD9] bg-white px-4 py-2 text-sm font-semibold text-[#0A0A0A] transition hover:border-[#FF9566] hover:text-[#FF6B35]"
+                      >
+                        View details
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
                     </div>
-                    <Link
-                      to={`/jobs/${related.id}`}
-                      state={{ job: related, allJobs }}
-                      className="inline-flex items-center justify-center gap-2 rounded-[8px] border border-[#EADFD9] bg-white px-4 py-2 text-sm font-semibold text-[#0A0A0A] transition hover:border-[#FF9566] hover:text-[#FF6B35]"
-                    >
-                      View details
-                      <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
         </section>
 
         <aside className="space-y-6">
@@ -346,9 +593,20 @@ const JobDetailsPage = () => {
             </h2>
             <div className="mt-5 space-y-3">
               <DetailRow label="Category" value={job.category} />
+              <DetailRow label="Job type" value={job.jobTypeLabel || job.type} />
+              <DetailRow label="Work mode" value={job.workModeLabel} />
               <DetailRow label="Experience" value={job.experience} />
               <DetailRow label="Degree" value={job.degree} />
               <DetailRow label="Salary" value={job.salary} highlight />
+              <DetailRow label="Deadline" value={job.deadline || "Not listed"} />
+              <DetailRow
+                label="Openings"
+                value={
+                  job.openings != null
+                    ? `${job.filledPositions ?? 0}/${job.openings} filled`
+                    : "Not listed"
+                }
+              />
             </div>
             <button
               type="button"
@@ -359,7 +617,6 @@ const JobDetailsPage = () => {
               <ArrowRight className="h-4 w-4" />
             </button>
           </section>
-
         </aside>
       </main>
 
@@ -401,7 +658,7 @@ const JobDetailsPage = () => {
                   </div>
 
                   <div className="mt-5 flex border-b border-[#EADFD9]">
-                    {["Your details", "Recruiter questions"].map(
+                    {["Cover letter", "Recruiter questions"].map(
                       (label, index) => (
                         <button
                           key={label}
@@ -426,102 +683,33 @@ const JobDetailsPage = () => {
                 >
                   {activeTab === 0 && (
                     <>
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <div>
-                          <label className={LABEL_CLASS}>
-                            Full name *
-                          </label>
-                          <input
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            placeholder="Aarav Sharma"
-                            className={INPUT_CLASS}
-                            required
-                          />
-                        </div>
-                        <div>
-                          <label className={LABEL_CLASS}>
-                            Email *
-                          </label>
-                          <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            placeholder="aarav@example.com"
-                            className={INPUT_CLASS}
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className={LABEL_CLASS}>
-                          Phone number
-                        </label>
-                        <input
-                          type="tel"
-                          name="phone"
-                          value={formData.phone}
-                          onChange={handleInputChange}
-                          placeholder="+91 98765 43210"
-                          className={INPUT_CLASS}
-                        />
-                      </div>
-
-                      <div>
-                        <label className={LABEL_CLASS}>
-                          Upload resume *
-                        </label>
-                        <div className="rounded-[8px] border-2 border-dashed border-[#EADFD9] bg-[#F7F5F2] p-4 text-center transition hover:border-[#8500FA]">
-                          <input
-                            type="file"
-                            name="resume"
-                            onChange={handleFileChange}
-                            accept=".pdf,.doc,.docx"
-                            className="w-full cursor-pointer text-xs text-[#6F6F76]"
-                            required
-                          />
-                          <p className="mt-2 text-xs font-medium text-[#6F6F76]">
-                            {formData.resume
-                              ? formData.resume.name
-                              : "PDF, DOC, or DOCX accepted"}
-                          </p>
-                        </div>
+                      <div className="rounded-[8px] border border-[#EADFD9] bg-[#FFF7F3] p-4">
+                        <p className="text-sm leading-6 text-[#6F6F76]">
+                          Your saved seeker profile and resume snapshot will be
+                          used with this application.
+                        </p>
                       </div>
 
                       <div>
                         <label className={LABEL_CLASS}>
                           Cover letter
                         </label>
-                        <input
-                          type="file"
+                        <textarea
                           name="coverLetter"
+                          value={formData.coverLetter}
                           onChange={(event) =>
                             setFormData((prev) => ({
                               ...prev,
-                              coverLetter: event.target.files[0],
+                              coverLetter: event.target.value,
                             }))
                           }
-                          accept=".pdf,.doc,.docx"
-                          className={INPUT_CLASS}
+                          maxLength={2000}
+                          placeholder="I am interested in this role because..."
+                          className={`${INPUT_CLASS} h-36 resize-none`}
                         />
-                      </div>
-
-                      <div>
-                        <label className={LABEL_CLASS}>
-                          Portfolio or LinkedIn
-                        </label>
-                        <input
-                          type="url"
-                          name="portfolio"
-                          value={formData.portfolio}
-                          onChange={handleInputChange}
-                          placeholder="https://linkedin.com/in/yourprofile"
-                          className={INPUT_CLASS}
-                        />
+                        <p className="mt-2 text-xs font-medium text-[#6F6F76]">
+                          {formData.coverLetter.length}/2000 characters
+                        </p>
                       </div>
                     </>
                   )}
@@ -535,46 +723,33 @@ const JobDetailsPage = () => {
                         </p>
                       </div>
 
-                      <div>
-                        <label className={LABEL_CLASS}>
-                          Why do you want to join {job.company}?
-                        </label>
-                        <textarea
-                          name="question1"
-                          value={formData.question1}
-                          onChange={handleInputChange}
-                          placeholder="I am interested in this role because..."
-                          className={`${INPUT_CLASS} h-24 resize-none`}
-                        />
-                      </div>
+                      {questions.length === 0 ? (
+                        <div className="rounded-[8px] border border-dashed border-[#EADFD9] bg-white p-4 text-sm font-semibold text-[#6F6F76]">
+                          No screening questions for this job.
+                        </div>
+                      ) : (
+                        questions.map((question) => (
+                          <div key={question.id}>
+                            <label className={LABEL_CLASS}>
+                              {question.question_text}
+                              {question.is_required ? " *" : ""}
+                            </label>
+                            <QuestionInput
+                              question={question}
+                              value={formData.answers[question.id]}
+                              onChange={(value) =>
+                                handleAnswerChange(question.id, value)
+                              }
+                            />
+                          </div>
+                        ))
+                      )}
 
-                      <div>
-                        <label className={LABEL_CLASS}>
-                          What relevant project or internship experience do you
-                          have?
-                        </label>
-                        <textarea
-                          name="question2"
-                          value={formData.question2}
-                          onChange={handleInputChange}
-                          placeholder="I worked on..."
-                          className={`${INPUT_CLASS} h-24 resize-none`}
-                        />
-                      </div>
-
-                      <div>
-                        <label className={LABEL_CLASS}>
-                          Salary expectations
-                        </label>
-                        <input
-                          type="text"
-                          name="question3"
-                          value={formData.question3}
-                          onChange={handleInputChange}
-                          placeholder="Example: Rs 4-5 LPA"
-                          className={INPUT_CLASS}
-                        />
-                      </div>
+                      {applyError && (
+                        <div className="rounded-[8px] border border-red-100 bg-red-50 p-3 text-sm font-semibold text-red-700">
+                          {applyError}
+                        </div>
+                      )}
                     </>
                   )}
                 </form>
@@ -605,9 +780,10 @@ const JobDetailsPage = () => {
                       <button
                         type="button"
                         onClick={handleApplySubmit}
-                        className="flex-1 rounded-[8px] bg-[#FF6B35] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#FF9566]"
+                        disabled={isApplying}
+                        className="flex-1 rounded-[8px] bg-[#FF6B35] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#FF9566] disabled:cursor-not-allowed disabled:bg-[#FF9566]"
                       >
-                        Submit application
+                        {isApplying ? "Submitting..." : "Submit application"}
                       </button>
                     )}
                   </div>

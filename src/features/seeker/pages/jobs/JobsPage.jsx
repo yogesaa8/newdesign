@@ -1,15 +1,14 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowRight,
-  Bookmark,
-  BriefcaseBusiness,
-  Clock,
-  MapPin,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  Info,
   Search,
 } from "lucide-react";
-import JobsPublicNav from "./JobsPublicNav";
-import jobsData from "../../data/jobsData.json";
+import { useJobStore } from "../../store/jobStore";
 import useSEO from "@/seo/useSEO";
 import seoMeta from "@/data/seoMeta";
 import {
@@ -17,166 +16,274 @@ import {
   buildItemListOfJobs,
   buildWebPage,
 } from "@/seo/schemas";
-import {
-  HeroHighlight,
-  Highlight,
-} from "../../../../components/ui/hero-highlight";
 
-const FIELD_CLASS =
-  "w-full rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2] px-3 py-2.5 text-sm text-[#0A0A0A] outline-none transition focus:border-[#8500FA] focus:ring-2 focus:ring-[#8500FA]/15";
-const LABEL_CLASS = "mb-2 block text-xs font-semibold uppercase text-[#6F6F76]";
+const PAGE_LIMIT = 10;
 
-const TypeChip = ({ label, active, onClick }) => (
-  <button
-    type="button"
-    onClick={onClick}
-    className={`w-full rounded-[8px] border px-3 py-2 text-left text-sm font-medium transition ${
-      active
-        ? "border-[#8500FA] bg-[#8500FA] text-white"
-        : "border-[#EADFD9] bg-[#F7F5F2] text-[#6F6F76] hover:border-[#C6AFFF] hover:text-[#0A0A0A]"
-    }`}
-  >
-    {label}
-  </button>
+const jobTypeOptions = [
+  ["full_time", "Full time"],
+  ["part_time", "Part time"],
+  ["internship", "Internship"],
+  ["contract", "Contract"],
+  ["freelance", "Freelance"],
+  ["temporary", "Temporary"],
+];
+
+const workModeOptions = [
+  ["", "All work modes"],
+  ["remote", "Remote"],
+  ["onsite", "Onsite"],
+  ["hybrid", "Hybrid"],
+];
+
+const selectClass =
+  "h-8 min-w-[128px] appearance-none border-0 border-b border-[#D8DCE7] bg-transparent py-1 pl-0 pr-7 text-xs font-medium uppercase text-[#001B44] outline-none transition focus:border-[#001B44]";
+
+const inputClass =
+  "h-8 w-full rounded-[6px] border border-[#DDE1EA] bg-white py-1.5 pl-8 pr-3 text-xs text-[#001B44] outline-none transition placeholder:text-[#8B95AA] focus:border-[#2E6BFF] focus:ring-2 focus:ring-[#2E6BFF]/10";
+
+const formatCardDate = (value) => {
+  if (!value) return "";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
+
+  return new Intl.DateTimeFormat("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(date);
+};
+
+const stripDeadlineLabel = (value = "") =>
+  String(value).replace(/^Deadline\s*/i, "").trim();
+
+const getJobCode = (job = {}) =>
+  job.job_code ||
+  job.job_id ||
+  job.reference_id ||
+  job.raw?.job_code ||
+  job.raw?.job_id ||
+  job.raw?.reference_id ||
+  job.id;
+
+const getPostedDate = (job = {}) =>
+  formatCardDate(
+    job.posted_at ||
+      job.created_at ||
+      job.published_at ||
+      job.raw?.posted_at ||
+      job.raw?.created_at ||
+      job.raw?.published_at,
+  );
+
+const getEndDate = (job = {}) => {
+  if (job.deadline) return job.deadline;
+  if (job.raw?.application_deadline) {
+    return formatCardDate(job.raw.application_deadline);
+  }
+
+  return /^Deadline/i.test(job.time || "") ? stripDeadlineLabel(job.time) : "";
+};
+
+const getSkills = (skills) => {
+  if (Array.isArray(skills)) return skills.filter(Boolean);
+  if (typeof skills === "string") {
+    return skills
+      .split(/,|;|\n/)
+      .map((skill) => skill.trim())
+      .filter(Boolean);
+  }
+
+  return [];
+};
+
+const getShareUrl = (jobId) => {
+  if (typeof window === "undefined") return `/jobs/${jobId}`;
+  return `${window.location.origin}/jobs/${jobId}`;
+};
+
+const FilterSelect = ({ label, value, onChange, options }) => (
+  <label className="relative inline-flex items-center gap-2">
+    <span className="sr-only">{label}</span>
+    <select
+      value={value}
+      onChange={onChange}
+      className={selectClass}
+      aria-label={label}
+    >
+      {options.map(([optionValue, optionLabel]) => (
+        <option key={`${label}-${optionValue || "all"}`} value={optionValue}>
+          {optionLabel}
+        </option>
+      ))}
+    </select>
+    <ChevronDown className="pointer-events-none absolute right-1 h-4 w-4 text-[#001B44]" />
+  </label>
 );
 
-const JobCard = ({ job }) => (
-  <article className="group rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2] p-5 transition hover:border-[#FF9566] hover:bg-white hover:shadow-sm">
-    <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-      <div className="flex min-w-0 items-start gap-4">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[8px] border border-[#EADFD9] bg-white text-sm font-bold text-[#0A0A0A]">
-          {job.logoLetter}
-        </div>
+const JobCard = ({ job }) => {
+  const skills = getSkills(job.skills);
+  const visibleSkills = skills.slice(0, 3);
+  const remainingSkills = Math.max(0, skills.length - visibleSkills.length);
+  const postedDate = getPostedDate(job) || "Not listed";
+  const endDate = getEndDate(job) || "Not listed";
+  const jobCode = getJobCode(job);
 
-        <div className="min-w-0">
-          <h3 className="text-base font-semibold leading-tight text-[#0A0A0A] transition group-hover:text-[#FF6B35]">
-            {job.title}
-          </h3>
-          <p className="mt-1 text-sm text-[#6F6F76]">{job.company}</p>
+  const handleShare = async () => {
+    const url = getShareUrl(job.id);
 
-          <div className="mt-3 flex flex-wrap gap-2 text-xs font-medium">
-            <span className="inline-flex items-center gap-1 rounded-[8px] border border-[#EADFD9] bg-[#FFF7F3] px-2.5 py-1 text-[#6F6F76]">
-              <BriefcaseBusiness className="h-3.5 w-3.5" />
-              {job.category}
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: job.title,
+          text: `${job.title} at ${job.company}`,
+          url,
+        });
+        return;
+      }
+
+      await navigator.clipboard?.writeText(url);
+    } catch {
+      // Sharing is optional; keep the card interaction silent on cancel/failure.
+    }
+  };
+
+  return (
+    <article className="flex h-full min-h-[280px] flex-col rounded-[7px] border border-[#E6E9F0] bg-white px-2.5 py-2.5 shadow-[0_2px_12px_rgba(15,23,42,0.04)]">
+      <header className="min-w-0">
+        <h2
+          className="truncate text-[15px] font-bold leading-5 text-[#001B44]"
+          title={job.title}
+        >
+          {job.title}
+        </h2>
+        <p className="mt-0.5 truncate text-[11px] font-medium text-[#001B44]">
+          Job ID: {jobCode}
+        </p>
+      </header>
+
+      <div className="mt-2 border-t border-[#E8EAF0] pt-2">
+        <p className="truncate text-[11px] font-medium text-[#8993AA]">
+          <span>{job.company}</span>
+          <span className="mx-1 text-[#C0C5D1]">|</span>
+          <span>{job.location}</span>
+        </p>
+        <p className="mt-1 text-[11px] font-medium text-[#8993AA]">
+          Posted On:{" "}
+          <span className="font-bold text-[#001B44]">{postedDate}</span>
+          <span className="mx-1 text-[#C0C5D1]">|</span>
+          End Date: <span className="font-bold text-[#001B44]">{endDate}</span>
+        </p>
+      </div>
+
+      <div className="mt-2 border-t border-[#E8EAF0] pt-2">
+        <p className="text-[11px] font-medium leading-4 text-[#001B44]">
+          Required Experience
+        </p>
+        <p className="text-[12px] font-bold leading-4 text-[#001B44]">
+          {job.experience || "Not listed"}
+        </p>
+      </div>
+
+      <div className="mt-2 border-t border-[#E8EAF0] pt-2">
+        <p className="text-[11px] font-medium leading-4 text-[#001B44]">
+          Required Skills
+        </p>
+        <div className="mt-2 flex max-h-[58px] flex-wrap gap-1.5 overflow-hidden">
+          {visibleSkills.length > 0 ? (
+            <>
+              {visibleSkills.map((skill) => (
+                <span
+                  key={skill}
+                  className="inline-flex max-w-full items-center rounded-[4px] bg-[#F3F4F6] px-3 py-1.5 text-[11px] font-medium uppercase leading-none text-[#001B44]"
+                  title={skill}
+                >
+                  <span className="truncate">{skill}</span>
+                </span>
+              ))}
+              {remainingSkills > 0 && (
+                <span className="inline-flex items-center rounded-[4px] bg-[#F3F4F6] px-3 py-1.5 text-[11px] font-medium leading-none text-[#001B44]">
+                  +{remainingSkills}
+                </span>
+              )}
+            </>
+          ) : (
+            <span className="inline-flex items-center rounded-[4px] bg-[#F3F4F6] px-3 py-1.5 text-[11px] font-medium leading-none text-[#001B44]">
+              Not listed
             </span>
-            <span className="inline-flex items-center gap-1 rounded-[8px] border border-[#EADFD9] bg-[#FFF7F3] px-2.5 py-1 text-[#6F6F76]">
-              <Clock className="h-3.5 w-3.5" />
-              {job.time}
-            </span>
-            <span className="rounded-[8px] border border-[#C6AFFF] bg-white px-2.5 py-1 font-semibold text-[#8500FA]">
-              {job.salary}
-            </span>
-          </div>
+          )}
         </div>
       </div>
 
-      <div className="flex w-full flex-col gap-3 md:w-auto md:items-end">
-        <span className="inline-flex items-center gap-1 text-xs font-medium text-[#6F6F76]">
-          <MapPin className="h-3.5 w-3.5 text-[#FF9566]" />
-          {job.location}
-        </span>
-
-        <div className="flex items-center gap-2">
-          <span className="rounded-[8px] border border-green-100 bg-green-50 px-2.5 py-1 text-[11px] font-semibold text-green-700">
-            {job.type}
-          </span>
-          <button
-            type="button"
-            aria-label={`Save ${job.title}`}
-            className="rounded-[8px] border border-[#EADFD9] bg-white p-2 text-[#6F6F76] transition hover:border-[#C6AFFF] hover:text-[#8500FA]"
-          >
-            <Bookmark className="h-4 w-4" />
-          </button>
-          <Link
-            to={`/jobs/${job.id}`}
-            state={{ job, allJobs: jobsData }}
-            className="inline-flex items-center justify-center gap-1 rounded-[8px] bg-[#FF6B35] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#FF9566]"
-          >
-            Apply now
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
+      <div className="mt-auto flex gap-2 pt-4">
+        <button
+          type="button"
+          onClick={handleShare}
+          className="inline-flex h-7 flex-1 items-center justify-center rounded-[5px] border border-[#001B44] bg-white px-3 text-[11px] font-bold text-[#001B44] transition hover:bg-[#F5F6FA]"
+        >
+          Share
+        </button>
+        <Link
+          to={`/jobs/${job.id}`}
+          state={{ job }}
+          className="inline-flex h-7 flex-1 items-center justify-center rounded-[5px] bg-[#FF762F] px-3 text-center text-[11px] font-bold text-white transition hover:bg-[#F06422]"
+        >
+          Register And Apply
+        </Link>
       </div>
-    </div>
-  </article>
-);
-
-const TopCompanyCard = ({ company }) => (
-  <article className="flex items-center gap-3 rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2] px-4 py-3 transition hover:border-[#FF9566] hover:bg-white">
-    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[8px] border border-[#EADFD9] bg-white text-xs font-bold text-[#0A0A0A]">
-      {company.logo}
-    </div>
-    <div className="min-w-0 text-left">
-      <h3 className="truncate text-sm font-semibold text-[#0A0A0A]">
-        {company.name}
-      </h3>
-      <p className="text-xs font-medium text-green-700">
-        {company.openPositions} roles
-      </p>
-    </div>
-  </article>
-);
+    </article>
+  );
+};
 
 const JobsPage = () => {
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [location, setLocation] = useState("Remote, India");
-  const [category, setCategory] = useState("");
+  const [location, setLocation] = useState("");
+  const [workMode, setWorkMode] = useState("");
   const [sortBy, setSortBy] = useState("Newest");
+  const [page, setPage] = useState(1);
+  const [showFilters, setShowFilters] = useState(true);
+  const {
+    jobs,
+    pagination,
+    isLoading,
+    error,
+    fetchJobs,
+    clearError,
+  } = useJobStore();
 
-  const types = useMemo(
-    () => [...new Set(jobsData.map((job) => job.type).filter(Boolean))],
-    [],
-  );
-  const locations = useMemo(
-    () => [...new Set(jobsData.map((job) => job.location).filter(Boolean))],
-    [],
-  );
-  const categories = useMemo(
-    () => [...new Set(jobsData.map((job) => job.category).filter(Boolean))],
-    [],
+  const apiFilters = useMemo(
+    () => ({
+      page,
+      limit: PAGE_LIMIT,
+      search: searchTerm.trim(),
+      job_type: selectedTypes[0] || "",
+      work_mode: workMode,
+      city: location.trim(),
+    }),
+    [location, page, searchTerm, selectedTypes, workMode],
   );
 
-  const handleTypeToggle = (type) => {
-    setSelectedTypes((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
-    );
+  useEffect(() => {
+    fetchJobs(apiFilters).catch(() => {});
+  }, [apiFilters, fetchJobs]);
+
+  const updateFilter = (setter) => (event) => {
+    clearError();
+    setPage(1);
+    setter(event.target.value);
+  };
+
+  const handleTypeChange = (event) => {
+    clearError();
+    setPage(1);
+    setSelectedTypes(event.target.value ? [event.target.value] : []);
   };
 
   const filteredJobs = useMemo(() => {
-    let result = [...jobsData];
-    const normalizedSearch = searchTerm.trim().toLowerCase();
-
-    if (normalizedSearch) {
-      result = result.filter(
-        (job) =>
-          job.title.toLowerCase().includes(normalizedSearch) ||
-          job.company.toLowerCase().includes(normalizedSearch) ||
-          job.category.toLowerCase().includes(normalizedSearch),
-      );
-    }
-
-    if (location) {
-      result = result.filter((job) => job.location === location);
-    }
-
-    if (category) {
-      result = result.filter((job) => job.category === category);
-    }
-
-    if (selectedTypes.length > 0) {
-      result = result.filter((job) => selectedTypes.includes(job.type));
-    }
-
-    return sortBy === "Newest" ? result.reverse() : result;
-  }, [searchTerm, location, category, selectedTypes, sortBy]);
-
-  const companies = [
-    { id: 1, name: "Tata Consultancy Services", logo: "TC", openPositions: 6 },
-    { id: 2, name: "Zomato", logo: "ZO", openPositions: 3 },
-    { id: 3, name: "Zoho", logo: "ZH", openPositions: 4 },
-    { id: 4, name: "Meesho", logo: "ME", openPositions: 5 },
-  ];
+    const result = [...jobs];
+    return sortBy === "Oldest" ? result.reverse() : result;
+  }, [jobs, sortBy]);
 
   const meta = seoMeta["/jobs"];
   const breadcrumbs = [
@@ -199,180 +306,207 @@ const JobsPage = () => {
     ],
   });
   const hasActiveFilters =
-    selectedTypes.length > 0 || searchTerm || location || category;
+    selectedTypes.length > 0 || searchTerm || location || workMode;
   const clearFilters = () => {
+    clearError();
     setSelectedTypes([]);
     setSearchTerm("");
     setLocation("");
-    setCategory("");
+    setWorkMode("");
+    setPage(1);
   };
 
+  const currentPage = Number(pagination.page) || page;
+  const currentLimit = Number(pagination.limit) || PAGE_LIMIT;
+  const totalJobs = Number(pagination.total) || filteredJobs.length;
+  const totalPages = Math.max(1, Math.ceil(totalJobs / currentLimit));
+  const canGoBack = currentPage > 1;
+  const canGoForward = currentPage < totalPages;
+  const showingTo = totalJobs
+    ? Math.min(currentPage * currentLimit, totalJobs)
+    : filteredJobs.length;
+
   return (
-    <div className="min-h-screen bg-[#FFF7F3] text-[#0A0A0A]">
+    <div className="min-h-screen bg-[#F5F6FA] text-[#001B44]">
       {seoElement}
-      <JobsPublicNav />
 
-      <HeroHighlight
-        containerClassName="border-b border-[#EADFD9] bg-[#F7F5F2]"
-        className="px-4 py-14 md:py-20"
-      >
-        <div className="mx-auto flex max-w-6xl flex-col items-center text-center">
-          <div className="max-w-4xl">
-            <p className="text-sm font-semibold uppercase text-[#FF9566]">
-              Verified fresher jobs
-            </p>
-            <h1 className="mt-4 text-4xl font-bold leading-tight text-[#0A0A0A] md:text-6xl">
-              Find your{" "}
-              <Highlight className="rounded-[8px] px-2 pb-1">
-                first job.
-              </Highlight>
-            </h1>
-            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <a
-                href="#job-search"
-                className="inline-flex items-center justify-center gap-2 rounded-[8px] bg-[#FF6B35] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#FF9566]"
-              >
-                Browse openings
-                <ArrowRight className="h-4 w-4" />
-              </a>
-              <Link
-                to="/resume"
-                className="inline-flex items-center justify-center gap-2 rounded-[8px] border border-[#EADFD9] bg-white px-5 py-3 text-sm font-semibold text-[#0A0A0A] transition hover:border-[#C6AFFF] hover:text-[#8500FA]"
-              >
-                Build resume
-              </Link>
-            </div>
-          </div>
-        </div>
-      </HeroHighlight>
+      <main id="job-search" className="mx-auto w-full max-w-[1280px] px-2 py-4 sm:px-4 lg:px-2">
+        <h1 className="text-[18px] font-bold leading-6 text-[#001B44]">
+          All Jobs
+        </h1>
 
-      <main
-        id="job-search"
-        className="mx-auto w-full max-w-6xl px-4 py-10 md:py-14"
-      >
-        <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
-          <aside className="h-fit rounded-[8px] border border-[#EADFD9] bg-white p-5 lg:sticky lg:top-24">
-            <div className="space-y-5">
-              <div>
-                <label className={LABEL_CLASS}>Keyword</label>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#9F9FA9]" />
-                  <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={(event) => setSearchTerm(event.target.value)}
-                    placeholder="Role or company"
-                    className={`${FIELD_CLASS} pl-9`}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className={LABEL_CLASS}>Location</label>
-                <select
-                  value={location}
-                  onChange={(event) => setLocation(event.target.value)}
-                  className={FIELD_CLASS}
-                >
-                  <option value="">All locations</option>
-                  {locations.map((item) => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className={LABEL_CLASS}>Category</label>
-                <select
-                  value={category}
-                  onChange={(event) => setCategory(event.target.value)}
-                  className={FIELD_CLASS}
-                >
-                  <option value="">All categories</option>
-                  {categories.map((item) => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className={LABEL_CLASS}>Sort</label>
-                <select
-                  value={sortBy}
-                  onChange={(event) => setSortBy(event.target.value)}
-                  className={FIELD_CLASS}
-                >
-                  <option>Newest</option>
-                  <option>Oldest</option>
-                </select>
-              </div>
-
-              <div>
-                <div className="space-y-2">
-                  {types.map((type) => (
-                    <TypeChip
-                      key={type}
-                      label={type}
-                      active={selectedTypes.includes(type)}
-                      onClick={() => handleTypeToggle(type)}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 flex items-center justify-between gap-3 border-t border-[#EADFD9] pt-4">
-              <span className="text-sm font-semibold text-[#0A0A0A]">
-                {filteredJobs.length} matched
+        <section className="mt-3 rounded-[8px] bg-white px-3 py-4 shadow-[0_1px_8px_rgba(15,23,42,0.03)]">
+          {showFilters && (
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-4">
+              <span className="text-[12px] font-bold uppercase tracking-wide text-[#001B44]">
+                Filter By
               </span>
+
+              <FilterSelect
+                label="Job type"
+                value={selectedTypes[0] || ""}
+                onChange={handleTypeChange}
+                options={[["", "Job Type"], ...jobTypeOptions]}
+              />
+
+              <label className="relative inline-flex items-center">
+                <span className="sr-only">Location</span>
+                <input
+                  type="text"
+                  value={location}
+                  onChange={updateFilter(setLocation)}
+                  placeholder="Location"
+                  className="h-8 min-w-[128px] border-0 border-b border-[#D8DCE7] bg-transparent py-1 pl-0 pr-2 text-xs font-medium uppercase text-[#001B44] outline-none placeholder:text-[#001B44] focus:border-[#001B44]"
+                />
+              </label>
+
+              <FilterSelect
+                label="Work mode"
+                value={workMode}
+                onChange={updateFilter(setWorkMode)}
+                options={workModeOptions.map(([value, label]) => [
+                  value,
+                  value ? label : "Work Mode",
+                ])}
+              />
+
+              <FilterSelect
+                label="Sort"
+                value={sortBy}
+                onChange={(event) => setSortBy(event.target.value)}
+                options={[
+                  ["Newest", "Newest"],
+                  ["Oldest", "Oldest"],
+                ]}
+              />
+            </div>
+          )}
+
+          <div className={`${showFilters ? "mt-6" : ""} flex items-center justify-between gap-3 border-t border-[#DDE1EA] pt-3`}>
+            <div>
               {hasActiveFilters && (
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="rounded-[8px] border border-[#EADFD9] bg-white px-3 py-2 text-sm font-semibold text-[#6F6F76] transition hover:bg-[#F7F5F2] hover:text-[#0A0A0A]"
+                  className="text-[11px] font-bold uppercase text-[#001B44] transition hover:text-[#FF762F]"
                 >
-                  Clear
+                  Clear Filters
                 </button>
               )}
             </div>
-          </aside>
 
-          <section>
-            {filteredJobs.length === 0 ? (
-              <div className="rounded-[8px] border border-dashed border-[#EADFD9] bg-white px-6 py-16 text-center">
-                <h3 className="text-lg font-semibold text-[#0A0A0A]">
-                  No jobs found
-                </h3>
-                <p className="mx-auto mt-2 max-w-md text-sm text-[#6F6F76]">
-                  Try a broader role, city, or type.
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {filteredJobs.map((job) => (
-                  <JobCard key={job.id} job={job} />
-                ))}
-              </div>
-            )}
-          </section>
-        </div>
-
-        <section className="mt-12">
-          <div className="mb-4 max-w-2xl">
-            <h2 className="text-2xl font-semibold text-[#0A0A0A]">
-              Hiring companies
-            </h2>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {companies.map((company) => (
-              <TopCompanyCard key={company.id} company={company} />
-            ))}
+            <button
+              type="button"
+              onClick={() => setShowFilters((value) => !value)}
+              className="inline-flex items-center gap-1 text-[11px] font-bold uppercase text-[#001B44]"
+            >
+              {showFilters ? "Hide Filters" : "Show Filters"}
+              {showFilters ? (
+                <ChevronUp className="h-4 w-4" />
+              ) : (
+                <ChevronDown className="h-4 w-4" />
+              )}
+            </button>
           </div>
         </section>
+
+        <div className="mt-4 flex items-center gap-1.5">
+          <div className="relative w-full max-w-[345px]">
+            <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#2E6BFF]" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={updateFilter(setSearchTerm)}
+              placeholder="Search Job"
+              className={inputClass}
+            />
+          </div>
+          <Info className="h-4 w-4 shrink-0 text-[#001B44]" />
+        </div>
+
+        <section className="mt-5">
+          {isLoading && filteredJobs.length === 0 ? (
+            <div className="rounded-[8px] border border-dashed border-[#DDE1EA] bg-white px-6 py-16 text-center">
+              <h2 className="text-lg font-semibold text-[#001B44]">
+                Loading jobs...
+              </h2>
+            </div>
+          ) : error ? (
+            <div className="rounded-[8px] border border-dashed border-[#DDE1EA] bg-white px-6 py-16 text-center">
+              <h2 className="text-lg font-semibold text-[#001B44]">
+                Could not load jobs
+              </h2>
+              <p className="mx-auto mt-2 max-w-md text-sm text-[#68738A]">
+                {error}
+              </p>
+            </div>
+          ) : filteredJobs.length === 0 ? (
+            <div className="rounded-[8px] border border-dashed border-[#DDE1EA] bg-white px-6 py-16 text-center">
+              <h2 className="text-lg font-semibold text-[#001B44]">
+                No jobs found
+              </h2>
+              <p className="mx-auto mt-2 max-w-md text-sm text-[#68738A]">
+                Try a broader role, city, or type.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {filteredJobs.map((job) => (
+                <JobCard key={job.id} job={job} />
+              ))}
+            </div>
+          )}
+        </section>
+
+        <div className="sticky bottom-0 z-10 mt-5 flex flex-col gap-3 border-t border-[#E6E9F0] bg-white/95 px-4 py-3 text-[11px] font-bold uppercase text-[#222936] shadow-[0_-2px_12px_rgba(15,23,42,0.06)] backdrop-blur sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2">
+            <span>Showing</span>
+            <span className="rounded-[3px] bg-[#E8EEF9] px-2 py-1 text-[#001B44]">
+              {showingTo}
+            </span>
+            <span>Of {totalJobs}</span>
+          </div>
+
+          <div className="flex items-center gap-1 self-end sm:self-auto">
+            <button
+              type="button"
+              onClick={() => setPage(1)}
+              disabled={!canGoBack || isLoading}
+              className="rounded-[3px] px-2 py-1 text-[#8993AA] transition hover:bg-[#F3F4F6] hover:text-[#001B44] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              First
+            </button>
+            <button
+              type="button"
+              aria-label="Previous page"
+              onClick={() => setPage((value) => Math.max(1, value - 1))}
+              disabled={!canGoBack || isLoading}
+              className="rounded-[3px] p-1 text-[#8993AA] transition hover:bg-[#F3F4F6] hover:text-[#001B44] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <span className="rounded-[3px] bg-[#F4E9E3] px-2 py-1 text-[#FF762F]">
+              {currentPage}
+            </span>
+            <button
+              type="button"
+              aria-label="Next page"
+              onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
+              disabled={!canGoForward || isLoading}
+              className="rounded-[3px] p-1 text-[#8993AA] transition hover:bg-[#F3F4F6] hover:text-[#001B44] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setPage(totalPages)}
+              disabled={!canGoForward || isLoading}
+              className="rounded-[3px] px-2 py-1 text-[#8993AA] transition hover:bg-[#F3F4F6] hover:text-[#001B44] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Last
+            </button>
+          </div>
+        </div>
       </main>
     </div>
   );

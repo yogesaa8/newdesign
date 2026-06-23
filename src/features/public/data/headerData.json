@@ -15,6 +15,10 @@
                 "link": "/company/login"
             },
             {
+                "name": "Institute",
+                "link": "/institute/login"
+            },
+            {
                 "name": "College",
                 "link": "/college"
             },

@@ -56,6 +56,9 @@ import PrivacyPolicy from "../features/public/pages/PrivacyPolicy";
 import ReactSlides from "../features/public/pages/career/ReactQuestions";
 import NoindexRouteLayout from "../seo/NoindexRouteLayout";
 import InstituteMainPage from "../features/institute/InstituteMainPage";
+import InstituteLogin from "../features/institute/pages/InstituteLogin";
+import InstituteSignup from "../features/institute/pages/InstituteSignup";
+import InstituteDashboard from "../features/institute/pages/InstituteDashboard";
 
 const AppRoutes = () => {
   return (
@@ -99,9 +102,13 @@ const AppRoutes = () => {
             path="/company/reset-password"
             element={<CompanyForgotPassword />}
           />
+          <Route path="/institute/login" element={<InstituteLogin />} />
+          <Route path="/institute/signup" element={<InstituteSignup />} />
           <Route path="/admin/login" element={<AdminLogin />} />
         </Route>
       </Route>
+
+      <Route path="/institute/dashboard" element={<InstituteDashboard />} />
 
       {/* JOB SEEKER DASHBOARD */}
       <Route
@@ -141,6 +148,7 @@ const AppRoutes = () => {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="jobs" element={<JobList />} />
         <Route path="jobs/new" element={<JobPostForm />} />
+        <Route path="jobs/:jobId/applications" element={<ApplicantsList />} />
         <Route path="applicants" element={<ApplicantsList />} />
         <Route
           path="applicants/:applicantId/resume"

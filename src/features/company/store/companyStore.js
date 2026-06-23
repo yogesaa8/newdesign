@@ -18,16 +18,18 @@ const parseApiResponse = async (response) => {
   const payload = text ? JSON.parse(text) : {};
 
   if (!response.ok) {
+    const apiError = payload?.error;
     const message =
       payload?.message ||
-      payload?.error?.message ||
-      payload?.error ||
+      apiError?.message ||
+      (typeof apiError === "string" ? apiError : "") ||
       payload?.errors?.[0]?.message ||
       "Something went wrong. Please try again.";
     const error = new Error(message);
     error.payload = payload;
-    error.code = payload?.error?.code;
-    error.details = payload?.error?.details || payload?.errors;
+    error.code =
+      apiError?.code || (typeof apiError === "string" ? apiError : undefined);
+    error.details = apiError?.details || payload?.errors;
     throw error;
   }
 
@@ -94,6 +96,17 @@ const normalizeQuestionList = (payload) => {
   return data?.questions ?? [];
 };
 
+const normalizeApplicationList = (payload) => {
+  const data = getResponseData(payload);
+  const applications = data?.applications ?? [];
+
+  return {
+    applicantJob: data?.job ?? null,
+    totalApplications: Number(data?.total_applications ?? applications.length),
+    applications,
+  };
+};
+
 const cleanQuestionPayload = (question) => {
   const payload = cleanPayload(question);
 
@@ -117,6 +130,8 @@ const cleanQuestionPayload = (question) => {
 export const useCompanyStore = create((set) => ({
   company: null,
   applicants: [],
+  applicantJob: null,
+  totalApplications: 0,
   jobs: [],
   jobPagination: {
     page: 1,
@@ -128,6 +143,7 @@ export const useCompanyStore = create((set) => ({
   isSaving: false,
   isDeleting: false,
   isJobActionLoading: false,
+  isApplicantsLoading: false,
   error: null,
 
   setCompany: (company) => set({ company }),
@@ -223,6 +239,36 @@ export const useCompanyStore = create((set) => ({
       return payload;
     } catch (error) {
       set({ isLoading: false, error: error.message });
+      throw error;
+    }
+  },
+
+  fetchJobApplications: async (jobId, token) => {
+    set({
+      isApplicantsLoading: true,
+      error: null,
+      applicants: [],
+      applicantJob: null,
+      totalApplications: 0,
+    });
+
+    try {
+      const payload = await apiRequest(`/company/jobs/${jobId}/applications`, {
+        token,
+      });
+      const { applications, applicantJob, totalApplications } =
+        normalizeApplicationList(payload);
+
+      set({
+        applicants: applications,
+        applicantJob,
+        totalApplications,
+        isApplicantsLoading: false,
+      });
+
+      return payload;
+    } catch (error) {
+      set({ isApplicantsLoading: false, error: error.message });
       throw error;
     }
   },

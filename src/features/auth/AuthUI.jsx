@@ -22,6 +22,15 @@ const audienceTheme = {
     accentHover: "#491EF7",
     accentRing: "rgb(133 0 250 / 0.16)",
   },
+  institute: {
+    pageBg: "bg-black",
+    shell: "bg-black",
+    card: "border-white/10 bg-white/95 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur",
+    logoWrap: "bg-black border-violet-500/40",
+    accent: "#7F22FE",
+    accentHover: "#6D28D9",
+    accentRing: "rgb(127 34 254 / 0.18)",
+  },
 };
 
 const AuthCard = ({ audience, children }) => {

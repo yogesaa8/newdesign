@@ -1,65 +1,96 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useMemo, useState } from "react";
+import toast from "react-hot-toast";
+import { Link, useParams } from "react-router-dom";
+import { useAuthStore } from "../../../../store";
+import { useCompanyStore } from "../../store/companyStore";
 
-const applicants = [
-  {
-    id: 1,
-    name: "Priya Nair",
-    email: "priya.nair@example.com",
-    role: "Graduate Software Engineer",
-    applied: "Today",
-    status: "New",
-    score: "82%",
-  },
-  {
-    id: 2,
-    name: "Aman Verma",
-    email: "aman.verma@example.com",
-    role: "Digital Marketing Trainee",
-    applied: "Yesterday",
-    status: "Shortlisted",
-    score: "76%",
-  },
-  {
-    id: 3,
-    name: "Neha Shah",
-    email: "neha.shah@example.com",
-    role: "Junior Finance Analyst",
-    applied: "2 days ago",
-    status: "New",
-    score: "71%",
-  },
-  {
-    id: 4,
-    name: "Rohit Singh",
-    email: "rohit.singh@example.com",
-    role: "Graduate Software Engineer",
-    applied: "3 days ago",
-    status: "Reviewed",
-    score: "68%",
-  },
-];
+const formatEnum = (value) =>
+  value ? value.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase()) : "-";
 
-const roles = ["All roles", ...new Set(applicants.map((item) => item.role))];
-const statuses = ["All", "New", "Shortlisted", "Reviewed"];
+const formatDate = (value) => {
+  if (!value) return "-";
+
+  try {
+    return new Intl.DateTimeFormat("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }).format(new Date(value));
+  } catch {
+    return value;
+  }
+};
+
+const statusClasses = {
+  submitted: "bg-[#FFF1E9] text-[#C84F1F]",
+  withdrawn: "bg-[#F1E7FF] text-[#8500FA]",
+};
+
+const getSnapshot = (applicant) => applicant.resume_snapshot || applicant;
+
+const getApplicantName = (applicant) =>
+  getSnapshot(applicant).full_name || applicant.full_name || "Applicant";
+
+const getApplicantEmail = (applicant) =>
+  getSnapshot(applicant).email || applicant.email || "-";
+
+const getResumeUrl = (applicant) =>
+  getSnapshot(applicant).resume_url || applicant.resume_url || "";
+
+const getAnswerText = (answer) => {
+  if (answer.answer_text) return answer.answer_text;
+  if (answer.selected_option_text) return answer.selected_option_text;
+  if (Array.isArray(answer.selected_option_ids) && answer.selected_option_ids.length) {
+    return answer.selected_option_ids.join(", ");
+  }
+  if (answer.file_url) return answer.file_url;
+  if (answer.url_answer) return answer.url_answer;
+  return "-";
+};
 
 const ApplicantsList = () => {
+  const { jobId } = useParams();
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const {
+    applicants,
+    applicantJob,
+    totalApplications,
+    isApplicantsLoading,
+    error,
+    fetchJobApplications,
+    clearError,
+  } = useCompanyStore();
   const [role, setRole] = useState("All roles");
   const [status, setStatus] = useState("All");
 
+  useEffect(() => {
+    if (!jobId || !accessToken) return;
+
+    clearError();
+    fetchJobApplications(jobId, accessToken).catch((fetchError) => {
+      toast.error(fetchError.message);
+    });
+  }, [accessToken, clearError, fetchJobApplications, jobId]);
+
+  const roleTitle = applicantJob?.job_title || "Current role";
+  const roles = useMemo(() => ["All roles", roleTitle], [roleTitle]);
+  const statuses = useMemo(
+    () => [
+      "All",
+      ...new Set(applicants.map((item) => item.status).filter(Boolean).map(formatEnum)),
+    ],
+    [applicants],
+  );
+
   const filteredApplicants = applicants.filter((applicant) => {
-    const matchesRole = role === "All roles" || applicant.role === role;
-    const matchesStatus = status === "All" || applicant.status === status;
+    const applicantRole = applicantJob?.job_title || roleTitle;
+    const matchesRole = role === "All roles" || applicantRole === role;
+    const matchesStatus = status === "All" || formatEnum(applicant.status) === status;
     return matchesRole && matchesStatus;
   });
 
-  const handleShortlist = (applicantId) => {
-    console.log("Shortlist applicant:", applicantId);
-  };
-
-  const handleReject = (applicantId) => {
-    console.log("Reject applicant:", applicantId);
-  };
+  const submittedCount = applicants.filter((item) => item.status === "submitted").length;
+  const withdrawnCount = applicants.filter((item) => item.status === "withdrawn").length;
 
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-6 md:px-8 md:py-8">
@@ -71,19 +102,24 @@ const ApplicantsList = () => {
           <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-[#111114] md:text-3xl">
             Candidate review
           </h1>
+          {applicantJob && (
+            <p className="mt-2 text-sm font-semibold text-[#77737D]">
+              {applicantJob.job_title} - {[applicantJob.city, applicantJob.state].filter(Boolean).join(", ")}
+            </p>
+          )}
         </div>
         <div className="grid grid-cols-3 gap-2 rounded-[8px] border border-[#E7DDD6] bg-white p-2 text-center">
           <div className="px-3">
-            <p className="text-lg font-extrabold text-[#111114]">64</p>
-            <p className="text-xs font-semibold text-[#77737D]">New</p>
+            <p className="text-lg font-extrabold text-[#111114]">{totalApplications}</p>
+            <p className="text-xs font-semibold text-[#77737D]">Total</p>
           </div>
           <div className="border-x border-[#EFE7E1] px-3">
-            <p className="text-lg font-extrabold text-[#111114]">21</p>
-            <p className="text-xs font-semibold text-[#77737D]">Shortlisted</p>
+            <p className="text-lg font-extrabold text-[#111114]">{submittedCount}</p>
+            <p className="text-xs font-semibold text-[#77737D]">Submitted</p>
           </div>
           <div className="px-3">
-            <p className="text-lg font-extrabold text-[#111114]">6</p>
-            <p className="text-xs font-semibold text-[#77737D]">Interviews</p>
+            <p className="text-lg font-extrabold text-[#111114]">{withdrawnCount}</p>
+            <p className="text-xs font-semibold text-[#77737D]">Withdrawn</p>
           </div>
         </div>
       </div>
@@ -116,6 +152,23 @@ const ApplicantsList = () => {
         </div>
       </div>
 
+      {!jobId && (
+        <div className="mb-4 rounded-[8px] border border-dashed border-[#E7DDD6] bg-white px-6 py-8 text-center">
+          <h2 className="text-lg font-bold text-[#111114]">
+            Open applicants from a job post
+          </h2>
+          <p className="mt-2 text-sm font-semibold text-[#77737D]">
+            The applicant API requires a company job ID.
+          </p>
+          <Link
+            to="/company/jobs"
+            className="mt-4 inline-flex rounded-[8px] bg-[#FF6B35] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#E85F2F]"
+          >
+            Go to jobs
+          </Link>
+        </div>
+      )}
+
       <section className="overflow-hidden rounded-[8px] border border-[#E7DDD6] bg-white">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[860px] text-left">
@@ -124,67 +177,148 @@ const ApplicantsList = () => {
                 <th className="px-5 py-3">Candidate</th>
                 <th className="px-5 py-3">Role</th>
                 <th className="px-5 py-3">Applied</th>
-                <th className="px-5 py-3">Match</th>
+                <th className="px-5 py-3">Snapshot</th>
                 <th className="px-5 py-3">Status</th>
                 <th className="px-5 py-3 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {filteredApplicants.map((applicant) => (
-                <tr
-                  key={applicant.id}
-                  className="border-b border-[#F2ECE7] transition-colors last:border-0 hover:bg-[#FDFBF9]"
-                >
-                  <td className="px-5 py-4">
-                    <p className="text-sm font-bold text-[#111114]">{applicant.name}</p>
-                    <p className="text-xs text-[#77737D]">{applicant.email}</p>
-                  </td>
-                  <td className="px-5 py-4 text-sm font-semibold text-[#4F4D55]">
-                    {applicant.role}
-                  </td>
-                  <td className="px-5 py-4 text-sm text-[#4F4D55]">{applicant.applied}</td>
-                  <td className="px-5 py-4 text-sm font-bold text-[#111114]">
-                    {applicant.score}
-                  </td>
-                  <td className="px-5 py-4">
-                    <span
-                      className={`rounded-[8px] px-2.5 py-1 text-xs font-bold ${
-                        applicant.status === "Shortlisted"
-                          ? "bg-green-50 text-green-700"
-                          : applicant.status === "Reviewed"
-                            ? "bg-[#F1E7FF] text-[#8500FA]"
-                            : "bg-[#FFF1E9] text-[#C84F1F]"
-                      }`}
-                    >
-                      {applicant.status}
-                    </span>
-                  </td>
-                  <td className="px-5 py-4">
-                    <div className="flex items-center justify-end gap-2">
-                      <Link
-                        to={`/company/applicants/${applicant.id}/resume`}
-                        className="rounded-[8px] border border-[#E7DDD6] bg-white px-3 py-2 text-xs font-bold text-[#4F4D55] transition-colors hover:bg-[#F7F5F2]"
-                      >
-                        Resume
-                      </Link>
-                      <button
-                        onClick={() => handleShortlist(applicant.id)}
-                        className="rounded-[8px] bg-[#111114] px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-[#2B2B31]"
-                        type="button"
-                      >
-                        Shortlist
-                      </button>
-                      <button
-                        onClick={() => handleReject(applicant.id)}
-                        className="rounded-[8px] bg-red-50 px-3 py-2 text-xs font-bold text-red-600 transition-colors hover:bg-red-100"
-                        type="button"
-                      >
-                        Reject
-                      </button>
-                    </div>
+              {isApplicantsLoading ? (
+                <tr>
+                  <td className="px-5 py-8 text-center text-sm font-semibold text-[#77737D]" colSpan={6}>
+                    Loading applicants...
                   </td>
                 </tr>
-              ))}
+              ) : error && jobId ? (
+                <tr>
+                  <td className="px-5 py-8 text-center text-sm font-semibold text-red-600" colSpan={6}>
+                    {error}
+                  </td>
+                </tr>
+              ) : filteredApplicants.length === 0 ? (
+                <tr>
+                  <td className="px-5 py-8 text-center text-sm font-semibold text-[#77737D]" colSpan={6}>
+                    {jobId ? "No applicants found." : "Select a job to view applicants."}
+                  </td>
+                </tr>
+              ) : (
+                filteredApplicants.map((applicant) => {
+                  const snapshot = getSnapshot(applicant);
+                  const resumeUrl = getResumeUrl(applicant);
+                  const screeningAnswers = applicant.screening_answers || [];
+                  const rowId = applicant.application_id || applicant.id;
+
+                  return (
+                    <React.Fragment key={rowId}>
+                      <tr className="border-b border-[#F2ECE7] transition-colors hover:bg-[#FDFBF9]">
+                        <td className="px-5 py-4">
+                          <p className="text-sm font-bold text-[#111114]">
+                            {getApplicantName(applicant)}
+                          </p>
+                          <p className="text-xs text-[#77737D]">
+                            {getApplicantEmail(applicant)}
+                          </p>
+                          <p className="mt-1 text-xs text-[#77737D]">
+                            {snapshot.phone_no || applicant.phone_no || "-"}
+                          </p>
+                        </td>
+                        <td className="px-5 py-4 text-sm font-semibold text-[#4F4D55]">
+                          <p>{applicantJob?.job_title || applicant.job_id}</p>
+                          <p className="mt-1 text-xs text-[#77737D]">
+                            {[formatEnum(applicantJob?.job_type), formatEnum(applicantJob?.work_mode)]
+                              .filter((item) => item !== "-")
+                              .join(" - ") || "-"}
+                          </p>
+                        </td>
+                        <td className="px-5 py-4 text-sm text-[#4F4D55]">
+                          {formatDate(applicant.applied_at)}
+                        </td>
+                        <td className="px-5 py-4 text-sm text-[#4F4D55]">
+                          <p className="font-semibold text-[#111114]">
+                            {[snapshot.degree, snapshot.stream].filter(Boolean).join(" - ") || "-"}
+                          </p>
+                          <p className="mt-1 text-xs text-[#77737D]">
+                            {snapshot.graduation_year || ""}
+                          </p>
+                          <p className="mt-1 max-w-[220px] truncate text-xs text-[#77737D]">
+                            {snapshot.skills || "-"}
+                          </p>
+                        </td>
+                        <td className="px-5 py-4">
+                          <span
+                            className={`rounded-[8px] px-2.5 py-1 text-xs font-bold ${
+                              statusClasses[applicant.status] || "bg-[#F1E7FF] text-[#8500FA]"
+                            }`}
+                          >
+                            {formatEnum(applicant.status)}
+                          </span>
+                        </td>
+                        <td className="px-5 py-4">
+                          <div className="flex items-center justify-end gap-2">
+                            {resumeUrl ? (
+                              <a
+                                href={resumeUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="rounded-[8px] border border-[#E7DDD6] bg-white px-3 py-2 text-xs font-bold text-[#4F4D55] transition-colors hover:bg-[#F7F5F2]"
+                              >
+                                Resume
+                              </a>
+                            ) : (
+                              <span className="rounded-[8px] border border-[#E7DDD6] bg-white px-3 py-2 text-xs font-bold text-[#77737D]">
+                                No resume
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                      <tr className="border-b border-[#F2ECE7] last:border-0">
+                        <td className="px-5 pb-4" colSpan={6}>
+                          <div className="rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] p-4">
+                            <div className="grid gap-3 text-xs font-semibold text-[#4F4D55] md:grid-cols-3">
+                              <p>
+                                Snapshot name:{" "}
+                                <span className="text-[#111114]">{snapshot.full_name || "-"}</span>
+                              </p>
+                              <p>
+                                Snapshot email:{" "}
+                                <span className="text-[#111114]">{snapshot.email || "-"}</span>
+                              </p>
+                              <p>
+                                Snapshot phone:{" "}
+                                <span className="text-[#111114]">{snapshot.phone_no || "-"}</span>
+                              </p>
+                            </div>
+                            <div className="mt-4 border-t border-[#EFE7E1] pt-4">
+                              <p className="text-xs font-bold uppercase tracking-[0.08em] text-[#77737D]">
+                                Screening answers
+                              </p>
+                              {screeningAnswers.length === 0 ? (
+                                <p className="mt-2 text-sm font-semibold text-[#77737D]">
+                                  No screening answers submitted.
+                                </p>
+                              ) : (
+                                <div className="mt-3 space-y-3">
+                                  {screeningAnswers.map((answer) => (
+                                    <div key={answer.answer_id || answer.question_id}>
+                                      <p className="text-sm font-bold text-[#111114]">
+                                        {answer.question_text}
+                                      </p>
+                                      <p className="mt-1 text-sm text-[#4F4D55]">
+                                        {getAnswerText(answer)}
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </React.Fragment>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>

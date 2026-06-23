@@ -281,6 +281,12 @@ const JobList = () => {
                       </td>
                       <td className="px-5 py-4">
                         <div className="flex justify-end gap-2">
+                          <Link
+                            to={`/company/jobs/${job.id}/applications`}
+                            className="rounded-[8px] border border-[#E7DDD6] bg-white px-3 py-1.5 text-xs font-bold text-[#4F4D55] transition-colors hover:bg-[#F7F5F2]"
+                          >
+                            Applicants
+                          </Link>
                           {jobState === "draft" && (
                             <button
                               onClick={() =>

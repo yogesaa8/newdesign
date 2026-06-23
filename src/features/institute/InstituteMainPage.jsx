@@ -5,7 +5,12 @@ import Course from "./component/Course";
 const InstituteMainPage = () => {
      return (
           <div>
-               <PartnerHeader ctaLabel="Institute demo" />
+               <PartnerHeader
+                    ctaLabel="Institute signup"
+                    ctaHref="/institute/signup"
+                    loginLabel="Institute login"
+                    loginTo="/institute/login"
+               />
                <InstiHero />
                <Course />
           </div>
