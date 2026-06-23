@@ -6,7 +6,6 @@ const primaryNav = [
   { icon: "dashboard", label: "Dashboard", path: "/company/dashboard" },
   { icon: "work", label: "Jobs", path: "/company/jobs" },
   { icon: "add", label: "Post job", path: "/company/jobs/new" },
-  { icon: "groups", label: "Applicants", path: "/company/applicants" },
 ];
 
 const accountNav = [
@@ -19,11 +18,21 @@ const CompanySidebar = ({ sidebarOpen }) => {
   const navigate = useNavigate();
   const { logout } = useAuthStore();
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => {
+    if (path === "/company/jobs") {
+      return (
+        location.pathname === path ||
+        (location.pathname.startsWith(`${path}/`) &&
+          location.pathname !== "/company/jobs/new")
+      );
+    }
+
+    return location.pathname === path;
+  };
 
   const handleLogout = async () => {
     await logout();
-    navigate("/company/login");
+    navigate("/", { replace: true });
   };
 
   const navLinkClass = (path) =>
@@ -35,7 +44,7 @@ const CompanySidebar = ({ sidebarOpen }) => {
 
   return (
     <aside
-      className={`fixed left-0 top-0 z-50 flex h-screen w-72 flex-col border-r border-[#E7DDD6] bg-white px-4 py-5 transition-transform duration-300 md:sticky md:z-30 md:translate-x-0 ${
+      className={`fixed left-0 top-0 z-50 flex h-dvh w-72 flex-col border-r border-[#E7DDD6] bg-white px-4 py-5 transition-transform duration-300 md:sticky md:z-30 md:translate-x-0 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >

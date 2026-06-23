@@ -15,12 +15,19 @@ const MainLayout = ({ children }) => {
     }
   }, [darkMode]);
   return (
-    <div className="h-[calc(100vh-52px)] overflow-hidden bg-[#F7F5F2] text-[#0A0A0A]">
-      <div className="flex h-full overflow-hidden">
+    <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden bg-[#F7F5F2] text-[#0A0A0A]">
+      <Header
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+      />
+
+      <div className="flex min-h-0 flex-1 overflow-hidden">
         {/* Mobile sidebar backdrop */}
         {sidebarOpen && (
           <div
-            className="fixed inset-0 z-9998 lg:hidden"
+            className="fixed inset-0 z-[45] lg:hidden"
             onClick={() => setSidebarOpen(false)}
           />
         )}
@@ -29,17 +36,9 @@ const MainLayout = ({ children }) => {
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
         {/* <!-- Content Area --> */}
-        <div className="relative flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden bg-[#F7F5F2]">
-          {/* <!-- Header --> */}
-          <Header
-            sidebarOpen={sidebarOpen}
-            setSidebarOpen={setSidebarOpen}
-            darkMode={darkMode}
-            setDarkMode={setDarkMode}
-          />
-
+        <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-[#F7F5F2]">
           {/* <!-- Main Content --> */}
-          <main>
+          <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
             <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
               {children}
             </div>

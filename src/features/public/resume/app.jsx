@@ -1,5 +1,5 @@
 import React from "react";
-import toast from "react-hot-toast";
+import toast from "@/lib/toast";
 
 /* global window */
 // Resume Builder - main app shell

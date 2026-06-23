@@ -1,5 +1,5 @@
 import React from "react";
-import { NavbarDemo } from "../components/LandingHeader";
+import BackgroundLinesDemo from "../components/background-lines-demo";
 import JobList from "../components/JobsShowCase";
 import HeroHighlightDemo from "../components/hero-highlight-demo";
 import GridBackgroundDemo from "../components/grid-background-demo";
@@ -10,7 +10,7 @@ import Footer from "../components/Footer";
 const LandingHomePage = () => {
   return (
     <div>
-      <NavbarDemo />
+      <BackgroundLinesDemo />
       <JobList />
       <HeroHighlightDemo />
       <GridBackgroundDemo />

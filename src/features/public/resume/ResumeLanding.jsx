@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
@@ -8,18 +8,6 @@ import {
   PenLine,
   Sparkles,
 } from "lucide-react";
-import {
-  MobileNav,
-  MobileNavHeader,
-  MobileNavMenu,
-  MobileNavToggle,
-  Navbar,
-  NavbarButton,
-  NavbarLogo,
-  NavBody,
-  NavItems,
-} from "../../../components/ui/resizable-navbar";
-import navItems from "../data/headerData.json";
 import useSEO from "@/seo/useSEO";
 import seoMeta from "@/data/seoMeta";
 import {
@@ -35,7 +23,6 @@ const primaryButton =
   "inline-flex items-center justify-center gap-2 rounded-[8px] bg-[#FF6B35] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#FF9566]";
 const secondaryButton =
   "inline-flex items-center justify-center gap-2 rounded-[8px] border border-[#EADFD9] bg-white px-5 py-3 text-sm font-semibold text-[#0A0A0A] transition hover:border-[#C6AFFF] hover:text-[#8500FA]";
-const resumeNavItems = navItems.filter((item) => item.name !== "Services");
 
 const FeatureBlock = ({ icon, title, text, accent = "orange" }) => {
   const FeatureIcon = icon;
@@ -58,7 +45,6 @@ const FeatureBlock = ({ icon, title, text, accent = "orange" }) => {
 };
 
 const ResumeLanding = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const meta = seoMeta["/resume"];
   const seoElement = useSEO({
     title: meta.title,
@@ -133,92 +119,6 @@ const ResumeLanding = () => {
     <>
       {seoElement}
       <main className="min-h-screen bg-[#FFF7F3] text-[#0A0A0A]">
-        <div className="relative w-full bg-[#fff7f3]">
-          <Navbar>
-            <NavBody disableScrollResize>
-              <NavbarLogo />
-              <NavItems items={resumeNavItems} />
-              <div className="flex items-center gap-4">
-                <NavbarButton as={Link} to="/seeker/login" variant="secondary">
-                  Sign in
-                </NavbarButton>
-                <NavbarButton as={Link} to="/seeker/signup" variant="primary">
-                  Start free
-                </NavbarButton>
-              </div>
-            </NavBody>
-
-            <MobileNav disableScrollResize>
-              <MobileNavHeader>
-                <NavbarLogo />
-                <MobileNavToggle
-                  isOpen={isMobileMenuOpen}
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                />
-              </MobileNavHeader>
-
-              <MobileNavMenu
-                isOpen={isMobileMenuOpen}
-                onClose={() => setIsMobileMenuOpen(false)}
-              >
-                {resumeNavItems.map((item, idx) => (
-                  <div key={`mobile-link-${idx}`} className="w-full">
-                    {item.link && (
-                      <a
-                        href={item.link}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="block py-2 text-on-surface-variant dark:text-surface-container-low"
-                      >
-                        {item.name}
-                      </a>
-                    )}
-
-                    {item.children && (
-                      <div className="flex flex-col gap-2">
-                        <span className="py-2 font-medium text-on-surface dark:text-surface-container-low">
-                          {item.name}
-                        </span>
-
-                        <div className="ml-4 flex flex-col gap-2">
-                          {item.children.map((child, i) => (
-                            <a
-                              key={i}
-                              href={child.link}
-                              onClick={() => setIsMobileMenuOpen(false)}
-                              className="text-sm text-outline"
-                            >
-                              {child.name}
-                            </a>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-                <div className="flex w-full flex-col gap-4">
-                  <NavbarButton
-                    href="/seeker/login"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    variant="primary"
-                    className="w-full"
-                  >
-                    Sign in
-                  </NavbarButton>
-
-                  <NavbarButton
-                    href="/seeker/signup"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    variant="primary"
-                    className="w-full"
-                  >
-                    Start free
-                  </NavbarButton>
-                </div>
-              </MobileNavMenu>
-            </MobileNav>
-          </Navbar>
-        </div>
-
         <HeroHighlight
           containerClassName="border-b border-[#EADFD9] bg-[#FFF7F3]"
           className="px-4 py-16 md:py-20"

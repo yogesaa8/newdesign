@@ -58,7 +58,7 @@ const SeekerVerifyOtp = () => {
 
     try {
       await verifySeekerOtp(otpValue);
-      navigate("/seeker/dashboard/profile");
+      navigate("/seeker/dashboard", { replace: true });
     } catch {
       // Store error is shown in the form.
     }

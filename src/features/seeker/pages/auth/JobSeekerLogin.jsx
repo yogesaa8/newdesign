@@ -39,7 +39,7 @@ const JobSeekerLogin = () => {
     event.preventDefault();
     try {
       await loginSeeker(formData);
-      navigate("/seeker/dashboard/profile");
+      navigate("/jobs", { replace: true });
     } catch {
       // Store error is shown in the form.
     }
@@ -52,7 +52,7 @@ const JobSeekerLogin = () => {
         userType: "seeker",
         remember: formData.remember,
       });
-      navigate("/seeker/dashboard/profile");
+      navigate("/jobs", { replace: true });
     } catch {
       // Store error is shown in the form.
     }

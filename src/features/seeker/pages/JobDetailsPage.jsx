@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import toast from "react-hot-toast";
+import toast from "@/lib/toast";
 import { Link, useLocation } from "react-router-dom";
 
 const JobDetailsPage = () => {

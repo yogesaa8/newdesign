@@ -267,7 +267,7 @@ const CompanySignupPage = () => {
         idToken,
         userType: "company",
       });
-      navigate("/company/profile");
+      navigate("/company/profile", { replace: true });
     } catch (err) {
       setErrors({ api: err?.message || "Unable to continue with Google." });
     }

@@ -1,4 +1,5 @@
 import { Navigate } from "react-router-dom";
+import { getRoleHomePath, normalizeRole } from "../lib/authRoutes";
 import { useAuthStore } from "../store";
 
 const ProtectedRoute = ({
@@ -7,6 +8,7 @@ const ProtectedRoute = ({
   redirectTo = "/seeker/login",
 }) => {
   const { isAuthenticated, isInitializing, role } = useAuthStore();
+  const normalizedRole = normalizeRole(role);
 
   if (isInitializing) {
     return (
@@ -23,11 +25,8 @@ const ProtectedRoute = ({
     return <Navigate to={redirectTo} replace />;
   }
 
-  if (allowedRoles && !allowedRoles.includes(role)) {
-    if (role === "seeker") return <Navigate to="/seeker/dashboard/profile" replace />;
-    if (role === "company") return <Navigate to="/company/dashboard" replace />;
-    if (role === "admin") return <Navigate to="/admin/dashboard" replace />;
-    return <Navigate to={redirectTo} replace />;
+  if (allowedRoles && !allowedRoles.map(normalizeRole).includes(normalizedRole)) {
+    return <Navigate to={getRoleHomePath(normalizedRole) || redirectTo} replace />;
   }
 
   return children;

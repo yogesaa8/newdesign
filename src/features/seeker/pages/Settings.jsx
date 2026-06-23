@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import toast from "react-hot-toast";
+import toast from "@/lib/toast";
 import { FiUser, FiLock, FiBell, FiEye, FiEyeOff, FiGlobe, FiShield, FiAlertTriangle, FiTrash2 } from 'react-icons/fi';
 import Breadcrumb from '../../../components/ui/Breadcrumb';
 

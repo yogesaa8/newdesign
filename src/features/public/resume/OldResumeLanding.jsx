@@ -1,17 +1,4 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import {
-  MobileNav,
-  MobileNavHeader,
-  MobileNavMenu,
-  MobileNavToggle,
-  Navbar,
-  NavbarButton,
-  NavbarLogo,
-  NavBody,
-  NavItems,
-} from "../../../components/ui/resizable-navbar";
-import navItems from "../data/headerData.json";
+import React from "react";
 import useSEO from "@/seo/useSEO";
 import seoMeta from "@/data/seoMeta";
 import {
@@ -119,95 +106,9 @@ const ResumeLanding = () => {
     },
   ];
 
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
   return (
     <>
       {seoElement}
-      <Navbar className="bg-[#FFF7F3] dark:bg-[#121212]">
-        <NavBody>
-          <NavbarLogo />
-          <NavItems items={navItems} />
-          <div className="flex items-center gap-4">
-            <NavbarButton as={Link} to="/seeker/login" variant="secondary">
-              Sign in
-            </NavbarButton>
-            <NavbarButton as={Link} to="/seeker/signup" variant="primary">
-              Build my resume
-            </NavbarButton>
-          </div>
-        </NavBody>
-
-        <MobileNav>
-          <MobileNavHeader>
-            <NavbarLogo />
-            <MobileNavToggle
-              isOpen={isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            />
-          </MobileNavHeader>
-
-          <MobileNavMenu
-            isOpen={isMobileMenuOpen}
-            onClose={() => setIsMobileMenuOpen(false)}
-          >
-            {navItems.map((item, idx) => (
-              <div key={`mobile-link-${idx}`} className="w-full">
-                {item.link && (
-                  <a
-                    href={item.link}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 text-[#5C534D] dark:text-[#9CA3AF]"
-                  >
-                    {item.name}
-                  </a>
-                )}
-
-                {item.children && (
-                  <div className="flex flex-col gap-2">
-                    <span className="py-2 font-medium text-[#2D2926] dark:text-white">
-                      {item.name}
-                    </span>
-
-                    <div className="ml-4 flex flex-col gap-2">
-                      {item.children.map((child, i) => (
-                        <a
-                          key={i}
-                          href={child.link}
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className="text-sm text-[#8A827C] dark:text-[#9CA3AF]"
-                        >
-                          {child.name}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-            <div className="flex w-full flex-col gap-4">
-              <NavbarButton
-                href="/seeker/login"
-                onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full"
-              >
-                Sign in
-              </NavbarButton>
-
-              <NavbarButton
-                href="/seeker/signup"
-                onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full"
-              >
-                Build my resume
-              </NavbarButton>
-            </div>
-          </MobileNavMenu>
-        </MobileNav>
-      </Navbar>
-
       <main className="relative overflow-hidden bg-[#FFF7F3] dark:bg-[#121212]">
         <section className="relative overflow-hidden w-full" id="home">
           <div

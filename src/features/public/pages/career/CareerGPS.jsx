@@ -28,19 +28,6 @@ import {
   X,
 } from "lucide-react";
 import Footer from "../../components/Footer";
-import {
-  MobileNav,
-  MobileNavHeader,
-  MobileNavMenu,
-  MobileNavToggle,
-  Navbar,
-  NavbarButton,
-  NavbarLogo,
-  NavBody,
-  NavItems,
-} from "../../../../components/ui/resizable-navbar";
-import { Link } from "react-router-dom";
-import navItems from "../../data/headerData.json";
 import useSEO from "@/seo/useSEO";
 import seoMeta from "@/data/seoMeta";
 import {
@@ -1099,7 +1086,6 @@ export default function CareerGPSReactComponent() {
   const [adClosed, setAdClosed] = useState(false);
   const [adIndex, setAdIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
@@ -1223,89 +1209,6 @@ export default function CareerGPSReactComponent() {
         className="fixed left-0 top-0 z-[70] h-1 bg-[#8500FA] transition-all"
         style={{ width: `${progress}%` }}
       />
-      <Navbar className="bg-[#FFF7F3] dark:bg-[#121212]">
-        <NavBody>
-          <NavbarLogo />
-          <NavItems items={navItems} />
-          <div className="flex items-center gap-4">
-            <NavbarButton as={Link} to="/seeker/login" variant="secondary">
-              Sign in
-            </NavbarButton>
-            <NavbarButton as={Link} to="/seeker/signup" variant="primary">
-              Start free
-            </NavbarButton>
-          </div>
-        </NavBody>
-
-        <MobileNav>
-          <MobileNavHeader>
-            <NavbarLogo />
-            <MobileNavToggle
-              isOpen={isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            />
-          </MobileNavHeader>
-
-          <MobileNavMenu
-            isOpen={isMobileMenuOpen}
-            onClose={() => setIsMobileMenuOpen(false)}
-          >
-            {navItems.map((item, idx) => (
-              <div key={`mobile-link-${idx}`} className="w-full">
-                {item.link && (
-                  <a
-                    href={item.link}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="block py-2 text-[#5C534D] dark:text-[#9CA3AF]"
-                  >
-                    {item.name}
-                  </a>
-                )}
-
-                {item.children && (
-                  <div className="flex flex-col gap-2">
-                    <span className="py-2 font-medium text-[#2D2926] dark:text-white">
-                      {item.name}
-                    </span>
-
-                    <div className="ml-4 flex flex-col gap-2">
-                      {item.children.map((child, i) => (
-                        <a
-                          key={i}
-                          href={child.link}
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className="text-sm text-[#8A827C] dark:text-[#9CA3AF]"
-                        >
-                          {child.name}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-            <div className="flex w-full flex-col gap-4">
-              <NavbarButton
-                href="/seeker/login"
-                onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full"
-              >
-                Sign in
-              </NavbarButton>
-
-              <NavbarButton
-                href="/seeker/signup"
-                onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full"
-              >
-                Start free
-              </NavbarButton>
-            </div>
-          </MobileNavMenu>
-        </MobileNav>
-      </Navbar>
 
       <main>
         <section

@@ -93,7 +93,7 @@ const JobSeekerSignUp = () => {
         idToken,
         userType: "seeker",
       });
-      navigate("/seeker/dashboard/profile");
+      navigate("/seeker/dashboard", { replace: true });
     } catch {
       // Store error is shown in the form.
     }

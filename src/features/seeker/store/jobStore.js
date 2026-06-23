@@ -11,6 +11,19 @@ const defaultPagination = {
   total: 0,
 };
 
+const APPLIED_JOBS_STORAGE_PREFIX = "firstJobIndiaAppliedJobs";
+
+const appliedStatusValues = new Set([
+  "applied",
+  "submitted",
+  "pending",
+  "shortlisted",
+  "interview_scheduled",
+  "interview scheduled",
+  "accepted",
+  "rejected",
+]);
+
 const getApiUrl = (path) => {
   if (!API_BASE_URL) {
     throw new Error("VITE_API_BASE_URL is not configured.");
@@ -20,6 +33,68 @@ const getApiUrl = (path) => {
 };
 
 const getResponseData = (payload) => payload?.data ?? payload?.result ?? payload;
+
+const decodeJwtPayload = (token) => {
+  try {
+    if (!token) return {};
+
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    return JSON.parse(atob(base64));
+  } catch {
+    return {};
+  }
+};
+
+const hashToken = (token = "") => {
+  let hash = 0;
+
+  for (let index = 0; index < token.length; index += 1) {
+    hash = (hash * 31 + token.charCodeAt(index)) >>> 0;
+  }
+
+  return hash.toString(36);
+};
+
+const getAppliedJobsStorageKey = (token) => {
+  const payload = decodeJwtPayload(token);
+  const identity =
+    payload.sub ||
+    payload.id ||
+    payload.user_id ||
+    payload.userId ||
+    payload.seeker_id ||
+    payload.seekerId ||
+    payload.email ||
+    `token-${hashToken(token)}`;
+
+  return `${APPLIED_JOBS_STORAGE_PREFIX}:${identity}`;
+};
+
+const readStoredAppliedJobIds = (token) => {
+  try {
+    if (typeof localStorage === "undefined") return [];
+
+    const value = localStorage.getItem(getAppliedJobsStorageKey(token));
+    const parsed = value ? JSON.parse(value) : [];
+    return Array.isArray(parsed) ? parsed.map(String) : [];
+  } catch {
+    return [];
+  }
+};
+
+const persistAppliedJobIds = (token, ids = []) => {
+  try {
+    if (typeof localStorage === "undefined" || !token) return;
+
+    localStorage.setItem(
+      getAppliedJobsStorageKey(token),
+      JSON.stringify(Array.from(new Set(ids.map(String)))),
+    );
+  } catch {
+    // Applied state persistence is best-effort; API truth still wins.
+  }
+};
 
 const parseApiResponse = async (response) => {
   const text = await response.text();
@@ -158,6 +233,87 @@ const splitTextList = (value) => {
 const sortQuestions = (questions = []) =>
   [...questions].sort((a, b) => Number(a.order_number || 0) - Number(b.order_number || 0));
 
+const hasAppliedFlag = (job = {}) => {
+  if (
+    job.is_applied === true ||
+    job.has_applied === true ||
+    job.already_applied === true ||
+    job.applied === true ||
+    Boolean(job.application_id) ||
+    Boolean(job.user_application_id) ||
+    Boolean(job.application?.id)
+  ) {
+    return true;
+  }
+
+  const status = String(
+    job.application_status ||
+      job.application?.status ||
+      job.application?.application_status ||
+      "",
+  )
+    .trim()
+    .toLowerCase();
+
+  return appliedStatusValues.has(status);
+};
+
+const getApplicationJobId = (application = {}) => {
+  if (typeof application === "string" || typeof application === "number") {
+    return application;
+  }
+
+  return (
+    application.job_id ||
+    application.jobId ||
+    application.job_listing_id ||
+    application.job_post_id ||
+    application.job?.id ||
+    application.job?.job_id ||
+    application.job?.jobId ||
+    application.job?.job_listing_id ||
+    application.job?.job_post_id ||
+    application.raw?.job_id ||
+    application.raw?.job?.id
+  );
+};
+
+const normalizeAppliedJobIds = (items = []) =>
+  items
+    .map(getApplicationJobId)
+    .filter((id) => id != null && String(id).trim() !== "")
+    .map(String);
+
+const extractApplications = (payload) => {
+  const data = getResponseData(payload);
+  const profile = data?.profile ?? data?.seeker ?? data ?? {};
+
+  return (
+    profile.applications ||
+    profile.job_applications ||
+    profile.applied_jobs ||
+    data?.applications ||
+    data?.job_applications ||
+    data?.applied_jobs ||
+    []
+  );
+};
+
+const extractAlreadyApplied = (error) => {
+  const text = [
+    error?.code,
+    error?.message,
+    error?.payload?.message,
+    error?.payload?.error?.code,
+    error?.payload?.error?.message,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  return text.includes("already") && text.includes("appl");
+};
+
 const normalizeJob = (job = {}) => {
   const company = job.company_name || job.company || "Company";
   const jobType = formatEnum(job.job_type || job.type);
@@ -201,6 +357,7 @@ const normalizeJob = (job = {}) => {
     logoLetter: getCompanyInitials(company),
     validThrough: job.application_deadline,
     questions: sortQuestions(job.questions || []),
+    isApplied: hasAppliedFlag(job),
   };
 };
 
@@ -224,9 +381,16 @@ const normalizeJobDetailPayload = (payload) => {
   return normalizeJob(data?.job ?? data);
 };
 
-export const useJobStore = create((set) => ({
+export const isJobApplied = (job, appliedJobIds = []) => {
+  if (!job) return false;
+  const ids = new Set(appliedJobIds.map(String));
+  return Boolean(job.isApplied) || ids.has(String(job.id));
+};
+
+export const useJobStore = create((set, get) => ({
   jobs: [],
   selectedJob: null,
+  appliedJobIds: [],
   pagination: defaultPagination,
   isLoading: false,
   isDetailLoading: false,
@@ -239,6 +403,28 @@ export const useJobStore = create((set) => ({
   setSelectedJob: (selectedJob) => set({ selectedJob }),
   clearError: () => set({ error: null }),
   clearApplyState: () => set({ applyError: null, applyResult: null }),
+  markJobApplied: (jobId, token) => {
+    if (jobId == null) return;
+    const id = String(jobId);
+
+    set((state) => {
+      const appliedIds = state.appliedJobIds.map(String);
+      const nextIds = appliedIds.includes(id) ? appliedIds : [...appliedIds, id];
+
+      persistAppliedJobIds(token, nextIds);
+
+      return {
+        appliedJobIds: nextIds,
+        jobs: state.jobs.map((job) =>
+          String(job.id) === id ? { ...job, isApplied: true } : job,
+        ),
+        selectedJob:
+          String(state.selectedJob?.id) === id
+            ? { ...state.selectedJob, isApplied: true }
+            : state.selectedJob,
+      };
+    });
+  },
 
   fetchJobs: async (filters = {}) => {
     set({ isLoading: true, error: null });
@@ -248,7 +434,11 @@ export const useJobStore = create((set) => ({
       const { jobs, pagination } = normalizeJobsPayload(payload);
 
       set({
-        jobs,
+        jobs: jobs.map((job) =>
+          get().appliedJobIds.map(String).includes(String(job.id))
+            ? { ...job, isApplied: true }
+            : job,
+        ),
         pagination,
         isLoading: false,
       });
@@ -268,7 +458,9 @@ export const useJobStore = create((set) => ({
       const selectedJob = normalizeJobDetailPayload(payload);
 
       set({
-        selectedJob,
+        selectedJob: get().appliedJobIds.map(String).includes(String(selectedJob.id))
+          ? { ...selectedJob, isApplied: true }
+          : selectedJob,
         isDetailLoading: false,
       });
 
@@ -295,10 +487,70 @@ export const useJobStore = create((set) => ({
       });
 
       set({ isApplying: false, applyResult: payload });
+      get().markJobApplied(jobId, token);
       return payload;
     } catch (error) {
+      if (extractAlreadyApplied(error)) {
+        get().markJobApplied(jobId, token);
+      }
+
       set({ isApplying: false, applyError: error.message });
       throw error;
+    }
+  },
+
+  fetchAppliedJobs: async (token) => {
+    if (!token) return [];
+
+    const storedAppliedJobIds = readStoredAppliedJobIds(token);
+    if (storedAppliedJobIds.length) {
+      set((state) => {
+        const nextIds = Array.from(
+          new Set([...state.appliedJobIds.map(String), ...storedAppliedJobIds]),
+        );
+        const appliedSet = new Set(nextIds);
+
+        return {
+          appliedJobIds: nextIds,
+          jobs: state.jobs.map((job) =>
+            appliedSet.has(String(job.id)) ? { ...job, isApplied: true } : job,
+          ),
+          selectedJob:
+            state.selectedJob && appliedSet.has(String(state.selectedJob.id))
+              ? { ...state.selectedJob, isApplied: true }
+              : state.selectedJob,
+        };
+      });
+    }
+
+    try {
+      const payload = await apiRequest("/profile", { token });
+      const appliedJobIds = normalizeAppliedJobIds(extractApplications(payload));
+
+      if (!appliedJobIds.length) return storedAppliedJobIds;
+
+      set((state) => {
+        const nextIds = Array.from(
+          new Set([...state.appliedJobIds.map(String), ...appliedJobIds]),
+        );
+        const appliedSet = new Set(nextIds);
+        persistAppliedJobIds(token, nextIds);
+
+        return {
+          appliedJobIds: nextIds,
+          jobs: state.jobs.map((job) =>
+            appliedSet.has(String(job.id)) ? { ...job, isApplied: true } : job,
+          ),
+          selectedJob:
+            state.selectedJob && appliedSet.has(String(state.selectedJob.id))
+              ? { ...state.selectedJob, isApplied: true }
+              : state.selectedJob,
+        };
+      });
+
+      return appliedJobIds;
+    } catch {
+      return storedAppliedJobIds;
     }
   },
 }));

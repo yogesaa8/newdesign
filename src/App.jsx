@@ -14,18 +14,24 @@ const App = () => {
   }, [initAuth]);
 
   return (
-    <BrowserRouter>
-      <div className="min-h-screen flex flex-col">
-        <Banner />
-        <ScrollToTop />
+    <>
+      <BrowserRouter>
+        <div className="min-h-screen flex flex-col">
+          <Banner />
+          <ScrollToTop />
 
-        <div className="flex-1 flex flex-col">
-          <AppRoutes />
+          <div className="flex-1 flex flex-col">
+            <AppRoutes />
+          </div>
         </div>
-
-        <Toaster />
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
+      <Toaster
+        position="top-right"
+        containerStyle={{
+          zIndex: 2147483647,
+        }}
+      />
+    </>
   );
 };
 

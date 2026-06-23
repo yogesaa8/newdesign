@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import toast from "react-hot-toast";
+import toast from "@/lib/toast";
 import AuthLayout from '../layouts/AuthLayout'
 import { Link, useNavigate } from 'react-router-dom';
 

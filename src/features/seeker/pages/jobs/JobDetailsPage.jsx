@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import toast from "react-hot-toast";
+import toast from "@/lib/toast";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft,
@@ -7,9 +7,8 @@ import {
   Check,
   X,
 } from "lucide-react";
-import JobsPublicNav from "./JobsPublicNav";
 import { useAuthStore } from "../../../../store";
-import { useJobStore } from "../../store/jobStore";
+import { isJobApplied, useJobStore } from "../../store/jobStore";
 import useSEO from "@/seo/useSEO";
 import seoMeta from "@/data/seoMeta";
 import {
@@ -71,6 +70,11 @@ const buildAnswerPayload = (questions, answers) =>
       return answer;
     })
     .filter(Boolean);
+
+const isAlreadyAppliedError = (error) => {
+  const message = String(error?.message || error?.code || "").toLowerCase();
+  return message.includes("already") && message.includes("appl");
+};
 
 const DetailRow = ({ label, value, highlight }) => (
   <div className="flex items-start justify-between gap-4 border-b border-[#EADFD9] pb-3 last:border-b-0 last:pb-0">
@@ -216,6 +220,8 @@ const JobDetailsPage = () => {
     applyError,
     fetchJobDetail,
     applyToJob,
+    appliedJobIds,
+    fetchAppliedJobs,
     clearApplyState,
   } = useJobStore();
   const fallbackJob =
@@ -236,6 +242,11 @@ const JobDetailsPage = () => {
     if (!jobId) return;
     fetchJobDetail(jobId).catch(() => {});
   }, [fetchJobDetail, jobId]);
+
+  useEffect(() => {
+    if (!isAuthenticated || role !== "seeker" || !accessToken) return;
+    fetchAppliedJobs(accessToken).catch(() => {});
+  }, [accessToken, fetchAppliedJobs, isAuthenticated, role]);
 
   useEffect(() => {
     clearApplyState();
@@ -340,6 +351,8 @@ const JobDetailsPage = () => {
     );
   }
 
+  const alreadyApplied = isJobApplied(job, appliedJobIds);
+
   const closeApplyModal = () => {
     setShowApplyModal(false);
     setActiveTab(0);
@@ -391,6 +404,12 @@ const JobDetailsPage = () => {
         closeApplyModal();
       }, 2000);
     } catch (submitError) {
+      if (isAlreadyAppliedError(submitError)) {
+        toast.success("You have already applied for this job.");
+        closeApplyModal();
+        return;
+      }
+
       if (
         submitError.code === "REQUIRED_QUESTION_NOT_ANSWERED" ||
         submitError.code === "INVALID_JOB_QUESTION" ||
@@ -424,6 +443,11 @@ const JobDetailsPage = () => {
   };
 
   const handleApplyJob = () => {
+    if (alreadyApplied) {
+      toast.success("You have already applied for this job.");
+      return;
+    }
+
     if (!isAuthenticated || !accessToken) {
       showLoginToast();
       return;
@@ -445,13 +469,15 @@ const JobDetailsPage = () => {
   };
 
   const primaryApplyAction = handleApplyJob;
-  const primaryApplyLabel = "Apply now";
+  const primaryApplyLabel = alreadyApplied ? "Applied" : "Apply now";
+  const primaryApplyClass = alreadyApplied
+    ? "bg-green-50 text-green-700 border border-green-200 cursor-default"
+    : "bg-[#FF6B35] text-white hover:bg-[#FF9566]";
   const canContinue = formData.coverLetter.length <= 2000;
 
   return (
     <div className="min-h-screen bg-[#FFF7F3] text-[#0A0A0A]">
       {seoElement}
-      <JobsPublicNav />
 
       <HeroHighlight
         containerClassName="border-b border-[#EADFD9] bg-[#FFF7F3]"
@@ -482,10 +508,11 @@ const JobDetailsPage = () => {
             <button
               type="button"
               onClick={primaryApplyAction}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-[8px] bg-[#FF6B35] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#FF9566] sm:w-auto"
+              disabled={alreadyApplied}
+              className={`inline-flex w-full items-center justify-center gap-2 rounded-[8px] px-6 py-3 text-sm font-semibold transition sm:w-auto ${primaryApplyClass}`}
             >
               {primaryApplyLabel}
-              <ArrowRight className="h-4 w-4" />
+              {!alreadyApplied && <ArrowRight className="h-4 w-4" />}
             </button>
           </div>
         </div>
@@ -611,10 +638,11 @@ const JobDetailsPage = () => {
             <button
               type="button"
               onClick={primaryApplyAction}
-              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-[8px] bg-[#FF6B35] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#FF9566]"
+              disabled={alreadyApplied}
+              className={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-[8px] px-5 py-3 text-sm font-semibold transition ${primaryApplyClass}`}
             >
               {primaryApplyLabel}
-              <ArrowRight className="h-4 w-4" />
+              {!alreadyApplied && <ArrowRight className="h-4 w-4" />}
             </button>
           </section>
         </aside>

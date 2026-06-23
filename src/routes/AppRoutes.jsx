@@ -43,10 +43,11 @@ import Dashboard from "../features/company/pages/dashboard/Dashboard";
 import AdminDashboard from "../features/admin/pages/dashboard/AdminDashboard";
 import AdminLogin from "../features/admin/pages/auth/AdminLogin";
 import CareerGPS from "../features/public/pages/career/CareerGPS";
-import UnderDevelopment from "../components/ui/UnderDevelopment";
 import SeekerProtectedRoute from "./SeekerProtectedRoute";
+import PublicAuthRoute from "./PublicAuthRoute";
 import CompanyProtectedRoute from "./CompanyProtectedRoute";
 import AdminProtectedRoute from "./AdminProtectedRoute";
+import InstituteProtectedRoute from "./InstituteProtectedRoute";
 import CompanyForgotPassword from "../features/company/pages/auth/CompanyForgotPassword";
 import AboutUs from "../features/public/pages/AboutUs";
 import Blog from "../features/public/pages/Blog";
@@ -88,27 +89,36 @@ const AppRoutes = () => {
       {/* AUTH ROUTES (Form pages) */}
       <Route element={<PublicLayout />}>
         <Route element={<NoindexRouteLayout />}>
-          <Route path="/seeker/login" element={<JobSeekerLogin />} />
-          <Route path="/seeker/signup" element={<JobSeekerSignUp />} />
-          <Route
-            path="/seeker/reset-password"
-            element={<JobSeekerResetPassword />}
-          />
-          <Route path="/seeker/verify-otp" element={<SeekerVerifyOtp />} />
+          <Route element={<PublicAuthRoute />}>
+            <Route path="/seeker/login" element={<JobSeekerLogin />} />
+            <Route path="/seeker/signup" element={<JobSeekerSignUp />} />
+            <Route
+              path="/seeker/reset-password"
+              element={<JobSeekerResetPassword />}
+            />
+            <Route path="/seeker/verify-otp" element={<SeekerVerifyOtp />} />
 
-          <Route path="/company/login" element={<CompanyLogin />} />
-          <Route path="/company/signup" element={<CompanySignupPage />} />
-          <Route
-            path="/company/reset-password"
-            element={<CompanyForgotPassword />}
-          />
-          <Route path="/institute/login" element={<InstituteLogin />} />
-          <Route path="/institute/signup" element={<InstituteSignup />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/company/login" element={<CompanyLogin />} />
+            <Route path="/company/signup" element={<CompanySignupPage />} />
+            <Route
+              path="/company/reset-password"
+              element={<CompanyForgotPassword />}
+            />
+            <Route path="/institute/login" element={<InstituteLogin />} />
+            <Route path="/institute/signup" element={<InstituteSignup />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+          </Route>
         </Route>
       </Route>
 
-      <Route path="/institute/dashboard" element={<InstituteDashboard />} />
+      <Route
+        path="/institute/dashboard"
+        element={
+          <InstituteProtectedRoute>
+            <InstituteDashboard />
+          </InstituteProtectedRoute>
+        }
+      />
 
       {/* JOB SEEKER DASHBOARD */}
       <Route
@@ -149,13 +159,6 @@ const AppRoutes = () => {
         <Route path="jobs" element={<JobList />} />
         <Route path="jobs/new" element={<JobPostForm />} />
         <Route path="jobs/:jobId/applications" element={<ApplicantsList />} />
-        <Route path="applicants" element={<ApplicantsList />} />
-        <Route
-          path="applicants/:applicantId/resume"
-          element={
-            <UnderDevelopment title="Resume Preview" icon="visibility" />
-          }
-        />
         <Route path="profile" element={<CompanyProfile />} />
         <Route
           path="settings"

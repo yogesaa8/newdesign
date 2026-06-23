@@ -18,7 +18,7 @@ import {
 import Breadcrumb from "../../../../components/ui/Breadcrumb";
 import Modal from "../../../../components/ui/Modal";
 import ReactQuill from "react-quill-new";
-import toast from "react-hot-toast";
+import toast from "@/lib/toast";
 import { useAuthStore } from "../../../../store/authStore";
 import { useSeekerProfileStore } from "../../store/seekerProfileStore";
 

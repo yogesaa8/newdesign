@@ -21,7 +21,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
   const handleLogout = async () => {
     await logout();
-    navigate("/seeker/login");
+    navigate("/", { replace: true });
   };
 
   const navItems = [
@@ -98,11 +98,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
   return (
     <aside
-      className={`fixed left-0 top-0 z-50 flex h-screen w-72 flex-col bg-white border-r border-[#EADFD9] shadow-xl transition-transform duration-300 lg:static lg:translate-x-0
+      className={`fixed left-0 top-0 z-50 flex h-dvh min-h-0 w-72 flex-col bg-white border-r border-[#EADFD9] shadow-xl transition-transform duration-300 lg:static lg:h-auto lg:self-stretch lg:translate-x-0
       ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-6 border-b border-[#EFE7E1]">
+      <div className="flex shrink-0 items-center justify-between px-6 py-6 border-b border-[#EFE7E1]">
         <NavLink to="/seeker/dashboard" className="flex items-center gap-3">
           <div className="p-2 bg-[#FFF1E9] rounded-[8px]">
             <img
@@ -127,7 +127,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       </div>
 
       {/* Nav */}
-      <div className="flex-1 overflow-y-auto px-4 py-6">
+      <div className="min-h-0 flex-1 overflow-y-auto px-4 py-6">
         {navItems.map((section, index) => (
           <div key={index} className="mb-8">
             <h3 className="px-3 mb-3 text-xs font-semibold uppercase tracking-wider text-[#8A8690]">
@@ -170,7 +170,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       </div>
 
       {/* Bottom User Card */}
-      <div className="border-t border-[#EFE7E1] p-4 space-y-3">
+      <div className="shrink-0 border-t border-[#EFE7E1] p-4 space-y-3">
         <div className="flex items-center gap-3 p-3 rounded-[8px] bg-[#F7F5F2]">
           <div className="w-10 h-10 rounded-full bg-[#FFF1E9] flex items-center justify-center font-bold text-[#C84F1F]">
             Y

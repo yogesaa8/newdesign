@@ -32,20 +32,6 @@ const sections = [
 const TermsConditions = () => {
   return (
     <div className="fji-page">
-      <header className="border-b border-[#EADFD9] bg-[#FFF7F3]">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
-          <Link to="/" className="text-xl font-extrabold text-[#0A0A0A]">
-            HireLaunch
-          </Link>
-          <Link
-            to="/seeker/login"
-            className="fji-primary-btn cursor-pointer"
-          >
-            Login
-          </Link>
-        </div>
-      </header>
-
       <main className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mb-10">
           <Link

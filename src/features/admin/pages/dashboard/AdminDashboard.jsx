@@ -19,7 +19,7 @@ export default function AdminDashboard() {
 
   const handleLogout = () => {
     clearAuth();
-    navigate("/admin/login");
+    navigate("/", { replace: true });
   };
 
   const seoElement = useSEO({

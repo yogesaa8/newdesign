@@ -9,9 +9,11 @@ import {
   AuthShell,
 } from "../../auth/AuthUI";
 import { authLinkClass } from "../../auth/authConstants";
+import { useAuthStore } from "../../../store";
 
 const InstituteLogin = () => {
   const navigate = useNavigate();
+  const setAuth = useAuthStore((state) => state.setAuth);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -29,7 +31,16 @@ const InstituteLogin = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    navigate("/institute/dashboard");
+    setAuth({
+      role: "institute",
+      user: {
+        name: "Institute Partner",
+        email: formData.email,
+      },
+      accessToken: "institute-local-session",
+      remember: true,
+    });
+    navigate("/institute/dashboard", { replace: true });
   };
 
   return (

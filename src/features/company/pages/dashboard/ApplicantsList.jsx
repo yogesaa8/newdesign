@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import toast from "react-hot-toast";
+import toast from "@/lib/toast";
 import { Link, useParams } from "react-router-dom";
 import { useAuthStore } from "../../../../store";
 import { useCompanyStore } from "../../store/companyStore";

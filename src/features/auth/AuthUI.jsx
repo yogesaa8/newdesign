@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import toast from "react-hot-toast";
+import toast from "@/lib/toast";
 import { HeroHighlight } from "../../components/ui/hero-highlight";
 
 const audienceTheme = {

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import toast from "react-hot-toast";
+import toast from "@/lib/toast";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../../store";
 import { useCompanyStore } from "../../store/companyStore";

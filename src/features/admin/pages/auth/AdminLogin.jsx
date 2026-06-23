@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import toast from "react-hot-toast";
+import toast from "@/lib/toast";
 import { Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../../store";
@@ -35,9 +35,10 @@ const AdminLogin = () => {
         name: "Admin User",
         email: formData.email,
       },
+      remember: true,
     });
 
-    navigate("/admin/dashboard");
+    navigate("/admin/dashboard", { replace: true });
     toast.success("Signed in successfully.");
   };
 

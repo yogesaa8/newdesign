@@ -15,7 +15,6 @@ import {
   UsersRound,
 } from "lucide-react";
 
-import PartnerHeader from "../../components/PartnerHeader";
 import useSEO from "@/seo/useSEO";
 import seoMeta from "@/data/seoMeta";
 import { buildWebPage, buildBreadcrumbList } from "@/seo/schemas";
@@ -128,8 +127,6 @@ const CollegeMainPage = () => {
     <>
       {seoElement}
       <main className="min-h-screen bg-[#FFF7F3] text-[#0A0A0A]">
-        <PartnerHeader />
-
         <HeroHighlight
           containerClassName="border-b border-[#EADFD9] bg-[#FFF7F3]"
           className="px-4 py-16 md:py-20"
@@ -408,7 +405,18 @@ const CollegeMainPage = () => {
 
         <footer className="border-t border-[#EADFD9] bg-[#FFF7F3] px-4 py-10">
           <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-            <NavbarLogo />
+            <div className="flex items-center gap-2 text-sm font-normal text-black">
+              <img
+                src="/images/logos/fji_orange.png"
+                alt="FirstJobIndia"
+                className="h-8 w-8 object-contain"
+              />
+              <span className="font-medium">
+                <span className="text-black">First</span>
+                <span className="text-orange-600">Job</span>
+                <span className="text-black">India</span>
+              </span>
+            </div>
             <p className="text-sm text-[#6F6F76]">
               © 2026 FirstJobIndia. Built for placement teams across India.
             </p>

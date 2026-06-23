@@ -1,13 +1,11 @@
-import { Link } from "react-router-dom";
 import {
   BookOpen,
   CalendarCheck,
   FileText,
-  GraduationCap,
-  LogOut,
   Search,
   Users,
 } from "lucide-react";
+import MasterHeader from "../../../components/layout/MasterHeader";
 
 const stats = [
   {
@@ -85,41 +83,10 @@ const statusClass = {
 
 const InstituteDashboard = () => {
   return (
-    <main className="min-h-screen bg-[#F7F5F2] text-[#111114]">
-      <header className="border-b border-[#E7DDD6] bg-black text-white">
-        <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-5 md:flex-row md:items-center md:justify-between md:px-8">
-          <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-[8px] border border-white/10 bg-white/10 text-violet-200">
-              <GraduationCap className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-violet-200">
-                Institute workspace
-              </p>
-              <h1 className="mt-1 text-xl font-extrabold tracking-tight md:text-2xl">
-                Arcanum Academic Partner Institute
-              </h1>
-            </div>
-          </div>
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <Link
-              to="/institute"
-              className="rounded-[8px] border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/20"
-            >
-              Institute page
-            </Link>
-            <Link
-              to="/institute/login"
-              className="inline-flex items-center justify-center gap-2 rounded-[8px] bg-violet-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-violet-700"
-            >
-              <LogOut className="h-4 w-4" />
-              Sign out
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      <section className="mx-auto w-full max-w-7xl px-4 py-6 md:px-8 md:py-8">
+    <>
+      <MasterHeader />
+      <main className="min-h-screen bg-[#F7F5F2] text-[#111114]">
+        <section className="mx-auto w-full max-w-7xl px-4 py-6 md:px-8 md:py-8">
         <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {stats.map((item) => {
             const Icon = item.icon;
@@ -254,8 +221,9 @@ const InstituteDashboard = () => {
             </section>
           </aside>
         </div>
-      </section>
-    </main>
+        </section>
+      </main>
+    </>
   );
 };
 

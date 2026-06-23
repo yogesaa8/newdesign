@@ -52,7 +52,7 @@ const CompanyLogin = () => {
     if (!validate()) return;
     try {
       await loginCompany(formData);
-      navigate("/company/profile");
+      navigate("/company/profile", { replace: true });
     } catch {
       // Store error is shown in the form.
     }
@@ -65,7 +65,7 @@ const CompanyLogin = () => {
         userType: "company",
         remember: formData.remember,
       });
-      navigate("/company/profile");
+      navigate("/company/profile", { replace: true });
     } catch {
       // Store error is shown in the form.
     }

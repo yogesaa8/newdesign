@@ -10,9 +10,11 @@ import {
   AuthShell,
 } from "../../auth/AuthUI";
 import { authLinkClass } from "../../auth/authConstants";
+import { useAuthStore } from "../../../store";
 
 const InstituteSignup = () => {
   const navigate = useNavigate();
+  const setAuth = useAuthStore((state) => state.setAuth);
   const [formData, setFormData] = useState({
     instituteName: "",
     instituteType: "",
@@ -34,7 +36,17 @@ const InstituteSignup = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    navigate("/institute/dashboard");
+    setAuth({
+      role: "institute",
+      user: {
+        name: formData.instituteName || "Institute Partner",
+        email: formData.email,
+        instituteName: formData.instituteName,
+      },
+      accessToken: "institute-local-session",
+      remember: true,
+    });
+    navigate("/institute/dashboard", { replace: true });
   };
 
   return (

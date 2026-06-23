@@ -1,6 +1,5 @@
 import { useState } from "react";
-import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import toast from "@/lib/toast";
 import {
   CheckCircle2,
   ImagePlus,
@@ -8,21 +7,9 @@ import {
   UploadCloud,
 } from "lucide-react";
 import {
-  MobileNav,
-  MobileNavHeader,
-  MobileNavMenu,
-  MobileNavToggle,
-  Navbar,
-  NavbarButton,
-  NavbarLogo,
-  NavBody,
-  NavItems,
-} from "../../../components/ui/resizable-navbar";
-import {
   HeroHighlight,
   Highlight,
 } from "../../../components/ui/hero-highlight";
-import navItems from "../data/headerData.json";
 import useSEO from "@/seo/useSEO";
 import seoMeta from "@/data/seoMeta";
 import {
@@ -42,7 +29,6 @@ const feedbackNotes = [
 ];
 
 const ReviewPage = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     issue: "",
@@ -113,91 +99,6 @@ const ReviewPage = () => {
   return (
     <main className="min-h-screen bg-[#FFF7F3] text-[#0A0A0A]">
       {seoElement}
-
-      <div className="relative w-full bg-[#FFF7F3]">
-        <Navbar>
-          <NavBody disableScrollResize>
-            <NavbarLogo />
-            <NavItems items={navItems} />
-            <div className="flex items-center gap-4">
-              <NavbarButton as={Link} to="/seeker/login" variant="secondary">
-                Sign in
-              </NavbarButton>
-              <NavbarButton as={Link} to="/seeker/signup" variant="primary">
-                Start free
-              </NavbarButton>
-            </div>
-          </NavBody>
-
-          <MobileNav disableScrollResize>
-            <MobileNavHeader>
-              <NavbarLogo />
-              <MobileNavToggle
-                isOpen={isMobileMenuOpen}
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              />
-            </MobileNavHeader>
-
-            <MobileNavMenu
-              isOpen={isMobileMenuOpen}
-              onClose={() => setIsMobileMenuOpen(false)}
-            >
-              {navItems.map((item, idx) => (
-                <div key={`mobile-link-${idx}`} className="w-full">
-                  {item.link && (
-                    <a
-                      href={item.link}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block py-2 text-[#6F6F76] transition hover:text-[#0A0A0A]"
-                    >
-                      {item.name}
-                    </a>
-                  )}
-
-                  {item.children && (
-                    <div className="flex flex-col gap-2">
-                      <span className="py-2 font-medium text-[#0A0A0A]">
-                        {item.name}
-                      </span>
-                      <div className="ml-4 flex flex-col gap-2">
-                        {item.children.map((child, i) => (
-                          <a
-                            key={i}
-                            href={child.link}
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="text-sm text-[#6F6F76] transition hover:text-[#8500FA]"
-                          >
-                            {child.name}
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-
-              <div className="flex w-full flex-col gap-4">
-                <NavbarButton
-                  href="/seeker/login"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  variant="secondary"
-                  className="w-full"
-                >
-                  Sign in
-                </NavbarButton>
-                <NavbarButton
-                  href="/seeker/signup"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  variant="primary"
-                  className="w-full"
-                >
-                  Start free
-                </NavbarButton>
-              </div>
-            </MobileNavMenu>
-          </MobileNav>
-        </Navbar>
-      </div>
 
       <HeroHighlight
         containerClassName="bg-[#FFF7F3]"

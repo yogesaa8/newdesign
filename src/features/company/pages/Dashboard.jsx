@@ -254,10 +254,10 @@ const Dashboard = () => {
               <p className="text-sm text-outline">Review your latest candidate submissions</p>
             </div>
             <Link
-              to="/company-applicants"
+              to="/company/jobs"
               className="text-sm font-bold px-4 py-2 bg-surface-container-low text-primary rounded-lg hover:bg-surface-container transition-colors"
             >
-              View Database
+              View jobs
             </Link>
           </div>
           <div className="overflow-x-auto">

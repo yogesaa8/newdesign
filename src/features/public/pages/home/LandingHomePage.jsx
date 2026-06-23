@@ -1,5 +1,5 @@
 import React from "react";
-import { NavbarDemo } from "../../components/LandingHeader";
+import BackgroundLinesDemo from "../../components/background-lines-demo";
 import JobList from "../../components/JobsShowCase";
 import HeroHighlightDemo from "../../components/hero-highlight-demo";
 import GridBackgroundDemo from "../../components/grid-background-demo";
@@ -31,7 +31,7 @@ const LandingHomePage = () => {
   return (
     <div>
       {seoElement}
-      <NavbarDemo />
+      <BackgroundLinesDemo />
       <LandingInstitute/>
       <JobList />
       <HeroHighlightDemo />

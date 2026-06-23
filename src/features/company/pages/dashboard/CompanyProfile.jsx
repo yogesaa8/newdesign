@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect -- Editable profile state mirrors store data and async location search. */
 import React, { useEffect, useRef, useState } from "react";
-import toast from "react-hot-toast";
+import toast from "@/lib/toast";
 import { useAuthStore } from "../../../../store/authStore";
 import { useCompanyStore } from "../../store/companyStore";
 

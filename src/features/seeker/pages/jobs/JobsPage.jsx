@@ -16,6 +16,8 @@ import {
   buildItemListOfJobs,
   buildWebPage,
 } from "@/seo/schemas";
+import { useAuthStore } from "../../../../store";
+import { isJobApplied } from "../../store/jobStore";
 
 const PAGE_LIMIT = 10;
 
@@ -121,7 +123,7 @@ const FilterSelect = ({ label, value, onChange, options }) => (
   </label>
 );
 
-const JobCard = ({ job }) => {
+const JobCard = ({ job, isApplied }) => {
   const skills = getSkills(job.skills);
   const visibleSkills = skills.slice(0, 3);
   const remainingSkills = Math.max(0, skills.length - visibleSkills.length);
@@ -226,9 +228,13 @@ const JobCard = ({ job }) => {
         <Link
           to={`/jobs/${job.id}`}
           state={{ job }}
-          className="inline-flex h-7 flex-1 items-center justify-center rounded-[5px] bg-[#FF762F] px-3 text-center text-[11px] font-bold text-white transition hover:bg-[#F06422]"
+          className={`inline-flex h-7 flex-1 items-center justify-center rounded-[5px] px-3 text-center text-[11px] font-bold transition ${
+            isApplied
+              ? "border border-green-200 bg-green-50 text-green-700 hover:bg-green-100"
+              : "bg-[#FF762F] text-white hover:bg-[#F06422]"
+          }`}
         >
-          Register And Apply
+          {isApplied ? "Applied" : "Register And Apply"}
         </Link>
       </div>
     </article>
@@ -243,12 +249,17 @@ const JobsPage = () => {
   const [sortBy, setSortBy] = useState("Newest");
   const [page, setPage] = useState(1);
   const [showFilters, setShowFilters] = useState(true);
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const role = useAuthStore((state) => state.role);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const {
     jobs,
     pagination,
     isLoading,
     error,
+    appliedJobIds,
     fetchJobs,
+    fetchAppliedJobs,
     clearError,
   } = useJobStore();
 
@@ -267,6 +278,11 @@ const JobsPage = () => {
   useEffect(() => {
     fetchJobs(apiFilters).catch(() => {});
   }, [apiFilters, fetchJobs]);
+
+  useEffect(() => {
+    if (!isAuthenticated || role !== "seeker" || !accessToken) return;
+    fetchAppliedJobs(accessToken).catch(() => {});
+  }, [accessToken, fetchAppliedJobs, isAuthenticated, role]);
 
   const updateFilter = (setter) => (event) => {
     clearError();
@@ -452,7 +468,11 @@ const JobsPage = () => {
           ) : (
             <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 lg:grid-cols-3">
               {filteredJobs.map((job) => (
-                <JobCard key={job.id} job={job} />
+                <JobCard
+                  key={job.id}
+                  job={job}
+                  isApplied={isJobApplied(job, appliedJobIds)}
+                />
               ))}
             </div>
           )}
