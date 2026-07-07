@@ -752,11 +752,12 @@ const Profile = () => {
         isOpen={isModalOpen}
         onClose={closeModal}
         title={`${editItem ? "Edit" : "Add"} ${modalType}`}
+        size={modalType === "profile" ? "lg" : "md"}
       >
         <form onSubmit={handleSave} className="space-y-4">
           {modalType === "profile" && (
             <>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     Full Name
@@ -814,7 +815,7 @@ const Profile = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     Stream <span className="text-red-500">*</span>
@@ -857,7 +858,7 @@ const Profile = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     Graduation Year <span className="text-red-500">*</span>
@@ -886,7 +887,7 @@ const Profile = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     Target Role
@@ -922,7 +923,7 @@ const Profile = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     LinkedIn URL
@@ -947,7 +948,7 @@ const Profile = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     Portfolio URL
@@ -978,7 +979,7 @@ const Profile = () => {
             modalType === "experience" ||
             modalType === "education") && (
             <>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                     {modalType === "education" ? "Degree" : "Title"}
@@ -1027,7 +1028,7 @@ const Profile = () => {
               </div>
 
               {modalType === "experience" && (
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                       Start Date
@@ -1067,7 +1068,7 @@ const Profile = () => {
               )}
 
               {modalType === "education" && (
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                   <div>
                     <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                       Start Year
@@ -1109,7 +1110,7 @@ const Profile = () => {
               )}
 
               {modalType === "project" && (
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div>
                     <label className="mb-2 block text-sm font-medium text-[#4F4D55]">
                       Project URL
@@ -1152,18 +1153,18 @@ const Profile = () => {
             </>
           )}
 
-          <div className="flex justify-end gap-3 border-t border-[#EADFD9] pt-4">
+          <div className="flex flex-col-reverse gap-3 border-t border-[#EADFD9] pt-4 sm:flex-row sm:justify-end">
             <button
               type="button"
               onClick={closeModal}
-              className="rounded border border-[#D8C9C0] bg-white px-6 py-2 text-sm font-medium text-[#4F4D55] shadow-sm transition-all hover:bg-[#F7F5F2] hover:shadow-md"
+              className="w-full rounded border border-[#D8C9C0] bg-white px-6 py-2 text-sm font-medium text-[#4F4D55] shadow-sm transition-all hover:bg-[#F7F5F2] hover:shadow-md sm:w-auto"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSaving}
-              className="rounded bg-[#FF6B35] px-6 py-2 text-sm font-medium text-white shadow-md transition-all hover:bg-[#FF9566] disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full rounded bg-[#FF6B35] px-6 py-2 text-sm font-medium text-white shadow-md transition-all hover:bg-[#FF9566] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
             >
               {isSaving ? "Saving..." : "Save"}
             </button>
@@ -1192,12 +1193,12 @@ const Profile = () => {
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 border-t border-[#EADFD9] pt-4">
+          <div className="flex flex-col-reverse gap-3 border-t border-[#EADFD9] pt-4 sm:flex-row sm:justify-end">
             <button
               type="button"
               onClick={() => setIsDeleteProfileOpen(false)}
               disabled={isSaving}
-              className="rounded border border-[#D8C9C0] bg-white px-6 py-2 text-sm font-medium text-[#4F4D55] shadow-sm transition-all hover:bg-[#F7F5F2] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full rounded border border-[#D8C9C0] bg-white px-6 py-2 text-sm font-medium text-[#4F4D55] shadow-sm transition-all hover:bg-[#F7F5F2] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
             >
               Cancel
             </button>
@@ -1205,7 +1206,7 @@ const Profile = () => {
               type="button"
               onClick={handleDeleteProfile}
               disabled={isSaving}
-              className="rounded bg-red-600 px-6 py-2 text-sm font-medium text-white shadow-md transition-all hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-70"
+              className="w-full rounded bg-red-600 px-6 py-2 text-sm font-medium text-white shadow-md transition-all hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
             >
               {isSaving ? "Deleting..." : "Delete"}
             </button>
