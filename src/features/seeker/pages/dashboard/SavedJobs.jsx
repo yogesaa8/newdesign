@@ -8,140 +8,125 @@ import {
   FiBookmark,
   FiBriefcase,
 } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import Breadcrumb from "../../../../components/ui/Breadcrumb";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { savedJobs } from "../../data/mockData";
 
+const statIconColorMap = {
+  saved: "bg-sk-surface text-sk-primary",
+  ready: "bg-success-bg text-success",
+  recent: "bg-info-bg text-info",
+};
+
 const SavedJobs = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <Breadcrumb pageName="Saved Jobs" />
 
-      {/* Top Stats */}
+      {/* Stat cards */}
       <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div className=" border border-[#EADFD9] bg-white p-5 shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="rounded-[8px] bg-[#FFF7F3] p-3 text-[#FF6B35]">
-              <FiBookmark size={20} />
+        {[
+          { label: "Saved Jobs", value: savedJobs.length, icon: <FiBookmark size={18} />, key: "saved" },
+          { label: "Ready to Apply", value: savedJobs.length, icon: <FiBriefcase size={18} />, key: "ready" },
+          { label: "Recent Saves", value: "This Week", icon: <FiClock size={18} />, key: "recent" },
+        ].map(({ label, value, icon, key }) => (
+          <div key={key} className="flex items-center gap-4 rounded-xl border border-n-200 bg-white p-5 shadow-sm">
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${statIconColorMap[key]}`}>
+              {icon}
             </div>
             <div>
-              <p className="text-sm text-[#6F6F76]">Saved Jobs</p>
-              <h3 className="text-xl font-bold">{savedJobs.length}</h3>
-            </div>
-          </div>
-        </div>
-
-        <div className="border border-[#EADFD9] bg-white p-5 shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="rounded-[8px] bg-green-50 p-3 text-green-600">
-              <FiBriefcase size={20} />
-            </div>
-            <div>
-              <p className="text-sm text-[#6F6F76]">Ready to Apply</p>
-              <h3 className="text-xl font-bold">{savedJobs.length}</h3>
-            </div>
-          </div>
-        </div>
-
-        <div className="border border-[#EADFD9] bg-white p-5 shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="rounded-[8px] bg-blue-50 p-3 text-blue-600">
-              <FiClock size={20} />
-            </div>
-            <div>
-              <p className="text-sm text-[#6F6F76]">Recent Saves</p>
-              <h3 className="text-xl font-bold">This Week</h3>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Job Cards */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {savedJobs.map((job) => (
-          <div
-            key={job.id}
-            className="group  border border-[#EADFD9] bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
-          >
-            {/* Header */}
-            <div className="mb-6 flex items-start justify-between">
-              <div className="flex items-center gap-4">
-                <div className="flex h-16 w-16 items-center justify-center rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2] p-3">
-                  <img
-                    src={job.logo}
-                    alt={job.company}
-                    className="max-h-full max-w-full object-contain"
-                  />
-                </div>
-
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[#FF6B35]">
-                    Saved Job
-                  </p>
-                  <h4 className="mt-1 font-semibold text-[#0A0A0A]">
-                    {job.company}
-                  </h4>
-                </div>
-              </div>
-
-              <button
-                title="Remove from saved"
-                className="rounded-[8px] p-2 text-[#8A8690] transition hover:bg-red-50 hover:text-red-500"
-              >
-                <FiTrash2 size={18} />
-              </button>
-            </div>
-
-            {/* Content */}
-            <div>
-              <h3 className="mb-2 text-xl font-bold text-[#0A0A0A] transition group-hover:text-[#FF6B35]">
-                {job.title}
-              </h3>
-
-              <div className="mb-6 flex flex-col gap-3">
-                <div className="flex items-center gap-2 text-sm text-[#6F6F76]">
-                  <FiMapPin size={16} />
-                  <span>{job.location}</span>
-                </div>
-
-                <div className="flex items-center gap-2 text-sm text-[#6F6F76]">
-                  <FiDollarSign size={16} />
-                  <span>{job.salary}</span>
-                </div>
-
-                <div className="flex items-center gap-2 text-sm text-[#6F6F76]">
-                  <FiClock size={16} />
-                  <span>{job.type}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="flex gap-3">
-              <button className="flex-1 rounded border border-[#EADFD9] py-3 font-medium text-[#4F4D55] transition hover:bg-[#F7F5F2]">
-                View Details
-              </button>
-
-              <button className="flex flex-1 items-center justify-center gap-2 rounded bg-[#FF6B35] py-3 font-semibold text-white shadow-md transition hover:bg-[#FF6B35]">
-                Apply
-                <FiArrowRight size={16} />
-              </button>
+              <p className="text-xs text-n-500">{label}</p>
+              <p className="text-xl font-bold text-n-900">{value}</p>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Empty state fallback */}
-      {savedJobs.length === 0 && (
-        <div className="rounded-[8px] border border-dashed border-[#D8C9C0] bg-white py-20 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#EFE7E1]">
-            <FiBookmark size={24} className="text-[#6F6F76]" />
-          </div>
-          <h3 className="text-lg font-semibold text-[#0A0A0A]">
-            No saved jobs yet
-          </h3>
-          <p className="mt-2 text-sm text-[#6F6F76]">
-            Start saving jobs to access them quickly later.
-          </p>
+      {/* Empty state */}
+      {savedJobs.length === 0 ? (
+        <div className="rounded-xl border border-n-200 bg-white p-8">
+          <EmptyState
+            icon="❤️"
+            title="No saved jobs yet"
+            description="Start saving jobs to access them quickly later."
+            actionLabel="Browse Jobs"
+            onAction={() => navigate("/jobs")}
+          />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {savedJobs.map((job) => (
+            <div
+              key={job.id}
+              className="group flex flex-col rounded-xl border border-n-200 border-l-4 border-l-sk-primary bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+            >
+              {/* Header */}
+              <div className="mb-4 flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="h-12 w-12 shrink-0 rounded-lg border border-n-200 bg-n-50 p-2 flex items-center justify-center">
+                    <img
+                      src={job.logo}
+                      alt={job.company}
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-sk-primary uppercase tracking-wide">
+                      Saved Job
+                    </p>
+                    <p className="text-sm font-semibold text-n-900 mt-0.5">{job.company}</p>
+                  </div>
+                </div>
+                <button
+                  title="Remove from saved"
+                  className="rounded-lg p-1.5 text-n-400 transition hover:bg-error-bg hover:text-error"
+                >
+                  <FiTrash2 size={16} />
+                </button>
+              </div>
+
+              {/* Job title */}
+              <h3 className="mb-3 text-base font-bold text-n-900 transition group-hover:text-sk-primary leading-snug">
+                {job.title}
+              </h3>
+
+              {/* Meta info */}
+              <div className="mb-5 flex flex-col gap-2">
+                <div className="flex items-center gap-2 text-sm text-n-500">
+                  <FiMapPin size={14} className="shrink-0" />
+                  <span>{job.location}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-n-500">
+                  <FiDollarSign size={14} className="shrink-0" />
+                  <span className="font-semibold text-sk-primary">{job.salary}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-n-500">
+                  <FiClock size={14} className="shrink-0" />
+                  <span>{job.type}</span>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="mt-auto flex gap-2">
+                <button
+                  onClick={() => navigate("/jobs")}
+                  className="flex-1 rounded-lg border border-n-200 py-2.5 text-sm font-semibold text-n-700 transition hover:bg-n-50"
+                >
+                  View Details
+                </button>
+                <button
+                  onClick={() => navigate("/jobs")}
+                  className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-sk-primary py-2.5 text-sm font-semibold text-white transition hover:bg-sk-hover"
+                >
+                  Apply
+                  <FiArrowRight size={14} />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </>

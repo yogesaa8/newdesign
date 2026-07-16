@@ -1,178 +1,272 @@
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import toast from "@/lib/toast";
-import { HeroHighlight } from "../../components/ui/hero-highlight";
 
-const audienceTheme = {
-  seeker: {
-    pageBg: "bg-[#FFF7F3]",
-    shell: "bg-[#FFF7F3]",
-    card: "border-[#EADFD9] bg-white/82 shadow-sm backdrop-blur",
-    logoWrap: "bg-[#FFF7F3] border-[#F3D3C4]",
-    accent: "#FF6B35",
-    accentHover: "#FF9566",
-    accentRing: "rgb(255 107 53 / 0.18)",
-  },
-  company: {
-    pageBg: "bg-[#F7F5F2]",
-    shell: "bg-[#F7F5F2]",
-    card: "border-[#C6AFFF]/50 bg-white shadow-sm",
-    logoWrap: "bg-[#F7F5F2] border-[#C6AFFF]",
-    accent: "#8500FA",
-    accentHover: "#491EF7",
-    accentRing: "rgb(133 0 250 / 0.16)",
-  },
-  institute: {
-    pageBg: "bg-black",
-    shell: "bg-black",
-    card: "border-white/10 bg-white/95 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur",
-    logoWrap: "bg-black border-violet-500/40",
-    accent: "#7F22FE",
-    accentHover: "#6D28D9",
-    accentRing: "rgb(127 34 254 / 0.18)",
-  },
-};
+// ─── Brand panels ────────────────────────────────────────────────────────────
 
-const AuthCard = ({ audience, children }) => {
-  const theme = audienceTheme[audience] || audienceTheme.seeker;
+const CheckIcon = () => (
+  <svg className="w-4 h-4 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+    <path
+      fillRule="evenodd"
+      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
+const SeekerBrandPanel = () => (
+  <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-sk-primary to-sk-pressed flex-col justify-between p-12">
+    {/* Decorative circles */}
+    <div className="absolute -top-20 -left-20 w-72 h-72 rounded-full bg-white/8 pointer-events-none" />
+    <div className="absolute top-1/2 -right-16 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
+    <div className="absolute -bottom-10 left-1/4 w-56 h-56 rounded-full bg-white/6 pointer-events-none" />
+
+    <div className="relative z-10">
+      <Link to="/" className="inline-flex items-center gap-2">
+        <img src="/images/logos/fji_white.png" alt="FirstJobIndia" className="h-8 object-contain" onError={(e) => {
+          e.currentTarget.style.display = 'none';
+          e.currentTarget.nextSibling.style.display = 'inline';
+        }} />
+        <span className="hidden text-white font-bold text-xl tracking-tight">FirstJobIndia</span>
+      </Link>
+    </div>
+
+    <div className="relative z-10 space-y-6">
+      <div>
+        <p className="text-white/70 text-sm font-semibold uppercase tracking-widest mb-3">For Job Seekers</p>
+        <h1 className="text-white font-extrabold text-4xl leading-tight">
+          Your first job<br />starts here.
+        </h1>
+        <p className="text-white/75 text-base mt-4 leading-relaxed max-w-sm">
+          AI-powered tools to help freshers and final-year students land their first job faster.
+        </p>
+      </div>
+
+      <ul className="space-y-3">
+        {[
+          "AI-matched jobs for your skills & stream",
+          "Resume builder with instant AI feedback",
+          "Mock interviews & skill gap analysis",
+        ].map((item) => (
+          <li key={item} className="flex items-center gap-3 text-white text-sm font-medium">
+            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-white/20 text-white shrink-0">
+              <CheckIcon />
+            </span>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div className="relative z-10">
+      <p className="text-white/50 text-xs">© 2024 FirstJobIndia · Free for all students</p>
+    </div>
+  </div>
+);
+
+const CompanyBrandPanel = () => (
+  <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-co-primary to-co-pressed flex-col justify-between p-12">
+    {/* Decorative circles */}
+    <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-white/8 pointer-events-none" />
+    <div className="absolute top-1/2 -left-16 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
+    <div className="absolute -bottom-10 right-1/4 w-56 h-56 rounded-full bg-white/6 pointer-events-none" />
+
+    <div className="relative z-10">
+      <Link to="/" className="inline-flex items-center gap-2">
+        <img src="/images/logos/fji_white.png" alt="FirstJobIndia" className="h-8 object-contain" onError={(e) => {
+          e.currentTarget.style.display = 'none';
+          e.currentTarget.nextSibling.style.display = 'inline';
+        }} />
+        <span className="hidden text-white font-bold text-xl tracking-tight">FirstJobIndia</span>
+      </Link>
+    </div>
+
+    <div className="relative z-10 space-y-6">
+      <div>
+        <p className="text-white/70 text-sm font-semibold uppercase tracking-widest mb-3">For Employers</p>
+        <h1 className="text-white font-extrabold text-4xl leading-tight">
+          Hire India's<br />freshest talent.
+        </h1>
+        <p className="text-white/75 text-base mt-4 leading-relaxed max-w-sm">
+          Post jobs, review AI-matched candidates, and build your fresher pipeline — all in one place.
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        {[
+          { stat: "10,000+", label: "Active job seekers" },
+          { stat: "AI-matched", label: "Candidate recommendations" },
+          { stat: "First post", label: "Always free" },
+        ].map(({ stat, label }) => (
+          <div key={stat} className="flex items-center gap-3 bg-white/10 rounded-xl px-4 py-3">
+            <span className="text-white font-bold text-sm">{stat}</span>
+            <span className="text-white/70 text-sm">{label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div className="relative z-10">
+      <p className="text-white/50 text-xs">© 2024 FirstJobIndia · Verified employer network</p>
+    </div>
+  </div>
+);
+
+// ─── Form panel (right/left depending on audience) ────────────────────────────
+
+const FormPanel = ({ audience, children }) => {
+  const bg = audience === "seeker" ? "bg-sk-bg" : audience === "company" ? "bg-co-bg" : "bg-gray-50";
 
   return (
-    <section
-      className={`w-full max-w-[480px] rounded-[8px] border p-5 sm:p-8 ${theme.card}`}
-    >
-      <div className="mb-8 flex justify-center">
-        <Link
-          to="/"
-          className={`inline-flex h-12 w-12 items-center justify-center rounded-[8px] border ${theme.logoWrap}`}
-          aria-label="FirstJobIndia home"
-        >
-          <img
-            src="/images/logos/fji_orange.png"
-            alt=""
-            className="h-8 w-8 object-contain"
-          />
-        </Link>
+    <div className={`flex flex-1 lg:w-1/2 min-h-screen items-center justify-center px-6 py-12 ${bg}`}>
+      <div className="w-full max-w-md">
+        {/* Mobile logo */}
+        <div className="flex justify-center mb-8 lg:hidden">
+          <Link to="/" className="inline-flex items-center gap-2">
+            <img src="/images/logos/fji_orange.png" alt="FirstJobIndia" className="h-8 object-contain" />
+          </Link>
+        </div>
+        <div className="bg-white rounded-2xl border border-n-200 shadow-sm p-8">
+          {children}
+        </div>
       </div>
-      {children}
-    </section>
+    </div>
   );
 };
 
-export const AuthShell = ({ audience = "seeker", children }) => {
-  const theme = audienceTheme[audience] || audienceTheme.seeker;
+// ─── AuthShell ────────────────────────────────────────────────────────────────
 
-  if (audience === "company") {
+export const AuthShell = ({ audience = "seeker", children }) => {
+  // Institute keeps centered single-card layout (not redesigned in this sprint)
+  if (audience === "institute") {
     return (
       <main
-        className={`min-h-screen text-[#0A0A0A] ${theme.pageBg}`}
+        className="min-h-screen flex items-center justify-center bg-black px-4 py-8"
         style={{
-          "--auth-accent": theme.accent,
-          "--auth-accent-hover": theme.accentHover,
-          "--auth-ring": theme.accentRing,
+          "--auth-accent": "#7F22FE",
+          "--auth-accent-hover": "#6D28D9",
+          "--auth-ring": "rgb(127 34 254 / 0.18)",
         }}
       >
-        <HeroHighlight
-          containerClassName={`min-h-screen ${theme.shell}`}
-          className="flex min-h-screen items-center justify-center px-4 py-8 sm:px-6 lg:px-8"
-        >
-          <AuthCard audience={audience}>{children}</AuthCard>
-        </HeroHighlight>
+        <div className="w-full max-w-[480px] rounded-2xl border border-white/10 bg-white p-8 shadow-2xl">
+          <div className="mb-8 flex justify-center">
+            <Link to="/" aria-label="FirstJobIndia home">
+              <img src="/images/logos/fji_orange.png" alt="" className="h-8 object-contain" />
+            </Link>
+          </div>
+          {children}
+        </div>
       </main>
     );
   }
 
+  const isSeeker = audience === "seeker";
+  const accentVars = isSeeker
+    ? { "--auth-accent": "#FF6B35", "--auth-accent-hover": "#FF9566", "--auth-ring": "rgb(255 107 53 / 0.18)" }
+    : { "--auth-accent": "#7C3AED", "--auth-accent-hover": "#A855F7", "--auth-ring": "rgb(124 58 237 / 0.18)" };
+
+  const brandPanel = isSeeker ? <SeekerBrandPanel /> : <CompanyBrandPanel />;
+  const formPanel = <FormPanel audience={audience}>{children}</FormPanel>;
+
   return (
-    <main
-      className={`min-h-screen text-[#0A0A0A] ${theme.pageBg}`}
-      style={{
-        "--auth-accent": theme.accent,
-        "--auth-accent-hover": theme.accentHover,
-        "--auth-ring": theme.accentRing,
-      }}
-    >
-      <HeroHighlight
-        containerClassName={`min-h-screen ${theme.shell}`}
-        className="flex min-h-screen items-center justify-center px-4 py-8 sm:px-6 lg:px-8"
-      >
-        <AuthCard audience={audience}>{children}</AuthCard>
-      </HeroHighlight>
+    <main className="min-h-screen flex" style={accentVars}>
+      {/* Seeker: Brand LEFT → Form RIGHT | Company: Form LEFT → Brand RIGHT */}
+      {isSeeker ? brandPanel : formPanel}
+      {isSeeker ? formPanel : brandPanel}
     </main>
   );
 };
 
+// ─── AuthHeader ───────────────────────────────────────────────────────────────
+
 export const AuthHeader = ({ eyebrow, title, description }) => (
-  <div className="mb-8">
+  <div className="mb-7">
     {eyebrow && (
-      <p className="text-sm font-semibold uppercase text-[var(--auth-accent)]">
+      <p className="text-xs font-semibold uppercase tracking-wider text-[var(--auth-accent)] mb-1">
         {eyebrow}
       </p>
     )}
-    <h2 className="mt-2 text-3xl font-bold text-[#0A0A0A]">{title}</h2>
+    <h2 className="text-2xl font-bold text-n-900">{title}</h2>
     {description && (
-      <p className="mt-3 text-sm leading-6 text-[#6F6F76]">{description}</p>
+      <p className="mt-2 text-sm leading-6 text-n-500">{description}</p>
     )}
   </div>
 );
 
-export const AuthInput = ({
-  label,
-  error,
-  children,
-  className = "",
-  ...props
-}) => (
+// ─── AuthInput ────────────────────────────────────────────────────────────────
+
+export const AuthInput = ({ label, error, children, className = "", ...props }) => (
   <div>
-    <label className="mb-2 block text-xs font-semibold uppercase text-[#6F6F76]">
-      {label}
-    </label>
+    {label && (
+      <label className="mb-1.5 block text-sm font-medium text-n-700">
+        {label}
+      </label>
+    )}
     <div className="relative">
       <input
-        className={`w-full rounded-[8px] border bg-[#F7F5F2] px-3 py-3 text-sm text-[#0A0A0A] outline-none transition placeholder:text-[#9F9FA9] focus:ring-2 ${
-          error
-            ? "border-red-300 focus:border-red-400 focus:ring-red-100"
-            : "border-[#EADFD9] focus:border-[var(--auth-accent)] focus:ring-[var(--auth-ring)]"
-        } ${children ? "pr-11" : ""} ${className}`}
+        className={`w-full rounded-lg border bg-white px-4 py-3 text-sm text-n-900 outline-none transition placeholder:text-n-400
+          ${error
+            ? "border-error focus:border-error focus:ring-2 focus:ring-error/10"
+            : "border-n-200 focus:border-[var(--auth-accent)] focus:ring-2 focus:ring-[var(--auth-ring)]"
+          }
+          ${children ? "pr-11" : ""}
+          ${className}`}
         {...props}
       />
       {children}
     </div>
-    {error && <p className="mt-1.5 text-sm text-red-600">{error}</p>}
+    {error && (
+      <p className="mt-1 text-xs text-error flex items-center gap-1">
+        <svg className="w-3 h-3 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+        </svg>
+        {error}
+      </p>
+    )}
   </div>
 );
 
+// ─── AuthSelect ───────────────────────────────────────────────────────────────
+
 export const AuthSelect = ({ label, error, children, ...props }) => (
   <div>
-    <label className="mb-2 block text-xs font-semibold uppercase text-[#6F6F76]">
-      {label}
-    </label>
+    {label && (
+      <label className="mb-1.5 block text-sm font-medium text-n-700">
+        {label}
+      </label>
+    )}
     <select
-      className={`w-full rounded-[8px] border bg-[#F7F5F2] px-3 py-3 text-sm text-[#0A0A0A] outline-none transition focus:ring-2 ${
-        error
-          ? "border-red-300 focus:border-red-400 focus:ring-red-100"
-          : "border-[#EADFD9] focus:border-[var(--auth-accent)] focus:ring-[var(--auth-ring)]"
-      }`}
+      className={`w-full rounded-lg border bg-white px-4 py-3 text-sm text-n-900 outline-none transition
+        ${error
+          ? "border-error focus:border-error focus:ring-2 focus:ring-error/10"
+          : "border-n-200 focus:border-[var(--auth-accent)] focus:ring-2 focus:ring-[var(--auth-ring)]"
+        }`}
       {...props}
     >
       {children}
     </select>
-    {error && <p className="mt-1.5 text-sm text-red-600">{error}</p>}
+    {error && (
+      <p className="mt-1 text-xs text-error flex items-center gap-1">
+        <svg className="w-3 h-3 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+        </svg>
+        {error}
+      </p>
+    )}
   </div>
 );
 
-export const AuthButton = ({
-  children,
-  variant = "primary",
-  className = "",
-  ...props
-}) => {
+// ─── AuthButton ───────────────────────────────────────────────────────────────
+
+export const AuthButton = ({ children, variant = "primary", className = "", ...props }) => {
   const styles =
     variant === "secondary"
-      ? "border border-[#EADFD9] bg-white text-[#0A0A0A] hover:bg-[#F7F5F2]"
+      ? "border border-n-200 bg-white text-n-700 hover:bg-n-50"
       : "bg-[var(--auth-accent)] text-white hover:bg-[var(--auth-accent-hover)]";
 
   return (
     <button
-      className={`inline-flex w-full items-center justify-center gap-2 rounded-[8px] px-4 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-70 ${styles} ${className}`}
+      className={`inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-60 active:scale-[0.98] ${styles} ${className}`}
       {...props}
     >
       {children}
@@ -180,31 +274,35 @@ export const AuthButton = ({
   );
 };
 
+// ─── AuthAlert (toast-based) ──────────────────────────────────────────────────
+
 export const AuthAlert = ({ type = "error", children }) => {
   useEffect(() => {
     if (!children) return;
-
     if (type === "success") {
       toast.success(children);
       return;
     }
-
     toast.error(children);
   }, [children, type]);
 
   return null;
 };
 
+// ─── AuthDivider ──────────────────────────────────────────────────────────────
+
 export const AuthDivider = ({ label = "Or continue with" }) => (
   <div className="flex items-center gap-3 py-1">
-    <span className="h-px flex-1 bg-[#EADFD9]" />
-    <span className="text-xs font-semibold uppercase text-[#9F9FA9]">
+    <span className="h-px flex-1 bg-n-200" />
+    <span className="text-xs font-semibold uppercase tracking-wider text-n-400">
       {label}
     </span>
-    <span className="h-px flex-1 bg-[#EADFD9]" />
+    <span className="h-px flex-1 bg-n-200" />
   </div>
 );
 
+// ─── AuthFooterText ───────────────────────────────────────────────────────────
+
 export const AuthFooterText = ({ children }) => (
-  <p className="text-center text-sm text-[#6F6F76]">{children}</p>
+  <p className="text-center text-sm text-n-500">{children}</p>
 );

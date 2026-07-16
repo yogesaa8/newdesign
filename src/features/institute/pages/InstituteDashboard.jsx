@@ -1,229 +1,184 @@
-import {
-  BookOpen,
-  CalendarCheck,
-  FileText,
-  Search,
-  Users,
-} from "lucide-react";
-import MasterHeader from "../../../components/layout/MasterHeader";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { BookOpen, FilePlus2, GraduationCap, Users } from "lucide-react";
+import { useAuthStore } from "../../../store";
+import { getProfile, listCourses } from "../api/instituteApi";
 
-const stats = [
-  {
-    label: "Total Students",
-    value: "248",
-    note: "22 joined this month",
-    icon: Users,
-  },
-  {
-    label: "Total Courses",
-    value: "12",
-    note: "4 drone tracks live",
-    icon: BookOpen,
-  },
-  {
-    label: "Total Applications",
-    value: "86",
-    note: "18 pending review",
-    icon: FileText,
-  },
-  {
-    label: "Active Batches",
-    value: "07",
-    note: "3 field batches",
-    icon: CalendarCheck,
-  },
-];
-
-const students = [
-  {
-    id: "ST-1042",
-    name: "Aarav Sharma",
-    course: "Drone Operations Foundation",
-    batch: "Morning A",
-    status: "Active",
-    progress: "78%",
-  },
-  {
-    id: "ST-1043",
-    name: "Priya Nair",
-    course: "UAV Mapping Basics",
-    batch: "Weekend B",
-    status: "Review",
-    progress: "64%",
-  },
-  {
-    id: "ST-1044",
-    name: "Kabir Mehta",
-    course: "Drone Maintenance Lab",
-    batch: "Evening C",
-    status: "Active",
-    progress: "91%",
-  },
-  {
-    id: "ST-1045",
-    name: "Neha Shah",
-    course: "Aerial Survey Projects",
-    batch: "Weekend B",
-    status: "New",
-    progress: "24%",
-  },
-];
-
-const courses = [
-  "Drone operations and safety",
-  "UAV mapping and payload handling",
-  "Maintenance lab practice",
-];
-
-const statusClass = {
-  Active: "bg-green-50 text-green-700",
-  Review: "bg-[#F1E7FF] text-[#8500FA]",
-  New: "bg-[#FFF1E9] text-[#C84F1F]",
+const statusStyles = {
+  draft: "bg-n-100 text-n-700",
+  published: "bg-success-bg text-success",
+  paused: "bg-yellow-50 text-yellow-700",
+  closed: "bg-red-50 text-red-700",
 };
 
 const InstituteDashboard = () => {
+  const token = useAuthStore((state) => state.accessToken);
+  const navigate = useNavigate();
+  const [profileData, setProfileData] = useState(null);
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadDashboard = async () => {
+      setLoading(true);
+      try {
+        const profileResponse = await getProfile(token);
+        const nextProfileData = profileResponse?.data || null;
+        setProfileData(nextProfileData);
+
+        if (nextProfileData?.profile_status !== "completed") {
+          navigate("/institute/profile", { replace: true });
+          return;
+        }
+
+        const coursesResponse = await listCourses(token, {
+          limit: 5,
+          sort_by: "created_at",
+          sort_order: "desc",
+        });
+        setCourses(coursesResponse?.data?.courses || []);
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (token) {
+      loadDashboard();
+    }
+  }, [token, navigate]);
+
+  const stats = useMemo(() => {
+    const published = courses.filter((course) => course.status === "published").length;
+    const drafts = courses.filter((course) => course.status === "draft").length;
+    return [
+      { label: "Loaded Courses", value: courses.length, icon: BookOpen },
+      { label: "Published", value: published, icon: GraduationCap },
+      { label: "Drafts", value: drafts, icon: FilePlus2 },
+      { label: "Profile", value: profileData?.profile_status || "pending", icon: Users },
+    ];
+  }, [courses, profileData]);
+
+  if (loading) {
+    return <div className="p-6 text-sm font-semibold text-n-500">Loading institute dashboard...</div>;
+  }
+
+  const profile = profileData?.profile;
+  const needsProfile = profileData?.profile_status !== "completed";
+  const canPostCourses = profile?.can_post_courses !== false && !needsProfile;
+
   return (
-    <>
-      <MasterHeader />
-      <main className="min-h-screen bg-[#F7F5F2] text-[#111114]">
-        <section className="mx-auto w-full max-w-7xl px-4 py-6 md:px-8 md:py-8">
-        <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {stats.map((item) => {
-            const Icon = item.icon;
-            return (
-              <article
-                key={item.label}
-                className="rounded-[8px] border border-[#E7DDD6] bg-white p-5 shadow-sm"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#77737D]">
-                      {item.label}
-                    </p>
-                    <p className="mt-3 text-3xl font-extrabold text-[#111114]">
-                      {item.value}
-                    </p>
-                    <p className="mt-2 text-sm font-semibold text-[#77737D]">
-                      {item.note}
-                    </p>
-                  </div>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-[#F1E7FF] text-[#8500FA]">
-                    <Icon className="h-5 w-5" />
-                  </div>
+    <section className="mx-auto w-full max-w-7xl px-4 py-6 md:px-8">
+      <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.1em] text-co-primary">
+            Institute Workspace
+          </p>
+          <h1 className="mt-1 text-2xl font-extrabold text-n-900">
+            {profile?.institute_name || "Institute dashboard"}
+          </h1>
+          <p className="mt-2 text-sm font-medium text-n-500">
+            Manage profile, courses, publishing, and applicant exports.
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Link
+            to="/institute/profile"
+            className="inline-flex items-center justify-center rounded-lg border border-co-primary px-4 py-2 text-sm font-semibold text-co-primary transition hover:bg-co-surface"
+          >
+            {needsProfile ? "Complete profile" : "Edit profile"}
+          </Link>
+          <Link
+            to={canPostCourses ? "/institute/courses/create" : "/institute/profile"}
+            className={`inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white transition ${
+              canPostCourses
+                ? "bg-co-primary hover:bg-co-hover"
+                : "cursor-not-allowed bg-co-primary/50"
+            }`}
+          >
+            <FilePlus2 className="h-4 w-4" />
+            New course
+          </Link>
+        </div>
+      </div>
+
+      {needsProfile && (
+        <div className="mb-6 rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm font-semibold text-yellow-800">
+          Complete the institute profile before creating and publishing courses.
+        </div>
+      )}
+
+      <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {stats.map((item) => {
+          const Icon = item.icon;
+          return (
+            <article key={item.label} className="rounded-lg border border-n-200 bg-white p-5 shadow-sm">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.1em] text-n-500">{item.label}</p>
+                  <p className="mt-3 text-2xl font-extrabold capitalize text-n-900">{item.value}</p>
                 </div>
-              </article>
-            );
-          })}
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-co-surface text-co-primary">
+                  <Icon className="h-5 w-5" />
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      <section className="overflow-hidden rounded-lg border border-n-200 bg-white">
+        <div className="flex items-center justify-between border-b border-n-100 px-5 py-4">
+          <h2 className="text-lg font-extrabold text-n-900">Recent courses</h2>
+          <Link to="/institute/courses" className="text-sm font-bold text-co-primary hover:underline">
+            View all
+          </Link>
         </div>
-
-        <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
-          <section className="overflow-hidden rounded-[8px] border border-[#E7DDD6] bg-white">
-            <div className="flex flex-col gap-4 border-b border-[#EFE7E1] px-5 py-4 md:flex-row md:items-center md:justify-between">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#8500FA]">
-                  Students
-                </p>
-                <h2 className="mt-1 text-lg font-extrabold text-[#111114]">
-                  Current student list
-                </h2>
-              </div>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#9F9FA9]" />
-                <input
-                  type="search"
-                  placeholder="Search students"
-                  className="w-full rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] px-3 py-2 pl-9 text-sm font-semibold text-[#111114] outline-none focus:border-[#8500FA] md:w-64"
-                />
-              </div>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[760px] text-left">
-                <thead>
-                  <tr className="border-b border-[#EFE7E1] text-xs font-bold uppercase tracking-[0.08em] text-[#77737D]">
-                    <th className="px-5 py-3">Student</th>
-                    <th className="px-5 py-3">Course</th>
-                    <th className="px-5 py-3">Batch</th>
-                    <th className="px-5 py-3">Progress</th>
-                    <th className="px-5 py-3">Status</th>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[760px] text-left">
+            <thead>
+              <tr className="border-b border-n-100 text-xs font-bold uppercase tracking-[0.08em] text-n-500">
+                <th className="px-5 py-3">Course</th>
+                <th className="px-5 py-3">Mode</th>
+                <th className="px-5 py-3">Fees</th>
+                <th className="px-5 py-3">Deadline</th>
+                <th className="px-5 py-3">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {courses.length === 0 ? (
+                <tr>
+                  <td colSpan="5" className="px-5 py-8 text-center text-sm font-semibold text-n-500">
+                    No courses found.
+                  </td>
+                </tr>
+              ) : (
+                courses.map((course) => (
+                  <tr key={course.id} className="border-b border-n-50 last:border-0 hover:bg-n-50">
+                    <td className="px-5 py-4">
+                      <Link to={`/institute/courses/${course.id}`} className="text-sm font-bold text-n-900 hover:text-co-primary">
+                        {course.title}
+                      </Link>
+                      <p className="text-xs text-n-500">{course.category || "Uncategorized"}</p>
+                    </td>
+                    <td className="px-5 py-4 text-sm font-semibold capitalize text-n-700">{course.mode || "-"}</td>
+                    <td className="px-5 py-4 text-sm text-n-700">{course.fees ? `${course.currency || "INR"} ${course.fees}` : "Free"}</td>
+                    <td className="px-5 py-4 text-sm text-n-700">{course.application_deadline || "-"}</td>
+                    <td className="px-5 py-4">
+                      <span className={`rounded-lg px-2.5 py-1 text-xs font-bold ${statusStyles[course.status] || statusStyles.draft}`}>
+                        {course.status}
+                      </span>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {students.map((student) => (
-                    <tr
-                      key={student.id}
-                      className="border-b border-[#F2ECE7] transition-colors last:border-0 hover:bg-[#FDFBF9]"
-                    >
-                      <td className="px-5 py-4">
-                        <p className="text-sm font-bold text-[#111114]">
-                          {student.name}
-                        </p>
-                        <p className="text-xs text-[#77737D]">{student.id}</p>
-                      </td>
-                      <td className="px-5 py-4 text-sm font-semibold text-[#4F4D55]">
-                        {student.course}
-                      </td>
-                      <td className="px-5 py-4 text-sm text-[#4F4D55]">
-                        {student.batch}
-                      </td>
-                      <td className="px-5 py-4 text-sm font-bold text-[#111114]">
-                        {student.progress}
-                      </td>
-                      <td className="px-5 py-4">
-                        <span
-                          className={`rounded-[8px] px-2.5 py-1 text-xs font-bold ${
-                            statusClass[student.status]
-                          }`}
-                        >
-                          {student.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <aside className="space-y-6">
-            <section className="rounded-[8px] border border-[#E7DDD6] bg-white p-5 shadow-sm">
-              <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#8500FA]">
-                Active courses
-              </p>
-              <h2 className="mt-1 text-lg font-extrabold text-[#111114]">
-                Training tracks
-              </h2>
-              <div className="mt-4 space-y-3">
-                {courses.map((course, index) => (
-                  <div
-                    key={course}
-                    className="rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] px-4 py-3"
-                  >
-                    <p className="text-sm font-bold text-[#111114]">
-                      {course}
-                    </p>
-                    <p className="mt-1 text-xs font-semibold text-[#77737D]">
-                      Batch {index + 1} scheduled this week
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="rounded-[8px] border border-violet-100 bg-[#F1E7FF] p-5">
-              <p className="text-xs font-bold uppercase tracking-[0.1em] text-[#8500FA]">
-                Mock preview
-              </p>
-              <p className="mt-2 text-sm font-semibold leading-6 text-[#4F4D55]">
-                This dashboard is a static institute UI preview. Student,
-                course, batch, and application counts are sample data only.
-              </p>
-            </section>
-          </aside>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
-        </section>
-      </main>
-    </>
+      </section>
+    </section>
   );
 };
 

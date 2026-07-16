@@ -1,18 +1,60 @@
 import React, { useState } from "react";
 import {
   FiSearch,
-  FiFilter,
-  FiChevronLeft,
-  FiChevronRight,
-  FiEye,
   FiBriefcase,
   FiClock,
   FiCheckCircle,
   FiXCircle,
-  FiEdit3, // Added for Notes functionality
+  FiEye,
+  FiEdit3,
 } from "react-icons/fi";
 import { applications } from "../../data/mockData";
+import { Badge } from "@/components/ui/Badge";
+import { EmptyState } from "@/components/ui/EmptyState";
 import Breadcrumb from "../../../../components/ui/Breadcrumb";
+
+const STATUS_TABS = ["All", "Pending", "Shortlisted", "Interview Scheduled", "Rejected"];
+
+const badgeStatusMap = {
+  "Interview Scheduled": "info",
+  Shortlisted: "success",
+  Rejected: "error",
+  Applied: "applied",
+  Pending: "warning",
+};
+
+const borderAccentMap = {
+  Applied: "border-l-sk-primary",
+  Pending: "border-l-sk-primary",
+  "Interview Scheduled": "border-l-warning",
+  Shortlisted: "border-l-success",
+  Rejected: "border-l-error",
+};
+
+const statIconColorMap = {
+  total: "bg-sk-surface text-sk-primary",
+  pending: "bg-warning-bg text-warning",
+  shortlisted: "bg-success-bg text-success",
+  rejected: "bg-error-bg text-error",
+};
+
+const STAGES = ["Applied", "Viewed", "Shortlisted", "Interview"];
+const stageIndexMap = {
+  Applied: 0,
+  Pending: 0,
+  Viewed: 1,
+  Shortlisted: 2,
+  "Interview Scheduled": 3,
+};
+
+const handleViewDetails = (appId) => {
+  console.log("Navigate to application details:", appId);
+};
+
+const handleAddNote = (e, appId) => {
+  e.stopPropagation();
+  console.log("Open note modal for:", appId);
+};
 
 const Applications = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -22,248 +64,196 @@ const Applications = () => {
     const matchesSearch =
       app.jobTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
       app.company.toLowerCase().includes(searchTerm.toLowerCase());
-
     const matchesStatus = statusFilter === "All" || app.status === statusFilter;
-
     return matchesSearch && matchesStatus;
   });
 
-  const getStatusClasses = (status) => {
-    switch (status) {
-      case "Interview Scheduled":
-        return "bg-blue-50 text-blue-700 border border-blue-100";
-      case "Shortlisted":
-        return "bg-green-50 text-green-700 border border-green-100";
-      case "Rejected":
-        return "bg-red-50 text-red-700 border border-red-100";
-      default:
-        return "bg-[#FFF7F3] text-[#C84F1F] border border-[#F3D3C4]";
-    }
-  };
-
-  // Mock function for when user clicks a row or notes
-  const handleViewDetails = (appId) => {
-    console.log("Navigate to application details:", appId);
-    // navigate(`/applications/${appId}`);
-  };
-
-  const handleAddNote = (e, appId) => {
-    e.stopPropagation(); // Prevents the row click event from firing
-    console.log("Open note modal for:", appId);
-    // setOpenNoteModal(appId);
-  };
+  const tabCount = (tab) =>
+    tab === "All"
+      ? applications.length
+      : applications.filter((a) => a.status === tab).length;
 
   return (
     <>
       <Breadcrumb pageName="Job Applications" />
 
-      {/* Stats */}
-      <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
-        <div className="border border-[#EADFD9] bg-white p-5 shadow-sm">
-          <div className="flex items-center gap-3">
-            <FiBriefcase className="text-[#FF6B35]" size={22} />
+      {/* Stat cards */}
+      <div className="mb-6 grid grid-cols-2 gap-4 xl:grid-cols-4">
+        {[
+          { label: "Total", value: applications.length, icon: <FiBriefcase size={18} />, key: "total" },
+          { label: "Pending", value: applications.filter((a) => a.status === "Pending").length, icon: <FiClock size={18} />, key: "pending" },
+          { label: "Shortlisted", value: applications.filter((a) => a.status === "Shortlisted").length, icon: <FiCheckCircle size={18} />, key: "shortlisted" },
+          { label: "Rejected", value: applications.filter((a) => a.status === "Rejected").length, icon: <FiXCircle size={18} />, key: "rejected" },
+        ].map(({ label, value, icon, key }) => (
+          <div key={key} className="flex items-center gap-4 rounded-xl border border-n-200 bg-white p-5 shadow-sm">
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${statIconColorMap[key]}`}>
+              {icon}
+            </div>
             <div>
-              <p className="text-sm text-[#6F6F76]">Total</p>
-              <h3 className="text-xl font-bold">{applications.length}</h3>
+              <p className="text-xs text-n-500">{label}</p>
+              <p className="text-xl font-bold text-n-900">{value}</p>
             </div>
           </div>
+        ))}
+      </div>
+
+      {/* Search + filter tabs */}
+      <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="relative w-full sm:w-80">
+          <FiSearch size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-n-400" />
+          <input
+            type="text"
+            placeholder="Search by role or company..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full rounded-lg border border-n-200 bg-white py-2.5 pl-10 pr-4 text-sm text-n-900 outline-none placeholder:text-n-400 focus:border-sk-primary focus:ring-2 focus:ring-sk-primary/10"
+          />
         </div>
 
-        <div className="border border-[#EADFD9] bg-white p-5 shadow-sm">
-          <div className="flex items-center gap-3">
-            <FiClock className="text-[#FF6B35]" size={22} />
-            <div>
-              <p className="text-sm text-[#6F6F76]">Pending</p>
-              <h3 className="text-xl font-bold">
-                {applications.filter((a) => a.status === "Pending").length}
-              </h3>
-            </div>
-          </div>
-        </div>
-
-        <div className="border border-[#EADFD9] bg-white p-5 shadow-sm">
-          <div className="flex items-center gap-3">
-            <FiCheckCircle className="text-green-600" size={22} />
-            <div>
-              <p className="text-sm text-[#6F6F76]">Shortlisted</p>
-              <h3 className="text-xl font-bold">
-                {applications.filter((a) => a.status === "Shortlisted").length}
-              </h3>
-            </div>
-          </div>
-        </div>
-
-        <div className="border border-[#EADFD9] bg-white p-5 shadow-sm">
-          <div className="flex items-center gap-3">
-            <FiXCircle className="text-red-600" size={22} />
-            <div>
-              <p className="text-sm text-[#6F6F76]">Rejected</p>
-              <h3 className="text-xl font-bold">
-                {applications.filter((a) => a.status === "Rejected").length}
-              </h3>
-            </div>
-          </div>
+        {/* Filter pill tabs */}
+        <div className="flex gap-1.5 rounded-xl bg-n-100 p-1 overflow-x-auto shrink-0">
+          {STATUS_TABS.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setStatusFilter(tab)}
+              className={`flex items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
+                statusFilter === tab
+                  ? "bg-white text-n-900 shadow-sm"
+                  : "text-n-500 hover:text-n-900"
+              }`}
+            >
+              {tab}
+              <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
+                statusFilter === tab ? "bg-sk-surface text-sk-primary" : "bg-n-200 text-n-500"
+              }`}>
+                {tabCount(tab)}
+              </span>
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Main Table */}
-      <div className="overflow-hidden rounded border border-[#EADFD9] bg-white shadow-sm">
-        {/* Header */}
-        <div className="flex flex-col gap-4 border-b border-[#EFE7E1] p-5 md:flex-row md:items-center md:justify-between">
-          <div className="relative w-full md:w-96">
-            <FiSearch
-              size={18}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8A8690]"
-            />
-            <input
-              type="text"
-              placeholder="Search by company or role..."
-              className="w-full rounded border border-[#EADFD9] py-3 pl-11 pr-4 outline-none focus:ring-2 focus:ring-orange-200"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <select
-              className="rounded border border-[#EADFD9] px-4 py-3 outline-none focus:ring-2 focus:ring-orange-200"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <option value="All">All Status</option>
-              <option value="Pending">Pending</option>
-              <option value="Shortlisted">Shortlisted</option>
-              <option value="Interview Scheduled">Interview Scheduled</option>
-              <option value="Rejected">Rejected</option>
-            </select>
-
-            <button className="flex items-center justify-center gap-2 rounded border border-[#EADFD9] px-5 py-3 font-medium hover:bg-[#F7F5F2] transition">
-              <FiFilter size={18} />
-              Filter
-            </button>
-          </div>
+      {/* Application cards */}
+      {filteredApplications.length === 0 ? (
+        <div className="rounded-xl border border-n-200 bg-white p-8">
+          <EmptyState
+            icon="📄"
+            title="No applications found"
+            description={searchTerm ? "Try a different search term." : "Browse jobs and start applying."}
+          />
         </div>
+      ) : (
+        <div className="space-y-3">
+          {filteredApplications.map((app, i) => {
+            const currentStage = stageIndexMap[app.status] ?? -1;
+            const isRejected = app.status === "Rejected";
+            const borderClass = borderAccentMap[app.status] || "border-l-n-200";
 
-        {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[800px]">
-            <thead>
-              <tr className="border-b border-[#EFE7E1] text-left text-sm text-[#6F6F76]">
-                <th className="px-6 py-4 font-semibold">Company & Role</th>
-                <th className="px-6 py-4 font-semibold">Location</th>
-                <th className="px-6 py-4 font-semibold">Applied Date</th>
-                <th className="px-6 py-4 font-semibold">Status</th>
-                <th className="px-6 py-4 font-semibold text-right">
-                  Quick Actions
-                </th>
-              </tr>
-            </thead>
+            return (
+              <div
+                key={i}
+                onClick={() => handleViewDetails(app.id)}
+                className={`cursor-pointer rounded-xl border border-n-200 border-l-4 bg-white p-5 shadow-sm transition hover:shadow-md ${borderClass}`}
+              >
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                  {/* Left: logo + info */}
+                  <div className="flex items-center gap-4 flex-1 min-w-0">
+                    <div className="h-11 w-11 shrink-0 rounded-lg border border-n-200 bg-white p-1.5">
+                      <img
+                        src={app.logo}
+                        alt={app.company}
+                        className="h-full w-full object-contain"
+                      />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-n-900 truncate">{app.jobTitle}</p>
+                      <p className="text-sm text-n-500 truncate">{app.company}</p>
+                    </div>
+                  </div>
 
-            <tbody>
-              {filteredApplications.length > 0 ? (
-                filteredApplications.map((app, index) => (
-                  // Made the whole row clickable for better UX
-                  <tr
-                    key={index}
-                    onClick={() => handleViewDetails(app.id)}
-                    className="cursor-pointer border-b border-[#EFE7E1] hover:bg-[#F7F5F2] transition"
-                  >
-                    <td className="px-6 py-5">
-                      <div className="flex items-center gap-4">
-                        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-[8px] border border-[#EADFD9] bg-white p-2">
-                          <img
-                            src={app.logo}
-                            alt={app.company}
-                            className="h-full w-full object-contain"
-                          />
-                        </div>
+                  {/* Right: badge + actions */}
+                  <div className="flex items-center gap-3 shrink-0">
+                    <Badge status={badgeStatusMap[app.status] || "neutral"}>
+                      {app.status}
+                    </Badge>
+                    <button
+                      title="Add Note"
+                      onClick={(e) => handleAddNote(e, app.id)}
+                      className="rounded-lg p-1.5 text-n-400 hover:bg-n-100 hover:text-n-700 transition"
+                    >
+                      <FiEdit3 size={16} />
+                    </button>
+                    <button
+                      title="View Details"
+                      className="rounded-lg p-1.5 text-n-400 hover:bg-sk-surface hover:text-sk-primary transition"
+                    >
+                      <FiEye size={16} />
+                    </button>
+                  </div>
+                </div>
 
-                        <div>
-                          <h4 className="font-semibold text-[#0A0A0A]">
-                            {app.jobTitle}
-                          </h4>
-                          <p className="text-sm text-[#6F6F76]">
-                            {app.company}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
+                {/* Progress tracker */}
+                {!isRejected && (
+                  <div className="mt-4 flex items-center gap-0">
+                    {STAGES.map((stage, idx) => {
+                      const done = idx <= currentStage;
+                      return (
+                        <React.Fragment key={stage}>
+                          <div className="flex flex-col items-center gap-1">
+                            <div className={`w-3 h-3 rounded-full shrink-0 ${done ? "bg-sk-primary" : "bg-n-200"}`} />
+                            <span className={`text-[10px] whitespace-nowrap ${done ? "text-sk-primary font-semibold" : "text-n-400"}`}>
+                              {stage}
+                            </span>
+                          </div>
+                          {idx < STAGES.length - 1 && (
+                            <div className={`flex-1 h-px mx-1 mb-3.5 ${done && idx < currentStage ? "bg-sk-primary" : "bg-n-200"}`} />
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
+                  </div>
+                )}
 
-                    {/* Assuming you have location in mock data, else change app.location to a static string like "Remote" */}
-                    <td className="px-6 py-5 text-sm text-[#6F6F76]">
-                      {app.location || "Remote"}
-                    </td>
-
-                    <td className="px-6 py-5 text-sm text-[#6F6F76]">
-                      {app.date}
-                    </td>
-
-                    <td className="px-6 py-5">
-                      <span
-                        className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getStatusClasses(
-                          app.status,
-                        )}`}
-                      >
-                        {app.status}
-                      </span>
-                    </td>
-
-                    <td className="px-6 py-5">
-                      <div className="flex items-center justify-end gap-2">
-                        {/* Note Button: e.stopPropagation() prevents row click when clicking note */}
-                        <button
-                          title="Add Note"
-                          onClick={(e) => handleAddNote(e, app.id)}
-                          className="rounded-lg p-2 text-[#8A8690] hover:bg-[#EFE7E1] hover:text-[#4F4D55] transition"
-                        >
-                          <FiEdit3 size={18} />
-                        </button>
-
-                        {/* View Details Button */}
-                        <button
-                          title="View Details"
-                          className="rounded-lg p-2 text-[#8A8690] hover:bg-[#FFF7F3] hover:text-[#FF6B35] transition"
-                        >
-                          <FiEye size={18} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan="5"
-                    className="px-6 py-14 text-center text-[#6F6F76]"
-                  >
-                    No applications found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                {/* Footer row */}
+                <div className="mt-3 flex items-center gap-4">
+                  <span className="text-xs text-n-400">Applied {app.date}</span>
+                  {app.location && (
+                    <span className="text-xs text-n-400">{app.location}</span>
+                  )}
+                  <div className="ml-auto flex gap-3">
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleViewDetails(app.id); }}
+                      className="text-xs font-semibold text-sk-primary hover:underline"
+                    >
+                      View Details
+                    </button>
+                    <button
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-xs font-semibold text-error hover:underline"
+                    >
+                      Withdraw
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
+      )}
 
-        {/* Footer */}
-        <div className="flex flex-col gap-4 border-t border-[#EFE7E1] p-5 md:flex-row md:items-center md:justify-between">
-          <p className="text-sm text-[#6F6F76]">
-            Showing {filteredApplications.length} of {applications.length}{" "}
-            applications
-          </p>
-
-          <div className="flex items-center gap-2">
-            <button className="flex h-9 w-9 items-center justify-center rounded-[8px] border border-[#EADFD9] hover:bg-[#F7F5F2]">
-              <FiChevronLeft />
-            </button>
-
-            <button className="flex h-9 min-w-[36px] items-center justify-center rounded-[8px] bg-[#FF6B35] px-3 text-white shadow">
-              1
-            </button>
-
-            <button className="flex h-9 w-9 items-center justify-center rounded-[8px] border border-[#EADFD9] hover:bg-[#F7F5F2]">
-              <FiChevronRight />
-            </button>
-          </div>
+      {/* Pagination footer */}
+      <div className="mt-4 flex items-center justify-between text-sm text-n-500">
+        <p>Showing {filteredApplications.length} of {applications.length} applications</p>
+        <div className="flex items-center gap-1.5">
+          <button className="flex h-8 w-8 items-center justify-center rounded-lg border border-n-200 hover:bg-n-50 transition">
+            ‹
+          </button>
+          <button className="flex h-8 min-w-[32px] items-center justify-center rounded-lg bg-sk-surface px-2.5 text-xs font-bold text-sk-primary">
+            1
+          </button>
+          <button className="flex h-8 w-8 items-center justify-center rounded-lg border border-n-200 hover:bg-n-50 transition">
+            ›
+          </button>
         </div>
       </div>
     </>

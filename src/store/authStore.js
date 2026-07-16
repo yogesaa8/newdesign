@@ -19,7 +19,8 @@ const getStoredAuth = () => {
 
 const getStoredSession = () => {
   try {
-    const s = localStorage.getItem(SESSION_KEY);
+    const s =
+      sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(SESSION_KEY);
     return s ? JSON.parse(s) : null;
   } catch {
     return null;
@@ -42,8 +43,16 @@ const storedPendingAuth = getStoredPendingAuth();
 const hasFullAuth = Boolean(storedAuth?.user && storedAuth?.role);
 const hasSession = !hasFullAuth && Boolean(storedSession?.refreshToken);
 
-const persistSession = ({ user, role, refreshToken }) => {
-  localStorage.setItem(SESSION_KEY, JSON.stringify({ user, role, refreshToken }));
+const persistSession = ({ user, role, refreshToken, remember = false }) => {
+  const session = JSON.stringify({ user, role, refreshToken, remember });
+
+  if (remember) {
+    localStorage.setItem(SESSION_KEY, session);
+    sessionStorage.removeItem(SESSION_KEY);
+  } else {
+    sessionStorage.setItem(SESSION_KEY, session);
+    localStorage.removeItem(SESSION_KEY);
+  }
 };
 
 const getApiUrl = (path) => {
@@ -64,7 +73,11 @@ const parseApiResponse = async (response) => {
       payload?.error ||
       payload?.errors?.[0]?.message ||
       "Something went wrong. Please try again.";
-    throw new Error(message);
+    const error = new Error(message);
+    error.status = response.status;
+    error.code = payload?.code || payload?.error?.code;
+    error.details = payload?.errors || payload?.error?.details;
+    throw error;
   }
 
   return payload;
@@ -143,6 +156,22 @@ const getUserType = (user, token) => {
   );
 };
 
+const assertUsableToken = (token) => {
+  if (!token) {
+    throw new Error("Login response did not include an access token.");
+  }
+};
+
+const assertActiveVerifiedUser = (user, label) => {
+  if (user?.is_active === false) {
+    throw new Error(`This ${label} account is inactive.`);
+  }
+
+  if (user?.is_verified === false) {
+    throw new Error(`This ${label} account is not verified.`);
+  }
+};
+
 const persistAuthenticatedUser = ({
   set,
   user,
@@ -151,7 +180,7 @@ const persistAuthenticatedUser = ({
   refreshToken,
   remember = false,
 }) => {
-  persistSession({ user, role, refreshToken });
+  persistSession({ user, role, refreshToken, remember });
 
   if (remember) {
     localStorage.setItem(
@@ -177,9 +206,15 @@ const persistAuthenticatedUser = ({
 };
 
 const persistUpdatedUser = ({ user, role, accessToken, refreshToken }) => {
-  persistSession({ user, role, refreshToken });
-
   const storedAuth = getStoredAuth();
+  const storedSession = getStoredSession();
+  persistSession({
+    user,
+    role,
+    refreshToken,
+    remember: Boolean(storedAuth?.user || storedSession?.remember),
+  });
+
   if (storedAuth?.user) {
     localStorage.setItem(
       AUTH_STORAGE_KEY,
@@ -252,7 +287,7 @@ export const useAuthStore = create((set, get) => ({
   isAuthenticated: hasFullAuth,
   setAuth: ({ user, role, accessToken, refreshToken, remember = false }) => {
     sessionStorage.removeItem(PENDING_AUTH_STORAGE_KEY);
-    persistSession({ user, role, refreshToken });
+    persistSession({ user, role, refreshToken, remember });
 
     if (remember) {
       localStorage.setItem(
@@ -277,6 +312,7 @@ export const useAuthStore = create((set, get) => ({
   clearAuth: () => {
     localStorage.removeItem(AUTH_STORAGE_KEY);
     localStorage.removeItem(SESSION_KEY);
+    sessionStorage.removeItem(SESSION_KEY);
     sessionStorage.removeItem(PENDING_AUTH_STORAGE_KEY);
     set({
       user: null,
@@ -340,7 +376,12 @@ export const useAuthStore = create((set, get) => ({
         throw new Error("Please login with a seeker account.");
       }
 
-      persistSession({ user, role: "seeker", refreshToken: tokens.refreshToken });
+      persistSession({
+        user,
+        role: "seeker",
+        refreshToken: tokens.refreshToken,
+        remember,
+      });
 
       if (remember) {
         localStorage.setItem(
@@ -430,6 +471,7 @@ export const useAuthStore = create((set, get) => ({
         user: pendingVerification.user,
         role: pendingVerification.role,
         refreshToken: pendingVerification.refreshToken,
+        remember: pendingVerification.remember,
       });
       sessionStorage.removeItem(PENDING_AUTH_STORAGE_KEY);
       set({
@@ -538,7 +580,12 @@ export const useAuthStore = create((set, get) => ({
         throw new Error("Please login with a company account.");
       }
 
-      persistSession({ user, role: "company", refreshToken: tokens.refreshToken });
+      persistSession({
+        user,
+        role: "company",
+        refreshToken: tokens.refreshToken,
+        remember,
+      });
 
       if (remember) {
         localStorage.setItem(
@@ -565,6 +612,82 @@ export const useAuthStore = create((set, get) => ({
     } catch (error) {
       set({ isLoading: false, error: error.message });
       throw error;
+    }
+  },
+  loginAdmin: async ({ email, password, remember = true }) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const payload = await apiRequest("/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
+      const tokens = extractTokens(payload);
+      const user = buildUser(payload, { email });
+      const userType = getUserType(user, tokens.accessToken);
+      assertUsableToken(tokens.accessToken);
+
+      if (userType && userType !== "admin") {
+        throw new Error("Please login with an admin account.");
+      }
+
+      assertActiveVerifiedUser(user, "admin");
+
+      persistAuthenticatedUser({
+        set,
+        user,
+        role: "admin",
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+        remember,
+      });
+
+      return payload;
+    } catch (error) {
+      const message =
+        error.status === 401
+          ? "Invalid admin email or password, or this admin account is not active."
+          : error.message;
+      set({ isLoading: false, error: message });
+      throw Object.assign(error, { message });
+    }
+  },
+  loginInstitute: async ({ email, password, remember = false }) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const payload = await apiRequest("/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
+      const tokens = extractTokens(payload);
+      const user = buildUser(payload, { email });
+      const userType = getUserType(user, tokens.accessToken);
+      assertUsableToken(tokens.accessToken);
+
+      if (userType && userType !== "institute") {
+        throw new Error("Please login with an institute account.");
+      }
+
+      assertActiveVerifiedUser(user, "institute");
+
+      persistAuthenticatedUser({
+        set,
+        user,
+        role: "institute",
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+        remember,
+      });
+
+      return payload;
+    } catch (error) {
+      const message =
+        error.status === 401
+          ? "Invalid institute email or password, or this institute account is not active."
+          : error.message;
+      set({ isLoading: false, error: message });
+      throw Object.assign(error, { message });
     }
   },
   verifyCompanyOtp: async (otp) => {
@@ -706,6 +829,7 @@ export const useAuthStore = create((set, get) => ({
     } finally {
       localStorage.removeItem(AUTH_STORAGE_KEY);
       localStorage.removeItem(SESSION_KEY);
+      sessionStorage.removeItem(SESSION_KEY);
       sessionStorage.removeItem(PENDING_AUTH_STORAGE_KEY);
       set({
         user: null,
@@ -741,7 +865,12 @@ export const useAuthStore = create((set, get) => ({
       const newAccessToken = tokens.accessToken;
       const newRefreshToken = tokens.refreshToken || session.refreshToken;
 
-      persistSession({ user: session.user, role: session.role, refreshToken: newRefreshToken });
+      persistSession({
+        user: session.user,
+        role: session.role,
+        refreshToken: newRefreshToken,
+        remember: Boolean(session.remember),
+      });
 
       set({
         user: session.user,
@@ -754,6 +883,7 @@ export const useAuthStore = create((set, get) => ({
       });
     } catch {
       localStorage.removeItem(SESSION_KEY);
+      sessionStorage.removeItem(SESSION_KEY);
       set({
         user: null,
         role: null,

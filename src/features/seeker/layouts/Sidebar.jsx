@@ -11,181 +11,168 @@ import {
   FiSettings,
   FiUser,
   FiX,
+  FiLock,
+  FiSearch,
+  FiFileText,
 } from "react-icons/fi";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../store";
 
+const PROFILE_STRENGTH = 72;
+
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const navigate = useNavigate();
-  const { logout } = useAuthStore();
+  const { logout, user } = useAuthStore();
 
   const handleLogout = async () => {
     await logout();
     navigate("/", { replace: true });
   };
 
+  const firstName = user?.name?.split(" ")[0] || user?.email?.split("@")[0] || "You";
+  const initials = (user?.name || "Y").charAt(0).toUpperCase();
+
   const navItems = [
-    {
-      title: "MAIN MENU",
-      items: [
-        {
-          name: "Dashboard",
-          icon: <FiLayout size={18} />,
-          path: "/seeker/dashboard",
-        },
-        {
-          name: "My Profile",
-          icon: <FiUser size={18} />,
-          path: "/seeker/dashboard/profile",
-        },
-        {
-          name: "Applications",
-          icon: <FiBriefcase size={18} />,
-          path: "/seeker/dashboard/applications",
-          badge: "NEW",
-          badgeColor: "bg-[#FFF1E9] text-[#C84F1F]",
-        },
-        {
-          name: "Saved Jobs",
-          icon: <FiBookmark size={18} />,
-          path: "/seeker/dashboard/saved-jobs",
-        },
-        {
-          name: "Job Alerts",
-          icon: <FiBell size={18} />,
-          path: "/seeker/dashboard/job-alerts",
-        },
-        {
-          name: "Interviews",
-          icon: <FiClock size={18} />,
-          path: "/seeker/dashboard/interviews",
-        },
-      ],
-    },
-    {
-      title: "COMMUNICATION",
-      items: [
-        {
-          name: "Messages",
-          icon: <FiMessageCircle size={18} />,
-          path: "/seeker/dashboard/messages",
-          badge: "5",
-          badgeColor: "bg-red-100 text-red-600",
-        },
-        {
-          name: "Documents",
-          icon: <FiFilePlus size={18} />,
-          path: "/seeker/dashboard/documents",
-        },
-      ],
-    },
-    {
-      title: "SETTINGS",
-      items: [
-        {
-          name: "Support",
-          icon: <FiHelpCircle size={18} />,
-          path: "/seeker/dashboard/support",
-        },
-        {
-          name: "Account Settings",
-          icon: <FiSettings size={18} />,
-          path: "/seeker/dashboard/settings",
-        },
-      ],
-    },
+    { name: "Dashboard", icon: <FiLayout size={17} />, path: "/seeker/dashboard", end: true },
+    { name: "Browse Jobs", icon: <FiSearch size={17} />, path: "/jobs" },
+    { name: "Applications", icon: <FiBriefcase size={17} />, path: "/seeker/dashboard/applications", badge: "NEW" },
+    { name: "Saved Jobs", icon: <FiBookmark size={17} />, path: "/seeker/dashboard/saved-jobs" },
+    { name: "My Profile", icon: <FiUser size={17} />, path: "/seeker/dashboard/profile" },
+    { name: "Resume Builder", icon: <FiFileText size={17} />, path: "/resume" },
   ];
+
+  const lockedItems = [
+    { name: "Interview Prep", icon: <FiClock size={17} /> },
+    { name: "Skill Gap Analysis", icon: <FiSearch size={17} /> },
+  ];
+
+  const secondaryItems = [
+    { name: "Job Alerts", icon: <FiBell size={17} />, path: "/seeker/dashboard/job-alerts" },
+    { name: "Messages", icon: <FiMessageCircle size={17} />, path: "/seeker/dashboard/messages", badge: "5" },
+    { name: "Documents", icon: <FiFilePlus size={17} />, path: "/seeker/dashboard/documents" },
+  ];
+
+  const bottomItems = [
+    { name: "Settings", icon: <FiSettings size={17} />, path: "/seeker/dashboard/settings" },
+    { name: "Support", icon: <FiHelpCircle size={17} />, path: "/seeker/dashboard/support" },
+  ];
+
+  const NavItem = ({ name, icon, path, end, badge }) => (
+    <NavLink
+      to={path}
+      end={end}
+      className={({ isActive }) =>
+        `flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150
+        ${isActive
+          ? "bg-sk-surface text-sk-primary font-semibold"
+          : "text-n-500 hover:text-n-900 hover:bg-n-50"
+        }`
+      }
+    >
+      <span className="flex items-center gap-3">
+        {icon}
+        {name}
+      </span>
+      {badge && (
+        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-sk-surface text-sk-primary">
+          {badge}
+        </span>
+      )}
+    </NavLink>
+  );
 
   return (
     <aside
-      className={`fixed left-0 top-0 z-50 flex h-dvh min-h-0 w-72 flex-col bg-white border-r border-[#EADFD9] shadow-xl transition-transform duration-300 lg:static lg:h-auto lg:self-stretch lg:translate-x-0
-      ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+      className={`fixed left-0 top-0 z-50 flex h-dvh w-64 flex-col bg-white border-r border-n-200 transition-transform duration-300 lg:static lg:h-auto lg:self-stretch lg:translate-x-0
+        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
     >
-      {/* Header */}
-      <div className="flex shrink-0 items-center justify-between px-6 py-6 border-b border-[#EFE7E1]">
-        <NavLink to="/seeker/dashboard" className="flex items-center gap-3">
-          <div className="p-2 bg-[#FFF1E9] rounded-[8px]">
+      {/* Logo */}
+      <div className="flex shrink-0 items-center justify-between px-5 py-5 border-b border-n-100">
+        <NavLink to="/seeker/dashboard" className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-sk-surface flex items-center justify-center">
             <img
               src="/images/logos/fji_orange.png"
               alt="FirstJobIndia"
-              className="h-[22px] w-[22px] object-contain"
+              className="h-5 w-5 object-contain"
             />
           </div>
-          <span className="text-xl font-bold text-[#0A0A0A]">
-            <span>First</span>
-            <span className="text-[#FF6B35]">Job</span>
-            <span>India</span>
+          <span className="text-base font-bold text-n-900">
+            First<span className="text-sk-primary">Job</span>India
           </span>
         </NavLink>
-
         <button
           onClick={() => setSidebarOpen(false)}
-          className="lg:hidden text-[#6F6F76] hover:text-[#0A0A0A]"
+          className="lg:hidden text-n-400 hover:text-n-900 p-1"
         >
-          <FiX size={22} />
+          <FiX size={20} />
         </button>
       </div>
 
-      {/* Nav */}
-      <div className="min-h-0 flex-1 overflow-y-auto px-4 py-6">
-        {navItems.map((section, index) => (
-          <div key={index} className="mb-8">
-            <h3 className="px-3 mb-3 text-xs font-semibold uppercase tracking-wider text-[#8A8690]">
-              {section.title}
-            </h3>
-
-            <ul className="space-y-2">
-              {section.items.map((item, idx) => (
-                <li key={idx}>
-                  <NavLink
-                    to={item.path}
-                    end={item.path === "/seeker/dashboard"}
-                    className={({ isActive }) =>
-                      `group flex items-center justify-between rounded px-4 py-2 font-medium border transition-all duration-200
-                        ${
-                          isActive
-                            ? "bg-[#FFF7F3] text-[#C84F1F] border-[#F3D3C4] shadow-sm"
-                            : "text-[#6F6F76] border-transparent hover:bg-[#F7F5F2] hover:text-[#0A0A0A]"
-                        }`
-                    }
-                  >
-                    <div className="flex items-center gap-3">
-                      {item.icon}
-                      <span>{item.name}</span>
-                    </div>
-
-                    {item.badge && (
-                      <span
-                        className={`text-xs px-2 py-1 rounded-full font-semibold ${item.badgeColor}`}
-                      >
-                        {item.badge}
-                      </span>
-                    )}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
+      {/* User + profile strength */}
+      <div className="px-5 py-4 border-b border-n-100">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-10 h-10 rounded-full bg-sk-surface flex items-center justify-center font-bold text-sk-primary text-sm shrink-0">
+            {initials}
           </div>
-        ))}
-      </div>
-
-      {/* Bottom User Card */}
-      <div className="shrink-0 border-t border-[#EFE7E1] p-4 space-y-3">
-        <div className="flex items-center gap-3 p-3 rounded-[8px] bg-[#F7F5F2]">
-          <div className="w-10 h-10 rounded-full bg-[#FFF1E9] flex items-center justify-center font-bold text-[#C84F1F]">
-            Y
-          </div>
-          <div>
-            <p className="font-semibold text-sm text-[#0A0A0A]">Yogesh</p>
-            <p className="text-xs text-[#6F6F76]">Job Seeker</p>
+          <div className="min-w-0">
+            <p className="font-semibold text-sm text-n-900 truncate">{firstName}</p>
+            <p className="text-xs text-n-400">Job Seeker</p>
           </div>
         </div>
+        <div>
+          <div className="flex justify-between mb-1">
+            <span className="text-xs text-n-500">Profile strength</span>
+            <span className="text-xs font-semibold text-sk-primary">{PROFILE_STRENGTH}%</span>
+          </div>
+          <div className="h-1.5 bg-n-200 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-sk-primary rounded-full transition-all"
+              style={{ width: `${PROFILE_STRENGTH}%` }}
+            />
+          </div>
+        </div>
+      </div>
 
+      {/* Main nav */}
+      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-0.5">
+        {navItems.map((item) => (
+          <NavItem key={item.name} {...item} />
+        ))}
+
+        {/* Locked items */}
+        <div className="border-t border-n-100 my-2 pt-2 space-y-0.5">
+          {lockedItems.map((item) => (
+            <div
+              key={item.name}
+              className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm text-n-400 cursor-not-allowed select-none"
+              title="Upgrade to Prime"
+            >
+              <span className="flex items-center gap-3">
+                {item.icon}
+                {item.name}
+              </span>
+              <FiLock size={13} className="text-n-400" />
+            </div>
+          ))}
+        </div>
+
+        <div className="border-t border-n-100 my-2 pt-2 space-y-0.5">
+          {secondaryItems.map((item) => (
+            <NavItem key={item.name} {...item} />
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom */}
+      <div className="shrink-0 border-t border-n-100 px-3 py-3 space-y-0.5">
+        {bottomItems.map((item) => (
+          <NavItem key={item.name} {...item} />
+        ))}
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 rounded-[8px] border border-red-100 bg-red-50 py-3 text-red-600 font-medium hover:bg-red-100 transition"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-error hover:bg-error-bg transition-colors"
         >
-          <FiLogOut size={18} />
+          <FiLogOut size={17} />
           Logout
         </button>
       </div>

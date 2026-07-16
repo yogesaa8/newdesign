@@ -152,33 +152,44 @@ const PhotoUpload = ({ value, onChange }) => {
   const inputRef = useRef(null);
 
   return (
-    <div className="photo-upload">
-      <div className="photo-preview">
-        {value ? <img src={value} alt="" /> : <Icon name="user" size={24} />}
+    <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+      <div
+        className="photo-upload"
+        onClick={() => inputRef.current?.click()}
+        title="Upload photo"
+      >
+        {value
+          ? <img src={value} alt="Profile" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          : <Icon name="user" size={28} />}
       </div>
-      <div>
-        <button className="btn btn-ghost btn-sm" onClick={() => inputRef.current?.click()} type="button">
-          <Icon name="plus" size={12} /> Upload photo
-        </button>
-        {value && (
-          <button className="btn btn-ghost btn-sm" onClick={() => onChange("")} type="button" style={{ marginLeft: 8 }}>
-            Remove
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <button className="btn btn-ghost btn-sm" onClick={() => inputRef.current?.click()} type="button">
+            <Icon name="plus" size={12} /> Upload photo
           </button>
-        )}
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/*"
-          hidden
-          onChange={(event) => {
-            const file = event.target.files?.[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = () => onChange(reader.result);
-            reader.readAsDataURL(file);
-          }}
-        />
+          {value && (
+            <button className="btn btn-ghost btn-sm" onClick={() => onChange("")} type="button">
+              Remove
+            </button>
+          )}
+        </div>
+        <span style={{ fontSize: 11, color: "var(--ink-3)" }}>JPG or PNG · max 2 MB</span>
       </div>
+
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        hidden
+        onChange={(event) => {
+          const file = event.target.files?.[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => onChange(reader.result);
+          reader.readAsDataURL(file);
+        }}
+      />
     </div>
   );
 };

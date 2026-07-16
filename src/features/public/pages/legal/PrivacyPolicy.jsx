@@ -56,23 +56,23 @@ const PrivacyPolicy = () => {
   });
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-n-50 text-n-900">
       {seoElement}
       <main className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mb-10">
           <Link
             to="/"
-            className="inline-flex rounded px-3 py-2 text-sm font-semibold text-orange-600 transition hover:bg-orange-50"
+            className="inline-flex rounded px-3 py-2 text-sm font-semibold text-sk-primary transition hover:bg-sk-bg"
           >
             Back to home
           </Link>
-          <p className="mt-8 text-sm font-semibold uppercase tracking-wider text-orange-600">
+          <p className="mt-8 text-sm font-semibold uppercase tracking-wider text-sk-primary">
             Legal
           </p>
           <h1 className="mt-3 text-4xl font-extrabold tracking-tight sm:text-5xl">
             Privacy Policy
           </h1>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600">
+          <p className="mt-4 max-w-3xl text-base leading-7 text-n-500">
             Last updated: May 7, 2026. This policy explains what information
             FirstJobIndia collects and how it is used across the job seeker and
             company experience.
@@ -83,17 +83,17 @@ const PrivacyPolicy = () => {
           {sections.map((section) => (
             <section
               key={section.title}
-              className="rounded border border-slate-200 bg-white p-6 shadow-sm transition hover:bg-orange-50/40"
+              className="rounded border border-n-200 bg-white p-6 shadow-sm transition hover:bg-sk-bg/40"
             >
               <h2 className="text-xl font-bold">{section.title}</h2>
-              <p className="mt-3 leading-7 text-slate-600">{section.body}</p>
+              <p className="mt-3 leading-7 text-n-500">{section.body}</p>
             </section>
           ))}
         </div>
 
-        <section className="mt-8 rounded border border-orange-100 bg-orange-50 p-6">
+        <section className="mt-8 rounded border border-sk-border bg-sk-surface p-6">
           <h2 className="text-xl font-bold">Contact</h2>
-          <p className="mt-3 leading-7 text-slate-700">
+          <p className="mt-3 leading-7 text-n-700">
             For privacy questions or account-data requests, contact FirstJobIndia
             support from the public support page or your dashboard.
           </p>

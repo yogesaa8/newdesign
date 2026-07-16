@@ -5,8 +5,8 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
-  Info,
   Search,
+  MapPin,
 } from "lucide-react";
 import { useJobStore } from "../../store/jobStore";
 import useSEO from "@/seo/useSEO";
@@ -18,6 +18,7 @@ import {
 } from "@/seo/schemas";
 import { useAuthStore } from "../../../../store";
 import { isJobApplied } from "../../store/jobStore";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 const PAGE_LIMIT = 10;
 
@@ -37,18 +38,10 @@ const workModeOptions = [
   ["hybrid", "Hybrid"],
 ];
 
-const selectClass =
-  "h-8 min-w-[128px] appearance-none border-0 border-b border-[#D8DCE7] bg-transparent py-1 pl-0 pr-7 text-xs font-medium uppercase text-[#001B44] outline-none transition focus:border-[#001B44]";
-
-const inputClass =
-  "h-8 w-full rounded-[6px] border border-[#DDE1EA] bg-white py-1.5 pl-8 pr-3 text-xs text-[#001B44] outline-none transition placeholder:text-[#8B95AA] focus:border-[#2E6BFF] focus:ring-2 focus:ring-[#2E6BFF]/10";
-
 const formatCardDate = (value) => {
   if (!value) return "";
-
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return String(value);
-
   return new Intl.DateTimeFormat("en-IN", {
     day: "2-digit",
     month: "short",
@@ -83,19 +76,14 @@ const getEndDate = (job = {}) => {
   if (job.raw?.application_deadline) {
     return formatCardDate(job.raw.application_deadline);
   }
-
   return /^Deadline/i.test(job.time || "") ? stripDeadlineLabel(job.time) : "";
 };
 
 const getSkills = (skills) => {
   if (Array.isArray(skills)) return skills.filter(Boolean);
   if (typeof skills === "string") {
-    return skills
-      .split(/,|;|\n/)
-      .map((skill) => skill.trim())
-      .filter(Boolean);
+    return skills.split(/,|;|\n/).map((s) => s.trim()).filter(Boolean);
   }
-
   return [];
 };
 
@@ -104,24 +92,7 @@ const getShareUrl = (jobId) => {
   return `${window.location.origin}/jobs/${jobId}`;
 };
 
-const FilterSelect = ({ label, value, onChange, options }) => (
-  <label className="relative inline-flex items-center gap-2">
-    <span className="sr-only">{label}</span>
-    <select
-      value={value}
-      onChange={onChange}
-      className={selectClass}
-      aria-label={label}
-    >
-      {options.map(([optionValue, optionLabel]) => (
-        <option key={`${label}-${optionValue || "all"}`} value={optionValue}>
-          {optionLabel}
-        </option>
-      ))}
-    </select>
-    <ChevronDown className="pointer-events-none absolute right-1 h-4 w-4 text-[#001B44]" />
-  </label>
-);
+// ─── Job Card ─────────────────────────────────────────────────────────────────
 
 const JobCard = ({ job, isApplied }) => {
   const skills = getSkills(job.skills);
@@ -133,113 +104,151 @@ const JobCard = ({ job, isApplied }) => {
 
   const handleShare = async () => {
     const url = getShareUrl(job.id);
-
     try {
       if (navigator.share) {
-        await navigator.share({
-          title: job.title,
-          text: `${job.title} at ${job.company}`,
-          url,
-        });
+        await navigator.share({ title: job.title, text: `${job.title} at ${job.company}`, url });
         return;
       }
-
       await navigator.clipboard?.writeText(url);
     } catch {
-      // Sharing is optional; keep the card interaction silent on cancel/failure.
+      // silent
     }
   };
 
   return (
-    <article className="flex h-full min-h-[280px] flex-col rounded-[7px] border border-[#E6E9F0] bg-white px-2.5 py-2.5 shadow-[0_2px_12px_rgba(15,23,42,0.04)]">
+    <article className="flex h-full flex-col rounded-xl border border-n-200 border-l-4 border-l-sk-primary bg-white p-5 shadow-sm hover:shadow-md transition-shadow duration-200">
+      {/* Header */}
       <header className="min-w-0">
-        <h2
-          className="truncate text-[15px] font-bold leading-5 text-[#001B44]"
-          title={job.title}
-        >
+        <h2 className="truncate text-base font-bold text-n-900 leading-tight" title={job.title}>
           {job.title}
         </h2>
-        <p className="mt-0.5 truncate text-[11px] font-medium text-[#001B44]">
-          Job ID: {jobCode}
-        </p>
+        <p className="mt-0.5 truncate text-xs text-n-400">ID: {jobCode}</p>
       </header>
 
-      <div className="mt-2 border-t border-[#E8EAF0] pt-2">
-        <p className="truncate text-[11px] font-medium text-[#8993AA]">
-          <span>{job.company}</span>
-          <span className="mx-1 text-[#C0C5D1]">|</span>
-          <span>{job.location}</span>
-        </p>
-        <p className="mt-1 text-[11px] font-medium text-[#8993AA]">
-          Posted On:{" "}
-          <span className="font-bold text-[#001B44]">{postedDate}</span>
-          <span className="mx-1 text-[#C0C5D1]">|</span>
-          End Date: <span className="font-bold text-[#001B44]">{endDate}</span>
-        </p>
-      </div>
-
-      <div className="mt-2 border-t border-[#E8EAF0] pt-2">
-        <p className="text-[11px] font-medium leading-4 text-[#001B44]">
-          Required Experience
-        </p>
-        <p className="text-[12px] font-bold leading-4 text-[#001B44]">
-          {job.experience || "Not listed"}
-        </p>
-      </div>
-
-      <div className="mt-2 border-t border-[#E8EAF0] pt-2">
-        <p className="text-[11px] font-medium leading-4 text-[#001B44]">
-          Required Skills
-        </p>
-        <div className="mt-2 flex max-h-[58px] flex-wrap gap-1.5 overflow-hidden">
-          {visibleSkills.length > 0 ? (
-            <>
-              {visibleSkills.map((skill) => (
-                <span
-                  key={skill}
-                  className="inline-flex max-w-full items-center rounded-[4px] bg-[#F3F4F6] px-3 py-1.5 text-[11px] font-medium uppercase leading-none text-[#001B44]"
-                  title={skill}
-                >
-                  <span className="truncate">{skill}</span>
-                </span>
-              ))}
-              {remainingSkills > 0 && (
-                <span className="inline-flex items-center rounded-[4px] bg-[#F3F4F6] px-3 py-1.5 text-[11px] font-medium leading-none text-[#001B44]">
-                  +{remainingSkills}
-                </span>
-              )}
-            </>
-          ) : (
-            <span className="inline-flex items-center rounded-[4px] bg-[#F3F4F6] px-3 py-1.5 text-[11px] font-medium leading-none text-[#001B44]">
-              Not listed
+      {/* Company + location */}
+      <div className="mt-3 flex items-center gap-1.5 text-xs text-n-500">
+        <span className="font-medium truncate">{job.company}</span>
+        {job.location && (
+          <>
+            <span className="text-n-300">·</span>
+            <span className="flex items-center gap-0.5 shrink-0">
+              <MapPin size={11} className="text-n-400" />
+              {job.location}
             </span>
-          )}
-        </div>
+          </>
+        )}
       </div>
 
+      {/* Meta */}
+      <div className="mt-3 border-t border-n-100 pt-3 space-y-1">
+        <div className="flex justify-between text-xs">
+          <span className="text-n-400">Posted</span>
+          <span className="font-semibold text-n-700">{postedDate}</span>
+        </div>
+        <div className="flex justify-between text-xs">
+          <span className="text-n-400">Deadline</span>
+          <span className="font-semibold text-n-700">{endDate}</span>
+        </div>
+        {job.experience && (
+          <div className="flex justify-between text-xs">
+            <span className="text-n-400">Experience</span>
+            <span className="font-semibold text-n-700">{job.experience}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Skills */}
+      {(visibleSkills.length > 0) && (
+        <div className="mt-3 border-t border-n-100 pt-3">
+          <div className="flex flex-wrap gap-1.5">
+            {visibleSkills.map((skill) => (
+              <span
+                key={skill}
+                className="rounded-full bg-n-100 px-2.5 py-1 text-[10px] font-medium text-n-700 truncate max-w-[120px]"
+                title={skill}
+              >
+                {skill}
+              </span>
+            ))}
+            {remainingSkills > 0 && (
+              <span className="rounded-full bg-n-100 px-2.5 py-1 text-[10px] font-medium text-n-500">
+                +{remainingSkills}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* CTA */}
       <div className="mt-auto flex gap-2 pt-4">
         <button
           type="button"
           onClick={handleShare}
-          className="inline-flex h-7 flex-1 items-center justify-center rounded-[5px] border border-[#001B44] bg-white px-3 text-[11px] font-bold text-[#001B44] transition hover:bg-[#F5F6FA]"
+          className="flex-1 rounded-lg border border-n-200 bg-white px-3 py-2 text-xs font-semibold text-n-700 transition hover:bg-n-50"
         >
           Share
         </button>
         <Link
           to={`/jobs/${job.id}`}
           state={{ job }}
-          className={`inline-flex h-7 flex-1 items-center justify-center rounded-[5px] px-3 text-center text-[11px] font-bold transition ${
+          className={`flex-1 rounded-lg px-3 py-2 text-center text-xs font-bold transition ${
             isApplied
-              ? "border border-green-200 bg-green-50 text-green-700 hover:bg-green-100"
-              : "bg-[#FF762F] text-white hover:bg-[#F06422]"
+              ? "border border-success/30 bg-success-bg text-success"
+              : "bg-sk-primary text-white hover:bg-sk-hover"
           }`}
         >
-          {isApplied ? "Applied" : "Register And Apply"}
+          {isApplied ? "Applied ✓" : "View & Apply"}
         </Link>
       </div>
     </article>
   );
 };
+
+// ─── Loading skeleton ─────────────────────────────────────────────────────────
+
+const JobCardSkeleton = () => (
+  <div className="rounded-xl border border-n-200 border-l-4 border-l-n-200 bg-white p-5 animate-pulse space-y-3">
+    <div className="h-5 bg-n-200 rounded w-3/4" />
+    <div className="h-3 bg-n-100 rounded w-1/2" />
+    <div className="h-px bg-n-100 my-3" />
+    <div className="space-y-2">
+      <div className="h-3 bg-n-100 rounded w-full" />
+      <div className="h-3 bg-n-100 rounded w-2/3" />
+    </div>
+    <div className="flex gap-1.5 pt-2">
+      <div className="h-6 bg-n-100 rounded-full w-16" />
+      <div className="h-6 bg-n-100 rounded-full w-16" />
+      <div className="h-6 bg-n-100 rounded-full w-10" />
+    </div>
+    <div className="flex gap-2 pt-2">
+      <div className="h-8 bg-n-100 rounded-lg flex-1" />
+      <div className="h-8 bg-sk-surface rounded-lg flex-1" />
+    </div>
+  </div>
+);
+
+// ─── Filter bar ───────────────────────────────────────────────────────────────
+
+const FilterSelect = ({ label, value, onChange, options }) => (
+  <label className="relative inline-flex items-center">
+    <span className="sr-only">{label}</span>
+    <select
+      value={value}
+      onChange={onChange}
+      aria-label={label}
+      className="appearance-none rounded-lg border border-n-200 bg-white py-2 pl-3 pr-7 text-xs font-medium text-n-700 outline-none focus:border-sk-primary focus:ring-2 focus:ring-sk-primary/10 transition"
+    >
+      {options.map(([optionValue, optionLabel]) => (
+        <option key={`${label}-${optionValue || "all"}`} value={optionValue}>
+          {optionLabel}
+        </option>
+      ))}
+    </select>
+    <ChevronDown className="pointer-events-none absolute right-2 h-3.5 w-3.5 text-n-400" />
+  </label>
+);
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
 const JobsPage = () => {
   const [selectedTypes, setSelectedTypes] = useState([]);
@@ -311,18 +320,13 @@ const JobsPage = () => {
     description: meta.description,
     path: meta.path,
     graph: [
-      buildWebPage({
-        path: meta.path,
-        title: meta.title,
-        description: meta.description,
-        breadcrumbPath: meta.path,
-      }),
+      buildWebPage({ path: meta.path, title: meta.title, description: meta.description, breadcrumbPath: meta.path }),
       buildBreadcrumbList(breadcrumbs, meta.path),
       buildItemListOfJobs(filteredJobs.slice(0, 20), "/jobs"),
     ],
   });
-  const hasActiveFilters =
-    selectedTypes.length > 0 || searchTerm || location || workMode;
+
+  const hasActiveFilters = selectedTypes.length > 0 || searchTerm || location || workMode;
   const clearFilters = () => {
     clearError();
     setSelectedTypes([]);
@@ -343,128 +347,131 @@ const JobsPage = () => {
     : filteredJobs.length;
 
   return (
-    <div className="min-h-screen bg-[#F5F6FA] text-[#001B44]">
+    <div className="min-h-screen bg-sk-bg text-n-900">
       {seoElement}
 
-      <main id="job-search" className="mx-auto w-full max-w-[1280px] px-2 py-4 sm:px-4 lg:px-2">
-        <h1 className="text-[18px] font-bold leading-6 text-[#001B44]">
-          All Jobs
-        </h1>
+      <main id="job-search" className="mx-auto w-full max-w-[1280px] px-4 py-6">
+        {/* Page header */}
+        <div className="mb-5">
+          <h1 className="text-xl font-bold text-n-900">All Jobs</h1>
+          {totalJobs > 0 && !isLoading && (
+            <p className="text-sm text-n-500 mt-0.5">{totalJobs} positions available</p>
+          )}
+        </div>
 
-        <section className="mt-3 rounded-[8px] bg-white px-3 py-4 shadow-[0_1px_8px_rgba(15,23,42,0.03)]">
+        {/* Search + filters bar */}
+        <div className="bg-white border border-n-200 rounded-xl p-4 mb-5 shadow-sm">
+          {/* Search row */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-n-400" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={updateFilter(setSearchTerm)}
+                placeholder="Search by role, skill, or company"
+                className="w-full rounded-lg border border-n-200 bg-white py-2.5 pl-9 pr-3 text-sm text-n-900 outline-none placeholder:text-n-400 focus:border-sk-primary focus:ring-2 focus:ring-sk-primary/10 transition"
+              />
+            </div>
+            <div className="relative sm:w-52">
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-n-400" />
+              <input
+                type="text"
+                value={location}
+                onChange={updateFilter(setLocation)}
+                placeholder="City or location"
+                className="w-full rounded-lg border border-n-200 bg-white py-2.5 pl-9 pr-3 text-sm text-n-900 outline-none placeholder:text-n-400 focus:border-sk-primary focus:ring-2 focus:ring-sk-primary/10 transition"
+              />
+            </div>
+          </div>
+
+          {/* Filter selects row */}
           {showFilters && (
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-4">
-              <span className="text-[12px] font-bold uppercase tracking-wide text-[#001B44]">
-                Filter By
-              </span>
-
+            <div className="mt-3 pt-3 border-t border-n-100 flex flex-wrap items-center gap-3">
+              <span className="text-xs font-semibold text-n-400 uppercase tracking-wider">Filter by</span>
               <FilterSelect
                 label="Job type"
                 value={selectedTypes[0] || ""}
                 onChange={handleTypeChange}
                 options={[["", "Job Type"], ...jobTypeOptions]}
               />
-
-              <label className="relative inline-flex items-center">
-                <span className="sr-only">Location</span>
-                <input
-                  type="text"
-                  value={location}
-                  onChange={updateFilter(setLocation)}
-                  placeholder="Location"
-                  className="h-8 min-w-[128px] border-0 border-b border-[#D8DCE7] bg-transparent py-1 pl-0 pr-2 text-xs font-medium uppercase text-[#001B44] outline-none placeholder:text-[#001B44] focus:border-[#001B44]"
-                />
-              </label>
-
               <FilterSelect
                 label="Work mode"
                 value={workMode}
                 onChange={updateFilter(setWorkMode)}
-                options={workModeOptions.map(([value, label]) => [
-                  value,
-                  value ? label : "Work Mode",
-                ])}
+                options={workModeOptions.map(([v, l]) => [v, v ? l : "Work Mode"])}
               />
-
               <FilterSelect
                 label="Sort"
                 value={sortBy}
-                onChange={(event) => setSortBy(event.target.value)}
-                options={[
-                  ["Newest", "Newest"],
-                  ["Oldest", "Oldest"],
-                ]}
+                onChange={(e) => setSortBy(e.target.value)}
+                options={[["Newest", "Newest"], ["Oldest", "Oldest"]]}
               />
-            </div>
-          )}
-
-          <div className={`${showFilters ? "mt-6" : ""} flex items-center justify-between gap-3 border-t border-[#DDE1EA] pt-3`}>
-            <div>
               {hasActiveFilters && (
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="text-[11px] font-bold uppercase text-[#001B44] transition hover:text-[#FF762F]"
+                  className="text-xs font-semibold text-error hover:underline ml-auto"
                 >
-                  Clear Filters
+                  Clear filters ×
                 </button>
               )}
             </div>
+          )}
 
+          {/* Toggle filters */}
+          <div className={`${showFilters ? "mt-3 pt-3 border-t border-n-100" : "mt-3"} flex justify-end`}>
             <button
               type="button"
-              onClick={() => setShowFilters((value) => !value)}
-              className="inline-flex items-center gap-1 text-[11px] font-bold uppercase text-[#001B44]"
+              onClick={() => setShowFilters((v) => !v)}
+              className="inline-flex items-center gap-1 text-xs font-semibold text-n-500 hover:text-n-900 transition"
             >
-              {showFilters ? "Hide Filters" : "Show Filters"}
-              {showFilters ? (
-                <ChevronUp className="h-4 w-4" />
-              ) : (
-                <ChevronDown className="h-4 w-4" />
-              )}
+              {showFilters ? "Hide filters" : "Show filters"}
+              {showFilters ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
             </button>
           </div>
-        </section>
-
-        <div className="mt-4 flex items-center gap-1.5">
-          <div className="relative w-full max-w-[345px]">
-            <Search className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#2E6BFF]" />
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={updateFilter(setSearchTerm)}
-              placeholder="Search Job"
-              className={inputClass}
-            />
-          </div>
-          <Info className="h-4 w-4 shrink-0 text-[#001B44]" />
         </div>
 
-        <section className="mt-5">
+        {/* Active filter chips */}
+        {hasActiveFilters && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {selectedTypes[0] && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-sk-surface border border-sk-border text-sk-primary px-3 py-1 text-xs font-semibold">
+                {jobTypeOptions.find(([v]) => v === selectedTypes[0])?.[1]}
+                <button onClick={() => { setSelectedTypes([]); setPage(1); }} className="hover:text-sk-pressed">×</button>
+              </span>
+            )}
+            {workMode && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-sk-surface border border-sk-border text-sk-primary px-3 py-1 text-xs font-semibold">
+                {workMode}
+                <button onClick={() => { setWorkMode(""); setPage(1); }} className="hover:text-sk-pressed">×</button>
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Grid / empty / loading */}
+        <section>
           {isLoading && filteredJobs.length === 0 ? (
-            <div className="rounded-[8px] border border-dashed border-[#DDE1EA] bg-white px-6 py-16 text-center">
-              <h2 className="text-lg font-semibold text-[#001B44]">
-                Loading jobs...
-              </h2>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, i) => <JobCardSkeleton key={i} />)}
             </div>
           ) : error ? (
-            <div className="rounded-[8px] border border-dashed border-[#DDE1EA] bg-white px-6 py-16 text-center">
-              <h2 className="text-lg font-semibold text-[#001B44]">
-                Could not load jobs
-              </h2>
-              <p className="mx-auto mt-2 max-w-md text-sm text-[#68738A]">
-                {error}
-              </p>
-            </div>
+            <EmptyState
+              icon="⚠️"
+              title="Could not load jobs"
+              description={error}
+              actionLabel="Try again"
+              onAction={() => fetchJobs(apiFilters).catch(() => {})}
+            />
           ) : filteredJobs.length === 0 ? (
-            <div className="rounded-[8px] border border-dashed border-[#DDE1EA] bg-white px-6 py-16 text-center">
-              <h2 className="text-lg font-semibold text-[#001B44]">
-                No jobs found
-              </h2>
-              <p className="mx-auto mt-2 max-w-md text-sm text-[#68738A]">
-                Try a broader role, city, or type.
-              </p>
-            </div>
+            <EmptyState
+              icon="🔍"
+              title="No jobs found"
+              description="Try a broader role, city, or type."
+              actionLabel="Reset Filters"
+              onAction={clearFilters}
+            />
           ) : (
             <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 lg:grid-cols-3">
               {filteredJobs.map((job) => (
@@ -478,13 +485,12 @@ const JobsPage = () => {
           )}
         </section>
 
-        <div className="sticky bottom-0 z-10 mt-5 flex flex-col gap-3 border-t border-[#E6E9F0] bg-white/95 px-4 py-3 text-[11px] font-bold uppercase text-[#222936] shadow-[0_-2px_12px_rgba(15,23,42,0.06)] backdrop-blur sm:flex-row sm:items-center sm:justify-between">
+        {/* Pagination */}
+        <div className="sticky bottom-0 z-10 mt-6 flex flex-col gap-3 border-t border-n-200 bg-white/95 px-4 py-3 text-xs font-semibold text-n-700 shadow-[0_-2px_12px_rgba(15,23,42,0.06)] backdrop-blur sm:flex-row sm:items-center sm:justify-between rounded-t-xl">
           <div className="flex items-center gap-2">
-            <span>Showing</span>
-            <span className="rounded-[3px] bg-[#E8EEF9] px-2 py-1 text-[#001B44]">
-              {showingTo}
-            </span>
-            <span>Of {totalJobs}</span>
+            <span className="text-n-400">Showing</span>
+            <span className="rounded bg-n-100 px-2 py-0.5 text-n-900">{showingTo}</span>
+            <span className="text-n-400">of {totalJobs}</span>
           </div>
 
           <div className="flex items-center gap-1 self-end sm:self-auto">
@@ -492,28 +498,28 @@ const JobsPage = () => {
               type="button"
               onClick={() => setPage(1)}
               disabled={!canGoBack || isLoading}
-              className="rounded-[3px] px-2 py-1 text-[#8993AA] transition hover:bg-[#F3F4F6] hover:text-[#001B44] disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded px-2 py-1 text-n-400 transition hover:bg-n-100 hover:text-n-900 disabled:cursor-not-allowed disabled:opacity-50"
             >
               First
             </button>
             <button
               type="button"
               aria-label="Previous page"
-              onClick={() => setPage((value) => Math.max(1, value - 1))}
+              onClick={() => setPage((v) => Math.max(1, v - 1))}
               disabled={!canGoBack || isLoading}
-              className="rounded-[3px] p-1 text-[#8993AA] transition hover:bg-[#F3F4F6] hover:text-[#001B44] disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded p-1 text-n-400 transition hover:bg-n-100 hover:text-n-900 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
-            <span className="rounded-[3px] bg-[#F4E9E3] px-2 py-1 text-[#FF762F]">
+            <span className="rounded bg-sk-surface px-2 py-0.5 text-sk-primary">
               {currentPage}
             </span>
             <button
               type="button"
               aria-label="Next page"
-              onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
+              onClick={() => setPage((v) => Math.min(totalPages, v + 1))}
               disabled={!canGoForward || isLoading}
-              className="rounded-[3px] p-1 text-[#8993AA] transition hover:bg-[#F3F4F6] hover:text-[#001B44] disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded p-1 text-n-400 transition hover:bg-n-100 hover:text-n-900 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
@@ -521,7 +527,7 @@ const JobsPage = () => {
               type="button"
               onClick={() => setPage(totalPages)}
               disabled={!canGoForward || isLoading}
-              className="rounded-[3px] px-2 py-1 text-[#8993AA] transition hover:bg-[#F3F4F6] hover:text-[#001B44] disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded px-2 py-1 text-n-400 transition hover:bg-n-100 hover:text-n-900 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Last
             </button>

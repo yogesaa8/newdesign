@@ -133,24 +133,24 @@ const SecuritySettings = () => {
   };
 
   const inputClass =
-    "w-full rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] px-4 py-3 text-sm font-semibold text-[#111114] outline-none transition focus:border-[#8500FA] focus:bg-white";
+    "w-full rounded-lg border border-n-200 bg-n-50 px-4 py-3 text-sm font-semibold text-n-900 outline-none transition focus:border-co-primary focus:ring-2 focus:ring-co-primary/10 focus:bg-white";
   const labelClass =
-    "mb-2 block text-xs font-bold uppercase tracking-[0.08em] text-[#77737D]";
+    "mb-2 block text-xs font-bold uppercase tracking-[0.08em] text-n-500";
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-6 md:px-8 md:py-8">
       <div className="mb-6">
-        <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#8500FA]">
+        <p className="text-xs font-bold uppercase tracking-[0.14em] text-co-primary">
           Settings
         </p>
-        <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-[#111114] md:text-3xl">
+        <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-n-900 md:text-3xl">
           Security
         </h1>
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <section className="rounded-[8px] border border-[#E7DDD6] bg-white p-5 md:p-6">
-          <h2 className="text-base font-bold text-[#111114]">Account</h2>
+        <section className="rounded-lg border border-n-200 bg-white p-5 md:p-6">
+          <h2 className="text-base font-bold text-n-900">Account</h2>
           <form onSubmit={handleUpdateProfile} className="mt-5 space-y-4">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
@@ -187,7 +187,7 @@ const SecuritySettings = () => {
               <input
                 name="email"
                 value={formData.email}
-                className={`${inputClass} cursor-not-allowed bg-[#EFE7E1] text-[#77737D]`}
+                className={`${inputClass} cursor-not-allowed bg-n-100 text-n-500`}
                 type="email"
                 disabled
                 readOnly
@@ -196,15 +196,15 @@ const SecuritySettings = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="rounded-[8px] bg-[#111114] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#2B2B31] disabled:cursor-not-allowed disabled:opacity-70"
+              className="rounded-lg bg-co-primary px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-co-hover disabled:cursor-not-allowed disabled:opacity-70"
             >
               {isLoading ? "Updating..." : "Update account"}
             </button>
           </form>
         </section>
 
-        <section className="rounded-[8px] border border-[#E7DDD6] bg-white p-5 md:p-6">
-          <h2 className="text-base font-bold text-[#111114]">Password</h2>
+        <section className="rounded-lg border border-n-200 bg-white p-5 md:p-6">
+          <h2 className="text-base font-bold text-n-900">Password</h2>
           <form onSubmit={handleChangePassword} className="mt-5 space-y-4">
             <div>
               <label className={labelClass}>Current password</label>
@@ -230,7 +230,7 @@ const SecuritySettings = () => {
             </div>
             <button
               type="submit"
-              className="rounded-[8px] bg-[#FF6B35] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#E85F2F]"
+              className="rounded-lg bg-co-primary px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-co-hover"
             >
               Change password
             </button>
@@ -238,19 +238,19 @@ const SecuritySettings = () => {
         </section>
       </div>
 
-      <section className="mt-4 rounded-[8px] border border-[#E7DDD6] bg-white p-5 md:p-6">
-        <h2 className="text-base font-bold text-[#111114]">Notifications</h2>
+      <section className="mt-4 rounded-lg border border-n-200 bg-white p-5 md:p-6">
+        <h2 className="text-base font-bold text-n-900">Notifications</h2>
         <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-3">
           {notificationOptions.map((option) => (
             <label
               key={option.key}
-              className="flex cursor-pointer items-center justify-between gap-4 rounded-[8px] border border-[#EFE7E1] bg-[#FDFBF9] p-4"
+              className="flex cursor-pointer items-center justify-between gap-4 rounded-lg border border-n-100 bg-n-50 p-4"
             >
               <span>
-                <span className="block text-sm font-bold text-[#111114]">
+                <span className="block text-sm font-bold text-n-900">
                   {option.label}
                 </span>
-                <span className="mt-1 block text-xs text-[#77737D]">
+                <span className="mt-1 block text-xs text-n-500">
                   {option.description}
                 </span>
               </span>
@@ -258,14 +258,14 @@ const SecuritySettings = () => {
                 type="checkbox"
                 checked={notifications[option.key]}
                 onChange={() => handleNotificationToggle(option.key)}
-                className="h-5 w-5 accent-[#8500FA]"
+                className="h-5 w-5 accent-co-primary"
               />
             </label>
           ))}
         </div>
       </section>
 
-      {/* <section className="mt-4 flex flex-col justify-between gap-4 rounded-[8px] border border-red-200 bg-red-50/50 p-5 md:flex-row md:items-center md:p-6">
+      {/* <section className="mt-4 flex flex-col justify-between gap-4 rounded-lg border border-red-200 bg-red-50/50 p-5 md:flex-row md:items-center md:p-6">
         <div>
           <h2 className="text-base font-bold text-red-700">Deactivate account</h2>
           <p className="mt-1 text-sm text-red-600">
@@ -274,7 +274,7 @@ const SecuritySettings = () => {
         </div>
         <button
           onClick={handleDeactivate}
-          className="rounded-[8px] border border-red-200 bg-white px-4 py-2.5 text-sm font-bold text-red-600 transition-colors hover:bg-red-100"
+          className="rounded-lg border border-red-200 bg-white px-4 py-2.5 text-sm font-bold text-red-600 transition-colors hover:bg-red-100"
           type="button"
         >
           Deactivate

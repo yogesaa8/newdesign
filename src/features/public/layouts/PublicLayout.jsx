@@ -11,7 +11,6 @@ const authPaths = [
   "/company/signup",
   "/company/reset-password",
   "/institute/login",
-  "/institute/signup",
   "/admin/login",
 ];
 

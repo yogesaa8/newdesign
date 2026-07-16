@@ -57,7 +57,7 @@ const PrivacyPolicy = () => {
           {sections.map((section) => (
             <section
               key={section.title}
-              className="fji-card p-6 transition hover:bg-[#F7F5F2]"
+              className="fji-card p-6 transition hover:bg-n-50"
             >
               <h2 className="text-xl font-bold">{section.title}</h2>
               <p className="fji-copy mt-3">{section.body}</p>
@@ -67,7 +67,7 @@ const PrivacyPolicy = () => {
 
         <section className="fji-card-soft mt-8 p-6">
           <h2 className="text-xl font-bold">Contact</h2>
-          <p className="mt-3 leading-7 text-[#6F6F76]">
+          <p className="mt-3 leading-7 text-n-500">
             For privacy questions or account-data requests, contact HireLaunch
             support from the public support page or your dashboard.
           </p>

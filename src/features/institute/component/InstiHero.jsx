@@ -1,6 +1,25 @@
-import React from 'react'
+import React from "react";
 
 const InstiHero = () => {
+     const instituteStats = [
+          {
+               value: "Finance",
+               label: "Banking, Investment and Fintech Programs",
+          },
+          {
+               value: "Technology",
+               label: "Software, AI, Data and Emerging Technologies",
+          },
+          {
+               value: "Career",
+               label: "Industry-Focused Training and Certifications",
+          },
+          {
+               value: "Growth",
+               label: "Skills, Employability and Placement Support",
+          },
+     ];
+
      return (
           <section className='relative overflow-hidden bg-black bg-[url("https://assets.prebuiltui.com/images/components/hero-section/hero-net-image.png")] bg-no-repeat bg-bottom bg-size-[100%_auto] px-4 pt-28 pb-24 md:pt-36 md:pb-32'>
                <div className="relative z-10 max-w-6xl mx-auto">
@@ -20,7 +39,8 @@ const InstiHero = () => {
                                         fill="#7F22FE"
                                    />
                               </svg>
-                              Institute Partnership Program
+
+                              Institute Learning Network
                          </span>
 
                          <span className="text-indigo-500 text-base">•</span>
@@ -29,7 +49,8 @@ const InstiHero = () => {
                               href="#institutes"
                               className="flex items-center gap-1 text-indigo-400 text-xs sm:text-xs"
                          >
-                              View institutes
+                              Explore institutes
+
                               <svg
                                    className="mt-1"
                                    width="6"
@@ -50,13 +71,16 @@ const InstiHero = () => {
                     </div>
 
                     <h1 className="text-4xl md:text-[58px]/19 text-center max-w-5xl mx-auto mt-5 text-white bg-clip-text leading-tight font-medium">
-                         Empowering Institutes with Drone Technology, Training, and Innovation
+                         Discover Institutes That Prepare You for the Careers of
+                         Tomorrow
                     </h1>
 
-                    <p className="text-base md:text-lg mx-auto text-gray-400 text-center mt-5 max-w-2xl">
-                         We collaborate with colleges, universities, and technical institutes
-                         to build drone labs, deliver UAV training, support student research,
-                         and create industry-ready learning experiences.
+                    <p className="text-base md:text-lg mx-auto text-gray-400 text-center mt-5 max-w-3xl">
+                         Explore trusted institutes offering programs in finance,
+                         banking, fintech, technology, artificial intelligence, data,
+                         management and other career-focused fields. Compare programs,
+                         understand learning outcomes and choose the right institute for
+                         your professional goals.
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-3 mt-7 justify-center">
@@ -71,25 +95,21 @@ const InstiHero = () => {
                               href="/contact"
                               className="bg-white/10 hover:bg-white/20 border border-violet-900 text-gray-50 text-xs md:text-sm px-5 py-3 rounded-full transition cursor-pointer text-center"
                          >
-                              Become an Institute Partner
+                              Partner With Us
                          </a>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mt-14">
-                         {[
-                              { value: "02+", label: "Institute Partners" },
-                              { value: "200+", label: "Students Impacted" },
-                              { value: "10+", label: "Training Sessions" },
-                              { value: "24/7", label: "Technical Support" },
-                         ].map((item) => (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto mt-14">
+                         {instituteStats.map((item) => (
                               <div
-                                   key={item.label}
+                                   key={item.value}
                                    className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur px-4 py-5 text-center"
                               >
-                                   <p className="text-2xl md:text-3xl font-semibold text-white">
+                                   <p className="text-xl md:text-2xl font-semibold text-white">
                                         {item.value}
                                    </p>
-                                   <p className="text-xs md:text-sm text-white/50 mt-1">
+
+                                   <p className="text-xs md:text-sm text-white/50 mt-2 leading-relaxed">
                                         {item.label}
                                    </p>
                               </div>
@@ -97,7 +117,7 @@ const InstiHero = () => {
                     </div>
                </div>
           </section>
-     )
-}
+     );
+};
 
-export default InstiHero
+export default InstiHero;

@@ -2,31 +2,31 @@ import React from "react";
 
 const FeaturesSection = () => {
   return (
-    <section className="py-24 bg-[#222222] relative overflow-hidden">
+    <section className="py-24 bg-n-800 relative overflow-hidden">
       {/* Subtle Background Gradient Orbs */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-co-primary/20 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-info/20 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header Section */}
         <div className="mb-16 text-center">
-          <h2 className="text-4xl text-center font-bold leading-tight mb-6 max-w-max lg:max-w-3xl lg:mx-auto bg-clip-text text-transparent bg-gradient-to-b from-white to-zinc-400">
+          <h2 className="text-4xl text-center font-bold leading-tight mb-6 max-w-max lg:max-w-3xl lg:mx-auto bg-clip-text text-transparent bg-gradient-to-b from-white to-n-400">
             Built for your first job, not your fifth.
           </h2>
-          <p className="text-base font-normal text-zinc-400 lg:max-w-2xl lg:mx-auto mb-10">
+          <p className="text-base font-normal text-n-400 lg:max-w-2xl lg:mx-auto mb-10">
             FirstJobIndia gives freshers the resume, the analytics, and the
             recruiter access that older job boards reserve for senior talent.
           </p>
           <div className="flex flex-col justify-center md:flex-row gap-4 max-w-lg mx-auto md:max-w-2xl lg:max-w-full">
             <a
               href="/jobs"
-              className="cursor-pointer py-3 px-8 rounded-full flex items-center justify-center text-sm font-semibold bg-white text-black hover:bg-zinc-200 transition-all duration-300 hover:shadow-[0_0_30px_-5px_rgba(255,255,255,0.3)]"
+              className="cursor-pointer py-3 px-8 rounded-full flex items-center justify-center text-sm font-semibold bg-white text-n-900 hover:bg-n-200 transition-all duration-300 hover:shadow-[0_0_30px_-5px_rgba(255,255,255,0.3)]"
             >
               See first jobs
             </a>
             <a
               href="/company/login"
-              className="cursor-pointer border border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:text-white py-3 px-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300"
+              className="cursor-pointer border border-n-700 text-n-200 hover:border-n-500 hover:text-white py-3 px-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300"
             >
               For employers
             </a>
@@ -37,10 +37,10 @@ const FeaturesSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-lg mx-auto md:max-w-2xl lg:max-w-full">
           {/* Card 1 (Large) */}
           <div className="relative w-full h-auto md:col-span-2 group">
-            <div className="rounded-3xl flex justify-between flex-row flex-wrap h-full border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm p-1 transition-all duration-500 hover:border-purple-500/50 hover:shadow-[0_0_40px_-10px_rgba(168,85,247,0.4)]">
+            <div className="rounded-3xl flex justify-between flex-row flex-wrap h-full border border-n-700 bg-n-900/50 backdrop-blur-sm p-1 transition-all duration-500 hover:border-co-primary/50 hover:shadow-[0_0_40px_-10px_rgba(124,58,237,0.4)]">
               <div className="p-6 xl:p-8 w-full md:w-1/2 flex flex-col justify-between">
                 <div>
-                  <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center mb-6 border border-purple-500/20">
+                  <div className="w-12 h-12 rounded-xl bg-co-primary/10 flex items-center justify-center mb-6 border border-co-primary/20">
                     <svg
                       width="24"
                       height="24"
@@ -72,14 +72,14 @@ const FeaturesSection = () => {
                   <h3 className="text-xl font-bold xl:text-2xl py-4 w-full xl:w-64 text-white">
                     AI resume builder, tuned for freshers
                   </h3>
-                  <p className="text-sm font-normal w-full mb-8 xl:w-64 text-zinc-400 leading-relaxed">
+                  <p className="text-sm font-normal w-full mb-8 xl:w-64 text-n-400 leading-relaxed">
                     Generate, edit, and tailor your resume with generative AI
                     prompts written for Indian freshers, not generic templates.
                   </p>
                 </div>
                 <a
                   href="/resume"
-                  className="self-start py-2.5 px-6 border border-zinc-700 hover:border-purple-500 text-zinc-300 hover:text-purple-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
+                  className="self-start py-2.5 px-6 border border-n-700 hover:border-co-primary text-n-200 hover:text-co-primary rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
                 >
                   Open resume
                   <svg
@@ -106,15 +106,15 @@ const FeaturesSection = () => {
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 {/* Subtle overlay on image for better text separation if they ever overlap */}
-                <div className="absolute inset-0 bg-gradient-to-r from-zinc-900/50 to-transparent pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-n-900/50 to-transparent pointer-events-none"></div>
               </div>
             </div>
           </div>
 
           {/* Card 2 */}
           <div className="relative w-full h-auto group">
-            <div className="rounded-3xl p-6 xl:p-8 h-full border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm transition-all duration-500 hover:border-blue-500/50 hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.4)] hover:-translate-y-1">
-              <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center mb-6 border border-blue-500/20">
+            <div className="rounded-3xl p-6 xl:p-8 h-full border border-n-700 bg-n-900/50 backdrop-blur-sm transition-all duration-500 hover:border-info/50 hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.4)] hover:-translate-y-1">
+              <div className="w-12 h-12 rounded-xl bg-info/10 flex items-center justify-center mb-6 border border-info/20">
                 <svg
                   width="24"
                   height="24"
@@ -145,13 +145,13 @@ const FeaturesSection = () => {
               <h3 className="py-4 text-lg font-bold xl:text-xl text-white">
                 Verified Indian employers
               </h3>
-              <p className="text-sm font-normal mb-8 text-zinc-400 leading-relaxed">
+              <p className="text-sm font-normal mb-8 text-n-400 leading-relaxed">
                 Every recruiter is vetted before posting, so you only apply to
                 companies that actually pay and actually call back.
               </p>
               <a
                 href="/jobs"
-                className="self-start py-2.5 px-6 border border-zinc-700 hover:border-blue-500 text-zinc-300 hover:text-blue-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
+                className="self-start py-2.5 px-6 border border-n-700 hover:border-info text-n-200 hover:text-info rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
               >
                 Browse jobs
                 <svg
@@ -175,8 +175,8 @@ const FeaturesSection = () => {
 
           {/* Card 3 */}
           <div className="relative w-full h-auto group">
-            <div className="rounded-3xl p-6 xl:p-8 h-full border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm transition-all duration-500 hover:border-emerald-500/50 hover:shadow-[0_0_40px_-10px_rgba(16,185,129,0.4)] hover:-translate-y-1">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-6 border border-emerald-500/20">
+            <div className="rounded-3xl p-6 xl:p-8 h-full border border-n-700 bg-n-900/50 backdrop-blur-sm transition-all duration-500 hover:border-success/50 hover:shadow-[0_0_40px_-10px_rgba(16,185,129,0.4)] hover:-translate-y-1">
+              <div className="w-12 h-12 rounded-xl bg-success/10 flex items-center justify-center mb-6 border border-success/20">
                 <svg
                   width="24"
                   height="24"
@@ -207,14 +207,14 @@ const FeaturesSection = () => {
               <h3 className="py-4 text-lg font-bold xl:text-xl text-white">
                 Career-readiness analytics
               </h3>
-              <p className="text-sm font-normal mb-8 text-zinc-400 leading-relaxed">
+              <p className="text-sm font-normal mb-8 text-n-400 leading-relaxed">
                 Track your readiness score across resume, skills, and
                 interviews. We tell you what to fix before the recruiter sees
                 it.
               </p>
               <a
                 href="/career-gps"
-                className="self-start py-2.5 px-6 border border-zinc-700 hover:border-emerald-500 text-zinc-300 hover:text-emerald-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
+                className="self-start py-2.5 px-6 border border-n-700 hover:border-success text-n-200 hover:text-success rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
               >
                 Open CareerGPS
                 <svg
@@ -238,20 +238,20 @@ const FeaturesSection = () => {
 
           {/* Card 4 */}
           <div className="relative w-full h-auto group">
-            <div className="rounded-3xl p-6 xl:p-8 h-full border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm transition-all duration-500 hover:border-orange-500/50 hover:shadow-[0_0_40px_-10px_rgba(249,115,22,0.4)] hover:-translate-y-1">
-              <div className="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center mb-6 border border-orange-500/20 text-orange-400 font-bold">
+            <div className="rounded-3xl p-6 xl:p-8 h-full border border-n-700 bg-n-900/50 backdrop-blur-sm transition-all duration-500 hover:border-sk-primary/50 hover:shadow-[0_0_40px_-10px_rgba(255,107,53,0.4)] hover:-translate-y-1">
+              <div className="w-12 h-12 rounded-xl bg-sk-primary/10 flex items-center justify-center mb-6 border border-sk-primary/20 text-sk-primary font-bold">
                 C
               </div>
               <h3 className="py-4 text-lg font-bold xl:text-xl text-white">
                 College placement tools
               </h3>
-              <p className="text-sm font-normal mb-8 text-zinc-400 leading-relaxed">
+              <p className="text-sm font-normal mb-8 text-n-400 leading-relaxed">
                 Help placement teams coordinate fresher drives, shortlist
                 students, and keep recruiter conversations in one place.
               </p>
               <a
                 href="/college"
-                className="self-start py-2.5 px-6 border border-zinc-700 hover:border-orange-500 text-zinc-300 hover:text-orange-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
+                className="self-start py-2.5 px-6 border border-n-700 hover:border-sk-primary text-n-200 hover:text-sk-primary rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
               >
                 View college
                 <svg
@@ -275,20 +275,20 @@ const FeaturesSection = () => {
 
           {/* Card 5 */}
           <div className="relative w-full h-auto group">
-            <div className="rounded-3xl p-6 xl:p-8 h-full border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm transition-all duration-500 hover:border-purple-500/50 hover:shadow-[0_0_40px_-10px_rgba(168,85,247,0.4)] hover:-translate-y-1">
-              <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center mb-6 border border-purple-500/20 text-purple-400 font-bold">
+            <div className="rounded-3xl p-6 xl:p-8 h-full border border-n-700 bg-n-900/50 backdrop-blur-sm transition-all duration-500 hover:border-co-primary/50 hover:shadow-[0_0_40px_-10px_rgba(124,58,237,0.4)] hover:-translate-y-1">
+              <div className="w-12 h-12 rounded-xl bg-co-primary/10 flex items-center justify-center mb-6 border border-co-primary/20 text-co-primary font-bold">
                 E
               </div>
               <h3 className="py-4 text-lg font-bold xl:text-xl text-white">
                 Interview e-book library
               </h3>
-              <p className="text-sm font-normal mb-8 text-zinc-400 leading-relaxed">
+              <p className="text-sm font-normal mb-8 text-n-400 leading-relaxed">
                 Download fresher-focused notes, communication guides, aptitude
                 prep, and interview practice packs from one library.
               </p>
               <a
                 href="/e-book"
-                className="self-start py-2.5 px-6 border border-zinc-700 hover:border-purple-500 text-zinc-300 hover:text-purple-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
+                className="self-start py-2.5 px-6 border border-n-700 hover:border-co-primary text-n-200 hover:text-co-primary rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
               >
                 Open library
                 <svg
@@ -312,20 +312,20 @@ const FeaturesSection = () => {
 
           {/* Card 6 */}
           <div className="relative w-full h-auto group">
-            <div className="rounded-3xl p-6 xl:p-8 h-full border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm transition-all duration-500 hover:border-rose-500/50 hover:shadow-[0_0_40px_-10px_rgba(244,63,94,0.4)] hover:-translate-y-1">
-              <div className="w-12 h-12 rounded-xl bg-rose-500/10 flex items-center justify-center mb-6 border border-rose-500/20 text-rose-400 font-bold">
+            <div className="rounded-3xl p-6 xl:p-8 h-full border border-n-700 bg-n-900/50 backdrop-blur-sm transition-all duration-500 hover:border-error/50 hover:shadow-[0_0_40px_-10px_rgba(239,68,68,0.4)] hover:-translate-y-1">
+              <div className="w-12 h-12 rounded-xl bg-error/10 flex items-center justify-center mb-6 border border-error/20 text-error font-bold">
                 F
               </div>
               <h3 className="py-4 text-lg font-bold xl:text-xl text-white">
                 Product feedback
               </h3>
-              <p className="text-sm font-normal mb-8 text-zinc-400 leading-relaxed">
+              <p className="text-sm font-normal mb-8 text-n-400 leading-relaxed">
                 Tell us what feels confusing, broken, or missing. Your feedback
                 helps us improve the fresher hiring experience.
               </p>
               <a
                 href="/reviews"
-                className="self-start py-2.5 px-6 border border-zinc-700 hover:border-rose-500 text-zinc-300 hover:text-rose-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
+                className="self-start py-2.5 px-6 border border-n-700 hover:border-error text-n-200 hover:text-error rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
               >
                 Send feedback
                 <svg
@@ -349,20 +349,20 @@ const FeaturesSection = () => {
 
           {/* Card 7 */}
           <div className="relative w-full h-auto group">
-            <div className="rounded-3xl p-6 xl:p-8 h-full border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm transition-all duration-500 hover:border-amber-500/50 hover:shadow-[0_0_40px_-10px_rgba(245,158,11,0.4)] hover:-translate-y-1">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center mb-6 border border-amber-500/20 text-amber-400 font-bold">
+            <div className="rounded-3xl p-6 xl:p-8 h-full border border-n-700 bg-n-900/50 backdrop-blur-sm transition-all duration-500 hover:border-warning/50 hover:shadow-[0_0_40px_-10px_rgba(245,158,11,0.4)] hover:-translate-y-1">
+              <div className="w-12 h-12 rounded-xl bg-warning/10 flex items-center justify-center mb-6 border border-warning/20 text-warning font-bold">
                 H
               </div>
               <h3 className="py-4 text-lg font-bold xl:text-xl text-white">
                 Employer workspace
               </h3>
-              <p className="text-sm font-normal mb-8 text-zinc-400 leading-relaxed">
+              <p className="text-sm font-normal mb-8 text-n-400 leading-relaxed">
                 Companies can post fresher roles, review applicants, and manage
                 hiring activity from a focused workspace.
               </p>
               <a
                 href="/company/login"
-                className="self-start py-2.5 px-6 border border-zinc-700 hover:border-amber-500 text-zinc-300 hover:text-amber-400 rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
+                className="self-start py-2.5 px-6 border border-n-700 hover:border-warning text-n-200 hover:text-warning rounded-full gap-2 text-xs font-semibold flex items-center justify-between transition-all duration-300"
               >
                 Employer login
                 <svg

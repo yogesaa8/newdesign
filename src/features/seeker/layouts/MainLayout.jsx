@@ -15,7 +15,7 @@ const MainLayout = ({ children }) => {
     }
   }, [darkMode]);
   return (
-    <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden bg-[#F7F5F2] text-[#0A0A0A]">
+    <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden bg-sk-bg text-n-900">
       <Header
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
@@ -36,7 +36,7 @@ const MainLayout = ({ children }) => {
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
         {/* <!-- Content Area --> */}
-        <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-[#F7F5F2]">
+        <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-sk-bg">
           {/* <!-- Main Content --> */}
           <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
             <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">

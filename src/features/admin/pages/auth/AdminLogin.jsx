@@ -3,25 +3,32 @@ import toast from "@/lib/toast";
 import { Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../../store";
+import { getRememberedLogin, saveRememberedLogin } from "../../../../lib/rememberedLogin";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
-  const { setAuth } = useAuthStore();
+  const { clearError, error, isLoading, loginAdmin } = useAuthStore();
+  const rememberedLogin = getRememberedLogin("admin");
 
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
-    email: "",
+    email: rememberedLogin.email || "",
     password: "",
+    remember: rememberedLogin.remember || false,
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, checked, type } = e.target;
 
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    clearError();
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.email.trim() || !formData.password.trim()) {
@@ -29,17 +36,18 @@ const AdminLogin = () => {
       return;
     }
 
-    setAuth({
-      role: "admin",
-      user: {
-        name: "Admin User",
-        email: formData.email,
-      },
-      remember: true,
-    });
-
-    navigate("/admin/dashboard", { replace: true });
-    toast.success("Signed in successfully.");
+    try {
+      await loginAdmin({
+        email: formData.email.trim(),
+        password: formData.password,
+        remember: formData.remember,
+      });
+      saveRememberedLogin("admin", formData.email.trim(), formData.remember);
+      navigate("/admin/dashboard", { replace: true });
+      toast.success("Signed in successfully.");
+    } catch (loginError) {
+      toast.error(loginError?.message || "Unable to login.");
+    }
   };
 
   return (
@@ -93,6 +101,12 @@ const AdminLogin = () => {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
+                {error && (
+                  <div className="rounded border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
+                    {error}
+                  </div>
+                )}
+
                 <FloatingInput
                   label="Email Address"
                   type="email"
@@ -121,11 +135,23 @@ const AdminLogin = () => {
                   </button>
                 </FloatingInput>
 
+                <label className="flex w-fit items-center gap-2 text-sm font-medium text-slate-500">
+                  <input
+                    type="checkbox"
+                    name="remember"
+                    checked={formData.remember}
+                    onChange={handleChange}
+                    className="h-4 w-4 accent-indigo-600"
+                  />
+                  Remember me
+                </label>
+
                 <button
                   type="submit"
+                  disabled={isLoading}
                   className="w-full bg-indigo-600 py-3.5 font-semibold text-white shadow-md transition hover:bg-indigo-700 cursor-pointer"
                 >
-                  Sign In
+                  {isLoading ? "Signing in..." : "Sign In"}
                 </button>
               </form>
             </div>

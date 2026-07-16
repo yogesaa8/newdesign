@@ -14,12 +14,12 @@ const stateLabels = {
 };
 
 const stateClasses = {
-  draft: "bg-[#F1E7FF] text-[#8500FA]",
-  published: "bg-green-50 text-green-700",
-  paused: "bg-amber-50 text-amber-700",
-  expired: "bg-red-50 text-red-700",
-  filled: "bg-blue-50 text-blue-700",
-  deleted: "bg-zinc-100 text-zinc-600",
+  draft: "bg-co-surface text-co-primary",
+  published: "bg-success-bg text-success",
+  paused: "bg-warning-bg text-warning",
+  expired: "bg-error-bg text-error",
+  filled: "bg-info-bg text-info",
+  deleted: "bg-n-100 text-n-500",
 };
 
 const jobTypes = [
@@ -144,34 +144,34 @@ const JobList = () => {
     <div className="mx-auto w-full max-w-7xl px-4 py-6 md:px-8 md:py-8">
       <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#8500FA]">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-co-primary">
             Jobs
           </p>
-          <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-[#111114] md:text-3xl">
+          <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-n-900 md:text-3xl">
             Job posts
           </h1>
         </div>
         <Link
           to="/company/jobs/new"
-          className="inline-flex items-center justify-center gap-2 rounded-[8px] bg-[#FF6B35] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#E85F2F]"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-co-primary px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-co-hover"
         >
           <span className="material-symbols-outlined text-[18px]">add</span>
           Post job
         </Link>
       </div>
 
-      <section className="mb-4 grid grid-cols-1 gap-3 rounded-[8px] border border-[#E7DDD6] bg-white p-4 md:grid-cols-3 xl:grid-cols-6">
+      <section className="mb-4 grid grid-cols-1 gap-3 rounded-lg border border-n-200 bg-white p-4 md:grid-cols-3 xl:grid-cols-6">
         <input
           value={filters.search}
           onChange={(event) => updateFilter("search", event.target.value)}
-          className="rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] px-3 py-2 text-sm font-semibold text-[#111114] outline-none focus:border-[#8500FA]"
+          className="rounded-lg border border-n-200 bg-n-50 px-3 py-2 text-sm font-semibold text-n-900 outline-none focus:border-co-primary"
           placeholder="Search jobs"
           type="search"
         />
         <select
           value={filters.is_published}
           onChange={(event) => updateFilter("is_published", event.target.value)}
-          className="rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] px-3 py-2 text-sm font-semibold text-[#111114] outline-none focus:border-[#8500FA]"
+          className="rounded-lg border border-n-200 bg-n-50 px-3 py-2 text-sm font-semibold text-n-900 outline-none focus:border-co-primary"
         >
           {statusFilters.map(([value, label]) => (
             <option key={label} value={value}>
@@ -182,7 +182,7 @@ const JobList = () => {
         <select
           value={filters.job_type}
           onChange={(event) => updateFilter("job_type", event.target.value)}
-          className="rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] px-3 py-2 text-sm font-semibold text-[#111114] outline-none focus:border-[#8500FA]"
+          className="rounded-lg border border-n-200 bg-n-50 px-3 py-2 text-sm font-semibold text-n-900 outline-none focus:border-co-primary"
         >
           {jobTypes.map(([value, label]) => (
             <option key={label} value={value}>
@@ -193,7 +193,7 @@ const JobList = () => {
         <select
           value={filters.work_mode}
           onChange={(event) => updateFilter("work_mode", event.target.value)}
-          className="rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] px-3 py-2 text-sm font-semibold text-[#111114] outline-none focus:border-[#8500FA]"
+          className="rounded-lg border border-n-200 bg-n-50 px-3 py-2 text-sm font-semibold text-n-900 outline-none focus:border-co-primary"
         >
           {workModes.map(([value, label]) => (
             <option key={label} value={value}>
@@ -204,26 +204,26 @@ const JobList = () => {
         <input
           value={filters.city}
           onChange={(event) => updateFilter("city", event.target.value)}
-          className="rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] px-3 py-2 text-sm font-semibold text-[#111114] outline-none focus:border-[#8500FA]"
+          className="rounded-lg border border-n-200 bg-n-50 px-3 py-2 text-sm font-semibold text-n-900 outline-none focus:border-co-primary"
           placeholder="City"
           type="text"
         />
-        <label className="flex items-center gap-2 rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] px-3 py-2 text-sm font-semibold text-[#4F4D55]">
+        <label className="flex items-center gap-2 rounded-lg border border-n-200 bg-n-50 px-3 py-2 text-sm font-semibold text-n-700">
           <input
             checked={filters.include_deleted}
             onChange={(event) => updateFilter("include_deleted", event.target.checked)}
-            className="h-4 w-4 accent-[#8500FA]"
+            className="h-4 w-4 accent-co-primary"
             type="checkbox"
           />
           Deleted
         </label>
       </section>
 
-      <section className="overflow-hidden rounded-[8px] border border-[#E7DDD6] bg-white">
+      <section className="overflow-hidden rounded-lg border border-n-200 bg-white">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[980px] text-left">
             <thead>
-              <tr className="border-b border-[#EFE7E1] text-xs font-bold uppercase tracking-[0.08em] text-[#77737D]">
+              <tr className="border-b border-n-100 text-xs font-bold uppercase tracking-[0.08em] text-n-500">
                 <th className="px-5 py-3">Role</th>
                 <th className="px-5 py-3">Type</th>
                 <th className="px-5 py-3">Mode</th>
@@ -237,13 +237,13 @@ const JobList = () => {
             <tbody>
               {isLoading ? (
                 <tr>
-                  <td className="px-5 py-8 text-center text-sm font-semibold text-[#77737D]" colSpan={8}>
+                  <td className="px-5 py-8 text-center text-sm font-semibold text-n-500" colSpan={8}>
                     Loading jobs...
                   </td>
                 </tr>
               ) : jobs.length === 0 ? (
                 <tr>
-                  <td className="px-5 py-8 text-center text-sm font-semibold text-[#77737D]" colSpan={8}>
+                  <td className="px-5 py-8 text-center text-sm font-semibold text-n-500" colSpan={8}>
                     No jobs found.
                   </td>
                 </tr>
@@ -253,26 +253,26 @@ const JobList = () => {
                   return (
                     <tr
                       key={job.id}
-                      className="border-b border-[#F2ECE7] transition-colors last:border-0 hover:bg-[#FDFBF9]"
+                      className="border-b border-[#F2ECE7] transition-colors last:border-0 hover:bg-n-50"
                     >
                       <td className="px-5 py-4">
-                        <p className="text-sm font-bold text-[#111114]">{job.job_title}</p>
-                        <p className="mt-1 text-xs text-[#77737D]">{job.job_slug}</p>
+                        <p className="text-sm font-bold text-n-900">{job.job_title}</p>
+                        <p className="mt-1 text-xs text-n-500">{job.job_slug}</p>
                       </td>
-                      <td className="px-5 py-4 text-sm text-[#4F4D55]">{formatEnum(job.job_type)}</td>
-                      <td className="px-5 py-4 text-sm text-[#4F4D55]">{formatEnum(job.work_mode)}</td>
-                      <td className="px-5 py-4 text-sm text-[#4F4D55]">
+                      <td className="px-5 py-4 text-sm text-n-700">{formatEnum(job.job_type)}</td>
+                      <td className="px-5 py-4 text-sm text-n-700">{formatEnum(job.work_mode)}</td>
+                      <td className="px-5 py-4 text-sm text-n-700">
                         {job.job_location || [job.city, job.state].filter(Boolean).join(", ") || "-"}
                       </td>
-                      <td className="px-5 py-4 text-sm text-[#4F4D55]">
+                      <td className="px-5 py-4 text-sm text-n-700">
                         {job.filled_positions ?? 0}/{job.openings ?? 0}
                       </td>
-                      <td className="px-5 py-4 text-sm text-[#4F4D55]">
+                      <td className="px-5 py-4 text-sm text-n-700">
                         {job.application_deadline || "-"}
                       </td>
                       <td className="px-5 py-4">
                         <span
-                          className={`rounded-[8px] px-2.5 py-1 text-xs font-bold ${
+                          className={`rounded-lg px-2.5 py-1 text-xs font-bold ${
                             stateClasses[jobState] || "bg-zinc-100 text-zinc-700"
                           }`}
                         >
@@ -283,7 +283,7 @@ const JobList = () => {
                         <div className="flex justify-end gap-2">
                           <Link
                             to={`/company/jobs/${job.id}/applications`}
-                            className="rounded-[8px] border border-[#E7DDD6] bg-white px-3 py-1.5 text-xs font-bold text-[#4F4D55] transition-colors hover:bg-[#F7F5F2]"
+                            className="rounded-lg border border-n-200 bg-white px-3 py-1.5 text-xs font-bold text-n-700 transition-colors hover:bg-n-50"
                           >
                             Applicants
                           </Link>
@@ -296,7 +296,7 @@ const JobList = () => {
                                 )
                               }
                               disabled={isJobActionLoading}
-                              className="rounded-[8px] border border-green-200 bg-green-50 px-3 py-1.5 text-xs font-bold text-green-700 disabled:opacity-60"
+                              className="rounded-lg border border-green-200 bg-green-50 px-3 py-1.5 text-xs font-bold text-green-700 disabled:opacity-60"
                               type="button"
                             >
                               Publish
@@ -306,7 +306,7 @@ const JobList = () => {
                             <button
                               onClick={() => handlePause(job.id)}
                               disabled={isJobActionLoading}
-                              className="rounded-[8px] border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-700 disabled:opacity-60"
+                              className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-700 disabled:opacity-60"
                               type="button"
                             >
                               Pause
@@ -321,7 +321,7 @@ const JobList = () => {
                                 )
                               }
                               disabled={isJobActionLoading}
-                              className="rounded-[8px] border border-green-200 bg-green-50 px-3 py-1.5 text-xs font-bold text-green-700 disabled:opacity-60"
+                              className="rounded-lg border border-green-200 bg-green-50 px-3 py-1.5 text-xs font-bold text-green-700 disabled:opacity-60"
                               type="button"
                             >
                               Resume
@@ -331,7 +331,7 @@ const JobList = () => {
                             <button
                               onClick={() => handleDelete(job.id)}
                               disabled={isDeleting}
-                              className="rounded-[8px] border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-bold text-red-700 disabled:opacity-60"
+                              className="rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-bold text-red-700 disabled:opacity-60"
                               type="button"
                             >
                               Delete
@@ -348,7 +348,7 @@ const JobList = () => {
         </div>
       </section>
 
-      <div className="mt-4 flex flex-col justify-between gap-3 text-sm font-semibold text-[#4F4D55] sm:flex-row sm:items-center">
+      <div className="mt-4 flex flex-col justify-between gap-3 text-sm font-semibold text-n-700 sm:flex-row sm:items-center">
         <p>
           Page {jobPagination.page} of {Math.max(1, Math.ceil(jobPagination.total / jobPagination.limit))}
           {" "}({jobPagination.total} jobs)
@@ -357,7 +357,7 @@ const JobList = () => {
           <button
             onClick={() => updateFilter("page", Number(filters.page) - 1)}
             disabled={!canGoBack || isLoading}
-            className="rounded-[8px] border border-[#E7DDD6] bg-white px-3 py-2 disabled:opacity-50"
+            className="rounded-lg border border-n-200 bg-white px-3 py-2 disabled:opacity-50"
             type="button"
           >
             Previous
@@ -365,7 +365,7 @@ const JobList = () => {
           <button
             onClick={() => updateFilter("page", Number(filters.page) + 1)}
             disabled={!canGoForward || isLoading}
-            className="rounded-[8px] border border-[#E7DDD6] bg-white px-3 py-2 disabled:opacity-50"
+            className="rounded-lg border border-n-200 bg-white px-3 py-2 disabled:opacity-50"
             type="button"
           >
             Next

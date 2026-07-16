@@ -107,12 +107,12 @@ const JobCard = ({ job, index }) => {
 
   // Array of different light glowing colors
   const glows = [
-    { border: "rgba(139, 92, 246, 0.6)", shadow: "rgba(139, 92, 246, 0.5)" }, // Light Purple
-    { border: "rgba(59, 130, 246, 0.6)", shadow: "rgba(59, 130, 246, 0.5)" }, // Light Blue
-    { border: "rgba(16, 185, 129, 0.6)", shadow: "rgba(16, 185, 129, 0.5)" }, // Light Green
-    { border: "rgba(245, 158, 11, 0.6)", shadow: "rgba(245, 158, 11, 0.5)" }, // Light Amber
-    { border: "rgba(236, 72, 153, 0.6)", shadow: "rgba(236, 72, 153, 0.5)" }, // Light Pink
-    { border: "rgba(20, 184, 166, 0.6)", shadow: "rgba(20, 184, 166, 0.5)" }, // Light Teal
+    { border: "rgba(124, 58, 237, 0.6)", shadow: "rgba(124, 58, 237, 0.5)" }, // co-primary
+    { border: "rgba(59, 130, 246, 0.6)", shadow: "rgba(59, 130, 246, 0.5)" }, // info
+    { border: "rgba(16, 185, 129, 0.6)", shadow: "rgba(16, 185, 129, 0.5)" }, // success
+    { border: "rgba(245, 158, 11, 0.6)", shadow: "rgba(245, 158, 11, 0.5)" }, // warning
+    { border: "rgba(255, 107, 53, 0.6)", shadow: "rgba(255, 107, 53, 0.5)" }, // sk-primary
+    { border: "rgba(20, 184, 166, 0.6)", shadow: "rgba(20, 184, 166, 0.5)" }, // teal
   ];
 
   // Fallback just in case
@@ -120,7 +120,7 @@ const JobCard = ({ job, index }) => {
 
   return (
     <div
-      className="group relative flex h-full w-full flex-col justify-between rounded-[28px] bg-[#f7f5f2] p-6 transition-all duration-500 "
+      className="group relative flex h-full w-full flex-col justify-between rounded-[28px] bg-n-50 p-6 transition-all duration-500 "
       style={{
         border: "1px solid rgba(0, 0, 0, 0.05)",
         transition:
@@ -137,44 +137,44 @@ const JobCard = ({ job, index }) => {
     >
       {/* Header */}
       <div className="flex items-start justify-between">
-        <span className="rounded-full bg-[#ece8e1] px-3 py-1 text-xs font-medium text-neutral-700">
+        <span className="rounded-full bg-n-100 px-3 py-1 text-xs font-medium text-n-700">
           {job.time}
         </span>
-        <button className="text-neutral-400 transition hover:text-neutral-700">
+        <button className="text-n-400 transition hover:text-n-700">
           <BsPinAngle size={16} />
         </button>
       </div>
 
       {/* Main Content */}
       <div className="mt-8">
-        <h2 className="text-2xl font-bold tracking-tight text-black">
+        <h2 className="text-2xl font-bold tracking-tight text-n-900">
           {job.title}
         </h2>
-        <p className="mt-2 text-sm text-neutral-600">{job.company}</p>
+        <p className="mt-2 text-sm text-n-500">{job.company}</p>
       </div>
 
       {/* Info Pills */}
       <div className="mt-6 flex flex-wrap gap-2">
-        <span className="rounded-full bg-[#dff4ea] px-3 py-1.5 text-xs font-medium text-[#246b45]">
+        <span className="rounded-full bg-success-bg px-3 py-1.5 text-xs font-medium text-success">
           {job.category}
         </span>
-        <span className="rounded-full bg-[#fceccf] px-3 py-1.5 text-xs font-medium text-[#8a5a00]">
+        <span className="rounded-full bg-warning-bg px-3 py-1.5 text-xs font-medium text-warning">
           {job.type}
         </span>
-        <span className="rounded-full bg-[#e8eefc] px-3 py-1.5 text-xs font-medium text-[#3556a8]">
+        <span className="rounded-full bg-info-bg px-3 py-1.5 text-xs font-medium text-info">
           {job.salary}
         </span>
-        <span className="rounded-full bg-[#f7e3e8] px-3 py-1.5 text-xs font-medium text-[#9a4f62]">
+        <span className="rounded-full bg-error-bg px-3 py-1.5 text-xs font-medium text-error">
           {job.location}
         </span>
       </div>
 
       {/* Footer */}
       <div className="mt-8 flex items-center justify-between">
-        <p className="text-xs text-neutral-500">Quick apply available</p>
+        <p className="text-xs text-n-500">Quick apply available</p>
         <button
           onClick={handleJobDetails}
-          className="text-sm font-semibold text-black underline underline-offset-4 transition hover:opacity-70"
+          className="text-sm font-semibold text-n-900 underline underline-offset-4 transition hover:opacity-70"
         >
           Job Details
         </button>
@@ -185,28 +185,23 @@ const JobCard = ({ job, index }) => {
 
 const JobList = () => {
   return (
-    <HeroHighlight containerClassName="bg-[radial-gradient(ellipse_at_top,_rgba(252,150,100,0.28)_0%,_rgba(255,247,243,0.95)_35%,_#F5E9DF_72%,_#EADCD2_100%)]">
+    <HeroHighlight containerClassName="bg-[radial-gradient(ellipse_at_top,_rgba(255,107,53,0.28)_0%,_#FFF7F3_35%,_#FFF1E9_72%,_#FDDCC8_100%)]">
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-screen flex flex-col">
         {/* Header */}
         <div className="flex justify-between items-center mb-10">
           <div>
-            {/* Changed text-neutral-100 to text-neutral-900 so it's visible on light background */}
-            <h1 className="text-3xl md:text-4xl font-bold text-black tracking-tight">
+            <h1 className="text-3xl md:text-4xl font-bold text-n-900 tracking-tight">
               First jobs hiring this week
             </h1>
-            {/* Changed text-neutral-500 to text-neutral-600 */}
-            <p className="text-black mt-2 text-sm md:text-base">
+            <p className="text-n-700 mt-2 text-sm md:text-base">
               Live fresher openings across India, hand-checked by our team
               before they go on the board.
             </p>
           </div>
-          {/* Changed indigo colors to neutral/black so it matches light theme */}
-          <button className="text-sm font-medium text-neutral-900 hover:text-neutral-700 transition-colors hover:underline cursor-pointer whitespace-nowrap">
+          <button className="text-sm font-medium text-n-900 hover:text-n-700 transition-colors hover:underline cursor-pointer whitespace-nowrap">
             See all openings
           </button>
         </div>
-        {/* Grid Layout */}
-        {/* FIX APPLIED HERE: Added index={index} prop */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 flex-1">
           {jobs.map((job, index) => (
             <JobCard key={index} job={job} index={index} />

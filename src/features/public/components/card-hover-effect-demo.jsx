@@ -99,13 +99,13 @@ export default function CardHoverEffectDemo() {
 
   return (
     <div
-      className="px-4 sm:px-6 relative max-w-5xl mx-auto z-50"
+      className="px-4 sm:px-6 relative max-w-5xl mx-auto z-10"
       onClick={handleCategoryClick}
     >
       <h2 className="text-6xl font-bold text-center text-white">
         Browse by Category
       </h2>
-      <h4 className="text-center text-2xl mt-4 text-zinc-400">
+      <h4 className="text-center text-2xl mt-4 text-n-400">
         Find roles in the fastest-growing career paths across remote, full-time,
         and internship tracks.
       </h4>

@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-gradient-to-br from-[#fdfbf9] via-[#fef3ee] to-[#fde8e2] relative overflow-hidden">
+    <footer className="w-full bg-gradient-to-br from-sk-bg via-sk-surface to-sk-surface relative overflow-hidden">
       {/* Subtle Background Decorative Blobs */}
-      <div className="absolute top-0 right-0 w-72 h-72 bg-orange-200/30 rounded-full blur-[100px] pointer-events-none"></div>
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-rose-200/30 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-72 h-72 bg-sk-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-sk-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Main Footer Content */}
@@ -22,9 +22,9 @@ const Footer = () => {
               className="h-8 w-8 object-contain"
             />
             <span className="text-xl font-extrabold tracking-tight">
-              <span className="text-stone-800">First</span>
-              <span className="text-orange-600">Job</span>
-              <span className="text-stone-800">India</span>
+              <span className="text-n-900">First</span>
+              <span className="text-sk-primary">Job</span>
+              <span className="text-n-900">India</span>
             </span>
             <svg
               className="hidden"
@@ -103,11 +103,11 @@ const Footer = () => {
           </a>
 
           {/* Navigation Links */}
-          <ul className="text-base text-center sm:flex items-center justify-center gap-10 lg:gap-10 xl:gap-14 font-medium text-stone-700">
+          <ul className="text-base text-center sm:flex items-center justify-center gap-10 lg:gap-10 xl:gap-14 font-medium text-n-700">
             <li>
               <Link
                 to="/jobs"
-                className="hover:text-orange-600 transition-colors duration-300 relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-0.5 after:bg-orange-500 after:transition-all after:duration-300 hover:after:w-full"
+                className="hover:text-sk-primary transition-colors duration-300 relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-0.5 after:bg-sk-primary after:transition-all after:duration-300 hover:after:w-full"
               >
                 Jobs
               </Link>
@@ -115,7 +115,7 @@ const Footer = () => {
             <li className="sm:my-0 my-2">
               <Link
                 to="/company/login"
-                className="hover:text-orange-600 transition-colors duration-300 relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-0.5 after:bg-orange-500 after:transition-all after:duration-300 hover:after:w-full"
+                className="hover:text-sk-primary transition-colors duration-300 relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-0.5 after:bg-sk-primary after:transition-all after:duration-300 hover:after:w-full"
               >
                 Companies
               </Link>
@@ -123,7 +123,7 @@ const Footer = () => {
             <li>
               <Link
                 to="/career-gps"
-                className="hover:text-orange-600 transition-colors duration-300 relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-0.5 after:bg-orange-500 after:transition-all after:duration-300 hover:after:w-full"
+                className="hover:text-sk-primary transition-colors duration-300 relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-0.5 after:bg-sk-primary after:transition-all after:duration-300 hover:after:w-full"
               >
                 Career GPS
               </Link>
@@ -131,7 +131,7 @@ const Footer = () => {
             <li className="sm:my-0 my-2">
               <Link
                 to="/reviews"
-                className="hover:text-orange-600 transition-colors duration-300 relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-0.5 after:bg-orange-500 after:transition-all after:duration-300 hover:after:w-full"
+                className="hover:text-sk-primary transition-colors duration-300 relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-0.5 after:bg-sk-primary after:transition-all after:duration-300 hover:after:w-full"
               >
                 Support
               </Link>
@@ -139,7 +139,7 @@ const Footer = () => {
             <li>
               <Link
                 to="/privacy-policy"
-                className="hover:text-orange-600 transition-colors duration-300 relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-0.5 after:bg-orange-500 after:transition-all after:duration-300 hover:after:w-full"
+                className="hover:text-sk-primary transition-colors duration-300 relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-0.5 after:bg-sk-primary after:transition-all after:duration-300 hover:after:w-full"
               >
                 Privacy Policy
               </Link>
@@ -147,7 +147,7 @@ const Footer = () => {
             <li className="sm:my-0 my-2">
               <Link
                 to="/terms"
-                className="hover:text-orange-600 transition-colors duration-300 relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-0.5 after:bg-orange-500 after:transition-all after:duration-300 hover:after:w-full"
+                className="hover:text-sk-primary transition-colors duration-300 relative after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-0 after:h-0.5 after:bg-sk-primary after:transition-all after:duration-300 hover:after:w-full"
               >
                 Terms
               </Link>
@@ -161,7 +161,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="FirstJobIndia on X"
-              className="w-10 h-10 rounded-full bg-white/60 border border-stone-200/50 flex justify-center items-center text-stone-600 hover:bg-orange-500 hover:border-orange-500 hover:text-white hover:shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)] transition-all duration-300"
+              className="w-10 h-10 rounded-full bg-white/60 border border-n-200/50 flex justify-center items-center text-n-500 hover:bg-sk-primary hover:border-sk-primary hover:text-white hover:shadow-md transition-all duration-300"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -182,7 +182,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="FirstJobIndia on LinkedIn"
-              className="w-10 h-10 rounded-full bg-white/60 border border-stone-200/50 flex justify-center items-center text-stone-600 hover:bg-orange-500 hover:border-orange-500 hover:text-white hover:shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)] transition-all duration-300"
+              className="w-10 h-10 rounded-full bg-white/60 border border-n-200/50 flex justify-center items-center text-n-500 hover:bg-sk-primary hover:border-sk-primary hover:text-white hover:shadow-md transition-all duration-300"
             >
               <svg
                 className="w-3.5 h-3.5"
@@ -201,7 +201,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="FirstJobIndia on YouTube"
-              className="w-10 h-10 rounded-full bg-white/60 border border-stone-200/50 flex justify-center items-center text-stone-600 hover:bg-orange-500 hover:border-orange-500 hover:text-white hover:shadow-[0_0_20px_-5px_rgba(234,88,12,0.5)] transition-all duration-300"
+              className="w-10 h-10 rounded-full bg-white/60 border border-n-200/50 flex justify-center items-center text-n-500 hover:bg-sk-primary hover:border-sk-primary hover:text-white hover:shadow-md transition-all duration-300"
             >
               <svg
                 className="w-4 h-3"
@@ -221,16 +221,16 @@ const Footer = () => {
         </div>
 
         {/* Bottom Copyright */}
-        <div className="py-7 border-t border-stone-300/50">
-          <div className="flex items-center justify-center text-sm text-stone-500">
+        <div className="py-7 border-t border-n-200/50">
+          <div className="flex items-center justify-center text-sm text-n-400">
             <span>
               ©
               <a
                 href="/"
-                className="hover:text-orange-600 transition-colors ml-1"
+                className="hover:text-sk-primary transition-colors ml-1"
               >
                 <span>First</span>
-                <span className="text-orange-600">Job</span>
+                <span className="text-sk-primary">Job</span>
                 <span>India</span>
               </a>{" "}
               2026. Your First Job, Our First Priority.

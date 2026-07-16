@@ -336,22 +336,22 @@ const CreateJobListing = () => {
     <div className="mx-auto w-full max-w-5xl px-4 py-6 md:px-8 md:py-8">
       <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#8500FA]">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-co-primary">
             New job
           </p>
-          <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-[#111114] md:text-3xl">
+          <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-n-900 md:text-3xl">
             Post a job
           </h1>
         </div>
-        <div className="flex rounded-[8px] border border-[#E7DDD6] bg-white p-1">
+        <div className="flex rounded-lg border border-n-200 bg-white p-1">
           {[1, 2].map((step) => (
             <button
               key={step}
               onClick={() => setCurrentStep(step)}
-              className={`rounded-[8px] px-3 py-2 text-sm font-bold transition-colors ${
+              className={`rounded-lg px-3 py-2 text-sm font-bold transition-colors ${
                 currentStep === step
                   ? "bg-[#111114] text-white"
-                  : "text-[#4F4D55] hover:bg-[#F7F5F2]"
+                  : "text-n-700 hover:bg-n-50"
               }`}
               type="button"
             >
@@ -361,7 +361,7 @@ const CreateJobListing = () => {
         </div>
       </div>
 
-      <section className="rounded-[8px] border border-[#E7DDD6] bg-white p-5 md:p-6">
+      <section className="rounded-lg border border-n-200 bg-white p-5 md:p-6">
         {currentStep === 1 ? (
           <div className="space-y-5">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -389,17 +389,17 @@ const CreateJobListing = () => {
                   />
                 </Field>
                 {isSearchingLocations && (
-                  <span className="absolute right-3 top-10 text-xs font-semibold text-[#77737D]">
+                  <span className="absolute right-3 top-10 text-xs font-semibold text-n-500">
                     Searching
                   </span>
                 )}
                 {showLocationDropdown && locationResults.length > 0 && (
-                  <ul className="absolute z-20 mt-1 max-h-48 w-full overflow-y-auto rounded-[8px] border border-[#E7DDD6] bg-white shadow-[0_18px_45px_rgba(17,17,20,0.08)]">
+                  <ul className="absolute z-20 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-n-200 bg-white shadow-[0_18px_45px_rgba(17,17,20,0.08)]">
                     {locationResults.map((location) => (
                       <li
                         key={location.id}
                         onMouseDown={() => handleLocationSelect(location)}
-                        className="cursor-pointer px-4 py-2 text-sm font-semibold text-[#4F4D55] hover:bg-[#F7F5F2]"
+                        className="cursor-pointer px-4 py-2 text-sm font-semibold text-n-700 hover:bg-n-50"
                       >
                         {getLocationLabel(location)}
                       </li>
@@ -601,22 +601,22 @@ const CreateJobListing = () => {
             </div>
 
             <div className="flex flex-wrap gap-4">
-              <label className="flex items-center gap-2 text-sm font-semibold text-[#4F4D55]">
+              <label className="flex items-center gap-2 text-sm font-semibold text-n-700">
                 <input
                   name="is_urgent"
                   checked={formData.is_urgent}
                   onChange={handleInputChange}
-                  className="h-4 w-4 accent-[#8500FA]"
+                  className="h-4 w-4 accent-co-primary"
                   type="checkbox"
                 />
                 Urgent
               </label>
-              <label className="flex items-center gap-2 text-sm font-semibold text-[#4F4D55]">
+              <label className="flex items-center gap-2 text-sm font-semibold text-n-700">
                 <input
                   name="is_featured"
                   checked={formData.is_featured}
                   onChange={handleInputChange}
-                  className="h-4 w-4 accent-[#8500FA]"
+                  className="h-4 w-4 accent-co-primary"
                   type="checkbox"
                 />
                 Featured
@@ -649,12 +649,12 @@ const CreateJobListing = () => {
                   ))}
                 </select>
               </Field>
-              <label className="flex items-end gap-2 pb-3 text-sm font-semibold text-[#4F4D55]">
+              <label className="flex items-end gap-2 pb-3 text-sm font-semibold text-n-700">
                 <input
                   name="is_required"
                   checked={questionDraft.is_required}
                   onChange={handleQuestionChange}
-                  className="h-4 w-4 accent-[#8500FA]"
+                  className="h-4 w-4 accent-co-primary"
                   type="checkbox"
                 />
                 Required
@@ -675,7 +675,7 @@ const CreateJobListing = () => {
 
             <button
               onClick={handleAddQuestion}
-              className="rounded-[8px] bg-[#111114] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#2B2B31]"
+              className="rounded-lg bg-[#111114] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#2B2B31]"
               type="button"
             >
               Add question
@@ -683,20 +683,20 @@ const CreateJobListing = () => {
 
             <div className="space-y-2">
               {questions.length === 0 ? (
-                <div className="rounded-[8px] border border-dashed border-[#D9CDC5] bg-[#FDFBF9] p-5 text-sm font-semibold text-[#77737D]">
+                <div className="rounded-lg border border-dashed border-[#D9CDC5] bg-n-50 p-5 text-sm font-semibold text-n-500">
                   Screening questions are optional.
                 </div>
               ) : (
                 questions.map((question, index) => (
                   <div
                     key={question.id}
-                    className="flex items-start justify-between gap-3 rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] p-4"
+                    className="flex items-start justify-between gap-3 rounded-lg border border-n-200 bg-n-50 p-4"
                   >
                     <div>
-                      <p className="text-sm font-semibold text-[#111114]">
+                      <p className="text-sm font-semibold text-n-900">
                         {index + 1}. {question.question_text}
                       </p>
-                      <p className="mt-1 text-xs font-semibold text-[#77737D]">
+                      <p className="mt-1 text-xs font-semibold text-n-500">
                         {questionTypeOptions.find(([value]) => value === question.question_type)?.[1]}
                         {question.is_required ? " - Required" : ""}
                       </p>
@@ -716,11 +716,11 @@ const CreateJobListing = () => {
           </div>
         )}
 
-        <div className="mt-6 flex flex-col-reverse justify-between gap-3 border-t border-[#EFE7E1] pt-5 sm:flex-row sm:items-center">
+        <div className="mt-6 flex flex-col-reverse justify-between gap-3 border-t border-n-100 pt-5 sm:flex-row sm:items-center">
           <button
             onClick={() => handleSubmit(false)}
             disabled={isSaving}
-            className="rounded-[8px] border border-[#E7DDD6] bg-white px-4 py-2.5 text-sm font-bold text-[#4F4D55] transition-colors hover:bg-[#F7F5F2] disabled:opacity-60"
+            className="rounded-lg border border-n-200 bg-white px-4 py-2.5 text-sm font-bold text-n-700 transition-colors hover:bg-n-50 disabled:opacity-60"
             type="button"
           >
             {isSaving ? "Saving..." : "Save draft"}
@@ -729,7 +729,7 @@ const CreateJobListing = () => {
             {currentStep === 2 && (
               <button
                 onClick={() => setCurrentStep(1)}
-                className="rounded-[8px] border border-[#E7DDD6] bg-white px-4 py-2.5 text-sm font-bold text-[#4F4D55] transition-colors hover:bg-[#F7F5F2]"
+                className="rounded-lg border border-n-200 bg-white px-4 py-2.5 text-sm font-bold text-n-700 transition-colors hover:bg-n-50"
                 type="button"
               >
                 Back
@@ -740,7 +740,7 @@ const CreateJobListing = () => {
                 onClick={() => {
                   if (validateJob()) setCurrentStep(2);
                 }}
-                className="rounded-[8px] bg-[#FF6B35] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#E85F2F]"
+                className="rounded-lg bg-co-primary px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-co-hover"
                 type="button"
               >
                 Continue
@@ -749,7 +749,7 @@ const CreateJobListing = () => {
               <button
                 onClick={() => handleSubmit(true)}
                 disabled={isSaving}
-                className="rounded-[8px] bg-[#FF6B35] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#E85F2F] disabled:opacity-60"
+                className="rounded-lg bg-co-primary px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-co-hover disabled:opacity-60"
                 type="button"
               >
                 {isSaving ? "Publishing..." : "Publish job"}
@@ -763,11 +763,11 @@ const CreateJobListing = () => {
 };
 
 const inputClass =
-  "w-full rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] px-4 py-3 text-sm font-semibold text-[#111114] outline-none transition focus:border-[#8500FA] focus:bg-white";
+  "w-full rounded-lg border border-n-200 bg-n-50 px-4 py-3 text-sm font-semibold text-n-900 outline-none transition focus:border-co-primary focus:bg-white";
 
 const Field = ({ label, children }) => (
   <label className="block">
-    <span className="mb-2 block text-xs font-bold uppercase tracking-[0.08em] text-[#77737D]">
+    <span className="mb-2 block text-xs font-bold uppercase tracking-[0.08em] text-n-500">
       {label}
     </span>
     {children}

@@ -5,11 +5,10 @@ import {
   ImagePlus,
   MessageSquareText,
   UploadCloud,
+  Lightbulb,
+  Bug,
+  Sparkles,
 } from "lucide-react";
-import {
-  HeroHighlight,
-  Highlight,
-} from "../../../components/ui/hero-highlight";
 import useSEO from "@/seo/useSEO";
 import seoMeta from "@/data/seoMeta";
 import {
@@ -17,20 +16,24 @@ import {
   buildBreadcrumbList,
   buildContactPage,
 } from "@/seo/schemas";
+import Footer from "../components/Footer";
 
-const inputClass =
-  "w-full rounded-[8px] border border-[#EADFD9] bg-[#FFFDFB] px-4 py-3 text-sm text-[#0A0A0A] outline-none transition placeholder:text-[#9F9FA9] focus:border-[#8500FA] focus:ring-2 focus:ring-[#8500FA]/15";
-const labelClass = "mb-2 block text-xs font-semibold uppercase text-[#6F6F76]";
+const FEEDBACK_TYPES = [
+  { id: "bug", label: "Bug report", icon: Bug, color: "text-error bg-error-bg border-error/20" },
+  { id: "idea", label: "Feature idea", icon: Lightbulb, color: "text-warning bg-warning-bg border-warning/20" },
+  { id: "general", label: "General feedback", icon: MessageSquareText, color: "text-sk-primary bg-sk-surface border-sk-border" },
+];
 
-const feedbackNotes = [
-  "Private",
-  "Read by the team",
-  "Screenshots welcome",
+const TRUST_NOTES = [
+  "Private — only our team reads this",
+  "We respond to every actionable report",
+  "Screenshots always helpful",
 ];
 
 const ReviewPage = () => {
   const [formData, setFormData] = useState({
     name: "",
+    type: "general",
     issue: "",
     image: null,
   });
@@ -42,12 +45,10 @@ const ReviewPage = () => {
     if (name === "image") {
       const file = files?.[0];
       if (!file) return;
-
       if (!file.type.startsWith("image/")) {
         toast.error("Please upload image files only.");
         return;
       }
-
       setFormData((prev) => ({ ...prev, image: file }));
       setPreview(URL.createObjectURL(file));
       return;
@@ -58,14 +59,12 @@ const ReviewPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
     if (!formData.name.trim() || !formData.issue.trim()) {
       toast.error("Please fill all required fields.");
       return;
     }
-
     toast.success("Thank you. Your feedback has been submitted.");
-    setFormData({ name: "", issue: "", image: null });
+    setFormData({ name: "", type: "general", issue: "", image: null });
     setPreview("");
   };
 
@@ -97,126 +96,182 @@ const ReviewPage = () => {
   });
 
   return (
-    <main className="min-h-screen bg-[#FFF7F3] text-[#0A0A0A]">
+    <>
       {seoElement}
+      <main className="min-h-screen bg-n-50 text-n-900">
 
-      <HeroHighlight
-        containerClassName="bg-[#FFF7F3]"
-        className="flex min-h-[calc(100vh-72px)] items-center px-4 py-14 md:py-16"
-      >
-        <section className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-          <div>
-            <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase text-[#8500FA]">
-              <MessageSquareText className="h-4 w-4" />
+        {/* Hero */}
+        <section className="border-b border-n-200 bg-white px-4 py-16 text-center">
+          <div className="mx-auto max-w-xl">
+            <span className="inline-flex items-center gap-2 rounded-full bg-sk-surface px-4 py-1.5 text-xs font-semibold text-sk-primary">
+              <MessageSquareText className="h-3.5 w-3.5" />
               Feedback
-            </p>
-            <h1 className="mt-4 max-w-3xl text-4xl font-bold leading-tight text-[#0A0A0A] md:text-6xl">
-              Tell us what to{" "}
-              <Highlight className="rounded-[8px] bg-gradient-to-r from-[#F6EAE0] to-[#C6AFFF] px-2 pb-1">
-                fix.
-              </Highlight>
+            </span>
+            <h1 className="mt-5 text-4xl font-extrabold leading-tight tracking-tight text-n-900 md:text-5xl">
+              Help us build a better{" "}
+              <span className="text-sk-primary">first job platform</span>
             </h1>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-[#6F6F76] md:text-lg">
-              Share bugs, ideas, or confusing moments. We read every note.
+            <p className="mx-auto mt-4 max-w-lg text-base leading-7 text-n-500">
+              Spotted a bug? Have an idea? Something confusing? We read every
+              note and ship fixes fast.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-2">
-              {feedbackNotes.map((note) => (
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+              {TRUST_NOTES.map((note) => (
                 <span
                   key={note}
-                  className="inline-flex items-center gap-2 rounded-[8px] border border-[#EADFD9] bg-[#FFFDFB] px-3 py-2 text-sm font-semibold text-[#6F6F76]"
+                  className="inline-flex items-center gap-2 rounded-full border border-n-200 bg-n-50 px-4 py-2 text-xs font-medium text-n-500"
                 >
-                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <CheckCircle2 className="h-3.5 w-3.5 text-success" />
                   {note}
                 </span>
               ))}
             </div>
           </div>
+        </section>
 
-          <form
-            onSubmit={handleSubmit}
-            className="rounded-[8px] border border-[#EADFD9] bg-white/75 p-5 shadow-sm backdrop-blur md:p-6"
-          >
-            <div>
-              <label htmlFor="name" className={labelClass}>
-                Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Your name"
-                className={inputClass}
-              />
+        {/* Form */}
+        <section className="px-4 py-14">
+          <div className="mx-auto max-w-xl">
+
+            {/* Trust note */}
+            <div className="mb-6 flex items-start gap-3 rounded-xl border border-sk-border bg-sk-surface p-4">
+              <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-sk-primary" />
+              <p className="text-sm leading-relaxed text-n-700">
+                <strong className="text-n-900">Real team, real responses.</strong>{" "}
+                Feedback goes directly to the product team — not a ticketing black hole.
+              </p>
             </div>
 
-            <div className="mt-4">
-              <label htmlFor="issue" className={labelClass}>
-                Feedback
-              </label>
-              <textarea
-                id="issue"
-                name="issue"
-                value={formData.issue}
-                onChange={handleChange}
-                rows="5"
-                placeholder="What happened? What should be better?"
-                className={`${inputClass} resize-none`}
-              />
-            </div>
+            <div className="rounded-2xl border border-n-200 bg-white p-6 shadow-sm md:p-8">
+              <h2 className="text-xl font-bold text-n-900">Send your feedback</h2>
+              <p className="mt-1 text-sm text-n-500">Takes under 2 minutes.</p>
 
-            <div className="mt-4">
-              <label htmlFor="image" className={labelClass}>
-                Screenshot
-              </label>
-              <label
-                htmlFor="image"
-                className="flex cursor-pointer flex-col items-center justify-center rounded-[8px] border-2 border-dashed border-[#EADFD9] bg-[#FFFDFB] px-6 py-7 text-center transition hover:border-[#C6AFFF]"
-              >
-                <input
-                  id="image"
-                  name="image"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleChange}
-                  className="hidden"
-                />
-                <UploadCloud className="h-6 w-6 text-[#8500FA]" />
-                <p className="mt-3 text-sm font-semibold text-[#0A0A0A]">
-                  Upload image
-                </p>
-                <p className="mt-1 text-xs text-[#6F6F76]">
-                  PNG, JPG, or WEBP
-                </p>
-              </label>
+              <form onSubmit={handleSubmit} className="mt-6 space-y-5">
 
-              {preview && (
-                <div className="mt-4 overflow-hidden rounded-[8px] border border-[#EADFD9] bg-[#FFFDFB] p-3">
-                  <div className="mb-2 flex items-center gap-2 text-xs font-semibold text-[#8500FA]">
-                    <ImagePlus className="h-4 w-4" />
-                    Preview
+                {/* Feedback type */}
+                <div>
+                  <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-n-500">
+                    Type
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {FEEDBACK_TYPES.map(({ id, label, icon: Icon, color }) => (
+                      <button
+                        key={id}
+                        type="button"
+                        onClick={() =>
+                          setFormData((prev) => ({ ...prev, type: id }))
+                        }
+                        className={`flex flex-col items-center gap-1.5 rounded-xl border-2 px-3 py-3 text-xs font-semibold transition ${
+                          formData.type === id
+                            ? color
+                            : "border-n-200 bg-white text-n-500 hover:border-n-300"
+                        }`}
+                      >
+                        <Icon className="h-4 w-4" />
+                        {label}
+                      </button>
+                    ))}
                   </div>
-                  <img
-                    src={preview}
-                    alt="Uploaded feedback screenshot preview"
-                    className="h-44 w-full rounded-[8px] object-cover"
+                </div>
+
+                {/* Name */}
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-n-500"
+                  >
+                    Your name
+                  </label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="e.g. Priya Sharma"
+                    className="w-full rounded-lg border border-n-200 bg-n-50 px-4 py-3 text-sm text-n-900 outline-none transition placeholder:text-n-400 focus:border-sk-primary focus:bg-white focus:ring-2 focus:ring-sk-primary/10"
                   />
                 </div>
-              )}
-            </div>
 
-            <button
-              type="submit"
-              className="mt-5 w-full rounded-[8px] bg-[#FF6B35] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#FF9566]"
-            >
-              Submit feedback
-            </button>
-          </form>
+                {/* Feedback */}
+                <div>
+                  <label
+                    htmlFor="issue"
+                    className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-n-500"
+                  >
+                    Feedback <span className="text-error">*</span>
+                  </label>
+                  <textarea
+                    id="issue"
+                    name="issue"
+                    value={formData.issue}
+                    onChange={handleChange}
+                    rows={5}
+                    placeholder="What happened? What should be better? What are we missing?"
+                    className="w-full resize-none rounded-lg border border-n-200 bg-n-50 px-4 py-3 text-sm text-n-900 outline-none transition placeholder:text-n-400 focus:border-sk-primary focus:bg-white focus:ring-2 focus:ring-sk-primary/10"
+                  />
+                </div>
+
+                {/* Screenshot upload */}
+                <div>
+                  <label
+                    htmlFor="image"
+                    className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-n-500"
+                  >
+                    Screenshot{" "}
+                    <span className="font-normal normal-case text-n-400">
+                      (optional)
+                    </span>
+                  </label>
+                  <label
+                    htmlFor="image"
+                    className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-n-200 bg-n-50 px-6 py-6 text-center transition hover:border-sk-primary hover:bg-sk-surface"
+                  >
+                    <input
+                      id="image"
+                      name="image"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleChange}
+                      className="hidden"
+                    />
+                    <UploadCloud className="h-6 w-6 text-n-400" />
+                    <p className="text-sm font-semibold text-n-700">
+                      Click to upload
+                    </p>
+                    <p className="text-xs text-n-400">PNG, JPG or WEBP</p>
+                  </label>
+
+                  {preview && (
+                    <div className="mt-3 overflow-hidden rounded-xl border border-sk-border bg-sk-surface p-3">
+                      <div className="mb-2 flex items-center gap-2 text-xs font-semibold text-sk-primary">
+                        <ImagePlus className="h-3.5 w-3.5" />
+                        Preview
+                      </div>
+                      <img
+                        src={preview}
+                        alt="Uploaded feedback screenshot preview"
+                        className="h-40 w-full rounded-lg object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full rounded-xl bg-sk-primary py-3.5 text-sm font-semibold text-white transition hover:bg-sk-hover active:bg-sk-pressed"
+                >
+                  Submit feedback
+                </button>
+              </form>
+            </div>
+          </div>
         </section>
-      </HeroHighlight>
-    </main>
+
+        <Footer />
+      </main>
+    </>
   );
 };
 

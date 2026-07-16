@@ -1,46 +1,50 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ArrowRight, Eye, EyeOff, GraduationCap } from "lucide-react";
 import {
+  AuthAlert,
   AuthButton,
-  AuthFooterText,
   AuthHeader,
   AuthInput,
   AuthShell,
 } from "../../auth/AuthUI";
-import { authLinkClass } from "../../auth/authConstants";
 import { useAuthStore } from "../../../store";
+import { getRememberedLogin, saveRememberedLogin } from "../../../lib/rememberedLogin";
 
 const InstituteLogin = () => {
   const navigate = useNavigate();
-  const setAuth = useAuthStore((state) => state.setAuth);
+  const { clearError, error, isLoading, loginInstitute } = useAuthStore();
+  const rememberedLogin = getRememberedLogin("institute");
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
+    email: rememberedLogin.email || "",
     password: "",
-    remember: false,
+    remember: rememberedLogin.remember || false,
   });
 
   const handleChange = (event) => {
     const { name, value, checked, type } = event.target;
+    clearError();
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setAuth({
-      role: "institute",
-      user: {
-        name: "Institute Partner",
-        email: formData.email,
-      },
-      accessToken: "institute-local-session",
-      remember: true,
-    });
-    navigate("/institute/dashboard", { replace: true });
+
+    try {
+      await loginInstitute({
+        email: formData.email.trim(),
+        password: formData.password,
+        remember: formData.remember,
+      });
+      saveRememberedLogin("institute", formData.email.trim(), formData.remember);
+      navigate("/institute/dashboard", { replace: true });
+    } catch {
+      // Store error is shown in the form.
+    }
   };
 
   return (
@@ -58,6 +62,8 @@ const InstituteLogin = () => {
         description="Open your institute workspace to review students, batches, courses, and incoming applications."
       />
 
+      {error && <AuthAlert>{error}</AuthAlert>}
+
       <form onSubmit={handleSubmit} className="mt-6 space-y-5">
         <AuthInput
           label="Institute email"
@@ -67,6 +73,7 @@ const InstituteLogin = () => {
           onChange={handleChange}
           autoComplete="email"
           placeholder="admin@institute.edu"
+          required
         />
 
         <div className="space-y-2">
@@ -78,6 +85,7 @@ const InstituteLogin = () => {
             onChange={handleChange}
             autoComplete="current-password"
             placeholder="Enter password"
+            required
           >
             <button
               type="button"
@@ -93,11 +101,6 @@ const InstituteLogin = () => {
             </button>
           </AuthInput>
 
-          <div className="text-right">
-            <Link to="/institute/signup" className={authLinkClass}>
-              Request institute access
-            </Link>
-          </div>
         </div>
 
         <label className="flex w-fit items-center gap-2 text-sm text-[#6F6F76]">
@@ -111,17 +114,10 @@ const InstituteLogin = () => {
           Remember this institute
         </label>
 
-        <AuthButton type="submit">
-          Sign in to dashboard
-          <ArrowRight className="h-4 w-4" />
+        <AuthButton type="submit" disabled={isLoading}>
+          {isLoading ? "Signing in..." : "Sign in to dashboard"}
+          {!isLoading && <ArrowRight className="h-4 w-4" />}
         </AuthButton>
-
-        <AuthFooterText>
-          New institute partner?{" "}
-          <Link to="/institute/signup" className={authLinkClass}>
-            Create institute account
-          </Link>
-        </AuthFooterText>
       </form>
     </AuthShell>
   );

@@ -98,16 +98,16 @@ const CompanySignupPage = () => {
 
   const passwordStrength = (() => {
     const password = formData.password;
-    if (!password) return { level: 0, text: "", className: "bg-[#EADFD9]" };
+    if (!password) return { level: 0, text: "", className: "bg-n-200" };
     let strength = 0;
     if (password.length >= 8) strength += 1;
     if (/[A-Z]/.test(password)) strength += 1;
     if (/[0-9]/.test(password)) strength += 1;
     if (/[^A-Za-z0-9]/.test(password)) strength += 1;
-    if (strength <= 1) return { level: 25, text: "Weak", className: "bg-red-500" };
-    if (strength === 2) return { level: 50, text: "Fair", className: "bg-yellow-500" };
-    if (strength === 3) return { level: 75, text: "Good", className: "bg-[#8500FA]" };
-    return { level: 100, text: "Strong", className: "bg-green-600" };
+    if (strength <= 1) return { level: 25, text: "Weak", className: "bg-error" };
+    if (strength === 2) return { level: 50, text: "Fair", className: "bg-warning" };
+    if (strength === 3) return { level: 75, text: "Good", className: "bg-co-primary" };
+    return { level: 100, text: "Strong", className: "bg-success" };
   })();
 
   const handleChange = (event) => {
@@ -325,13 +325,13 @@ const CompanySignupPage = () => {
 
           {formData.password && (
             <div>
-              <div className="h-1.5 overflow-hidden rounded-full bg-[#EADFD9]">
+              <div className="h-1.5 overflow-hidden rounded-full bg-n-200">
                 <div
                   className={`h-full rounded-full transition-all ${passwordStrength.className}`}
                   style={{ width: `${passwordStrength.level}%` }}
                 />
               </div>
-              <p className="mt-1 text-xs font-medium text-[#6F6F76]">
+              <p className="mt-1 text-xs font-medium text-n-500">
                 Password strength: {passwordStrength.text}
               </p>
             </div>
@@ -351,7 +351,7 @@ const CompanySignupPage = () => {
               type="button"
               onClick={handleSendOtp}
               disabled={isSendingOtp || isLoading}
-              className="rounded-[8px] border border-[#EADFD9] bg-white px-4 py-3 text-sm font-semibold text-[#8500FA] transition hover:bg-[#F7F5F2] disabled:cursor-not-allowed disabled:opacity-70"
+              className="rounded-lg border border-n-200 bg-white px-4 py-3 text-sm font-semibold text-[var(--auth-accent)] transition hover:bg-n-50 disabled:cursor-not-allowed disabled:opacity-70"
             >
               {isSendingOtp ? "Sending..." : otpSent ? "Resend OTP" : "Send OTP"}
             </button>
@@ -363,7 +363,7 @@ const CompanySignupPage = () => {
             </AuthAlert>
           )}
 
-          <label className="flex items-start gap-3 text-sm leading-6 text-[#6F6F76]">
+          <label className="flex items-start gap-3 text-sm leading-6 text-n-500">
             <input
               type="checkbox"
               id="terms"
@@ -384,7 +384,7 @@ const CompanySignupPage = () => {
             </span>
           </label>
           {errors.agreeTerms && (
-            <p className="text-sm text-red-600">{errors.agreeTerms}</p>
+            <p className="text-sm text-error">{errors.agreeTerms}</p>
           )}
 
           {otpSent && (
@@ -471,17 +471,17 @@ const CompanySignupPage = () => {
               error={errors.location_id}
             />
             {isSearchingLocations && (
-              <span className="absolute right-3 top-10 text-xs text-[#9F9FA9]">
+              <span className="absolute right-3 top-10 text-xs text-n-400">
                 Searching...
               </span>
             )}
             {showLocationDropdown && locationResults.length > 0 && (
-              <ul className="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-[8px] border border-[#EADFD9] bg-white shadow-sm">
+              <ul className="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-n-200 bg-white shadow-sm">
                 {locationResults.map((loc) => (
                   <li
                     key={loc.id}
                     onMouseDown={() => handleLocationSelect(loc)}
-                    className="cursor-pointer px-4 py-2 text-sm text-[#0A0A0A] hover:bg-[#F7F5F2]"
+                    className="cursor-pointer px-4 py-2 text-sm text-n-900 hover:bg-n-50"
                   >
                     {[loc.city, loc.state].filter(Boolean).join(", ") ||
                       loc.name ||
@@ -548,7 +548,7 @@ const CompanySignupPage = () => {
 
       {step === 3 && (
         <div className="space-y-6 text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-green-100 bg-green-50 text-green-700">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-success-bg text-success">
             <CheckCircle2 className="h-8 w-8" />
           </div>
           <AuthHeader
@@ -557,7 +557,7 @@ const CompanySignupPage = () => {
           />
           <Link
             to="/company/login"
-            className="inline-flex w-full items-center justify-center gap-2 rounded-[8px] bg-[#FF6B35] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#FF9566]"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--auth-accent)] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[var(--auth-accent-hover)]"
           >
             Go to sign in
             <ArrowRight className="h-4 w-4" />

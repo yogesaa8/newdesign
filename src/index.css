@@ -48,6 +48,45 @@ h6 {
   --radius-2xl: calc(var(--radius) + 8px);
 }
 
+/* FJI Design Token Colors */
+@theme {
+  /* Seeker brand (orange) */
+  --color-sk-primary: #FF6B35;
+  --color-sk-hover: #FF9566;
+  --color-sk-pressed: #E85520;
+  --color-sk-surface: #FFF1E9;
+  --color-sk-border: #FDDCC8;
+  --color-sk-bg: #FFF7F3;
+
+  /* Company brand (violet) */
+  --color-co-primary: #7C3AED;
+  --color-co-hover: #A855F7;
+  --color-co-pressed: #6D28D9;
+  --color-co-surface: #EDE9FE;
+  --color-co-border: #DDD6FE;
+  --color-co-bg: #F5F3FF;
+
+  /* Neutral scale */
+  --color-n-900: #0A0A0F;
+  --color-n-800: #1F2937;
+  --color-n-700: #374151;
+  --color-n-500: #6B7280;
+  --color-n-400: #9CA3AF;
+  --color-n-200: #E5E7EB;
+  --color-n-100: #F3F4F6;
+  --color-n-50: #F9FAFB;
+
+  /* Semantic */
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  --color-info: #3B82F6;
+  --color-success-bg: #ECFDF5;
+  --color-warning-bg: #FFFBEB;
+  --color-error-bg: #FEF2F2;
+  --color-info-bg: #EFF6FF;
+}
+
 /* Light theme */
 :root {
   --radius: 1rem;
@@ -146,5 +185,14 @@ h6 {
 
   .navbar-link {
     @apply text-sm font-medium transition-colors;
+  }
+
+  .admin-table-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .admin-table-scroll::-webkit-scrollbar {
+    display: none;
   }
 }

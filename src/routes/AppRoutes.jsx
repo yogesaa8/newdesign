@@ -43,6 +43,11 @@ import Dashboard from "../features/company/pages/dashboard/Dashboard";
 import AdminDashboard from "../features/admin/pages/dashboard/AdminDashboard";
 import AdminLogin from "../features/admin/pages/auth/AdminLogin";
 import CareerGPS from "../features/public/pages/career/CareerGPS";
+import Pricing from "../features/public/pages/Pricing";
+import Community from "../features/public/pages/Community";
+import CareerAdvisor from "../features/public/pages/CareerAdvisor";
+import MentorsList from "../features/public/pages/MentorsList";
+import EbookLibrary from "../features/public/pages/EbookLibrary";
 import SeekerProtectedRoute from "./SeekerProtectedRoute";
 import PublicAuthRoute from "./PublicAuthRoute";
 import CompanyProtectedRoute from "./CompanyProtectedRoute";
@@ -58,8 +63,13 @@ import ReactSlides from "../features/public/pages/career/ReactQuestions";
 import NoindexRouteLayout from "../seo/NoindexRouteLayout";
 import InstituteMainPage from "../features/institute/InstituteMainPage";
 import InstituteLogin from "../features/institute/pages/InstituteLogin";
-import InstituteSignup from "../features/institute/pages/InstituteSignup";
 import InstituteDashboard from "../features/institute/pages/InstituteDashboard";
+import InstituteLayout from "../features/institute/layouts/InstituteLayout";
+import InstituteProfile from "../features/institute/pages/InstituteProfile";
+import InstituteCourses from "../features/institute/pages/InstituteCourses";
+import InstituteCourseForm from "../features/institute/pages/InstituteCourseForm";
+import InstituteCourseDetail from "../features/institute/pages/InstituteCourseDetail";
+import InstituteApplicants from "../features/institute/pages/InstituteApplicants";
 
 const AppRoutes = () => {
   return (
@@ -80,6 +90,11 @@ const AppRoutes = () => {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsConditions />} />
         <Route path="/institute" element={<InstituteMainPage/>}  />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/community" element={<Community />} />
+        <Route path="/career-advisor" element={<CareerAdvisor />} />
+        <Route path="/mentors" element={<MentorsList />} />
+        <Route path="/resources/ebooks" element={<EbookLibrary />} />
         <Route
           path="/terms-condition"
           element={<Navigate to="/terms" replace />}
@@ -105,20 +120,27 @@ const AppRoutes = () => {
               element={<CompanyForgotPassword />}
             />
             <Route path="/institute/login" element={<InstituteLogin />} />
-            <Route path="/institute/signup" element={<InstituteSignup />} />
             <Route path="/admin/login" element={<AdminLogin />} />
           </Route>
         </Route>
       </Route>
 
       <Route
-        path="/institute/dashboard"
+        path="/institute"
         element={
           <InstituteProtectedRoute>
-            <InstituteDashboard />
+            <InstituteLayout />
           </InstituteProtectedRoute>
         }
-      />
+      >
+        <Route path="dashboard" element={<InstituteDashboard />} />
+        <Route path="profile" element={<InstituteProfile />} />
+        <Route path="courses" element={<InstituteCourses />} />
+        <Route path="courses/create" element={<InstituteCourseForm />} />
+        <Route path="courses/:courseId" element={<InstituteCourseDetail />} />
+        <Route path="courses/:courseId/edit" element={<InstituteCourseForm />} />
+        <Route path="courses/:courseId/applicants" element={<InstituteApplicants />} />
+      </Route>
 
       {/* JOB SEEKER DASHBOARD */}
       <Route

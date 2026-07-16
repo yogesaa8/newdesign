@@ -17,7 +17,7 @@ import { authLinkClass } from "../../../auth/authConstants";
 const PasswordRule = ({ valid, children }) => (
   <p
     className={`flex items-center gap-2 text-sm ${
-      valid ? "text-green-700" : "text-[#6F6F76]"
+      valid ? "text-success" : "text-n-500"
     }`}
   >
     {valid ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
@@ -143,7 +143,7 @@ const JobSeekerSignUp = () => {
           <button
             type="button"
             onClick={() => setShowPassword((value) => !value)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6F6F76] transition hover:text-[#8500FA]"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-n-400 transition hover:text-[var(--auth-accent)]"
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -151,7 +151,7 @@ const JobSeekerSignUp = () => {
         </AuthInput>
 
         {formData.password && (
-          <div className="rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2] p-4">
+          <div className="rounded-lg border border-n-200 bg-n-50 p-4">
             <div className="space-y-2">
               <PasswordRule valid={passwordRules.minLength}>
                 Minimum 8 characters
@@ -182,7 +182,7 @@ const JobSeekerSignUp = () => {
           <button
             type="button"
             onClick={() => setShowRetypePassword((value) => !value)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6F6F76] transition hover:text-[#8500FA]"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-n-400 transition hover:text-[var(--auth-accent)]"
             aria-label={showRetypePassword ? "Hide password" : "Show password"}
           >
             {showRetypePassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -192,14 +192,14 @@ const JobSeekerSignUp = () => {
         {formData.confirmPassword && (
           <p
             className={`text-sm font-medium ${
-              passwordsMatch ? "text-green-700" : "text-red-600"
+              passwordsMatch ? "text-success" : "text-error"
             }`}
           >
             {passwordsMatch ? "Passwords match" : "Passwords do not match"}
           </p>
         )}
 
-        <label className="flex items-start gap-3 text-sm leading-6 text-[#6F6F76]">
+        <label className="flex items-start gap-3 text-sm leading-6 text-n-500">
           <input
             type="checkbox"
             required

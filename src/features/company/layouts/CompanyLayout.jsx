@@ -16,7 +16,7 @@ const CompanyLayout = () => {
   });
 
   return (
-    <div className="flex min-h-screen bg-[#F7F5F2] text-[#111114]">
+    <div className="flex min-h-screen bg-n-50 text-n-900">
       {seoElement}
       {sidebarOpen && (
         <div
@@ -30,7 +30,7 @@ const CompanyLayout = () => {
       <div className="flex min-w-0 flex-1 flex-col">
         <CompanyHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-        <div className="border-b border-[#E7DDD6] bg-[#F7F5F2]/80 px-4 py-3 md:px-8">
+        <div className="border-b border-n-200 bg-white px-4 py-3 md:px-8">
           <Breadcrumb showTitle={false} />
         </div>
 

@@ -101,7 +101,14 @@ const SeekerVerifyOtp = () => {
                 }}
                 onChange={(event) => handleChange(event, index)}
                 onKeyDown={(event) => handleKeyDown(event, index)}
-                className="h-12 w-11 rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2] text-center text-xl font-bold text-[#0A0A0A] outline-none transition focus:border-[var(--auth-accent)] focus:ring-2 focus:ring-[var(--auth-ring)] sm:h-14 sm:w-12"
+                className={`h-12 w-11 rounded-lg border text-center text-xl font-bold outline-none transition sm:h-14 sm:w-12
+                  focus:border-[var(--auth-accent)] focus:ring-2 focus:ring-[var(--auth-ring)]
+                  ${error
+                    ? "border-error bg-error-bg text-error"
+                    : digit
+                    ? "border-[var(--auth-accent)] bg-sk-surface text-[var(--auth-accent)]"
+                    : "border-n-200 bg-white text-n-900"
+                  }`}
               />
             ))}
           </div>
@@ -114,7 +121,7 @@ const SeekerVerifyOtp = () => {
           </AuthButton>
         </form>
 
-        <p className="text-center text-sm text-[#6F6F76]">
+        <p className="text-center text-sm text-n-500">
           Did not receive it?{" "}
           <button
             type="button"

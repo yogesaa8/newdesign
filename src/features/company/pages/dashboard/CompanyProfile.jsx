@@ -282,29 +282,29 @@ const CompanyProfile = () => {
   };
 
   const inputClass =
-    "w-full rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] px-4 py-3 text-sm font-semibold text-[#111114] outline-none transition focus:border-[#8500FA] focus:bg-white";
+    "w-full rounded-lg border border-n-200 bg-n-50 px-4 py-3 text-sm font-semibold text-n-900 outline-none transition focus:border-co-primary focus:bg-white";
   const labelClass =
-    "mb-2 block text-xs font-bold uppercase tracking-[0.08em] text-[#77737D]";
+    "mb-2 block text-xs font-bold uppercase tracking-[0.08em] text-n-500";
   const characterCount = formData.description.length;
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-6 md:px-8 md:py-8">
       <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#8500FA]">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-co-primary">
             Profile
           </p>
-          <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-[#111114] md:text-3xl">
+          <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-n-900 md:text-3xl">
             Company profile
           </h1>
-          {isLoading && <p className="mt-1 text-sm text-[#77737D]">Loading profile...</p>}
+          {isLoading && <p className="mt-1 text-sm text-n-500">Loading profile...</p>}
         </div>
 
         <div className="flex flex-wrap gap-2">
           {/* <button
             onClick={handleDeleteProfile}
             disabled={isDeleting || !company}
-            className="rounded-[8px] border border-red-200 bg-white px-4 py-2.5 text-sm font-bold text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-lg border border-red-200 bg-white px-4 py-2.5 text-sm font-bold text-red-600 transition-colors hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
             type="button"
           >
             {isDeleting ? "Deleting..." : "Delete"}
@@ -312,7 +312,7 @@ const CompanyProfile = () => {
           <button
             onClick={handleDiscard}
             disabled={!hasChanges}
-            className="rounded-[8px] border border-[#E7DDD6] bg-white px-4 py-2.5 text-sm font-bold text-[#4F4D55] transition-colors hover:bg-[#F7F5F2] disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-lg border border-n-200 bg-white px-4 py-2.5 text-sm font-bold text-n-700 transition-colors hover:bg-n-50 disabled:cursor-not-allowed disabled:opacity-50"
             type="button"
           >
             Discard
@@ -320,7 +320,7 @@ const CompanyProfile = () => {
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="rounded-[8px] bg-[#FF6B35] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#E85F2F] disabled:cursor-not-allowed disabled:opacity-70"
+            className="rounded-lg bg-co-primary px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-co-hover disabled:cursor-not-allowed disabled:opacity-70"
             type="button"
           >
             {isSaving ? "Saving..." : "Save"}
@@ -329,18 +329,18 @@ const CompanyProfile = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[320px_1fr]">
-        <aside className="rounded-[8px] border border-[#E7DDD6] bg-white p-5">
-          <p className="text-sm font-bold text-[#111114]">Logo</p>
+        <aside className="rounded-lg border border-n-200 bg-white p-5">
+          <p className="text-sm font-bold text-n-900">Logo</p>
           <label
             htmlFor="logo-upload"
-            className="mt-4 flex cursor-pointer flex-col items-center rounded-[8px] border border-dashed border-[#D9CDC5] bg-[#FDFBF9] p-5 text-center transition-colors hover:bg-white"
+            className="mt-4 flex cursor-pointer flex-col items-center rounded-lg border border-dashed border-[#D9CDC5] bg-n-50 p-5 text-center transition-colors hover:bg-white"
           >
             <img
               src={logoPreview}
               alt="Employer logo"
-              className="h-24 w-24 rounded-[8px] object-cover"
+              className="h-24 w-24 rounded-lg object-cover"
             />
-            <span className="mt-3 text-sm font-bold text-[#8500FA]">Upload logo</span>
+            <span className="mt-3 text-sm font-bold text-co-primary">Upload logo</span>
             <input
               id="logo-upload"
               type="file"
@@ -362,17 +362,17 @@ const CompanyProfile = () => {
             />
           </div>
 
-          <div className="mt-5 rounded-[8px] border border-[#EFE7E1] bg-[#F7F5F2] p-4">
-            <p className="text-xs font-bold uppercase tracking-[0.08em] text-[#77737D]">
+          <div className="mt-5 rounded-lg border border-n-100 bg-n-50 p-4">
+            <p className="text-xs font-bold uppercase tracking-[0.08em] text-n-500">
               Status
             </p>
-            <p className="mt-1 text-sm font-semibold text-[#111114]">
+            <p className="mt-1 text-sm font-semibold text-n-900">
               {company ? "Profile saved" : "Profile incomplete"}
             </p>
           </div>
         </aside>
 
-        <section className="rounded-[8px] border border-[#E7DDD6] bg-white p-5 md:p-6">
+        <section className="rounded-lg border border-n-200 bg-white p-5 md:p-6">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
               <label className={labelClass}>Company name *</label>
@@ -441,17 +441,17 @@ const CompanyProfile = () => {
                 type="text"
               />
               {isSearchingLocations && (
-                <span className="absolute right-3 top-10 text-xs font-semibold text-[#77737D]">
+                <span className="absolute right-3 top-10 text-xs font-semibold text-n-500">
                   Searching
                 </span>
               )}
               {showLocationDropdown && locationResults.length > 0 && (
-                <ul className="absolute z-20 mt-1 max-h-48 w-full overflow-y-auto rounded-[8px] border border-[#E7DDD6] bg-white shadow-[0_18px_45px_rgba(17,17,20,0.08)]">
+                <ul className="absolute z-20 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-n-200 bg-white shadow-[0_18px_45px_rgba(17,17,20,0.08)]">
                   {locationResults.map((location) => (
                     <li
                       key={location.id}
                       onMouseDown={() => handleLocationSelect(location)}
-                      className="cursor-pointer px-4 py-2 text-sm font-semibold text-[#4F4D55] hover:bg-[#F7F5F2]"
+                      className="cursor-pointer px-4 py-2 text-sm font-semibold text-n-700 hover:bg-n-50"
                     >
                       {getLocationLabel(location)}
                     </li>
@@ -522,10 +522,10 @@ const CompanyProfile = () => {
 
             <div className="md:col-span-2">
               <div className="mb-2 flex items-center justify-between gap-3">
-                <label className="block text-xs font-bold uppercase tracking-[0.08em] text-[#77737D]">
+                <label className="block text-xs font-bold uppercase tracking-[0.08em] text-n-500">
                   Description
                 </label>
-                <span className="text-xs font-semibold text-[#77737D]">
+                <span className="text-xs font-semibold text-n-500">
                   {characterCount}/2000
                 </span>
               </div>
@@ -534,7 +534,7 @@ const CompanyProfile = () => {
                 value={formData.description}
                 onChange={handleInputChange}
                 maxLength={2000}
-                className="min-h-36 w-full resize-y rounded-[8px] border border-[#E7DDD6] bg-[#FDFBF9] px-4 py-3 text-sm leading-6 text-[#111114] outline-none transition focus:border-[#8500FA] focus:bg-white"
+                className="min-h-36 w-full resize-y rounded-lg border border-n-200 bg-n-50 px-4 py-3 text-sm leading-6 text-n-900 outline-none transition focus:border-co-primary focus:bg-white"
                 placeholder="What candidates should know before applying."
               />
             </div>
@@ -543,12 +543,12 @@ const CompanyProfile = () => {
       </div>
 
       {hasChanges && (
-        <div className="fixed bottom-4 left-4 right-4 z-50 flex items-center justify-between gap-3 rounded-[8px] border border-[#E7DDD6] bg-white/95 p-3 shadow-[0_18px_45px_rgba(17,17,20,0.12)] backdrop-blur md:hidden">
-          <span className="text-sm font-bold text-[#111114]">Unsaved changes</span>
+        <div className="fixed bottom-4 left-4 right-4 z-50 flex items-center justify-between gap-3 rounded-lg border border-n-200 bg-white/95 p-3 shadow-[0_18px_45px_rgba(17,17,20,0.12)] backdrop-blur md:hidden">
+          <span className="text-sm font-bold text-n-900">Unsaved changes</span>
           <div className="flex gap-2">
             <button
               onClick={handleDiscard}
-              className="rounded-[8px] border border-[#E7DDD6] px-3 py-2 text-xs font-bold text-[#4F4D55]"
+              className="rounded-lg border border-n-200 px-3 py-2 text-xs font-bold text-n-700"
               type="button"
             >
               Discard
@@ -556,7 +556,7 @@ const CompanyProfile = () => {
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="rounded-[8px] bg-[#FF6B35] px-4 py-2 text-xs font-bold text-white disabled:opacity-70"
+              className="rounded-lg bg-co-primary px-4 py-2 text-xs font-bold text-white disabled:opacity-70"
               type="button"
             >
               {isSaving ? "Saving..." : "Save"}

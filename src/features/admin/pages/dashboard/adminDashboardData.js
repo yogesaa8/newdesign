@@ -1,11 +1,8 @@
 export const adminTabs = [
   { id: "overview", label: "Dashboard", icon: "dashboard" },
-  { id: "approvals", label: "Approvals", icon: "check_circle" },
-  { id: "jobs", label: "Jobs", icon: "work" },
-  { id: "users", label: "Users", icon: "people" },
-  { id: "reports", label: "Reports", icon: "flag" },
+  { id: "companies", label: "Companies", icon: "apartment" },
+  { id: "institutes", label: "Institutes", icon: "school" },
   { id: "profile", label: "Profile", icon: "account_circle" },
-  { id: "password", label: "Password", icon: "lock" },
 ];
 
 export const adminProfile = {
@@ -47,33 +44,3 @@ export const pendingCompanies = [
     industry: "Healthcare",
   },
 ];
-
-export const recentApplications = [
-  {
-    id: 101,
-    seeker: "Amit Kumar",
-    job: "Senior React Developer",
-    company: "TechCorp",
-    status: "New",
-  },
-  {
-    id: 102,
-    seeker: "Sneha Reddy",
-    job: "Marketing Manager",
-    company: "AdGlobal",
-    status: "Shortlisted",
-  },
-  {
-    id: 103,
-    seeker: "Vikram Singh",
-    job: "Data Analyst",
-    company: "DataMiners",
-    status: "Rejected",
-  },
-];
-
-export const statusColors = {
-  New: "bg-blue-50 text-blue-600",
-  Shortlisted: "bg-green-50 text-green-600",
-  Rejected: "bg-red-50 text-red-500",
-};

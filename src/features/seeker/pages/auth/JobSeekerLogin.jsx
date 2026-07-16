@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { useAuthStore } from "../../../../store";
+import { getRememberedLogin, saveRememberedLogin } from "../../../../lib/rememberedLogin";
 import GoogleOAuthButton from "../../../../components/auth/GoogleOAuthButton";
 import {
   AuthAlert,
@@ -15,11 +16,12 @@ import {
 import { authLinkClass } from "../../../auth/authConstants";
 
 const JobSeekerLogin = () => {
+  const rememberedLogin = getRememberedLogin("seeker");
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
+    email: rememberedLogin.email || "",
     password: "",
-    remember: false,
+    remember: rememberedLogin.remember || false,
   });
 
   const navigate = useNavigate();
@@ -38,7 +40,12 @@ const JobSeekerLogin = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      await loginSeeker(formData);
+      await loginSeeker({
+        email: formData.email.trim(),
+        password: formData.password,
+        remember: formData.remember,
+      });
+      saveRememberedLogin("seeker", formData.email.trim(), formData.remember);
       navigate("/jobs", { replace: true });
     } catch {
       // Store error is shown in the form.
@@ -52,6 +59,7 @@ const JobSeekerLogin = () => {
         userType: "seeker",
         remember: formData.remember,
       });
+      saveRememberedLogin("seeker", formData.email.trim(), formData.remember);
       navigate("/jobs", { replace: true });
     } catch {
       // Store error is shown in the form.
@@ -92,7 +100,7 @@ const JobSeekerLogin = () => {
             <button
               type="button"
               onClick={() => setShowPassword((value) => !value)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6F6F76] transition hover:text-[#8500FA]"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-n-400 transition hover:text-[var(--auth-accent)]"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}

@@ -16,10 +16,10 @@
   --ink-2: #6F6F76;
   --ink-3: #8A8690;
   --ink-4: #A6A0AA;
-  --accent: #8500FA;
-  --accent-2: #6D00D2;
-  --accent-soft: rgba(133, 0, 250, 0.14);
-  --accent-line: rgba(198, 175, 255, 0.34);
+  --accent: #FF6B35;
+  --accent-2: #E85520;
+  --accent-soft: rgba(255, 107, 53, 0.10);
+  --accent-line: rgba(253, 220, 200, 0.80);
   --ok: #16a34a;
   --warn: #b7791f;
   --danger: #dc2626;
@@ -105,12 +105,12 @@
   font-weight: 600;
   box-shadow: 0 0 0 1px rgba(198,175,255,0.18) inset;
 }
-.rb-scope .btn-primary:hover { background: #491EF7; transform: translateY(-1px); }
+.rb-scope .btn-primary:hover { background: #FF9566; transform: translateY(-1px); }
 .rb-scope .btn-primary:active { transform: translateY(0); }
 .rb-scope .btn-ghost { background: #FFFFFF; border-color: #EADFD9; color: #0A0A0A; }
-.rb-scope .btn-ghost:hover { background: #F7F5F2; border-color: #C6AFFF; color: #8500FA; }
+.rb-scope .btn-ghost:hover { background: #FFF1E9; border-color: #FDDCC8; color: #FF6B35; }
 .rb-scope .btn-soft { background: var(--accent-soft); border-color: var(--accent-line); color: var(--accent-2); }
-.rb-scope .btn-soft:hover { background: rgba(133,0,250,0.2); }
+.rb-scope .btn-soft:hover { background: rgba(255,107,53,0.18); }
 .rb-scope .btn-sm { padding: 6px 10px; font-size: 12px; border-radius: 8px; }
 .rb-scope .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .rb-scope .btn-icon { padding: 8px; border-radius: 8px; background: var(--bg-2); border: 1px solid var(--line); color: var(--ink-1); cursor: pointer; }
@@ -180,7 +180,8 @@
 }
 .rb-scope .step-pill:hover { color: var(--ink-1); background: var(--bg-2); }
 .rb-scope .step-pill.active {
-  color: #fff; background: #111114; border-color: #111114;
+  color: var(--accent); background: var(--bg-1); border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 .rb-scope .step-pill.done { color: var(--ok); }
 .rb-scope .step-pill .num {
@@ -337,7 +338,7 @@
   width: 24px; height: 24px; border-radius: 50%;
   background: var(--accent); color: #fff;
   display: grid; place-items: center;
-  box-shadow: 0 4px 12px rgba(133,0,250,0.4);
+  box-shadow: 0 4px 12px rgba(255,107,53,0.40);
   opacity: 0; transform: scale(0.6);
   transition: all 0.2s ease;
 }

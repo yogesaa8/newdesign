@@ -68,7 +68,7 @@ const AboutUs = () => {
         </div>
 
         <div className="mt-12 max-w-6xl mx-auto px-6">
-          <div className="h-80 rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2]" />
+          <div className="h-80 rounded-[8px] border border-n-200 bg-n-50" />
         </div>
       </section>
 
@@ -86,13 +86,13 @@ const AboutUs = () => {
             {aboutHowItWorks.steps.map((step, i) => (
               <div
                 key={i}
-                className="fji-card p-8 text-center transition hover:bg-[#F7F5F2]"
+                className="fji-card p-8 text-center transition hover:bg-n-50"
               >
                 <div className="text-4xl mb-4">{step.icon}</div>
-                <h3 className="mb-2 text-xl font-semibold text-[#0A0A0A]">
+                <h3 className="mb-2 text-xl font-semibold text-n-900">
                   {step.title}
                 </h3>
-                <p className="text-sm text-[#6F6F76]">{step.desc}</p>
+                <p className="text-sm text-n-500">{step.desc}</p>
               </div>
             ))}
           </div>
@@ -102,10 +102,10 @@ const AboutUs = () => {
       {/* Video Section */}
       <section className="py-12">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="relative flex h-[420px] items-center justify-center overflow-hidden rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2]">
+          <div className="relative flex h-[420px] items-center justify-center overflow-hidden rounded-[8px] border border-n-200 bg-n-50">
             <div className="absolute inset-0" />
-            <button className="z-10 flex h-20 w-20 items-center justify-center rounded-[8px] bg-white text-[#FF6B35] transition hover:bg-[#FFF7F3]">
-              <div className="ml-1 h-0 w-0 border-b-8 border-l-[18px] border-t-8 border-b-transparent border-l-[#FF6B35] border-t-transparent" />
+            <button className="z-10 flex h-20 w-20 items-center justify-center rounded-[8px] bg-white text-sk-primary transition hover:bg-sk-bg">
+              <div className="ml-1 h-0 w-0 border-b-8 border-l-[18px] border-t-8 border-b-transparent border-l-sk-primary border-t-transparent" />
             </button>
 
             <div className="absolute bottom-0 left-0 right-0 p-10">
@@ -115,12 +115,12 @@ const AboutUs = () => {
               <div className="grid md:grid-cols-3 gap-6">
                 {aboutVideoBullets.items.map((text, n) => (
                   <div key={n} className="flex gap-4">
-                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[8px] bg-white text-sm font-bold text-[#8500FA]">
+                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-[8px] bg-white text-sm font-bold text-co-primary">
                       {n + 1}
                     </div>
                     <div>
-                      <p className="font-medium text-[#0A0A0A]">{text}</p>
-                      <a href="#" className="mt-1 inline-block text-sm text-[#8500FA]">
+                      <p className="font-medium text-n-900">{text}</p>
+                      <a href="#" className="mt-1 inline-block text-sm text-co-primary">
                         Learn more →
                       </a>
                     </div>
@@ -153,7 +153,7 @@ const AboutUs = () => {
                   <span className="text-2xl">{openFaq === i ? "−" : "+"}</span>
                 </button>
                 {openFaq === i && (
-                  <div className="px-8 pb-8 text-sm leading-relaxed text-[#6F6F76]">
+                  <div className="px-8 pb-8 text-sm leading-relaxed text-n-500">
                     {faq.answer}
                   </div>
                 )}
@@ -164,14 +164,14 @@ const AboutUs = () => {
       </section>
 
       {/* We're Only Working With The Best */}
-      <section className="border-t border-[#EADFD9] py-20">
+      <section className="border-t border-n-200 py-20">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="grid grid-cols-2 gap-6">
-              <div className="aspect-video rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2]" />
+              <div className="aspect-video rounded-[8px] border border-n-200 bg-n-50" />
               <div className="space-y-6">
-                <div className="aspect-video rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2]" />
-                <div className="aspect-video rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2]" />
+                <div className="aspect-video rounded-[8px] border border-n-200 bg-n-50" />
+                <div className="aspect-video rounded-[8px] border border-n-200 bg-n-50" />
               </div>
             </div>
 
@@ -186,8 +186,8 @@ const AboutUs = () => {
                   <div key={i} className="flex gap-4">
                     <div className="text-3xl">{item.icon}</div>
                     <div>
-                      <div className="font-semibold text-[#0A0A0A]">{item.title}</div>
-                      <div className="text-sm text-[#6F6F76]">{item.subtitle}</div>
+                      <div className="font-semibold text-n-900">{item.title}</div>
+                      <div className="text-sm text-n-500">{item.subtitle}</div>
                     </div>
                   </div>
                 ))}
@@ -210,18 +210,18 @@ const AboutUs = () => {
           <div className="grid md:grid-cols-2 gap-8">
             {aboutNews.items.map((item, i) => (
               <div key={i} className="group">
-                <div className="relative mb-6 h-80 overflow-hidden rounded-[8px] border border-[#EADFD9] bg-[#F7F5F2]">
-                  <div className="absolute left-6 top-6 rounded-[8px] bg-white px-4 py-1 text-xs text-[#8500FA]">
+                <div className="relative mb-6 h-80 overflow-hidden rounded-[8px] border border-n-200 bg-n-50">
+                  <div className="absolute left-6 top-6 rounded-[8px] bg-white px-4 py-1 text-xs text-co-primary">
                     {item.tag}
                   </div>
                 </div>
-                <div className="mb-2 text-sm text-[#6F6F76]">{item.date}</div>
-                <h3 className="text-xl font-semibold leading-tight text-[#0A0A0A]">
+                <div className="mb-2 text-sm text-n-500">{item.date}</div>
+                <h3 className="text-xl font-semibold leading-tight text-n-900">
                   {item.title}
                 </h3>
                 <a
                   href="#"
-                  className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[#8500FA]"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-co-primary"
                 >
                   Read more →
                 </a>

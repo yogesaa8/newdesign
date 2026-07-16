@@ -1,8 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { getRoleHomePath } from "../lib/authRoutes";
 import { useAuthStore } from "../store";
 
 const PublicAuthRoute = () => {
-  const { isAuthenticated, isInitializing } = useAuthStore();
+  const { isAuthenticated, isInitializing, role } = useAuthStore();
 
   if (isInitializing) {
     return (
@@ -16,7 +17,7 @@ const PublicAuthRoute = () => {
   }
 
   if (isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={getRoleHomePath(role)} replace />;
   }
 
   return <Outlet />;

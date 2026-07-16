@@ -68,11 +68,11 @@ const roleDropdownItems = {
 };
 
 const profileAccent = {
-  company: "bg-[#F1E7FF] text-[#8500FA]",
-  admin: "bg-indigo-50 text-indigo-700",
-  institute: "bg-violet-50 text-violet-700",
-  college: "bg-[#F1E7FF] text-[#8500FA]",
-  seeker: "bg-[#FFF1E9] text-[#C84F1F]",
+  company: "bg-co-surface text-co-primary",
+  admin: "bg-co-surface text-co-primary",
+  institute: "bg-co-surface text-co-primary",
+  college: "bg-co-surface text-co-primary",
+  seeker: "bg-sk-surface text-sk-primary",
 };
 
 const profileFallbackName = {
@@ -224,7 +224,7 @@ const GetStartedButton = ({ onClick }) => (
   <Link
     to="/seeker/signup"
     onClick={onClick}
-    className="hidden items-center gap-2.5 rounded-full border-0 bg-linear-to-r from-zinc-950 to-zinc-500 py-2 pl-5 pr-2 text-sm font-medium text-zinc-50 transition hover:text-zinc-200 md:flex"
+    className="hidden items-center gap-2.5 rounded-full border-0 bg-linear-to-r from-n-900 to-n-500 py-2 pl-5 pr-2 text-sm font-medium text-n-50 transition hover:text-n-200 md:flex"
   >
     Get started
     <span className="flex size-7 items-center justify-center rounded-full bg-white">
@@ -237,7 +237,7 @@ const MobileGetStartedButton = ({ onClick }) => (
   <Link
     to="/seeker/signup"
     onClick={onClick}
-    className="mt-3 flex w-fit items-center justify-center gap-2.5 rounded-full border-0 bg-linear-to-r from-zinc-950 to-zinc-500 px-5 py-2.5 text-sm font-medium text-zinc-50"
+    className="mt-3 flex w-fit items-center justify-center gap-2.5 rounded-full border-0 bg-linear-to-r from-n-900 to-n-500 px-5 py-2.5 text-sm font-medium text-n-50"
   >
     Get started
     <span className="flex size-7 items-center justify-center rounded-full bg-white">
@@ -279,7 +279,7 @@ const HeaderActions = ({ compact = false, onNavigate }) => {
   };
 
   if (isInitializing) {
-    return <div className="h-10 w-28 rounded-full bg-zinc-100" />;
+    return <div className="h-10 w-28 rounded-full bg-n-100" />;
   }
 
   if (!isAuthenticated) {
@@ -302,7 +302,7 @@ const HeaderActions = ({ compact = false, onNavigate }) => {
           <button
             type="button"
             onClick={() => setNotifOpen((value) => !value)}
-            className="relative flex size-10 items-center justify-center rounded-full border border-zinc-200 bg-white text-zinc-800 transition hover:bg-zinc-50"
+            className="relative flex size-10 items-center justify-center rounded-full border border-n-200 bg-white text-n-800 transition hover:bg-n-50"
             aria-label="Notifications"
           >
             <FiBell size={18} />
@@ -310,22 +310,22 @@ const HeaderActions = ({ compact = false, onNavigate }) => {
           </button>
 
           {notifOpen && (
-            <div className="absolute right-0 z-50 mt-3 w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-xl">
-              <div className="border-b border-zinc-100 px-5 py-4">
-                <h4 className="font-semibold text-zinc-900">Notifications</h4>
+            <div className="absolute right-0 z-50 mt-3 w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-n-200 bg-white shadow-xl">
+              <div className="border-b border-n-100 px-5 py-4">
+                <h4 className="font-semibold text-n-900">Notifications</h4>
               </div>
               <div className="space-y-3 p-4">
-                <div className="rounded-xl bg-zinc-50 p-3">
-                  <p className="text-sm font-medium text-zinc-900">
+                <div className="rounded-xl bg-n-50 p-3">
+                  <p className="text-sm font-medium text-n-900">
                     New job alert matched your profile
                   </p>
-                  <span className="text-xs text-zinc-500">2 min ago</span>
+                  <span className="text-xs text-n-500">2 min ago</span>
                 </div>
-                <div className="rounded-xl bg-zinc-50 p-3">
-                  <p className="text-sm font-medium text-zinc-900">
+                <div className="rounded-xl bg-n-50 p-3">
+                  <p className="text-sm font-medium text-n-900">
                     Recruiter viewed your profile
                   </p>
-                  <span className="text-xs text-zinc-500">1 hour ago</span>
+                  <span className="text-xs text-n-500">1 hour ago</span>
                 </div>
               </div>
             </div>
@@ -337,13 +337,13 @@ const HeaderActions = ({ compact = false, onNavigate }) => {
         <button
           type="button"
           onClick={() => setProfileOpen((value) => !value)}
-          className="flex w-full items-center gap-2.5 rounded-full border border-zinc-200 bg-white py-1.5 pl-3 pr-1.5 text-left transition hover:bg-zinc-50 md:w-auto"
+          className="flex w-full items-center gap-2.5 rounded-full border border-n-200 bg-white py-1.5 pl-3 pr-1.5 text-left transition hover:bg-n-50 md:w-auto"
         >
           <div className="hidden min-w-0 lg:block">
-            <p className="max-w-36 truncate text-sm font-semibold text-zinc-900">
+            <p className="max-w-36 truncate text-sm font-semibold text-n-900">
               {profile.name}
             </p>
-            <p className="text-xs text-zinc-500">{profile.subtitle}</p>
+            <p className="text-xs text-n-500">{profile.subtitle}</p>
           </div>
           {profile.avatar ? (
             <img
@@ -363,11 +363,11 @@ const HeaderActions = ({ compact = false, onNavigate }) => {
         </button>
 
         {profileOpen && (
-          <div className="absolute right-0 z-50 mt-3 w-[min(18rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-xl">
-            <div className="border-b border-zinc-100 px-5 py-4">
-              <h4 className="font-semibold text-zinc-900">{profile.name}</h4>
+          <div className="absolute right-0 z-50 mt-3 w-[min(18rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-n-200 bg-white shadow-xl">
+            <div className="border-b border-n-100 px-5 py-4">
+              <h4 className="font-semibold text-n-900">{profile.name}</h4>
               {profile.email && (
-                <p className="truncate text-sm text-zinc-500">{profile.email}</p>
+                <p className="truncate text-sm text-n-500">{profile.email}</p>
               )}
             </div>
 
@@ -382,7 +382,7 @@ const HeaderActions = ({ compact = false, onNavigate }) => {
                       setProfileOpen(false);
                       onNavigate?.();
                     }}
-                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900"
+                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-n-500 hover:bg-n-50 hover:text-n-900"
                   >
                     <Icon size={18} />
                     {item.label}
@@ -391,7 +391,7 @@ const HeaderActions = ({ compact = false, onNavigate }) => {
               })}
             </div>
 
-            <div className="border-t border-zinc-100 p-3">
+            <div className="border-t border-n-100 p-3">
               <button
                 type="button"
                 onClick={handleLogout}
@@ -426,7 +426,7 @@ const DesktopNav = ({ items, pathname }) => {
   return (
     <div
       ref={menuRef}
-      className="hidden items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-1 py-1 md:flex"
+      className="hidden items-center gap-2 rounded-full border border-n-200 bg-n-50 px-1 py-1 md:flex"
     >
       {items.map((item) => {
         const childActive = item.children?.some((child) =>
@@ -444,8 +444,8 @@ const DesktopNav = ({ items, pathname }) => {
                 }
                 className={`flex items-center gap-1 rounded-full px-4 py-1.5 text-sm transition-colors ${
                   active
-                    ? "border border-zinc-200 bg-white font-medium text-zinc-800 hover:text-zinc-600"
-                    : "text-zinc-500 hover:text-zinc-400"
+                    ? "border border-n-200 bg-white font-medium text-n-800 hover:text-n-500"
+                    : "text-n-500 hover:text-n-400"
                 }`}
               >
                 {item.name}
@@ -456,7 +456,7 @@ const DesktopNav = ({ items, pathname }) => {
               </button>
 
               {openMenu === item.name && (
-                <div className="absolute left-1/2 z-50 mt-3 w-52 -translate-x-1/2 overflow-hidden rounded-2xl border border-zinc-200 bg-white p-1 shadow-xl">
+                <div className="absolute left-1/2 z-50 mt-3 w-52 -translate-x-1/2 overflow-hidden rounded-2xl border border-n-200 bg-white p-1 shadow-xl">
                   {item.children.map((child) => (
                     <Link
                       key={child.link}
@@ -464,8 +464,8 @@ const DesktopNav = ({ items, pathname }) => {
                       onClick={() => setOpenMenu(null)}
                       className={`block rounded-xl px-4 py-2.5 text-sm transition ${
                         isActivePath(pathname, child.link)
-                          ? "bg-zinc-50 font-medium text-zinc-800"
-                          : "text-zinc-500 hover:bg-zinc-50 hover:text-zinc-800"
+                          ? "bg-n-50 font-medium text-n-800"
+                          : "text-n-500 hover:bg-n-50 hover:text-n-800"
                       }`}
                     >
                       {child.name}
@@ -484,8 +484,8 @@ const DesktopNav = ({ items, pathname }) => {
             className={({ isActive }) =>
               `rounded-full px-4 py-1.5 text-sm transition-colors ${
                 isActive || active
-                  ? "border border-zinc-200 bg-white font-medium text-zinc-800 hover:text-zinc-600"
-                  : "text-zinc-500 hover:text-zinc-400"
+                  ? "border border-n-200 bg-white font-medium text-n-800 hover:text-n-500"
+                  : "text-n-500 hover:text-n-400"
               }`
             }
           >
@@ -508,7 +508,7 @@ const MobileMenu = ({
   if (!open) return null;
 
   return (
-    <div className="absolute left-0 top-full z-50 flex w-full flex-col gap-1 border-t border-zinc-200 bg-white p-5 md:hidden">
+    <div className="absolute left-0 top-full z-50 flex w-full flex-col gap-1 border-t border-n-200 bg-white p-5 md:hidden">
       {showSidebarToggle && (
         <button
           type="button"
@@ -516,7 +516,7 @@ const MobileMenu = ({
             onSidebarToggle?.();
             onNavigate();
           }}
-          className="rounded-lg px-4 py-2.5 text-left text-sm font-medium text-zinc-800 hover:bg-zinc-50"
+          className="rounded-lg px-4 py-2.5 text-left text-sm font-medium text-n-800 hover:bg-n-50"
         >
           Dashboard menu
         </button>
@@ -534,8 +534,8 @@ const MobileMenu = ({
               <span
                 className={`rounded-lg px-4 py-2.5 text-sm ${
                   active
-                    ? "bg-zinc-50 font-medium text-zinc-800"
-                    : "font-medium text-zinc-500"
+                    ? "bg-n-50 font-medium text-n-800"
+                    : "font-medium text-n-500"
                 }`}
               >
                 {item.name}
@@ -548,8 +548,8 @@ const MobileMenu = ({
                     onClick={onNavigate}
                     className={`rounded-lg px-4 py-2.5 text-sm ${
                       isActivePath(pathname, child.link)
-                        ? "bg-zinc-50 font-medium text-zinc-800"
-                        : "text-zinc-500 hover:bg-zinc-50"
+                        ? "bg-n-50 font-medium text-n-800"
+                        : "text-n-500 hover:bg-n-50"
                     }`}
                   >
                     {child.name}
@@ -567,8 +567,8 @@ const MobileMenu = ({
             onClick={onNavigate}
             className={`rounded-lg px-4 py-2.5 text-sm ${
               active
-                ? "bg-zinc-50 font-medium text-zinc-800"
-                : "text-zinc-500 hover:bg-zinc-50"
+                ? "bg-n-50 font-medium text-n-800"
+                : "text-n-500 hover:bg-n-50"
             }`}
           >
             {item.name}
@@ -606,9 +606,9 @@ const MasterHeader = ({
           alt="FirstJobIndia"
           className="size-8 object-contain"
         />
-        <span className="hidden text-sm font-medium text-black sm:inline">
+        <span className="hidden text-sm font-medium text-n-900 sm:inline">
           <span>First</span>
-          <span className="text-orange-600">Job</span>
+          <span className="text-sk-primary">Job</span>
           <span>India</span>
         </span>
       </Link>
@@ -627,17 +627,17 @@ const MasterHeader = ({
         aria-expanded={menuOpen}
       >
         <span
-          className={`block h-0.5 w-6 bg-zinc-800 transition-transform ${
+          className={`block h-0.5 w-6 bg-n-800 transition-transform ${
             menuOpen ? "translate-y-2 rotate-45" : ""
           }`}
         />
         <span
-          className={`block h-0.5 w-6 bg-zinc-800 transition-opacity ${
+          className={`block h-0.5 w-6 bg-n-800 transition-opacity ${
             menuOpen ? "opacity-0" : ""
           }`}
         />
         <span
-          className={`block h-0.5 w-6 bg-zinc-800 transition-transform ${
+          className={`block h-0.5 w-6 bg-n-800 transition-transform ${
             menuOpen ? "-translate-y-2 -rotate-45" : ""
           }`}
         />

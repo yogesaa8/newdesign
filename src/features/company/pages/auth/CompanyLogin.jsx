@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../../store";
+import { getRememberedLogin, saveRememberedLogin } from "../../../../lib/rememberedLogin";
 import GoogleOAuthButton from "../../../../components/auth/GoogleOAuthButton";
 import {
   AuthAlert,
@@ -18,10 +19,11 @@ const CompanyLogin = () => {
   const navigate = useNavigate();
   const { error, isLoading, loginCompany, continueWithGoogle, clearError } =
     useAuthStore();
+  const rememberedLogin = getRememberedLogin("company");
   const [formData, setFormData] = useState({
-    email: "",
+    email: rememberedLogin.email || "",
     password: "",
-    remember: false,
+    remember: rememberedLogin.remember || false,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [formErrors, setFormErrors] = useState({});
@@ -51,7 +53,12 @@ const CompanyLogin = () => {
     event.preventDefault();
     if (!validate()) return;
     try {
-      await loginCompany(formData);
+      await loginCompany({
+        email: formData.email.trim(),
+        password: formData.password,
+        remember: formData.remember,
+      });
+      saveRememberedLogin("company", formData.email.trim(), formData.remember);
       navigate("/company/profile", { replace: true });
     } catch {
       // Store error is shown in the form.
@@ -65,6 +72,7 @@ const CompanyLogin = () => {
         userType: "company",
         remember: formData.remember,
       });
+      saveRememberedLogin("company", formData.email.trim(), formData.remember);
       navigate("/company/profile", { replace: true });
     } catch {
       // Store error is shown in the form.
@@ -105,7 +113,7 @@ const CompanyLogin = () => {
             <button
               type="button"
               onClick={() => setShowPassword((value) => !value)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6F6F76] transition hover:text-[#8500FA]"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-n-400 transition hover:text-[var(--auth-accent)]"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -119,7 +127,7 @@ const CompanyLogin = () => {
           </div>
         </div>
 
-        <label className="flex w-fit items-center gap-2 text-sm text-[#6F6F76]">
+        <label className="flex w-fit items-center gap-2 text-sm text-n-500">
           <input
             type="checkbox"
             name="remember"
