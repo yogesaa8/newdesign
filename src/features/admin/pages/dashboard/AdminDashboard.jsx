@@ -3,7 +3,6 @@ import { useAdminStore, useAuthStore } from "../../../../store";
 import { adminTabs } from "./adminDashboardData";
 import AdminHeader from "./components/AdminHeader";
 import CompanyManagementTab from "./components/CompanyManagementTab";
-import InstituteManagementTab from "./components/InstituteManagementTab";
 import AdminProfileTab from "./components/AdminProfileTab";
 import AdminSidebar from "./components/AdminSidebar";
 import MobileAdminNav from "./components/MobileAdminNav";
@@ -43,9 +42,8 @@ export default function AdminDashboard() {
 
         {activeTab === "overview" && <OverviewTab onTabChange={setActiveTab} />}
         {activeTab === "companies" && <CompanyManagementTab />}
-        {activeTab === "institutes" && <InstituteManagementTab />}
         {activeTab === "profile" && <AdminProfileTab />}
-        {!["overview", "companies", "institutes", "profile"].includes(
+        {!["overview", "companies", "profile"].includes(
           activeTab,
         ) && (
           <PlaceholderTab activeTab={activeTab} />

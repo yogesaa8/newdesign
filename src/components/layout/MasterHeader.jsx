@@ -27,26 +27,20 @@ const navItems = [
   { name: "Resume", link: "/resume", roles: ["public", "seeker"] },
   {
     name: "Services",
-    roles: ["public", "seeker", "company", "institute", "college", "admin"],
+    roles: ["public", "seeker", "company", "college"],
     children: [
       { name: "Company", link: "/company/login", roles: ["public"] },
-      { name: "Institute", link: "/institute/login", roles: ["public"] },
+      { name: "Institute", link: "/institute", roles: ["public"] },
       { name: "College", link: "/college", roles: ["public", "college"] },
       { name: "Career GPS", link: "/career-gps", roles: ["public", "seeker"] },
       { name: "Ebook", link: "/e-book", roles: ["public", "seeker"] },
       { name: "Employer dashboard", link: "/company/dashboard", roles: ["company"] },
       { name: "Post job", link: "/company/jobs/new", roles: ["company"] },
-      { name: "Institute dashboard", link: "/institute/dashboard", roles: ["institute"] },
-      { name: "Institute page", link: "/institute", roles: ["institute"] },
-      { name: "Admin dashboard", link: "/admin/dashboard", roles: ["admin"] },
     ],
   },
   { name: "Feedback", link: "/reviews", roles: ["public"] },
   { name: "Dashboard", link: "/company/dashboard", roles: ["company"] },
   { name: "Jobs", link: "/company/jobs", roles: ["company"] },
-  { name: "Dashboard", link: "/institute/dashboard", roles: ["institute"] },
-  { name: "Institute", link: "/institute", roles: ["institute"] },
-  { name: "Dashboard", link: "/admin/dashboard", roles: ["admin"] },
 ];
 
 const roleDropdownItems = {
@@ -59,27 +53,18 @@ const roleDropdownItems = {
     { label: "Company profile", to: "/company/profile", icon: FiUser },
     { label: "Settings", to: "/company/settings/security", icon: FiSettings },
   ],
-  institute: [
-    { label: "Institute dashboard", to: "/institute/dashboard", icon: FiUser },
-    { label: "Institute page", to: "/institute", icon: FiSettings },
-  ],
   college: [{ label: "College page", to: "/college", icon: FiUser }],
-  admin: [{ label: "Admin dashboard", to: "/admin/dashboard", icon: FiUser }],
 };
 
 const profileAccent = {
   company: "bg-co-surface text-co-primary",
-  admin: "bg-co-surface text-co-primary",
-  institute: "bg-co-surface text-co-primary",
   college: "bg-co-surface text-co-primary",
   seeker: "bg-sk-surface text-sk-primary",
 };
 
 const profileFallbackName = {
-  admin: "Admin",
   college: "College",
   company: "Company",
-  institute: "Institute",
   seeker: "Job Seeker",
 };
 

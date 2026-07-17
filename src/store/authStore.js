@@ -156,22 +156,6 @@ const getUserType = (user, token) => {
   );
 };
 
-const assertUsableToken = (token) => {
-  if (!token) {
-    throw new Error("Login response did not include an access token.");
-  }
-};
-
-const assertActiveVerifiedUser = (user, label) => {
-  if (user?.is_active === false) {
-    throw new Error(`This ${label} account is inactive.`);
-  }
-
-  if (user?.is_verified === false) {
-    throw new Error(`This ${label} account is not verified.`);
-  }
-};
-
 const persistAuthenticatedUser = ({
   set,
   user,
@@ -612,82 +596,6 @@ export const useAuthStore = create((set, get) => ({
     } catch (error) {
       set({ isLoading: false, error: error.message });
       throw error;
-    }
-  },
-  loginAdmin: async ({ email, password, remember = true }) => {
-    set({ isLoading: true, error: null });
-
-    try {
-      const payload = await apiRequest("/auth/login", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-      });
-      const tokens = extractTokens(payload);
-      const user = buildUser(payload, { email });
-      const userType = getUserType(user, tokens.accessToken);
-      assertUsableToken(tokens.accessToken);
-
-      if (userType && userType !== "admin") {
-        throw new Error("Please login with an admin account.");
-      }
-
-      assertActiveVerifiedUser(user, "admin");
-
-      persistAuthenticatedUser({
-        set,
-        user,
-        role: "admin",
-        accessToken: tokens.accessToken,
-        refreshToken: tokens.refreshToken,
-        remember,
-      });
-
-      return payload;
-    } catch (error) {
-      const message =
-        error.status === 401
-          ? "Invalid admin email or password, or this admin account is not active."
-          : error.message;
-      set({ isLoading: false, error: message });
-      throw Object.assign(error, { message });
-    }
-  },
-  loginInstitute: async ({ email, password, remember = false }) => {
-    set({ isLoading: true, error: null });
-
-    try {
-      const payload = await apiRequest("/auth/login", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-      });
-      const tokens = extractTokens(payload);
-      const user = buildUser(payload, { email });
-      const userType = getUserType(user, tokens.accessToken);
-      assertUsableToken(tokens.accessToken);
-
-      if (userType && userType !== "institute") {
-        throw new Error("Please login with an institute account.");
-      }
-
-      assertActiveVerifiedUser(user, "institute");
-
-      persistAuthenticatedUser({
-        set,
-        user,
-        role: "institute",
-        accessToken: tokens.accessToken,
-        refreshToken: tokens.refreshToken,
-        remember,
-      });
-
-      return payload;
-    } catch (error) {
-      const message =
-        error.status === 401
-          ? "Invalid institute email or password, or this institute account is not active."
-          : error.message;
-      set({ isLoading: false, error: message });
-      throw Object.assign(error, { message });
     }
   },
   verifyCompanyOtp: async (otp) => {

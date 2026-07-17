@@ -78,36 +78,10 @@ export const useAdminStore = create((set, get) => ({
   isApprovingCompany: false,
   companyError: null,
 
-  institutes: [],
-  selectedInstitute: null,
-  institutePagination: { page: 1, limit: 10, total: 0, total_pages: 1 },
-  instituteFilters: {
-    page: 1,
-    limit: 10,
-    search: "",
-    status: "all",
-    profile_status: "all",
-    sort_by: "created_at",
-    sort_order: "desc",
-  },
-  isInstitutesLoading: false,
-  isCreatingInstitute: false,
-  isFetchingInstitute: false,
-  instituteError: null,
-
   setCompanyFilters: (filters) =>
     set((state) => ({
       companyFilters: {
         ...state.companyFilters,
-        ...filters,
-        page: filters.page ?? 1,
-      },
-    })),
-
-  setInstituteFilters: (filters) =>
-    set((state) => ({
-      instituteFilters: {
-        ...state.instituteFilters,
         ...filters,
         page: filters.page ?? 1,
       },
@@ -178,87 +152,4 @@ export const useAdminStore = create((set, get) => ({
       throw error;
     }
   },
-
-  fetchInstitutes: async (token, filters = get().instituteFilters) => {
-    set({ isInstitutesLoading: true, instituteError: null });
-
-    try {
-      const payload = await apiRequest(
-        `/admin/institutes${buildQueryString(filters)}`,
-        { token },
-      );
-      const data = getData(payload);
-
-      set({
-        institutes: data?.institutes ?? [],
-        institutePagination: data?.pagination ?? {
-          page: filters.page ?? 1,
-          limit: filters.limit ?? 10,
-          total: 0,
-          total_pages: 1,
-        },
-        instituteFilters: {
-          ...get().instituteFilters,
-          ...(data?.filters ?? {}),
-          page: data?.pagination?.page ?? filters.page ?? 1,
-          limit: data?.pagination?.limit ?? filters.limit ?? 10,
-        },
-        isInstitutesLoading: false,
-        instituteError: null,
-      });
-
-      return payload;
-    } catch (error) {
-      set({ isInstitutesLoading: false, instituteError: error.message });
-      throw error;
-    }
-  },
-
-  createInstitute: async (details, token) => {
-    set({ isCreatingInstitute: true, instituteError: null });
-
-    try {
-      const payload = await apiRequest("/admin/institutes", {
-        method: "POST",
-        token,
-        body: JSON.stringify(details),
-      });
-
-      set({ isCreatingInstitute: false, instituteError: null });
-      await get().fetchInstitutes(token, {
-        ...get().instituteFilters,
-        page: 1,
-      });
-
-      return payload;
-    } catch (error) {
-      set({ isCreatingInstitute: false, instituteError: error.message });
-      throw error;
-    }
-  },
-
-  fetchInstituteById: async (instituteUserId, token) => {
-    set({ isFetchingInstitute: true, instituteError: null });
-
-    try {
-      const payload = await apiRequest(
-        `/admin/institutes/${instituteUserId}`,
-        { token },
-      );
-      const instituteUser = getData(payload)?.institute_user ?? null;
-
-      set({
-        selectedInstitute: instituteUser,
-        isFetchingInstitute: false,
-        instituteError: null,
-      });
-
-      return instituteUser;
-    } catch (error) {
-      set({ isFetchingInstitute: false, instituteError: error.message });
-      throw error;
-    }
-  },
-
-  clearSelectedInstitute: () => set({ selectedInstitute: null }),
 }));

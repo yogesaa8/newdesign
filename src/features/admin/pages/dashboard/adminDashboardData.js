@@ -1,7 +1,6 @@
 export const adminTabs = [
   { id: "overview", label: "Dashboard", icon: "dashboard" },
   { id: "companies", label: "Companies", icon: "apartment" },
-  { id: "institutes", label: "Institutes", icon: "school" },
   { id: "profile", label: "Profile", icon: "account_circle" },
 ];
 

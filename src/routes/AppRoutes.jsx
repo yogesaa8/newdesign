@@ -39,9 +39,6 @@ import JobList from "../features/company/pages/dashboard/JobList";
 import JobPostForm from "../features/company/pages/dashboard/CreateJobListing";
 import Dashboard from "../features/company/pages/dashboard/Dashboard";
 
-/* ADMIN IMPORTS */
-import AdminDashboard from "../features/admin/pages/dashboard/AdminDashboard";
-import AdminLogin from "../features/admin/pages/auth/AdminLogin";
 import CareerGPS from "../features/public/pages/career/CareerGPS";
 import Pricing from "../features/public/pages/Pricing";
 import Community from "../features/public/pages/Community";
@@ -51,8 +48,6 @@ import EbookLibrary from "../features/public/pages/EbookLibrary";
 import SeekerProtectedRoute from "./SeekerProtectedRoute";
 import PublicAuthRoute from "./PublicAuthRoute";
 import CompanyProtectedRoute from "./CompanyProtectedRoute";
-import AdminProtectedRoute from "./AdminProtectedRoute";
-import InstituteProtectedRoute from "./InstituteProtectedRoute";
 import CompanyForgotPassword from "../features/company/pages/auth/CompanyForgotPassword";
 import AboutUs from "../features/public/pages/AboutUs";
 import Blog from "../features/public/pages/Blog";
@@ -62,14 +57,6 @@ import PrivacyPolicy from "../features/public/pages/PrivacyPolicy";
 import ReactSlides from "../features/public/pages/career/ReactQuestions";
 import NoindexRouteLayout from "../seo/NoindexRouteLayout";
 import InstituteMainPage from "../features/institute/InstituteMainPage";
-import InstituteLogin from "../features/institute/pages/InstituteLogin";
-import InstituteDashboard from "../features/institute/pages/InstituteDashboard";
-import InstituteLayout from "../features/institute/layouts/InstituteLayout";
-import InstituteProfile from "../features/institute/pages/InstituteProfile";
-import InstituteCourses from "../features/institute/pages/InstituteCourses";
-import InstituteCourseForm from "../features/institute/pages/InstituteCourseForm";
-import InstituteCourseDetail from "../features/institute/pages/InstituteCourseDetail";
-import InstituteApplicants from "../features/institute/pages/InstituteApplicants";
 
 const AppRoutes = () => {
   return (
@@ -119,27 +106,8 @@ const AppRoutes = () => {
               path="/company/reset-password"
               element={<CompanyForgotPassword />}
             />
-            <Route path="/institute/login" element={<InstituteLogin />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
           </Route>
         </Route>
-      </Route>
-
-      <Route
-        path="/institute"
-        element={
-          <InstituteProtectedRoute>
-            <InstituteLayout />
-          </InstituteProtectedRoute>
-        }
-      >
-        <Route path="dashboard" element={<InstituteDashboard />} />
-        <Route path="profile" element={<InstituteProfile />} />
-        <Route path="courses" element={<InstituteCourses />} />
-        <Route path="courses/create" element={<InstituteCourseForm />} />
-        <Route path="courses/:courseId" element={<InstituteCourseDetail />} />
-        <Route path="courses/:courseId/edit" element={<InstituteCourseForm />} />
-        <Route path="courses/:courseId/applicants" element={<InstituteApplicants />} />
       </Route>
 
       {/* JOB SEEKER DASHBOARD */}
@@ -188,20 +156,6 @@ const AppRoutes = () => {
         />
         <Route path="settings/security" element={<SecuritySettings />} />
       </Route>
-
-      {/* ADMIN DASHBOARD */}
-      <Route
-        path="/admin"
-        element={<Navigate to="/admin/dashboard" replace />}
-      />
-      <Route
-        path="/admin/dashboard"
-        element={
-          <AdminProtectedRoute>
-            <AdminDashboard />
-          </AdminProtectedRoute>
-        }
-      />
     </Routes>
   );
 };

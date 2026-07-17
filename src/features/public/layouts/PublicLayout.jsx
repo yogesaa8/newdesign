@@ -10,8 +10,6 @@ const authPaths = [
   "/company/login",
   "/company/signup",
   "/company/reset-password",
-  "/institute/login",
-  "/admin/login",
 ];
 
 const PublicLayout = () => {
