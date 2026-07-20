@@ -26,7 +26,7 @@ const FAQSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-10 items-start">
+        <div className=" gap-10 items-start">
           {/* LEFT SIDE - ACCORDION */}
           <div className="space-y-4">
             {faqs.map((faq, index) => (
@@ -77,7 +77,7 @@ const FAQSection = () => {
           </div>
 
           {/* RIGHT SIDE - CONTACT FORM */}
-          <div className="rounded border border-n-700 bg-n-900/40 backdrop-blur-md p-8 shadow-xl">
+          {/* <div className="rounded border border-n-700 bg-n-900/40 backdrop-blur-md p-8 shadow-xl">
             <div className="mb-6">
               <h3 className="text-2xl font-bold text-white">
                 Cannot find your answer? Ask us.
@@ -111,7 +111,7 @@ const FAQSection = () => {
                 Send my question
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

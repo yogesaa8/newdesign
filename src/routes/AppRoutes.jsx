@@ -76,7 +76,12 @@ const AppRoutes = () => {
         <Route path="/career-gps" element={<CareerGPS />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsConditions />} />
-        <Route path="/institute" element={<InstituteMainPage/>}  />
+        <Route path="/institute" element={<InstituteMainPage />} />
+        <Route
+          path="/institute/:instituteSlug"
+          element={<InstituteMainPage />}
+        />
+        <Route path="/course/:courseSlug" element={<InstituteMainPage />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/community" element={<Community />} />
         <Route path="/career-advisor" element={<CareerAdvisor />} />

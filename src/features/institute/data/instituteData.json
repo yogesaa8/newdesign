@@ -1,0 +1,1092 @@
+{
+  "contentLanguage": "en-IN",
+  "landingPage": {
+    "hero": {
+      "eyebrow": "Partner Institutes",
+      "title": "Explore Institutes and Professional Courses",
+      "description": "Choose an institute, review its strengths and open a complete course page before enrolling.",
+      "backgroundImage": {
+        "src": "/assets/site/landing-hero.webp",
+        "alt": "Students exploring partner institutes"
+      },
+      "primaryButton": {
+        "label": "Explore Institutes",
+        "url": "/institute#institutes"
+      }
+    },
+    "institutesSection": {
+      "id": "institutes",
+      "title": "Our Partner Institutes",
+      "instituteOrder": ["icofp"]
+    }
+  },
+  "institutes": [
+    {
+      "id": "icofp",
+      "slug": "icofp",
+      "status": "published",
+      "landingCard": {
+        "logo": {
+          "src": "/assets/institutes/icofp/logo.svg",
+          "alt": "ICOFP logo"
+        },
+        "name": "International College of Financial Planning (ICOFP)",
+        "shortDescription": "A specialised finance education institution focused on financial planning, wealth management, investments and BFSI careers.",
+        "keyFeatures": [
+          "CFP® regular and fast-track preparation",
+          "Live and recorded learning",
+          "Books, workbooks, mocks and projects",
+          "Mentoring and exam support"
+        ],
+        "fields": [
+          "Financial Planning",
+          "Wealth Management",
+          "Investments",
+          "BFSI"
+        ],
+        "viewDetailsButton": {
+          "label": "View Details",
+          "url": "/institute/icofp"
+        }
+      },
+      "detailPage": {
+        "hero": {
+          "eyebrow": "Partner Institute",
+          "title": "International College of Financial Planning",
+          "shortName": "ICOFP",
+          "description": "Specialised education for financial planning, wealth management, investment services and client-facing BFSI careers.",
+          "image": {
+            "src": "/assets/institutes/icofp/hero.webp",
+            "alt": "ICOFP financial education"
+          },
+          "primaryButton": {
+            "label": "Explore Courses",
+            "url": "#courses"
+          },
+          "secondaryButton": {
+            "label": "Book a free call",
+            "url": "https://wa.me/918198907329?text=Hello%2C%20I%20want%20more%20information.",
+            "openInNewTab": true
+          }
+        },
+        "shortDescription": "ICOFP is a specialised finance education institute established in 2002 and associated with the Bajaj Capital group in the supplied source.",
+        "longDescription": [
+          "International College of Financial Planning focuses on financial planning, personal finance, wealth management, investments and BFSI career development. Its CFP® preparation is described as combining global and Indian concepts with live teaching, recorded learning, concept books, workbooks, assignments, projects, case studies, mock tests, mentoring and technical examination support.For your collaboration page, ICOFP can be presented as a partner institute while clearly stating that admissions, academic delivery, examination, certification and fee policies remain governed by ICOFP and the relevant certification bodies."
+        ],
+        "keyFeatures": [
+          {
+            "title": "Specialised finance education",
+            "description": "Programmes focus on personal finance, financial planning, wealth management and investment services."
+          },
+          {
+            "title": "Flexible delivery",
+            "description": "Live virtual classes and pre-recorded e-learning are described for CFP® preparation."
+          },
+          {
+            "title": "Applied preparation",
+            "description": "Books, workbooks, assignments, projects, mocks, case studies and doubt-clearing support."
+          },
+          {
+            "title": "Professional guidance",
+            "description": "Faculty, mentors, programme managers and technical exam-readiness support are described."
+          }
+        ],
+        "keyPoints": [
+          "Established in 2002, according to the supplied source.",
+          "Associated with Bajaj Capital Group.",
+          "Focused on specialised finance and CFP® education.",
+          "Provides online access for learners across locations.",
+          "Uses practical projects, client scenarios and examination practice.",
+          "Admissions are described as online."
+        ],
+        "fields": [
+          "Personal Finance",
+          "Financial Planning",
+          "Investment Planning",
+          "Retirement Planning",
+          "Tax Planning",
+          "Risk and Insurance",
+          "Estate Planning",
+          "Wealth Management",
+          "Client Advisory",
+          "BFSI Careers"
+        ],
+        "whyChoose": [
+          "Structured CFP® regular and accelerated pathways.",
+          "Printed and digital learning support.",
+          "Faculty-led live classes with recordings.",
+          "Mock examinations and pre-exam doubt clearing.",
+          "Capstone project and case-study preparation.",
+          "Technical support for online-proctored examinations, as described by the source."
+        ],
+        "promotionalClaims": [
+          {
+            "claim": "India's first and largest CFP® education provider"
+          },
+          {
+            "claim": "CFP® was brought to India by ICOFP and Bajaj Capital in 2002"
+          },
+          {
+            "claim": "Approximately 80% market share in CFP® education"
+          },
+          {
+            "claim": "Highest pass percentage and 100% pass rate in some examinations"
+          },
+          {
+            "claim": "Part of a Bajaj Capital lineage described as 58 years"
+          },
+          {
+            "claim": "Faculty credentials include CFP, CFA, CA, PhD and IIM backgrounds"
+          },
+          {
+            "claim": "Academics headed by Ms Madhu Sinha in the supplied page"
+          },
+          {
+            "claim": "Zero-interest student financing with processing charges and six EMIs"
+          }
+        ],
+        "notableNames": [
+          "Suresh Sadagopan",
+          "Bhuvanaa Sreeram",
+          "Dilshad Billimoria",
+          "Lovaii Navlakhi",
+          "Shilpi Johri",
+          "Monika Halan"
+        ],
+        "contact": {
+          "website": "https://www.icofp.org/",
+          "applyUrl": "https://www.icofponline.com/",
+          "phone": "+91-9711437779",
+          "email": "admissions@icofp.org"
+        },
+        "coursesSection": {
+          "id": "courses",
+          "title": "Courses and Pathways",
+          "description": "Select a course to view its complete curriculum, eligibility, examinations, skills, resources and enrolment options."
+        }
+      },
+      "courses": [
+        {
+          "id": "icofp-cfp-regular",
+          "slug": "cfp-regular-pathway",
+          "status": "published",
+          "card": {
+            "name": "Certified Financial Planner (CFP®) - Regular Pathway",
+            "shortDescription": "A structured four-stage pathway covering investments, retirement and tax, risk and estate, and integrated financial planning.",
+            "thumbnail": {
+              "src": "/assets/institutes/icofp/courses/cfp-regular-card.webp",
+              "alt": "CFP Regular Pathway"
+            },
+            "duration": "Approximately 6-12 months",
+            "modes": ["Live Virtual Classes", "Pre-recorded E-learning"],
+            "badges": ["Professional Certification", "4-in-1 Programme"],
+            "keyPoints": [
+              "Three specialist credentials",
+              "Integrated financial planning",
+              "Online-proctored examinations"
+            ],
+            "viewDetailsButton": {
+              "label": "View Course Details",
+              "url": "/course/cfp-regular-pathway"
+            }
+          },
+          "detailPage": {
+            "hero": {
+              "eyebrow": "ICOFP Professional Certification",
+              "title": "Certified Financial Planner (CFP®) Certification",
+              "subtitle": "Build comprehensive capability in personal finance, investment, retirement, tax, risk, estate and integrated financial planning.",
+              "image": {
+                "src": "/assets/institutes/icofp/courses/cfp-regular-hero.webp",
+                "alt": "Certified Financial Planner course"
+              },
+              "badges": [
+                "International Professional Certification",
+                "Personal Finance",
+                "Financial Planning"
+              ],
+              "enrollButton": {
+                "label": "Enroll Now",
+                "url": "https://www.icofponline.com/",
+                "type": "external",
+                "openInNewTab": true
+              }
+            },
+            "overview": {
+              "longDescription": [
+                "The programme develops knowledge for comprehensive financial advisory services and personal financial planning. It covers cash-flow management, borrowing and lending decisions, investment planning, retirement planning, tax planning, insurance and risk, estate planning, client engagement and integrated written financial plans. The supplied source positions CFP® as a high-level global financial-planning certification and describes a four-in-one pathway in which learners can earn three specialist credentials before the final CFP® credential. Certification is subject to the current requirements of the relevant FPSB body, including education, examinations, ethics, experience, assessment, application and applicable fees."
+              ]
+            },
+            "majorFeatures": [
+              "Four-stage certification pathway.",
+              "Global concepts combined with Indian market, tax, legal and regulatory context.",
+              "Live virtual and self-paced recorded learning options.",
+              "Printed concept books and workbooks, recordings, assignments, projects, mocks, case studies and doubt-clearing support.",
+              "Financial Plan Assessment and case-study preparation at the integrated stage.",
+              "Ethics and professional-responsibility requirement.",
+              "Flexible online-proctored examination model, subject to current policy.",
+              "LMS access stated as 24 months from enrolment in one source section."
+            ],
+            "majorKeyPoints": [
+              "The source calls the programme a top qualification in personal finance and financial planning.",
+              "The source describes CFP® as an international mark of excellence for personal-finance professionals.",
+              "The source associates the certification with Financial Planning Standards Board and describes global recognition.",
+              "The supplied page claims validity across 27 countries and more than 223,000 certificants; both figures require current verification.",
+              "The course is positioned as a four-in-one programme with three specialist certificates plus the final CFP® certificate."
+            ],
+            "quickFacts": [
+              {
+                "label": "Programme Type",
+                "value": "Professional certification pathway"
+              },
+              {
+                "label": "Regular Structure",
+                "value": "Levels 1, 2 and 3 plus Integrated Financial Planning / final stage"
+              },
+              {
+                "label": "Indicative Duration",
+                "value": "Weekend 11-12 months; weekday under 6 months; 8-10 months recommended in the source"
+              },
+              {
+                "label": "Teaching Commitment",
+                "value": "Approximately 200-250 class hours"
+              },
+              {
+                "label": "Self-study Commitment",
+                "value": "Approximately 150 hours"
+              },
+              {
+                "label": "LMS Access",
+                "value": "24 months from enrolment, as stated in one source section"
+              },
+              {
+                "label": "Examination Mode",
+                "value": "Online, live-proctored"
+              },
+              {
+                "label": "Core Pillars",
+                "value": "Education, Examinations, Ethics and Experience"
+              }
+            ],
+            "learningModes": [
+              {
+                "id": "live-virtual",
+                "name": "CFP® Live Virtual Classes",
+                "description": "Real-time online teaching by faculty with interactive sessions. The source states that sessions are recorded and shared for repeated revision.",
+                "bestFor": [
+                  "Learners wanting scheduled faculty interaction",
+                  "Learners needing live doubt resolution",
+                  "Students studying from any Indian location"
+                ]
+              },
+              {
+                "id": "recorded-elearning",
+                "name": "CFP® Pre-recorded E-learning",
+                "description": "A self-paced LMS option with expert videos, study materials and progress tracking across devices. The source recommends it particularly for learners with an existing finance background such as CA, CFA or CWA.",
+                "bestFor": [
+                  "Working professionals",
+                  "Self-paced learners",
+                  "Learners with prior finance knowledge"
+                ]
+              }
+            ],
+            "eligibility": {
+              "minimumToJoin": [
+                "Class 12 / HSC passed",
+                "Any stream: Science, Arts or Commerce",
+                "At least 18 years of age"
+              ],
+              "minimumToClaimCertification": [
+                "Graduate / 10+2+3 qualification",
+                "Any stream",
+                "Relevant experience as required by FPSB"
+              ],
+              "experienceRequirements": [
+                "Three years of financial-industry experience",
+                "Or one year of supervised experience under a practising CFP® professional"
+              ],
+              "note": "Certification eligibility and experience rules must be reverified with FPSB India before publication."
+            },
+            "admissionProcedure": [
+              {
+                "step": 1,
+                "title": "Select",
+                "description": "Choose the preferred CFP® study mode."
+              },
+              {
+                "step": 2,
+                "title": "Enrol with ICOFP",
+                "description": "Complete the ICOFP admission process for the selected course package."
+              },
+              {
+                "step": 3,
+                "title": "Register with FPSB",
+                "description": "Complete FPSB registration in parallel with study, following current guidance."
+              },
+              {
+                "step": 4,
+                "title": "Subscribe and progress",
+                "description": "Subscribe to Levels 1, 2, 3 and 4 as applicable and take the examinations."
+              },
+              {
+                "step": 5,
+                "title": "Complete certification requirements",
+                "description": "Pass the required examinations and satisfy education, ethics, experience, assessment, application and fee requirements."
+              }
+            ],
+            "certificates": [
+              {
+                "level": 1,
+                "name": "FPSB® Investment Planning Specialist",
+                "image": {
+                  "src": "/cfp-l1_355251352.png",
+                  "alt": "CFP® Level 1 : Investment Specialist Certificate"
+                }
+              },
+              {
+                "level": 2,
+                "name": "FPSB® Retirement and Tax Planning Specialist",
+                "image": {
+                  "src": "/cfp-l2_46202902.png",
+                  "alt": "CFP® Level 2 : Retirement & Tax Specialist Certificate"
+                }
+              },
+              {
+                "level": 3,
+                "name": "FPSB® Risk and Estate Planning Specialist",
+                "image": {
+                  "src": "/cfp-l3_480262416.png",
+                  "alt": "CFP® Level 3 : Risk & Estate Specialist Certificate"
+                }
+              },
+              {
+                "level": 4,
+                "name": "Certified Financial Planner (CFP®)",
+                "image": {
+                  "src": "/cfp-l4_1464596062.png",
+                  "alt": "CFP® Level 4 : Certified Financial Planner Certificate"
+                }
+              }
+            ],
+            "programStructure": {
+              "description": "The source presents the Indian CFP® programme as four levels studied and assessed progressively. The first three are specialist stages, followed by integrated financial planning and final certification components.",
+              "pillars": ["Education", "Examinations", "Ethics", "Experience"],
+              "levels": [
+                {
+                  "order": 1,
+                  "title": "FPSB® Investment Planning Specialist",
+                  "abbreviation": "IPS"
+                },
+                {
+                  "order": 2,
+                  "title": "FPSB® Retirement and Tax Planning Specialist",
+                  "abbreviation": "RTPS"
+                },
+                {
+                  "order": 3,
+                  "title": "FPSB® Risk and Estate Planning Specialist",
+                  "abbreviation": "REPS"
+                },
+                {
+                  "order": 4,
+                  "title": "FPSB® Integrated Financial Planning",
+                  "abbreviation": "IFP / Capstone"
+                }
+              ],
+              "ethicsRequirement": "Complete the FPSB professional-ethics course and agree to the Code of Ethics and Professional Responsibility.",
+              "certificationRequirements": [
+                "Complete required education courses.",
+                "Pass specialist certification examinations.",
+                "Complete ethics course and attestation.",
+                "Complete Integrated Financial Planning and the Financial Plan Assessment.",
+                "Pass the final CFP® examination.",
+                "Meet the experience requirement.",
+                "Pay applicable certification and renewal fees."
+              ]
+            },
+            "studyPathways": {
+              "regularInstructorLed": {
+                "title": "Instructor-led route",
+                "description": "Study with an authorised education provider using classes, books, workbooks, videos, case studies, projects, guest sessions and assignments. The source says ICOFP certifies education completion before the learner books level examinations."
+              },
+              "selfStudy": {
+                "title": "Self-study / self-paced route",
+                "description": "One source section describes direct FPSB registration, e-books, chapter quizzes and mock tests with a 70% threshold before level examinations."
+              }
+            },
+            "curriculum": {
+              "level1": {
+                "title": "Level 1 - FPSB® Investment Planning Specialist",
+                "summary": "Investment-focused certification covering personal financial management, investments and regulatory context.",
+                "modules": [
+                  {
+                    "name": "Personal Financial Management",
+                    "description": "Collect and evaluate client information, assess strategy options, develop financial-management strategies and prepare implementation plans."
+                  },
+                  {
+                    "name": "Investment Planning and Asset Management",
+                    "description": "Economic institutions, markets, asset classes, securities, risk, expected returns, valuation, portfolios, pooled investments, buying and selling securities and behavioural finance."
+                  },
+                  {
+                    "name": "Regulatory Environment and Legal Compliance",
+                    "description": "Foundational legislation, regulators, economic and political environments, anti-money laundering and behavioural considerations."
+                  }
+                ]
+              },
+              "level2": {
+                "title": "Level 2 - FPSB® Retirement and Tax Planning Specialist",
+                "summary": "Retirement planning, wealth accumulation and withdrawal, income tax, tax saving and tax optimisation.",
+                "modules": [
+                  {
+                    "name": "Retirement Planning",
+                    "description": "Identify retirement objectives and needs, design accumulation and withdrawal strategies and consider risk profile, goals and retirement-plan structures."
+                  },
+                  {
+                    "name": "Tax Planning",
+                    "description": "Understand tax concepts, tax-saving approaches, the impact of tax on investments and financial transactions and tax-efficient planning."
+                  }
+                ]
+              },
+              "level3": {
+                "title": "Level 3 - FPSB® Risk and Estate Planning Specialist",
+                "summary": "Risk management, insurance, legacy and estate planning.",
+                "modules": [
+                  {
+                    "name": "Risk Management",
+                    "description": "Identify risk-management needs, evaluate insurance coverage and develop strategies to protect a client's financial wellbeing."
+                  },
+                  {
+                    "name": "Estate Planning",
+                    "description": "Plan for wealth distribution, wills and legacy objectives while addressing legal, emotional and family sensitivities before and after death."
+                  }
+                ]
+              },
+              "level4": {
+                "title": "Level 4 - Integrated Financial Planning / CFP® Final Stage",
+                "summary": "Integrate all specialist areas into a complete client financial-planning process and written plan.",
+                "modules": [
+                  {
+                    "name": "Financial Planning Process, Principles and Practice",
+                    "description": "Establish the client relationship, collect information, analyse financial status, develop and present recommendations, implement recommendations and review the client's situation."
+                  },
+                  {
+                    "name": "Engaging Clients in the Financial Planning Process",
+                    "description": "Professional communication, client characteristics, behaviour, engagement, relationship management and practical application of planning standards."
+                  },
+                  {
+                    "name": "Developing Effective Financial Plans",
+                    "description": "Combine quantitative and qualitative analysis, financial-planning theory and client facts to create coherent and rewarding written financial plans."
+                  }
+                ],
+                "capstoneProject": {
+                  "name": "Financial Plan Assessment",
+                  "description": "Prepare an actual financial plan for an assigned client scenario under mentor guidance and submit it for assessment. Source text states approval is required before booking the final examination."
+                },
+                "caseStudies": {
+                  "name": "Real-life case-study practice",
+                  "description": "Analyse integrated financial plans and prepare for case-study-based questions in the final examination."
+                }
+              }
+            },
+            "skills": [
+              "Client information collection",
+              "Cash-flow and financial-position analysis",
+              "Investment planning",
+              "Asset allocation",
+              "Retirement planning",
+              "Tax-planning concepts",
+              "Insurance and risk analysis",
+              "Estate and legacy planning",
+              "Financial-plan writing",
+              "Case-study analysis",
+              "Client communication",
+              "Behavioural understanding",
+              "Professional ethics",
+              "Implementation and review"
+            ],
+            "learningOutcomes": [
+              "Evaluate a client's financial position, goals, constraints and risk profile.",
+              "Develop investment and asset-management recommendations.",
+              "Design retirement accumulation and withdrawal strategies.",
+              "Understand tax implications and tax-planning approaches.",
+              "Assess insurance and risk-management needs.",
+              "Address estate, legacy and wealth-transfer objectives.",
+              "Engage and communicate with clients professionally.",
+              "Prepare, present, implement and review an integrated written financial plan.",
+              "Apply ethical and professional-responsibility principles."
+            ],
+            "examinations": {
+              "authority": "The supplied source identifies FPSB as the examining and certifying body.",
+              "levels1To3": {
+                "questions": 75,
+                "marks": 75,
+                "format": "Multiple-choice questions with four answer options",
+                "durationMinutes": 120,
+                "negativeMarking": false,
+                "mode": "Online, live-proctored",
+                "frequency": "Once each month, generally in the third or fourth week",
+                "multipleSlots": true,
+                "calculators": "Financial calculators and examination-platform spreadsheet tools described as permitted",
+                "passingScore": "Not predeclared; source says psychometric analysis is used and describes approximately 60% as an observed indicative score"
+              },
+              "level4": {
+                "prerequisite": "Financial Planning Project / Financial Plan Assessment approval",
+                "questions": 50,
+                "marks": 100,
+                "structure": [
+                  "25 one-mark concept questions",
+                  "25 three-mark case-study questions"
+                ],
+                "durationMinutes": 180,
+                "negativeMarking": false,
+                "mode": "Online, live-proctored",
+                "schedule": "According to a predefined calendar",
+                "multipleSlots": true,
+                "calculators": "Financial calculators and examination-platform spreadsheet tools described as permitted",
+                "passingScore": "Not predeclared; source suggests 55-60% as an experience-based indicative range"
+              },
+              "registrationAndScheduling": {
+                "registration": "First seven days of the month",
+                "examWindow": "Three consecutive days beginning around the third Friday or a monthly three-to-four-day window",
+                "minimumSubscriptionDays": 30
+              },
+              "results": {
+                "timeline": "10-15 days",
+                "display": "Pass / fail; source says numerical scores are not shared",
+                "channels": ["FPSB learning portal", "Email"]
+              },
+              "retakes": {
+                "details": "No overall attempt limit"
+              },
+              "technicalRequirements": [
+                "Supported Windows desktop or laptop as described in the supplied source",
+                "Webcam",
+                "Reliable internet connection",
+                "Private disturbance-free room",
+                "Required identification",
+                "Only permitted stationery, calculator and materials",
+                "No breaks, as stated in the source"
+              ],
+              "technicalSupport": "The source describes an ICOFP technical-readiness session two to three days before the examination and optional remote support."
+            },
+            "studyMaterials": [
+              {
+                "name": "Concept Books",
+                "description": "Printed, chapter-wise and topic-wise content aligned with the CFP® syllabus."
+              },
+              {
+                "name": "Workbooks",
+                "description": "Module and chapter-wise practice; the source claims approximately 500-800 questions on average."
+              },
+              {
+                "name": "Recorded Videos",
+                "description": "Recorded classes for repeated revision."
+              },
+              {
+                "name": "Assignments",
+                "description": "Regular class assignments with faculty guidance."
+              },
+              {
+                "name": "Group Projects",
+                "description": "Smaller projects intended to prepare learners before the final Capstone Project."
+              },
+              {
+                "name": "Online Mock Tests",
+                "description": "Timed 75-question, two-hour mock tests modelled on specialist examinations."
+              },
+              {
+                "name": "Doubt-clearing Sessions",
+                "description": "One-to-one or group mentoring and final concept revision before examinations."
+              },
+              {
+                "name": "Case Studies",
+                "description": "Caselets and comprehensive case studies for integrated planning and final-exam preparation."
+              },
+              {
+                "name": "Guest Lectures",
+                "description": "Selected sessions from finance professionals, coaches and alumni."
+              },
+              {
+                "name": "LMS",
+                "description": "Online access to materials, recordings, mocks and progress resources; one section states 24-month access."
+              }
+            ],
+            "careerOpportunities": {
+              "summary": "The source positions CFP® education for corporate BFSI roles, independent advisory practice and financial-services entrepreneurship, subject to applicable licences and regulations.",
+              "roles": [
+                "Financial Planner",
+                "Paraplanner",
+                "Investment-planning professional",
+                "Wealth-management professional",
+                "Relationship Manager",
+                "Retirement-planning specialist",
+                "Insurance and risk-planning support",
+                "Estate and legacy-planning coordination",
+                "Client-service professional",
+                "Independent financial-advisory practice",
+                "Financial education and training"
+              ],
+              "clientServiceCoverage": [
+                {
+                  "area": "Equity, derivatives, currency and commodities",
+                  "traditionalSpecialistsMentioned": [
+                    "Brokers",
+                    "Research analysts"
+                  ]
+                },
+                {
+                  "area": "Mutual funds",
+                  "traditionalSpecialistsMentioned": [
+                    "Mutual-fund distributors",
+                    "Agents"
+                  ]
+                },
+                {
+                  "area": "Insurance",
+                  "traditionalSpecialistsMentioned": [
+                    "Insurance agents",
+                    "Brokers"
+                  ]
+                },
+                {
+                  "area": "IPOs, bonds, fixed deposits and alternate investments",
+                  "traditionalSpecialistsMentioned": [
+                    "Agents",
+                    "Brokers",
+                    "Advisors"
+                  ]
+                },
+                {
+                  "area": "Portfolio and wealth management",
+                  "traditionalSpecialistsMentioned": [
+                    "Portfolio managers",
+                    "Wealth advisors"
+                  ]
+                },
+                {
+                  "area": "Personal taxation and tax planning",
+                  "traditionalSpecialistsMentioned": [
+                    "Chartered accountants",
+                    "Tax consultants"
+                  ]
+                },
+                {
+                  "area": "Financial and investment planning",
+                  "traditionalSpecialistsMentioned": []
+                },
+                {
+                  "area": "Legacy planning",
+                  "traditionalSpecialistsMentioned": ["Lawyers"]
+                },
+                {
+                  "area": "Investment laws",
+                  "traditionalSpecialistsMentioned": [
+                    "Lawyers",
+                    "Chartered accountants"
+                  ]
+                },
+                {
+                  "area": "GST basics, startup valuations and family business",
+                  "traditionalSpecialistsMentioned": ["Chartered accountants"]
+                }
+              ]
+            },
+            "whyDoCFP": [
+              "Start a career in the BFSI sector.",
+              "Accelerate career growth for an existing BFSI professional.",
+              "Build knowledge in wealth management and personal finance.",
+              "Add multiple specialist credentials to a professional profile.",
+              "Prepare for independent financial-planning practice.",
+              "Develop an investment-advisory, mutual-fund or insurance business.",
+              "Professionalise an existing financial-advisory business.",
+              "Strengthen credibility through professional certification.",
+              "Prepare for financial-services work in international markets, subject to local requirements."
+            ],
+            "valueOfCFPSurvey": {
+              "notice": "These percentages are promotional survey claims from the supplied page. Source, methodology and current validity must be verified before publication.",
+              "forProfessionals": [
+                {
+                  "metric": "37%",
+                  "claim": "Received a promotion, a new job or started a practice after certification"
+                },
+                {
+                  "metric": "57%",
+                  "claim": "Reported client-base growth within 12 months"
+                },
+                {
+                  "metric": "72%",
+                  "claim": "Reported increased career satisfaction"
+                },
+                {
+                  "metric": "63%",
+                  "claim": "Independent practitioners reported income growth within 12 months"
+                },
+                {
+                  "metric": "87%",
+                  "claim": "Independent practitioners expected stronger retention, satisfaction and trust"
+                }
+              ],
+              "forClients": [
+                {
+                  "metric": "97%",
+                  "claim": "Preferred dealing with a qualified CFP® professional"
+                },
+                {
+                  "metric": "84%",
+                  "claim": "Higher stated client-satisfaction index than with a normal financial advisor"
+                },
+                {
+                  "metric": "Nearly 3x",
+                  "claim": "Stronger confidence in achieving life goals with a financial plan"
+                }
+              ],
+              "forEmployers": [
+                {
+                  "metric": "59%",
+                  "claim": "Reported fewer client complaints"
+                },
+                {
+                  "metric": "69%",
+                  "claim": "Reported lower corporate risk and higher asset growth"
+                },
+                {
+                  "metric": "76%",
+                  "claim": "Reported increased client retention"
+                },
+                {
+                  "metric": "79%",
+                  "claim": "Planned to recruit more CFP® professionals"
+                }
+              ]
+            },
+            "studyAtICOFP": {
+              "studyCommitment": {
+                "classHours": "Approximately 200-250 hours",
+                "revisionAndPractice": "Approximately 150 hours",
+                "suggestedDailySelfStudy": "Around 30 minutes per day alongside classes"
+              },
+              "benefits": [
+                "Specialised finance education and long-standing CFP® preparation experience.",
+                "Live online availability without location constraints.",
+                "Printed books and workbooks instead of relying only on e-books.",
+                "Experienced faculty backgrounds including CFP, CFA, CA, PhD and IIM credentials.",
+                "Practical faculty experience and mentoring.",
+                "Projects, case studies, mocks, guest lectures and technical examination support."
+              ],
+              "financing": {
+                "description": "The source describes student-loan arrangements with selected NBFCs, a 10% initial payment, six EMIs and a zero-interest claim with processing charges."
+              },
+              "studyMaterialsImage": {
+                "src": "/study-materials_21jun.jpeg",
+                "alt": "ICOFP CFP® study materials overview"
+              }
+            },
+            "feesAndAccess": {
+              "pricingMode": "contact-institute",
+              "publicPricing": false,
+              "contactNote": "Display 'Contact ICOFP for current tuition, FPSB fees, taxes, inclusions, discounts and financing options.'",
+              "lmsAccess": "24 months from the ICOFP enrolment date",
+              "tuitionValidityFaqStatement": "One year from ICOFP admission, with conditional extension described"
+            },
+            "faq": [
+              {
+                "id": "where-to-begin",
+                "question": "Where should I begin if I want to join the CFP® programme?",
+                "answer": "Begin by selecting an ICOFP CFP® study option and speaking with the admissions team. The supplied source directs learners to ICOFP for counselling and programme guidance."
+              },
+              {
+                "id": "how-to-join",
+                "question": "How do I join the CFP® programme?",
+                "answer": "The supplied process starts with enrolment for CFP® study at ICOFP. The source then recommends FPSB registration approximately 45 days after joining, with guidance from the institute."
+              },
+              {
+                "id": "best-study-mode",
+                "question": "Which study mode is recommended?",
+                "answer": "The source recommends virtual instructor-led classes because learners receive live teaching, study materials and class recordings while studying from any location. Pre-recorded e-learning is also available for self-paced study."
+              },
+              {
+                "id": "study-material-delivery",
+                "question": "How are study materials provided?",
+                "answer": "Printed concept books and workbooks are described as being delivered by courier. Mobile access may be provided through QR codes. Assignments, projects, two mock tests per level, LMS resources and pre-exam doubt-clearing sessions are also described."
+              },
+              {
+                "id": "fpsb-ebooks",
+                "question": "Are FPSB e-books required?",
+                "answer": "The supplied source says FPSB e-book subscription is mandatory and that the files cannot be copied, downloaded, saved or bookmarked. ICOFP additionally provides printed books and workbooks."
+              },
+              {
+                "id": "programme-duration",
+                "question": "How long does the regular programme take?",
+                "answer": "The source states approximately 11-12 months for weekend batches and less than 6 months for weekday batches, while recommending an 8-10 month completion plan. Actual duration depends on batch, study pace, examination windows and current FPSB requirements."
+              },
+              {
+                "id": "challenge-and-self-study",
+                "question": "What is the status of Challenge Status and self-study?",
+                "answer": "One FAQ in the supplied source states that the old Challenge Status and self-study options were removed after 31 May 2020, while another section describes instructor-led and self-study routes. This is a source conflict and must be confirmed with FPSB India before publication."
+              },
+              {
+                "id": "exam-registration",
+                "question": "How and when is an examination registered?",
+                "answer": "The source describes registration during the first seven days of a month for a test window around three consecutive days beginning from the third Friday. It also states that an exam can be booked only after at least 30 days of subscription to the relevant FPSB learning content."
+              },
+              {
+                "id": "skip-specialist-exam",
+                "question": "Can a regular-pathway learner skip a specialist examination?",
+                "answer": "The supplied FAQ says no. Regular-pathway learners must complete Levels 1, 2 and 3, the ethics requirement and the final certification stage. Fast Track eligibility is a separate approved pathway for eligible professionals."
+              },
+              {
+                "id": "exam-window",
+                "question": "When can an examination be taken?",
+                "answer": "The source describes a monthly three-to-four-day examination window published in advance. Learners must complete the required education and the minimum learning-content subscription period before booking."
+              },
+              {
+                "id": "online-exam-care",
+                "question": "What should a learner prepare for an online-proctored examination?",
+                "answer": "The supplied source mentions a supported Windows computer, webcam, reliable internet, a private disturbance-free room, identity proof and permitted stationery or financial calculator. No breaks are described as permitted."
+              },
+              {
+                "id": "technical-preparation",
+                "question": "Does ICOFP help with technical examination setup?",
+                "answer": "The source describes a technical-support session two to three days before an examination and possible remote support. It also states that the examination was supported on Windows and not macOS at the time of publication."
+              },
+              {
+                "id": "exam-results",
+                "question": "When are examination results declared?",
+                "answer": "The source states that results are generally declared within 10-15 days and are communicated through the FPSB portal and email. It says the result is shown as pass or fail rather than a numerical score."
+              },
+              {
+                "id": "attempt-limit",
+                "question": "Is there a limit on examination attempts?",
+                "answer": "The supplied FAQ states that there is no overall attempt limit and that an examination may be retaken until passed. Current retake policy and fees must be verified."
+              },
+              {
+                "id": "ethics-course",
+                "question": "How is the ethics course completed?",
+                "answer": "The source describes an online ethics module, an 11-question mock test and an ethics attestation. It estimates approximately one hour for completion."
+              },
+              {
+                "id": "preparation-time-by-level",
+                "question": "How much preparation time is suggested by level?",
+                "answer": "For weekend study, the source estimates three months for Level 1, two months each for Levels 2 and 3, and three months for the final stage. It describes an overall 10-12 month weekend path or approximately six months for a faster weekday course."
+              },
+              {
+                "id": "fpsb-registration-validity",
+                "question": "What happens if FPSB registration expires before completion?",
+                "answer": "The supplied source contains historical fee and validity examples: a one-year registration, specialist-certificate claiming and a renewal fee if no level is completed. These amounts and rules must not be published until reconfirmed."
+              },
+              {
+                "id": "icofp-fee-validity",
+                "question": "What is the validity of ICOFP study fees?",
+                "answer": "One supplied FAQ states that ICOFP study fees are valid for one year, with an extension for the final level after Levels 1-3 are completed and revision lectures available without extra tuition. Another section states 24-month LMS access. Both policies should be confirmed for the selected package."
+              },
+              {
+                "id": "concessions",
+                "question": "Are concessions or discounts available?",
+                "answer": "The source mentions corporate group discounts and referral rewards and contains historical tuition and FPSB fee ranges. Current pricing and discounts must be obtained directly from ICOFP."
+              },
+              {
+                "id": "more-questions",
+                "question": "How can a learner ask more questions?",
+                "answer": "Contact ICOFP through its admissions phone, email or website chat.",
+                "contact": {
+                  "phone": "+91-9711437779",
+                  "email": "admissions@icofp.org",
+                  "website": "https://www.icofp.org/"
+                }
+              }
+            ],
+            "enrollment": {
+              "primaryButton": {
+                "label": "Enroll Now",
+                "url": "https://www.icofponline.com/",
+                "type": "external",
+                "openInNewTab": true
+              },
+              "secondaryButton": {
+                "label": "Call Admissions",
+                "url": "tel:+919711437779",
+                "type": "phone",
+                "openInNewTab": false
+              },
+              "email": "admissions@icofp.org"
+            }
+          }
+        },
+        {
+          "id": "icofp-cfp-fast-track",
+          "slug": "cfp-fast-track-pathway",
+          "status": "published",
+          "card": {
+            "name": "CFP® Fast Track Pathway",
+            "shortDescription": "An accelerated CFP® pathway for experienced professionals meeting approved education and BFSI experience criteria.",
+            "thumbnail": {
+              "src": "/assets/institutes/icofp/courses/cfp-fast-track-card.webp",
+              "alt": "CFP Fast Track Pathway"
+            },
+            "duration": "Source claim: approximately 3-4 months",
+            "modes": ["Live Online", "Mentored Project and Exam Preparation"],
+            "badges": ["Fast Track", "Eligibility Approval Required"],
+            "keyPoints": [
+              "One examination instead of four, as claimed",
+              "Three integrated modules",
+              "Document verification required"
+            ],
+            "viewDetailsButton": {
+              "label": "View Course Details",
+              "url": "/course/cfp-fast-track-pathway"
+            }
+          },
+          "detailPage": {
+            "hero": {
+              "eyebrow": "Accelerated CFP® Route",
+              "title": "CFP® Fast Track Pathway",
+              "subtitle": "A focused route for experienced finance professionals whose qualifications and work experience are approved under current FPSB rules.",
+              "image": {
+                "src": "/assets/institutes/icofp/courses/cfp-fast-track-hero.webp",
+                "alt": "CFP Fast Track course"
+              },
+              "badges": [
+                "Experienced Professionals",
+                "Document Approval",
+                "Accelerated Route"
+              ],
+              "enrollButton": {
+                "label": "Check Eligibility",
+                "url": "https://www.icofp.org/programs/cfp-fast-track",
+                "type": "external",
+                "openInNewTab": true
+              }
+            },
+            "overview": {
+              "shortDescription": "The supplied source says FPSB reintroduced an accelerated Fast Track pathway in October 2022 for professionals with relevant education and BFSI work experience.",
+              "longDescription": [
+                "The pathway is described as allowing eligible professionals to focus on integrated financial planning, a financial-plan project, ethics and one final examination instead of completing the full regular sequence.",
+                "Acceptance depends on documentary evidence of an approved qualification and relevant professional experience. Written eligibility confirmation should be obtained before enrolment."
+              ]
+            },
+            "claimedBenefits": [
+              "Take one examination instead of four.",
+              "Complete the pathway in approximately 3-4 months instead of 10-12 months.",
+              "Study approximately 70 hours instead of 240 hours.",
+              "Study three modules instead of ten modules.",
+              "FPSB fees may be approximately 30% lower.",
+              "ICOFP tuition may be approximately 40% lower."
+            ],
+            "quickFacts": [
+              {
+                "label": "Indicative Duration",
+                "value": "3-4 months, as claimed in the supplied source"
+              },
+              {
+                "label": "Study Time",
+                "value": "Approximately 70 hours, source claim"
+              },
+              {
+                "label": "Modules",
+                "value": "Three integrated modules, source claim"
+              },
+              {
+                "label": "Examinations",
+                "value": "One examination, subject to eligibility approval and current rules"
+              },
+              {
+                "label": "Eligibility",
+                "value": "Approved education plus at least three years of relevant experience, as described by the source"
+              }
+            ],
+            "educationEligibilityExamples": [
+              "CFA charter from CFA Institute, USA.",
+              "CPA from AICPA, CMA or ACCA.",
+              "Chartered Accountant from ICAI, or the source-described CA Intermediate plus articleship and B.Com combination.",
+              "Fellow Member of the Insurance Institute of India in Life or General Insurance.",
+              "Advanced Wealth Management Course from IIBF, or CAIIB plus a degree.",
+              "Postgraduate degree in Economics, Commerce, Finance or Financial Planning from a UGC-approved university.",
+              "MBA Finance or PGDM from an AICTE-approved institute."
+            ],
+            "experienceEligibility": {
+              "minimum": "At least three years of prior relevant work experience at the time documents are submitted.",
+              "qualifyingOrganisationExamples": [
+                "Bank",
+                "Non-banking finance company",
+                "Mutual-fund asset-management company",
+                "Insurance company",
+                "Securities company",
+                "Portfolio manager",
+                "Brokerage",
+                "Registered Investment Adviser",
+                "Corporate treasury department",
+                "Academic institution",
+                "FPSB-authorised education provider"
+              ],
+              "qualifyingActivityExamples": [
+                "Funds management",
+                "Investment advice",
+                "Accounting",
+                "Fund accounting",
+                "Auditing",
+                "Corporate finance",
+                "Customer relationship",
+                "Investor service",
+                "Teaching economics, commerce or finance",
+                "Training on CFP® curriculum"
+              ]
+            },
+            "curriculum": [
+              {
+                "name": "Integrated Financial Planning",
+                "description": "Combine investment, retirement, tax, risk, estate and client-engagement knowledge."
+              },
+              {
+                "name": "Financial Plan Development and Assessment",
+                "description": "Create a written plan for an assigned client scenario and complete the required assessment."
+              },
+              {
+                "name": "Case Studies and CFP® Examination Preparation",
+                "description": "Practise integrated cases, calculations, judgement and examination technique."
+              },
+              {
+                "name": "Professional Ethics",
+                "description": "Complete the required online ethics learning, mock and attestation."
+              }
+            ],
+            "skills": [
+              "Integrated financial planning",
+              "Financial-plan writing",
+              "Case-study analysis",
+              "Client recommendations",
+              "Ethical judgement",
+              "Examination technique"
+            ],
+            "assessment": [
+              "Eligibility-document approval",
+              "Financial Plan Assessment",
+              "Professional ethics requirement",
+              "CFP® final examination",
+              "Experience verification"
+            ],
+            "importantNotes": [
+              "Fast Track eligibility is not automatic.",
+              "Exact qualifications, experience categories and documentary evidence are governed by current FPSB India rules.",
+              "The source uses Fast Track and old Challenge Status terminology in different sections; do not present them as identical without approval.",
+              "All duration, module, examination and fee-saving claims require current confirmation."
+            ],
+            "enrollment": {
+              "primaryButton": {
+                "label": "Check Fast Track Eligibility",
+                "url": "https://www.icofp.org/programs/cfp-fast-track",
+                "type": "external",
+                "openInNewTab": true
+              },
+              "secondaryButton": {
+                "label": "Call Admissions",
+                "url": "tel:+919711437779",
+                "type": "phone",
+                "openInNewTab": false
+              },
+              "email": "admissions@icofp.org"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
